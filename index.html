@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-        <link rel="icon" href="z.png" type="image/x-icon">
+    <link rel="icon" href="z.png" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Investimentos</title>
     <style>
@@ -198,6 +198,8 @@
     </footer>
 
     <script>
+        const transactionFee = 0.05; // 5% de taxa
+
         document.getElementById("connect-metamask").addEventListener("click", async function () {
             if (typeof window.ethereum !== "undefined") {
                 try {
@@ -229,15 +231,36 @@
             document.getElementById("profit-display").textContent = `Plano: ${plan}, Lucro: ${currencySymbol[currency]}${profit}`;
         });
 
-        document.getElementById("buy-button").addEventListener("click", function () {
+        document.getElementById("buy-button").addEventListener("click", async function () {
             const plan = document.getElementById("investment-plan").value;
             const units = parseInt(document.getElementById("unit-count").value);
             const currency = document.getElementById("currency").value;
 
-            const confirmation = window.confirm(`Você tem certeza que deseja comprar o plano ${plan} com ${units} unidades por ${currency}?`);
-            
+            const profit = units * 100; // Exemplo de lucro
+
+            // Aplica a taxa de 5%
+            const amountWithFee = profit * (1 - transactionFee);
+
+            const confirmation = window.confirm(`Você tem certeza que deseja comprar o plano ${plan} com ${units} unidades por ${currency}? O valor após a taxa de 5% será ${amountWithFee}.`);
+
             if (confirmation) {
-                alert("Compra realizada com sucesso!");
+                try {
+                    const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+                    const account = accounts[0];
+                    const transaction = {
+                        to: "0x5AC8dE4d32Cb2e29Acb4c7Ee07ddCE1dF348a6cb", // Endereço para o qual a transação será enviada
+                        from: account,
+                        value: ethers.utils.parseUnits(amountWithFee.toString(), "ether") // Converte o valor para unidades de Ether
+                    };
+
+                    await window.ethereum.request({
+                        method: "eth_sendTransaction",
+                        params: [transaction]
+                    });
+                    alert("Compra realizada com sucesso!");
+                } catch (error) {
+                    alert("Erro ao realizar a transação: " + error.message);
+                }
             } else {
                 alert("Compra cancelada.");
             }
