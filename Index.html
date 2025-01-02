@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+        <link rel="icon" href="z.png" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investimentos</title>
+    <style>
+        /* Configuração global */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #000;
+            color: #00FF00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            padding: 10px;
+            zoom: 80%;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin: 20px 0;
+            color: #00FF00;
+            text-align: center;
+            text-shadow: 0 0 20px #7e00ff;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #e0e0e0;
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #3c3c3c;
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            font-size: 1.1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .buttons-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .buttons-group button {
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #000;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center;
+            flex: 1;
+        }
+
+        .btn-green {
+            background-color: #4CAF50;
+        }
+
+        .btn-green:hover {
+            background-color: #388e3c;
+            transform: scale(1.05);
+        }
+
+        .btn-red {
+            background-color: #f44336;
+        }
+
+        .btn-red:hover {
+            background-color: #d32f2f;
+            transform: scale(1.05);
+        }
+
+        .btn-blue {
+            background-color: #ffea00;
+        }
+
+        .btn-blue:hover {
+            background-color: #fdd835;
+            transform: scale(1.05);
+        }
+
+        .blue-screen {
+            margin-top: 20px;
+            padding: 20px;
+            width: 100%;
+            background-color: #0000aa;
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        footer {
+            width: 100%;
+            padding: 20px;
+            background-color: #000;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #00FF00;
+            margin-top: 20px;
+        }
+
+        footer a {
+            color: #00FF00;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Investimentos HoloFi</h1>
+    <div class="container">
+        <div class="form-group">
+            <label for="investment-plan">Escolha o plano</label>
+            <select id="investment-plan">
+                <option value="zenbo-100">Zenbo 100</option>
+                <option value="zebo-50">Zebo 50</option>
+                <option value="holofi-zen-10">HoloFi Zen 10</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="unit-count">Quantas unidades?</label>
+            <select id="unit-count">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="currency">Escolha a moeda</label>
+            <select id="currency">
+                <option value="usd">Dólar (USD)</option>
+                <option value="eur">Euro (EUR)</option>
+                <option value="brl">Real (BRL)</option>
+                <option value="btc">Bitcoin (BTC)</option>
+                <option value="eth">Ethereum (ETH)</option>
+                <option value="sol">Solana (SOL)</option>
+            </select>
+        </div>
+
+        <div class="buttons-group">
+            <button class="btn-green" id="calculate-profit">Calcular</button>
+            <button class="btn-red" id="buy-button">Comprar</button>
+            <button class="btn-blue" id="connect-metamask">Conectar</button>
+        </div>
+
+        <div class="blue-screen" id="profit-display">
+            O lucro será exibido aqui.
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 HoloFi. Todos os direitos reservados.by @lucasjanuario14 </p>
+    </footer>
+
+    <script>
+        document.getElementById("connect-metamask").addEventListener("click", async function () {
+            if (typeof window.ethereum !== "undefined") {
+                try {
+                    const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+                    alert(`MetaMask conectada: ${accounts[0]}`);
+                } catch (error) {
+                    alert("Erro ao conectar com MetaMask.");
+                }
+            } else {
+                alert("MetaMask não está instalada.");
+            }
+        });
+
+        document.getElementById("calculate-profit").addEventListener("click", function () {
+            const plan = document.getElementById("investment-plan").value;
+            const units = parseInt(document.getElementById("unit-count").value);
+            const currency = document.getElementById("currency").value;
+
+            let profit = units * 100; // Exemplo: cálculo básico de lucro
+            const currencySymbol = {
+                usd: "$",
+                eur: "€",
+                brl: "R$",
+                btc: "₿",
+                eth: "Ξ",
+                sol: "◎"
+            };
+
+            document.getElementById("profit-display").textContent = `Plano: ${plan}, Lucro: ${currencySymbol[currency]}${profit}`;
+        });
+
+        document.getElementById("buy-button").addEventListener("click", function () {
+            const plan = document.getElementById("investment-plan").value;
+            const units = parseInt(document.getElementById("unit-count").value);
+            const currency = document.getElementById("currency").value;
+
+            const confirmation = window.confirm(`Você tem certeza que deseja comprar o plano ${plan} com ${units} unidades por ${currency}?`);
+            
+            if (confirmation) {
+                alert("Compra realizada com sucesso!");
+            } else {
+                alert("Compra cancelada.");
+            }
+        });
+    </script>
+</body>
+</html>
