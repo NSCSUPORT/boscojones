@@ -1,244 +1,202 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="z.png" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Pagamento</title>
-  <style>
-    /* Configuração global */
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
+    <title>Pagamento - HoloFi</title>
+    <style>
+        /* Configuração global */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    body {
-        font-family: 'Roboto', Arial, sans-serif;
-        background-color: #000;
-        color: #00FF00;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        flex-direction: column;
-        padding: 10px;
-        zoom: 80%;
-    }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #000;
+            color: #00FF00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            padding: 10px;
+        }
 
-    h1 {
-        font-size: 2.8rem;
-        margin: 20px 0;
-        color: #00FF00;
-        text-align: center;
-        text-shadow: 0 0 20px #7e00ff;
-    }
+        h1 {
+            font-size: 2.8rem;
+            margin: 20px 0;
+            color: #00FF00;
+            text-align: center;
+            text-shadow: 0 0 20px #7e00ff;
+        }
 
-    .container {
-        width: 100%;
-        max-width: 600px;
-        background-color: #1e1e1e;
-        border-radius: 12px;
-        padding: 25px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-        margin: 0 auto;
-    }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+            margin: 0 auto;
+        }
 
-    .form-group {
-        margin-bottom: 20px;
-    }
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-    .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: bold;
-        color: #e0e0e0;
-    }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #e0e0e0;
+        }
 
-    .form-group input,
-    .form-group select {
-        width: 100%;
-        padding: 12px;
-        border-radius: 8px;
-        border: 1px solid #3c3c3c;
-        background-color: #2a2a2a;
-        color: #e0e0e0;
-        font-size: 1.1rem;
-        transition: border-color 0.3s ease;
-    }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #3c3c3c;
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            font-size: 1.1rem;
+            transition: border-color 0.3s ease;
+        }
 
-    .form-group input:focus,
-    .form-group select:focus {
-        outline: none;
-        border-color: #4CAF50;
-    }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
 
-    .buttons-group {
-        display: flex;
-        justify-content: space-between;
-        gap: 10px;
-        margin-top: 20px;
-    }
+        .quantity-slider {
+            width: 100%;
+            margin-top: 10px;
+            color: #fff;
+        }
 
-    .buttons-group button {
-        padding: 14px;
-        border-radius: 8px;
-        font-weight: bold;
-        cursor: pointer;
-        color: #000;
-        border: none;
-        transition: background-color 0.3s ease, transform 0.3s ease;
-        text-align: center;
-        flex: 1;
-    }
+        .buttons-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+        }
 
-    .btn-yellow {
-        background-color: #FFEA00;
-    }
+        .buttons-group button {
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #000;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center;
+            flex: 1;
+        }
 
-    .btn-yellow:hover {
-        background-color: #FDD835;
-        transform: scale(1.05);
-    }
+        .btn-yellow {
+            background-color: #FFEA00;
+        }
 
-    .btn-green {
-        background-color: #4CAF50;
-    }
+        .btn-yellow:hover {
+            background-color: #FDD835;
+            transform: scale(1.05);
+        }
 
-    .btn-green:hover {
-        background-color: #388e3c;
-        transform: scale(1.05);
-    }
+        .btn-green {
+            background-color: #4CAF50;
+        }
 
-    .btn-red {
-        background-color: #f44336;
-    }
+        .btn-green:hover {
+            background-color: #388e3c;
+            transform: scale(1.05);
+        }
 
-    .btn-red:hover {
-        background-color: #d32f2f;
-        transform: scale(1.05);
-    }
+        .btn-red {
+            background-color: #f44336;
+        }
 
-    .blue-screen {
-        margin-top: 20px;
-        padding: 20px;
-        width: 100%;
-        background-color: #0000aa;
-        color: #ffffff;
-        font-family: 'Courier New', Courier, monospace;
-        font-size: 1.1rem;
-        border-radius: 8px;
-        text-align: center;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-    }
+        .btn-red:hover {
+            background-color: #d32f2f;
+            transform: scale(1.05);
+        }
 
-    .blue-screen a {
-        color: #ffffff; /* Ensures the link is white */
-        text-decoration: none;
-    }
-
-    .blue-screen a:hover {
-        text-decoration: underline;
-    }
-
-    footer {
-        width: 100%;
-        padding: 20px;
-        background: linear-gradient(45deg, #f0f000, #ff4500);
-        color: #000000;
-        text-align: center;
-        font-size: 1.1rem;
-        font-weight: bold;
-        letter-spacing: 2px;
-        text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
-        margin-top: 20px;
-        animation: neon 1.5s ease-in-out infinite alternate;
-    }
-
-    footer a {
-        color: #000000;
-        text-decoration: none;
-    }
-
-    footer a:hover {
-        text-decoration: underline;
-    }
-
-    @keyframes neon {
-        0% {
+        footer {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(45deg, #f0f000, #ff4500);
+            color: #000000;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            letter-spacing: 2px;
             text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            margin-top: 20px;
+            animation: neon 1.5s ease-in-out infinite alternate;
         }
 
-        50% {
-            text-shadow: 0 0 20px #ff0000, 0 0 30px #ff4500, 0 0 40px #f0f000;
+        footer a {
+            color: #000000;
+            text-decoration: none;
         }
 
-        100% {
-            text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+        footer a:hover {
+            text-decoration: underline;
         }
-    }
-</style>
 
+        @keyframes neon {
+            0% {
+                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            }
+            50% {
+                text-shadow: 0 0 20px #ff0000, 0 0 30px #ff4500, 0 0 40px #f0f000;
+            }
+            100% {
+                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            }
+        }
+
+    </style>
 </head>
-
 <body>
-    <h1>Pagamento via Mercado Pago</h1>
+    <h1>Pagamento - HoloFi</h1>
     <div class="container">
         <div class="form-group">
-            <label for="product">Produto</label>
-            <input type="text" id="product" value="Produto Exemplo" disabled>
+            <label for="investment-plan">Escolha o plano</label>
+            <select id="investment-plan">
+                <option value="" disabled selected>Selecione um plano</option>
+                <option value="diamante-brl">zen BRL</option>
+                <option value="esmeralda-usd">zion USD</option>
+                <option value="safira-eur">zetha EUR</option>
+                <option value="topazio-brl">zenbol BRL</option>
+            </select>
         </div>
-        <div class="form-group">
-            <label for="amount">Valor (R$)</label>
-            <input type="text" id="amount" value="50.00" disabled>
-        </div>
-        <div class="buttons-group">
-            <button class="btn-green" onclick="createPayment()">Pagar via Pix</button>
-        </div>
-    </div>
 
-    <div class="blue-screen" id="payment-link" style="display:none;">
-        <p>Acesse o link para concluir o pagamento:</p>
-        <a id="payment-url" href="" target="_blank">Clique aqui para pagar via Pix</a>
+        <div class="form-group">
+            <label for="quantity">Quantidade</label>
+            <input type="range" id="quantity" min="1" max="10" value="1" step="1" class="quantity-slider">
+            <p>Quantidade selecionada: <span id="quantity-value">1</span></p>
+        </div>
+
+        <div class="buttons-group">
+            <a href="confirmation.html"><button class="btn-green">Confirmar Pagamento</button></a>
+            <a href="index.html"><button class="btn-red">Cancelar</button></a>
+        </div>
     </div>
 
     <footer>
-        <p>&copy; 2025 Banco Bosco Jones. Todos os direitos reservados.</p>
+        <p>&copy; 2025 HoloFi. Todos os direitos reservados. by <a href="https://instagram.com/lucasjanuario14" target="_blank">@lucasjanuario14</a></p>
     </footer>
 
     <script>
-        function createPayment() {
-            fetch('https://api.mercadopago.com/checkout/preferences', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer APP_USR-130fdaf8-9c5f-4ba0-b070-2aa0c9f20df0A' // Insira sua chave de API aqui
-                },
-                body: JSON.stringify({
-                    items: [{
-                        title: 'Produto Exemplo',
-                        quantity: 1,
-                        unit_price: 50.00
-                    }],
-                    back_urls: {
-                        success: 'http://www.suapagina.com.br/success',
-                        failure: 'http://www.suapagina.com.br/failure',
-                        pending: 'http://www.suapagina.com.br/pending'
-                    }
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                const paymentLink = document.getElementById('payment-link');
-                const paymentUrl = document.getElementById('payment-url');
-                paymentUrl.href = data.init_point;
-                paymentLink.style.display = 'block';
-            })
-            .catch(error => {
-                console.error('Erro ao criar pagamento:', error);
-            });
-        }
+        // Atualiza o valor da quantidade no texto
+        const quantitySlider = document.getElementById("quantity");
+        const quantityValue = document.getElementById("quantity-value");
+
+        quantitySlider.addEventListener("input", function () {
+            quantityValue.textContent = quantitySlider.value;
+        });
     </script>
 </body>
-
 </html>
