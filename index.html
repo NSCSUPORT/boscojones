@@ -133,21 +133,38 @@
         footer {
             width: 100%;
             padding: 20px;
-            background-color: #000;
+            background: linear-gradient(45deg, #f0f000, #ff4500);
+            color: #000000;
             text-align: center;
-            font-size: 0.9rem;
-            color: #00FF00;
+            font-size: 1.1rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
             margin-top: 20px;
+            animation: neon 1.5s ease-in-out infinite alternate;
         }
 
         footer a {
-            color: #00FF00;
+            color: #000000;
             text-decoration: none;
         }
 
         footer a:hover {
             text-decoration: underline;
         }
+
+        @keyframes neon {
+            0% {
+                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            }
+            50% {
+                text-shadow: 0 0 20px #ff0000, 0 0 30px #ff4500, 0 0 40px #f0f000;
+            }
+            100% {
+                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -160,25 +177,18 @@
                 <option value="diamante-brl">zen BRL</option>
                 <option value="esmeralda-usd">zion USD</option>
                 <option value="safira-eur">zetha EUR</option>
-              
+                <option value="topazio-brl">zenbol BRL</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label for="investment-amount">Valor do Investimento</label>
-            <input type="number" id="investment-amount" placeholder="Insira o valor desejado" min="1" step="any">
-        </div>
-
-        <div class="form-group">
-            <label for="execution-times">Quantidade de Execuções</label>
-            <input type="number" id="execution-times" placeholder="De 1 a 10" min="1" max="10">
+            <label for="investment-amount">Valor do Investimento (R$)</label>
+            <input type="number" id="investment-amount" placeholder="Insira o valor desejado" min="125" max="10000" step="any">
         </div>
 
         <div class="buttons-group">
             <button class="btn-green" id="calculate-profit">Calcular</button>
-            <a href="https://buy.stripe.com/test_cN2cOCdqxb2haBi6oo" target="_blank">
-                <button class="btn-red" id="buy-button">Confirmar Compra</button>
-            </a>
+            <a href="https://buy.stripe.com/test_cN2cOCdqxb2haBi6oo" target="_blank"><button class="btn-red" id="buy-button">Confirmar Compra</button></a>
         </div>
 
         <div class="blue-screen" id="profit-display">
@@ -195,10 +205,9 @@
         document.getElementById("calculate-profit").addEventListener("click", function () {
             const selectedPlan = document.getElementById("investment-plan").value;
             const investmentAmount = parseFloat(document.getElementById("investment-amount").value);
-            const executionTimes = parseInt(document.getElementById("execution-times").value);
 
-            if (isNaN(executionTimes) || executionTimes <= 0 || executionTimes > 10) {
-                alert("Por favor, insira uma quantidade de execuções válida entre 1 e 10.");
+            if (isNaN(investmentAmount) || investmentAmount < 125 || investmentAmount > 10000) {
+                alert("Por favor, insira um valor de investimento válido entre R$125 e R$10.000.");
                 return;
             }
 
@@ -215,8 +224,7 @@
                 profit = investmentAmount * 0.15;
             }
 
-            const totalProfit = profit * executionTimes;
-            document.getElementById("profit-display").textContent = `Lucro estimado: R$ ${totalProfit.toFixed(2)} BRL`;
+            document.getElementById("profit-display").textContent = `Lucro estimado: R$ ${profit.toFixed(2)} BRL`;
         });
 
         // Função para confirmar a compra
