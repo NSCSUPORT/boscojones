@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="icon" href="z.png" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagamento Pix - HoloFi</title>
+    <title>Pagamento - HoloFi</title>
     <link rel="icon" href="https://nscsuport.github.io/OZZ/z.png" type="image/x-icon">
     <style>
         /* Configuração global */
@@ -159,7 +159,7 @@
     </style>
 </head>
 <body>
-    <h1>Pagamento Pix - HoloFi</h1>
+    <h1>Pagamento - HoloFi</h1>
     <div class="container">
         <div class="form-group">
             <label for="investment-value">Valor a ser investido (R$)</label>
@@ -196,6 +196,7 @@
 
         <div class="buttons-group">
             <button class="btn-blue" id="generate-pix">Gerar PIX</button>
+            <button class="btn-blue" id="pay-with-paypal">Pagar com PayPal</button>
             <a href="https://nscsuport.github.io/OZZ/index.html"><button class="btn-red">Cancelar</button></a>
         </div>
 
@@ -211,6 +212,7 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID"></script>
     <script>
         document.getElementById("generate-pix").addEventListener("click", function () {
             const valorInvestido = document.getElementById("investment-value").value;
@@ -274,7 +276,36 @@
                 }
             });
         });
-    </script>
 
+        document.getElementById("pay-with-paypal").addEventListener("click", function () {
+            const valorInvestido = document.getElementById("investment-value").value;
+            const quantidade = document.getElementById("quantity").value;
+
+            if (!valorInvestido || !quantidade) {
+                alert('Por favor, insira um valor para o investimento!');
+                return;
+            }
+
+            const totalAmount = (parseFloat(valorInvestido) * parseInt(quantidade)).toFixed(2);
+
+            // Renderizar o botão PayPal
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: totalAmount
+                            }
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        alert('Pagamento aprovado com sucesso! ' + details.payer.name.given_name);
+                    });
+                }
+            }).render('#pay-with-paypal');
+        });
+    </script>
 </body>
 </html>
