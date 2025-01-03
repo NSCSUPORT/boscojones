@@ -175,7 +175,7 @@
         </div>
 
         <div class="buttons-group">
-            <button class="btn-yellow" id="connect-wallet">Conectar Trust Wallet</button>
+            <button class="btn-yellow" id="connect-wallet">Conectar MetaMask</button>
             <button class="btn-green" id="calculate-profit" disabled>Calcular</button>
             <button class="btn-red" id="buy-button" disabled>Confirmar Compra</button>
         </div>
@@ -199,11 +199,11 @@
         let signer;
         let account;
 
-        // Função para conectar ao Trust Wallet
+        // Função para conectar ao MetaMask
         document.getElementById("connect-wallet").addEventListener("click", async () => {
             if (window.ethereum) {
                 try {
-                    // Solicitar contas do Trust Wallet
+                    // Solicitar contas do MetaMask
                     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                     account = accounts[0];
 
@@ -218,17 +218,17 @@
                     document.getElementById("calculate-profit").disabled = false;
                     document.getElementById("buy-button").disabled = false;
 
-                    document.getElementById("connect-wallet").textContent = "Trust Wallet Conectado";
+                    document.getElementById("connect-wallet").textContent = "MetaMask Conectado";
                     document.getElementById("connect-wallet").classList.remove("btn-yellow");
                     document.getElementById("connect-wallet").classList.add("btn-green");
 
                     console.log("Conectado com a conta: " + account);
                 } catch (error) {
-                    console.error("Erro ao conectar ao Trust Wallet:", error);
-                    alert("Erro ao conectar ao Trust Wallet");
+                    console.error("Erro ao conectar ao MetaMask:", error);
+                    alert("Erro ao conectar ao MetaMask");
                 }
             } else {
-                alert("Trust Wallet não detectado. Por favor, instale o Trust Wallet.");
+                alert("MetaMask não detectado. Por favor, instale o MetaMask.");
             }
         });
 
@@ -263,7 +263,7 @@
         // Função para confirmar a compra com confirmação
         document.getElementById("buy-button").addEventListener("click", async () => {
             if (!account) {
-                alert("Por favor, conecte sua carteira Trust Wallet primeiro.");
+                alert("Por favor, conecte sua carteira MetaMask primeiro.");
                 return;
             }
 
@@ -275,14 +275,15 @@
                 return;
             }
 
-            // Confirmação antes de enviar a transação
-            const confirmPurchase = confirm("Tem certeza que deseja confirmar a compra?");
-            if (confirmPurchase) {
+            // Confirmar compra
+            const confirmed = window.confirm(`Você tem certeza que deseja investir R$${selectedAmount} no plano ${selectedPlan}?`);
+
+            if (confirmed) {
                 try {
-                    // Realizar a transação de compra (simulação)
+                    // Criando transação com MetaMask
                     const tx = await signer.sendTransaction({
-                        to: selectedPlan, // Aqui você deve usar o endereço do contrato ou destino
-                        value: ethers.utils.parseEther(selectedAmount)
+                        to: "ENDEREÇO_DESTINO",  // Substitua com o endereço correto
+                        value: ethers.utils.parseEther(selectedAmount.toString())
                     });
 
                     // Exibição do status da transação
