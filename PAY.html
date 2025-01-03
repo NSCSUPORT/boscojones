@@ -2,9 +2,9 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="z.png" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagamento - HoloFi</title>
+    <link rel="icon" href="z.png" type="image/x-icon">
     <style>
         /* Configuração global */
         * {
@@ -23,6 +23,7 @@
             height: 100vh;
             flex-direction: column;
             padding: 10px;
+            zoom: 80%;
         }
 
         h1 {
@@ -68,12 +69,6 @@
         .form-group input:focus, .form-group select:focus {
             outline: none;
             border-color: #4CAF50;
-        }
-
-        .quantity-slider {
-            width: 100%;
-            margin-top: 10px;
-            color: #fff;
         }
 
         .buttons-group {
@@ -122,6 +117,19 @@
             transform: scale(1.05);
         }
 
+        .blue-screen {
+            margin-top: 20px;
+            padding: 20px;
+            width: 100%;
+            background-color: #0000aa;
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
         footer {
             width: 100%;
             padding: 20px;
@@ -166,14 +174,12 @@
             <label for="investment-plan">Escolha o plano</label>
             <select id="investment-plan">
                 <option value="" disabled selected>Selecione um plano</option>
-                <option value="diamante-brl">zen BRL</option>
-                <option value="esmeralda-usd">zion USD</option>
-                <option value="safira-eur">zetha EUR</option>
-
+                <option value="zen BRL">zen BRL</option>
+                <option value="zion USD">zion USD</option>
+                <option value="zetha EUR">zetha EUR</option>
                 <option value="ethereum">Ethereum</option>
                 <option value="solana">Solana</option>
                 <option value="bitcoin">Bitcoin</option>
-               
             </select>
         </div>
 
@@ -184,13 +190,13 @@
         </div>
 
         <div class="buttons-group">
-            <a href="confirmation.html"><button class="btn-green">Confirmar Pagamento</button></a>
+            <button class="btn-green" id="confirm-payment">Confirmar Pagamento</button>
             <a href="index.html"><button class="btn-red">Cancelar</button></a>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2025 HoloFi. Todos os direitos reservados. by <a href="https://instagram.com/lucasjanuario14" target="_blank">@lucasjanuario14</a></p>
+        <p>&copy; 2025 HoloFi. Todos os direitos reservados.</p>
     </footer>
 
     <script>
@@ -201,6 +207,53 @@
         quantitySlider.addEventListener("input", function () {
             quantityValue.textContent = quantitySlider.value;
         });
+
+        // Lógica de pagamento
+        document.getElementById("confirm-payment").addEventListener("click", function () {
+            const planoSelecionado = document.getElementById("investment-plan").value;
+            const valorPlano = calcularValorPlano(planoSelecionado);
+
+            if (!planoSelecionado) {
+                alert('Por favor, selecione um plano!');
+                return;
+            }
+
+            // Faz a requisição para o backend para criar o pagamento
+            fetch('http://localhost:3000/criar-pagamento', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    plano: planoSelecionado,
+                    valor: valorPlano
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Redireciona o usuário para o Mercado Pago
+                window.location.href = data.init_point;
+            })
+            .catch(error => console.error('Erro ao criar pagamento:', error));
+        });
+
+        function calcularValorPlano(plano) {
+            let valor = 0;
+            switch (plano) {
+                case 'zen BRL':
+                    valor = 200; // exemplo de valor
+                    break;
+                case 'zion USD':
+                    valor = 250;
+                    break;
+                case 'zetha EUR':
+                    valor = 300;
+                    break;
+                default:
+                    valor = 0;
+            }
+            return valor;
+        }
     </script>
 </body>
 </html>
