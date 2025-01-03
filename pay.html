@@ -1,39 +1,269 @@
-<script>
-    document.getElementById("generate-pix").addEventListener("click", function () {
-        const valorInvestido = document.getElementById("investment-value").value;
-        const chavePixCliente = document.getElementById("pix-key").value;
-
-        if (!valorInvestido || !chavePixCliente) {
-            alert('Por favor, insira um valor para o investimento e forneça sua chave PIX!');
-            return;
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="icon" href="z.png" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento Pix - HoloFi</title>
+    <link rel="icon" href="https://nscsuport.github.io/OZZ/z.png" type="image/x-icon">
+    <style>
+        /* Configuração global */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
-        // Formatar o valor com 2 casas decimais
-        const valorFormatado = parseFloat(valorInvestido).toFixed(2);
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #000;
+            color: #00FF00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            padding: 10px;
+            zoom: 80%;
+        }
 
-        // Criar o payload Pix seguindo o padrão BR Code
-        const payloadPix = `
-            000201
-            26580014BR.GOV.BCB.PIX
-            01${chavePixCliente}
-            520400005303986
-            5404${valorFormatado}
-            5802BR
-            5920HoloFi
-            6009São Paulo
-            6304
-        `.replace(/\s+/g, ''); // Remove espaços desnecessários
+        h1 {
+            font-size: 2.8rem;
+            margin: 20px 0;
+            color: #00FF00;
+            text-align: center;
+            text-shadow: 0 0 20px #7e00ff;
+        }
 
-        // Gerar o QR Code com os dados do Pix
-        QRCode.toDataURL(payloadPix, { errorCorrectionLevel: 'H' }, function (err, url) {
-            if (err) {
-                console.error('Erro ao gerar QR Code:', err);
-                alert('Erro ao gerar o QR Code!');
-            } else {
-                const qrCodeElement = document.getElementById("qr-image");
-                document.getElementById("qr-code").style.display = "block";
-                qrCodeElement.src = url;
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #e0e0e0;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #3c3c3c;
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            font-size: 1.1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .buttons-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .buttons-group button {
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #fff;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center;
+            flex: 1;
+        }
+
+        .btn-blue {
+            background-color: #1A73E8;
+        }
+
+        .btn-blue:hover {
+            background-color: #0F59C9;
+            transform: scale(1.05);
+        }
+
+        .btn-red {
+            background-color: #f44336;
+        }
+
+        .btn-red:hover {
+            background-color: #d32f2f;
+            transform: scale(1.05);
+        }
+
+        .blue-screen {
+            margin-top: 20px;
+            padding: 20px;
+            width: 100%;
+            background-color: #0000aa;
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        footer {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(45deg, #f0f000, #ff4500);
+            color: #000000;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            margin-top: 20px;
+            animation: neon 1.5s ease-in-out infinite alternate;
+        }
+
+        footer a {
+            color: #000000;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes neon {
+            0% {
+                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
             }
+            50% {
+                text-shadow: 0 0 20px #ff0000, 0 0 30px #ff4500, 0 0 40px #f0f000;
+            }
+            100% {
+                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Pagamento Pix - HoloFi</h1>
+    <div class="container">
+        <div class="form-group">
+            <label for="investment-value">Valor a ser investido (R$)</label>
+            <input type="number" id="investment-value" placeholder="Digite o valor desejado" min="1" step="0.01" required>
+        </div>
+
+        <div class="form-group">
+            <label for="pix-key">Chave PIX do Cliente</label>
+            <input type="text" id="pix-key" placeholder="Digite sua chave PIX" required>
+        </div>
+
+        <div class="form-group">
+            <label for="investment-plan">Escolha o plano</label>
+            <select id="investment-plan" required>
+                <option value="" disabled="" selected="">Selecione um plano</option>
+                <option value="diamante-brl">zen BRL</option>
+                <option value="esmeralda-usd">zion USD</option>
+                <option value="safira-eur">zetha EUR</option>
+                <option value="ethereum">Ethereum</option>
+                <option value="solana">Solana</option>
+                <option value="bitcoin">Bitcoin</option>
+            </select>
+        </div>
+
+        <div class="buttons-group">
+            <button class="btn-blue" id="generate-pix">Gerar PIX</button>
+            <a href="https://nscsuport.github.io/OZZ/index.html"><button class="btn-red">Cancelar</button></a>
+        </div>
+
+        <!-- Exibir QR Code -->
+        <div id="qr-code" style="display: none; margin-top: 20px; text-align: center;">
+            <h2>QR Code de Pagamento</h2>
+            <img id="qr-image" src="" alt="QR Code" style="width: 200px;">
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 HoloFi. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+    <script>
+        document.getElementById("generate-pix").addEventListener("click", function () {
+            const valorInvestido = document.getElementById("investment-value").value;
+            const chavePixCliente = document.getElementById("pix-key").value;
+
+            if (!valorInvestido || !chavePixCliente) {
+                alert('Por favor, insira um valor para o investimento e forneça sua chave PIX!');
+                return;
+            }
+
+            // Formatar o valor com 2 casas decimais
+            const valorFormatado = parseFloat(valorInvestido).toFixed(2);
+
+            // Criar o payload do QR Code Pix
+            const payload = {
+                "v": "01", // versão
+                "cal": [
+                    {
+                        "tag": "00",
+                        "value": "01"
+                    },
+                    {
+                        "tag": "26", // Chave Pix do recebedor
+                        "value": chavePixCliente
+                    },
+                    {
+                        "tag": "51",
+                        "value": valorFormatado
+                    },
+                    {
+                        "tag": "52",
+                        "value": "BR"
+                    },
+                    {
+                        "tag": "59",
+                        "value": "HoloFi"
+                    },
+                    {
+                        "tag": "60",
+                        "value": "Pagamento de Investimento"
+                    },
+                    {
+                        "tag": "63",
+                        "value": "00"
+                    }
+                ]
+            };
+
+            // Gerar o QR Code com os dados do Pix
+            const qrCodeData = JSON.stringify(payload);
+            const qrCodeElement = document.getElementById("qr-image");
+
+            QRCode.toDataURL(qrCodeData, { errorCorrectionLevel: 'H' }, function (err, url) {
+                if (err) {
+                    console.error('Erro ao gerar QR Code:', err);
+                    alert('Erro ao gerar o QR Code!');
+                } else {
+                    document.getElementById("qr-code").style.display = "block";
+                    qrCodeElement.src = url;
+                }
+            });
         });
-    });
-</script>
+    </script>
+
+</body>
+</html>
