@@ -1,301 +1,145 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="z.png" type="image/x-icon">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investimentos</title>
-    <style>
-        /* Configuração global */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulário de Investimento</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
 
-        body {
-            font-family: 'Roboto', Arial, sans-serif;
-            background-color: #000;
-            color: #00FF00;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-            padding: 10px;
-            zoom: 80%;
-        }
+    .form-container {
+      background-color: #1c1c1c;
+      padding: 20px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 400px;
+    }
 
-        h1 {
-            font-size: 2.8rem;
-            margin: 20px 0;
-            color: #00FF00;
-            text-align: center;
-            text-shadow: 0 0 20px #7e00ff;
-        }
+    .form-container h1 {
+      text-align: center;
+      color: #fff;
+      margin-bottom: 20px;
+    }
 
-        .container {
-            width: 100%;
-            max-width: 600px;
-            background-color: #1e1e1e;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-            margin: 0 auto;
-        }
+    .form-group {
+      margin-bottom: 15px;
+    }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #e0e0e0;
-        }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #444;
+      border-radius: 4px;
+      background-color: #333;
+      color: #fff;
+    }
 
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #3c3c3c;
-            background-color: #2a2a2a;
-            color: #e0e0e0;
-            font-size: 1.1rem;
-            transition: border-color 0.3s ease;
-        }
+    .btn-green {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
 
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: #4CAF50;
-        }
+    .btn-green:hover {
+      background-color: #388E3C;
+    }
 
-        .buttons-group {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin-top: 20px;
-        }
+    .btn-red {
+      background-color: #f44336;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
 
-        .buttons-group button {
-            padding: 14px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #000;
-            border: none;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            text-align: center;
-            flex: 1;
-        }
+    .btn-red:hover {
+      background-color: #d32f2f;
+    }
 
-        .btn-yellow {
-            background-color: #FFEA00;
-        }
-
-        .btn-yellow:hover {
-            background-color: #FDD835;
-            transform: scale(1.05);
-        }
-
-        .btn-green {
-            background-color: #4CAF50;
-        }
-
-        .btn-green:hover {
-            background-color: #388e3c;
-            transform: scale(1.05);
-        }
-
-        .btn-red {
-            background-color: #f44336;
-        }
-
-        .btn-red:hover {
-            background-color: #d32f2f;
-            transform: scale(1.05);
-        }
-
-        .blue-screen {
-            margin-top: 20px;
-            padding: 20px;
-            width: 100%;
-            background-color: #0000aa;
-            color: #ffffff;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 1.1rem;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-        }
-
-        footer {
-            width: 100%;
-            padding: 20px;
-            background-color: #000;
-            text-align: center;
-            font-size: 0.9rem;
-            color: #00FF00;
-            margin-top: 20px;
-        }
-
-        footer a {
-            color: #00FF00;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    .result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 1.2em;
+    }
+  </style>
 </head>
 <body>
-    <h1>Investimentos HoloFi</h1>
-    <div class="container">
-        <div class="form-group">
-            <label for="investment-plan">Escolha o plano</label>
-            <select id="investment-plan" disabled>
-                <option value="" disabled selected>Selecione um plano</option>
-                <option value="diamante-brl">zen BRL</option>
-                <option value="esmeralda-usd">zion USD</option>
-                <option value="safira-eur">zetha EUR</option>
-                <option value="topazio-brl">zenbol BRL</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="investment-amount">Valor do Investimento</label>
-            <input type="number" id="investment-amount" placeholder="Insira o valor desejado" min="1" step="any" disabled>
-        </div>
-
-        <div class="form-group">
-            <label for="execution-times">Quantidade de Execuções</label>
-            <input type="number" id="execution-times" placeholder="De 1 a 10" min="1" max="10" disabled>
-        </div>
-
-        <div class="buttons-group">
-            <button class="btn-yellow" id="connect-wallet">Conectar MetaMask</button>
-            <button class="btn-green" id="calculate-profit" disabled>Calcular</button>
-            <button class="btn-red" id="buy-button" disabled>Confirmar Compra</button>
-        </div>
-
-        <div class="blue-screen" id="profit-display">
-            O lucro será exibido aqui.
-        </div>
+  <div class="form-container">
+    <h1>Investimento</h1>
+    <div class="form-group">
+      <label for="investment-plan">Plano de Investimento</label>
+      <select id="investment-plan">
+        <option value="basic">Plano Básico</option>
+        <option value="premium">Plano Premium</option>
+        <option value="vip">Plano VIP</option>
+      </select>
     </div>
+    <div class="form-group">
+      <label for="investment-amount">Valor do Investimento (R$)</label>
+      <input type="number" id="investment-amount" placeholder="Insira o valor desejado" min="1" step="any">
+    </div>
+    <div class="form-group">
+      <label for="execution-times">Quantidade de Execuções</label>
+      <input type="number" id="execution-times" placeholder="De 1 a 10" min="1" max="10">
+    </div>
+    <button class="btn-green" id="calculate-profit">Calcular</button>
+    <button class="btn-red" id="buy-button">Confirmar Compra</button>
+    <div class="result" id="result"></div>
+  </div>
 
-    <footer>
-        <p>&copy; 2025 HoloFi. Todos os direitos reservados. by <a href="https://instagram.com/lucasjanuario14" target="_blank">@lucasjanuario14</a></p>
-    </footer>
+  <script>
+    document.getElementById('calculate-profit').addEventListener('click', () => {
+      const plan = document.getElementById('investment-plan').value;
+      const amount = parseFloat(document.getElementById('investment-amount').value);
+      const times = parseInt(document.getElementById('execution-times').value, 10);
 
-    <!-- Incluindo o Ethers.js -->
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
+      if (!amount || !times) {
+        alert("Por favor, insira todos os valores corretamente.");
+        return;
+      }
 
-    <script>
-        let selectedPlan;
-        let investmentAmount;
-        let userBalance;
-        let signer;
-        let account;
+      let profitRate;
+      switch (plan) {
+        case 'basic': profitRate = 0.05; break;
+        case 'premium': profitRate = 0.1; break;
+        case 'vip': profitRate = 0.15; break;
+        default: profitRate = 0;
+      }
 
-        // Função para conectar ao MetaMask
-        document.getElementById("connect-wallet").addEventListener("click", async () => {
-            if (window.ethereum) {
-                try {
-                    // Solicitar contas do MetaMask
-                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    account = accounts[0];
+      const totalProfit = amount * profitRate * times;
+      document.getElementById('result').innerText = `Lucro Total Estimado: R$${totalProfit.toFixed(2)}`;
+    });
 
-                    // Definir o provedor e o assinante
-                    const provider = new ethers.providers.Web3Provider(window.ethereum);
-                    signer = provider.getSigner();
-
-                    // Habilitar os campos de input
-                    document.getElementById("investment-plan").disabled = false;
-                    document.getElementById("investment-amount").disabled = false;
-                    document.getElementById("execution-times").disabled = false;
-                    document.getElementById("calculate-profit").disabled = false;
-                    document.getElementById("buy-button").disabled = false;
-
-                    document.getElementById("connect-wallet").textContent = "MetaMask Conectado";
-                    document.getElementById("connect-wallet").classList.remove("btn-yellow");
-                    document.getElementById("connect-wallet").classList.add("btn-green");
-
-                    console.log("Conectado com a conta: " + account);
-                } catch (error) {
-                    console.error("Erro ao conectar ao MetaMask:", error);
-                    alert("Erro ao conectar ao MetaMask");
-                }
-            } else {
-                alert("MetaMask não detectado. Por favor, instale o MetaMask.");
-            }
-        });
-
-        // Função para calcular o lucro
-        document.getElementById("calculate-profit").addEventListener("click", function () {
-            selectedPlan = document.getElementById("investment-plan").value;
-            investmentAmount = parseFloat(document.getElementById("investment-amount").value);
-            let executionTimes = parseInt(document.getElementById("execution-times").value);
-
-            if (isNaN(executionTimes) || executionTimes <= 0 || executionTimes > 10) {
-                alert("Por favor, insira uma quantidade de execuções válida entre 1 e 10.");
-                return;
-            }
-
-            let profit = 0;
-
-            // Definindo lucro com base no plano selecionado
-            if (selectedPlan === "diamante-brl") {
-                profit = investmentAmount * 0.2; // Exemplo: cada 1 BRL do Diamante BRL rende 0.2
-            } else if (selectedPlan === "esmeralda-usd") {
-                profit = investmentAmount * 0.25; // Exemplo: cada 1 USD da Esmeralda USD rende 0.25
-            } else if (selectedPlan === "safira-eur") {
-                profit = investmentAmount * 0.3; // Exemplo: cada 1 EUR da Safira EUR rende 0.3
-            } else if (selectedPlan === "topazio-brl") {
-                profit = investmentAmount * 0.15; // Exemplo: cada 1 BRL do Topázio BRL rende 0.15
-            }
-
-            const totalProfit = profit * executionTimes;
-            document.getElementById("profit-display").textContent = `Lucro estimado: R$ ${totalProfit.toFixed(2)} BRL`;
-        });
-
-        // Função para confirmar a compra com confirmação
-        document.getElementById("buy-button").addEventListener("click", async () => {
-            if (!account) {
-                alert("Por favor, conecte sua carteira MetaMask primeiro.");
-                return;
-            }
-
-            const selectedAmount = document.getElementById("investment-amount").value;
-            const selectedPlan = document.getElementById("investment-plan").value;
-
-            if (!selectedAmount || !selectedPlan) {
-                alert("Por favor, preencha todos os campos.");
-                return;
-            }
-
-            // Confirmar compra
-            const confirmed = window.confirm(`Você tem certeza que deseja investir R$${selectedAmount} no plano ${selectedPlan}?`);
-
-            if (confirmed) {
-                try {
-                    // Criando transação com MetaMask
-                    const tx = await signer.sendTransaction({
-                        to: "ENDEREÇO_DESTINO",  // Substitua com o endereço correto
-                        value: ethers.utils.parseEther(selectedAmount.toString())
-                    });
-
-                    // Exibição do status da transação
-                    alert(`Compra realizada com sucesso! Tx hash: ${tx.hash}`);
-                    console.log(tx);
-                } catch (error) {
-                    alert(`Erro na compra: ${error.message}`);
-                }
-            } else {
-                alert("Compra cancelada.");
-            }
-        });
-    </script>
+    document.getElementById('buy-button').addEventListener('click', () => {
+      const amount = parseFloat(document.getElementById('investment-amount').value);
+      if (!amount) {
+        alert("Por favor, insira o valor do investimento.");
+        return;
+      }
+      alert("Compra confirmada! Obrigado por investir.");
+    });
+  </script>
 </body>
 </html>
