@@ -184,9 +184,8 @@
         </div>
 
         <div class="form-group">
-            <label for="quantity">Quantidade</label>
-            <input type="range" id="quantity" min="1" max="10" value="1" step="1" class="quantity-slider">
-            <p>Quantidade selecionada: <span id="quantity-value">1</span></p>
+            <label for="investment-value">Valor a ser investido (R$)</label>
+            <input type="number" id="investment-value" placeholder="Digite o valor desejado" min="1" step="0.01">
         </div>
 
         <div class="buttons-group">
@@ -200,21 +199,13 @@
     </footer>
 
     <script>
-        // Atualiza o valor da quantidade no texto
-        const quantitySlider = document.getElementById("quantity");
-        const quantityValue = document.getElementById("quantity-value");
-
-        quantitySlider.addEventListener("input", function () {
-            quantityValue.textContent = quantitySlider.value;
-        });
-
         // Lógica de pagamento
         document.getElementById("confirm-payment").addEventListener("click", function () {
             const planoSelecionado = document.getElementById("investment-plan").value;
-            const valorPlano = calcularValorPlano(planoSelecionado);
+            const valorInvestido = document.getElementById("investment-value").value;
 
-            if (!planoSelecionado) {
-                alert('Por favor, selecione um plano!');
+            if (!planoSelecionado || !valorInvestido) {
+                alert('Por favor, selecione um plano e insira um valor para o investimento!');
                 return;
             }
 
@@ -226,7 +217,7 @@
                 },
                 body: JSON.stringify({
                     plano: planoSelecionado,
-                    valor: valorPlano
+                    valor: parseFloat(valorInvestido)
                 })
             })
             .then(response => response.json())
@@ -236,24 +227,6 @@
             })
             .catch(error => console.error('Erro ao criar pagamento:', error));
         });
-
-        function calcularValorPlano(plano) {
-            let valor = 0;
-            switch (plano) {
-                case 'zen BRL':
-                    valor = 200; // exemplo de valor
-                    break;
-                case 'zion USD':
-                    valor = 250;
-                    break;
-                case 'zetha EUR':
-                    valor = 300;
-                    break;
-                default:
-                    valor = 0;
-            }
-            return valor;
-        }
     </script>
 </body>
 </html>
