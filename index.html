@@ -215,16 +215,45 @@
             }
 
             let profit = 0;
+  // Função para calcular o lucro
+    document.getElementById("calculate-profit").addEventListener("click", function () {
+        const selectedPlan = document.getElementById("investment-plan").value;
+        const investmentAmount = parseFloat(document.getElementById("investment-amount").value);
 
-            // Definindo lucro com base no plano selecionado
-            if (selectedPlan === "ethereum") {
-                profit = investmentAmount * 0.2;
-            } else if (selectedPlan === "solana") {
-                profit = investmentAmount * 0.25;
-            } else if (selectedPlan === "bitcoin") {
-                profit = investmentAmount * 0.3;
-            }
+        if (isNaN(investmentAmount)) {
+            alert("Por favor, insira um valor de investimento válido.");
+            return;
+        }
 
+        let profit = 0;
+
+        // Definindo lucro com base no plano selecionado
+        switch (selectedPlan) {
+            case "diamante-brl":
+                profit = investmentAmount * 0.15; // 15% de lucro para zen BRL
+                break;
+            case "esmeralda-usd":
+                profit = investmentAmount * 0.18; // 18% de lucro para zion USD
+                break;
+            case "safira-eur":
+                profit = investmentAmount * 0.12; // 12% de lucro para zetha EUR
+                break;
+            case "ethereum":
+                profit = investmentAmount * 0.2; // 20% de lucro para Ethereum
+                break;
+            case "solana":
+                profit = investmentAmount * 0.25; // 25% de lucro para Solana
+                break;
+            case "bitcoin":
+                profit = investmentAmount * 0.3; // 30% de lucro para Bitcoin
+                break;
+            default:
+                alert("Por favor, selecione um plano válido.");
+                return;
+        }
+
+        document.getElementById("profit-display").textContent = `Lucro estimado: R$ ${profit.toFixed(2)} BRL`;
+    });
             document.getElementById("profit-display").textContent = `Lucro estimado: R$ ${profit.toFixed(2)} BRL`;
         });
     </script>
