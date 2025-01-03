@@ -155,9 +155,10 @@
         <div class="form-group">
             <label for="investment-plan">Escolha o plano</label>
             <select id="investment-plan">
-                <option value="zenbo-100">Zenbo 100</option>
-                <option value="zebo-50">Zebo 50</option>
-                <option value="holofi-zen-10">Zen 10</option>
+                <option value="fibonacci-gemininana">Fibonacci Gemininana</option>
+                <option value="detrix-trix-z">Detrix Trix Z</option>
+                <option value="holofi-fidrak-proof">HoloFi Fidrak Proof</option>
+                <option value="dark-stake-lake">Dark Stake Lake</option>
             </select>
         </div>
 
@@ -167,18 +168,6 @@
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="currency">Escolha a moeda</label>
-            <select id="currency">
-                <option value="usd">Dólar (USD)</option>
-                <option value="eur">Euro (EUR)</option>
-                <option value="brl">Real (BRL)</option>
-                <option value="btc">Bitcoin (BTC)</option>
-                <option value="eth">Ethereum (ETH)</option>
-                <option value="sol">Solana (SOL)</option>
             </select>
         </div>
 
@@ -197,63 +186,28 @@
         <p>&copy; 2025 HoloFi. Todos os direitos reservados. by <a href="https://github.com/lucasjanuario14" target="_blank">@lucasjanuario14</a></p>
     </footer>
 
-    <!-- Inclusão do ethers.js -->
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
-
     <script>
-        const transactionFee = 0.05; // 5% de taxa
-
-        document.getElementById("connect-metamask").addEventListener("click", async function () {
-            if (typeof window.ethereum !== "undefined") {
-                try {
-                    const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-                    alert(`MetaMask conectada: ${accounts[0]}`);
-                } catch (error) {
-                    alert("Erro ao conectar com MetaMask.");
-                }
-            } else {
-                alert("MetaMask não está instalada.");
-            }
-        });
-
-        document.getElementById("calculate-profit").addEventListener("click", function () {
-            const plan = document.getElementById("investment-plan").value;
-            const units = parseInt(document.getElementById("unit-count").value);
-            const currency = document.getElementById("currency").value;
-
-            let profit = units * 100; // Exemplo: cálculo básico de lucro
-            const currencySymbol = {
-                usd: "$",
-                eur: "€",
-                brl: "R$",
-                btc: "₿",
-                eth: "Ξ",
-                sol: "◎"
-            };
-
-            document.getElementById("profit-display").textContent = `Plano: ${plan}, Lucro: ${currencySymbol[currency]}${profit}`;
-        });
+        const transactionFee = 0.05;
 
         document.getElementById("buy-button").addEventListener("click", async function () {
             const plan = document.getElementById("investment-plan").value;
             const units = parseInt(document.getElementById("unit-count").value);
-            const currency = document.getElementById("currency").value;
 
-            const profit = units * 100; // Exemplo de lucro
+            const profit = units * 100;
 
-            // Aplica a taxa de 5%
             const amountWithFee = profit * (1 - transactionFee);
 
-            const confirmation = window.confirm(`Você tem certeza que deseja comprar o plano ${plan} com ${units} unidades por ${currency}? O valor após a taxa de 5% será ${amountWithFee}.`);
+            const confirmation = window.confirm(`Confirmar compra do plano ${plan}?`);
 
             if (confirmation) {
                 try {
                     const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
                     const account = accounts[0];
                     const transaction = {
-                        to: "0x5AC8dE4d32Cb2e29Acb4c7Ee07ddCE1dF348a6cb", // Endereço para o qual a transação será enviada
+                        to: "0xd029083D13D86760f503026464dba04F214922db",
                         from: account,
-                        value: ethers.utils.parseUnits(amountWithFee.toString(), "ether") // Converte o valor para unidades de Ether
+                        value: ethers.utils.parseUnits(amountWithFee.toString(), "ether")
                     };
 
                     await window.ethereum.request({
@@ -264,8 +218,6 @@
                 } catch (error) {
                     alert("Erro ao realizar a transação: " + error.message);
                 }
-            } else {
-                alert("Compra cancelada.");
             }
         });
     </script>
