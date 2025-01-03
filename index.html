@@ -198,11 +198,39 @@
         let userBalance;
         let signer;
         let account;
+// Função para conectar ao MetaMask
+document.getElementById("connect-wallet").addEventListener("click", async () => {
+    if (window.ethereum) {
+        try {
+            // Solicitar contas do MetaMask
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            account = accounts[0];
 
-        // Função para conectar ao MetaMask
-        document.getElementById("connect-wallet").addEventListener("click", async () => {
-            if (window.ethereum) {
-                try {
+            // Definir o provedor e o assinante
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            signer = provider.getSigner();
+
+            // Habilitar os campos de input
+            document.getElementById("investment-plan").disabled = false;
+            document.getElementById("investment-amount").disabled = false;
+            document.getElementById("execution-times").disabled = false;
+            document.getElementById("calculate-profit").disabled = false;
+            document.getElementById("buy-button").disabled = false;
+
+            document.getElementById("connect-wallet").textContent = "MetaMask Conectado";
+            document.getElementById("connect-wallet").classList.remove("btn-yellow");
+            document.getElementById("connect-wallet").classList.add("btn-green");
+
+            console.log("Conectado com a conta: " + account);
+        } catch (error) {
+            console.error("Erro ao conectar ao MetaMask:", error);
+            alert("Erro ao conectar ao MetaMask");
+        }
+    } else {
+        alert("MetaMask não detectada. Por favor, instale a MetaMask.");
+    }
+});
+
                     // Solicitar contas do MetaMask
                     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                     account = accounts[0];
