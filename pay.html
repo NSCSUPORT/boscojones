@@ -6,7 +6,90 @@
     <title>Pagamento - HoloFi</title>
     <link rel="icon" href="z.png" type="image/x-icon">
     <style>
-        /* (Seu CSS existente aqui) */
+        /* Estilo Básico */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #fff;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-size: 1.1em;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            background-color: #444;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+        }
+
+        .buttons-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .btn-green {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-green:hover {
+            background-color: #45a049;
+        }
+
+        .btn-red {
+            background-color: #f44336;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-red:hover {
+            background-color: #d32f2f;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #bbb;
+        }
+
+        footer p {
+            margin: 10px;
+        }
     </style>
 </head>
 <body>
@@ -40,9 +123,7 @@
         <p>&copy; 2025 HoloFi. Todos os direitos reservados.</p>
     </footer>
 
-    <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script>
-        // Lógica de pagamento
         document.getElementById("confirm-payment").addEventListener("click", function () {
             const planoSelecionado = document.getElementById("investment-plan").value;
             const valorInvestido = document.getElementById("investment-value").value;
@@ -52,36 +133,25 @@
                 return;
             }
 
-            // Criação do pagamento com Mercado Pago
-            const mp = new MercadoPago('APP_USR-5426605333181809-010315-b06229d80c1e63ed582dbd28e27c677a-1658720398'); // Substitua pelo seu token de acesso Mercado Pago
-
-            mp.checkout({
-                preference: {
-                    items: [
-                        {
-                            title: planoSelecionado,
-                            quantity: 1,
-                            currency_id: 'BRL',
-                            unit_price: parseFloat(valorInvestido),
-                        }
-                    ],
-                    back_urls: {
-                        success: 'https://www.exemplo.com/success',
-                        failure: 'https://www.exemplo.com/failure',
-                        pending: 'https://www.exemplo.com/pending'
-                    },
-                    auto_return: 'approved',
+            // Envia os dados para o backend para criar o pagamento com PIX
+            fetch('http://localhost:3000/create-payment', {  // URL do backend
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
                 },
-                render: {
-                    container: '.buttons-group', // O botão de pagamento será renderizado neste container
-                    label: 'Pagar com Mercado Pago',
+                body: JSON.stringify({
+                    plano: planoSelecionado,
+                    valor: valorInvestido
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Redireciona para o link de pagamento PIX
+                if (data.init_point) {
+                    window.location.href = data.init_point;  // Redireciona para o Mercado Pago (QR code ou link PIX)
                 }
-            }).then(function (response) {
-                if (response.status === 'success') {
-                    // Redireciona o usuário para o link de pagamento
-                    window.location.href = response.preference.init_point;
-                }
-            }).catch(function (error) {
+            })
+            .catch(error => {
                 console.error('Erro ao criar pagamento:', error);
                 alert('Erro ao processar pagamento');
             });
