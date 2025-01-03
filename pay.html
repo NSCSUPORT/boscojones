@@ -163,7 +163,17 @@
     <div class="container">
         <div class="form-group">
             <label for="investment-value">Valor a ser investido (R$)</label>
-            <input type="number" id="investment-value" placeholder="Digite o valor desejado" min="1" step="0.01" required>
+            <input type="number" id="investment-value" placeholder="Digite o valor desejado" min="1" step="0.01" value="1" required>
+        </div>
+
+        <div class="form-group">
+            <label for="quantity">Quantidade</label>
+            <select id="quantity">
+                <option value="1">1</option>
+                <option value="10">10</option>
+                <option value="100">100</option>
+                <option value="1000">1000</option>
+            </select>
         </div>
 
         <div class="form-group">
@@ -174,7 +184,7 @@
         <div class="form-group">
             <label for="investment-plan">Escolha o plano</label>
             <select id="investment-plan" required>
-                <option value="" disabled="" selected="">Selecione um plano</option>
+                <option value="" disabled selected>Selecione um plano</option>
                 <option value="diamante-brl">zen BRL</option>
                 <option value="esmeralda-usd">zion USD</option>
                 <option value="safira-eur">zetha EUR</option>
@@ -204,6 +214,7 @@
     <script>
         document.getElementById("generate-pix").addEventListener("click", function () {
             const valorInvestido = document.getElementById("investment-value").value;
+            const quantidade = document.getElementById("quantity").value;
             const chavePixCliente = document.getElementById("pix-key").value;
 
             if (!valorInvestido || !chavePixCliente) {
@@ -211,8 +222,8 @@
                 return;
             }
 
-            // Formatar o valor com 2 casas decimais
-            const valorFormatado = parseFloat(valorInvestido).toFixed(2);
+            // Multiplicar o valor pelo número de unidades selecionadas
+            const valorTotal = (parseFloat(valorInvestido) * parseInt(quantidade)).toFixed(2);
 
             // Criar o payload do QR Code Pix
             const payload = {
@@ -228,7 +239,7 @@
                     },
                     {
                         "tag": "51",
-                        "value": valorFormatado
+                        "value": valorTotal
                     },
                     {
                         "tag": "52",
