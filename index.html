@@ -175,7 +175,7 @@
         </div>
 
         <div class="buttons-group">
-            <button class="btn-yellow" id="connect-wallet">Conectar Trust Wallet</button>
+            <button class="btn-yellow" id="connect-wallet">Conectar MetaMask</button>
             <button class="btn-green" id="calculate-profit" disabled>Calcular</button>
             <button class="btn-red" id="buy-button" disabled>Confirmar Compra</button>
         </div>
@@ -199,17 +199,17 @@
         let signer;
         let account;
 
-        // Função para conectar ao Trust Wallet
+        // Função para conectar ao MetaMask
         document.getElementById("connect-wallet").addEventListener("click", async () => {
             if (window.ethereum) {
                 try {
-                    // Solicitar contas do Trust Wallet
+                    // Solicitar contas do MetaMask
                     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                     account = accounts[0];
 
-                    // Definir o provedor e o assinante
-                    const provider = new ethers.providers.Web3Provider(window.ethereum);
-                    signer = provider.getSigner();
+                    // Definir o provedor e o assinante com a chave da API Infura
+                    const provider = new ethers.JsonRpcProvider("https://mainnet.infura.io/v3/ad86f1b6ed54493bafb904ee0f857f83");
+                    signer = provider.getSigner(account);
 
                     // Habilitar os campos de input
                     document.getElementById("investment-plan").disabled = false;
@@ -218,17 +218,17 @@
                     document.getElementById("calculate-profit").disabled = false;
                     document.getElementById("buy-button").disabled = false;
 
-                    document.getElementById("connect-wallet").textContent = "Trust Wallet Conectado";
+                    document.getElementById("connect-wallet").textContent = "MetaMask Conectado";
                     document.getElementById("connect-wallet").classList.remove("btn-yellow");
                     document.getElementById("connect-wallet").classList.add("btn-green");
 
                     console.log("Conectado com a conta: " + account);
                 } catch (error) {
-                    console.error("Erro ao conectar ao Trust Wallet:", error);
-                    alert("Erro ao conectar ao Trust Wallet");
+                    console.error("Erro ao conectar ao MetaMask:", error);
+                    alert("Erro ao conectar ao MetaMask");
                 }
             } else {
-                alert("Trust Wallet não detectado. Por favor, instale o Trust Wallet.");
+                alert("MetaMask não detectada. Por favor, instale a MetaMask.");
             }
         });
 
@@ -249,43 +249,24 @@
             if (selectedPlan === "diamante-brl") {
                 profit = investmentAmount * 0.2; // Exemplo: cada 1 BRL do Diamante BRL rende 0.2
             } else if (selectedPlan === "esmeralda-usd") {
-                profit = investmentAmount * 0.25; // Exemplo: cada 1 USD da Esmeralda USD rende 0.25
+                profit = investmentAmount * 0.25; // Exemplo: cada 1 USD do Esmeralda USD rende 0.25
             } else if (selectedPlan === "safira-eur") {
-                profit = investmentAmount * 0.3; // Exemplo: cada 1 EUR da Safira EUR rende 0.3
+                profit = investmentAmount * 0.3; // Exemplo: cada 1 EUR do Safira EUR rende 0.3
             } else if (selectedPlan === "topazio-brl") {
                 profit = investmentAmount * 0.15; // Exemplo: cada 1 BRL do Topázio BRL rende 0.15
             }
 
-            const totalProfit = profit * executionTimes;
-            document.getElementById("profit-display").textContent = `Lucro estimado: R$ ${totalProfit.toFixed(2)} BRL`;
+            // Exibindo o lucro calculado
+            document.getElementById("profit-display").textContent = `Lucro: R$ ${profit.toFixed(2)}`;
         });
 
-        // Função para confirmar a compra
-        document.getElementById("buy-button").addEventListener("click", async () => {
-            if (!account) {
-                alert("Por favor, conecte sua carteira Trust Wallet primeiro.");
-                return;
-            }
-
-            const selectedAmount = document.getElementById("investment-amount").value;
-            const selectedPlan = document.getElementById("investment-plan").value;
-
-            if (!selectedAmount || !selectedPlan) {
-                alert("Por favor, preencha todos os campos.");
-                return;
-            }
-
-            try {
-                // Realizar a transação de compra (simulação)
-                const tx = await signer.sendTransaction({
-                    to: selectedPlan, // Aqui você deve usar o endereço do contrato ou destino
-                    value: ethers.utils.parseEther(selectedAmount)
-                });
-
-                alert("Compra confirmada! A transação foi enviada: " + tx.hash);
-                console.log(tx);
-            } catch (error) {
-                alert("Erro ao confirmar a compra: " + error.message);
+        // Função para finalizar a compra
+        document.getElementById("buy-button").addEventListener("click", function () {
+            if (selectedPlan && investmentAmount > 0) {
+                // Coloque aqui a lógica de transação com a blockchain
+                alert(`Compra realizada com sucesso para o plano: ${selectedPlan}`);
+            } else {
+                alert("Por favor, preencha todos os campos corretamente.");
             }
         });
     </script>
