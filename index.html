@@ -75,6 +75,7 @@
             display: flex;
             justify-content: space-between;
             gap: 10px;
+            margin-top: 20px;
         }
 
         .buttons-group button {
@@ -152,12 +153,6 @@
 <body>
     <h1>Investimentos HoloFi</h1>
     <div class="container">
-        <div class="buttons-group">
-            <button class="btn-yellow" id="connect-wallet">Conectar MetaMask</button>
-            <button class="btn-green" id="calculate-profit" disabled>Calcular</button>
-            <button class="btn-red" id="buy-button" disabled>Confirmar Compra</button>
-        </div>
-
         <div class="form-group">
             <label for="investment-plan">Escolha o plano</label>
             <select id="investment-plan" disabled>
@@ -177,6 +172,12 @@
         <div class="form-group">
             <label for="execution-times">Quantidade de Execuções</label>
             <input type="number" id="execution-times" placeholder="De 1 a 10" min="1" max="10" disabled>
+        </div>
+
+        <div class="buttons-group">
+            <button class="btn-yellow" id="connect-wallet">Conectar MetaMask</button>
+            <button class="btn-green" id="calculate-profit" disabled>Calcular</button>
+            <button class="btn-red" id="buy-button" disabled>Confirmar Compra</button>
         </div>
 
         <div class="blue-screen" id="profit-display">
@@ -255,37 +256,36 @@
                 profit = investmentAmount * 0.15; // Exemplo: cada 1 BRL do Topázio BRL rende 0.15
             }
 
-            profit *= executionTimes;
-            let profitDisplay = document.getElementById("profit-display");
-            profitDisplay.textContent = `Lucro estimado: ${profit.toFixed(2)} (em valor da moeda do plano)`;
+            const totalProfit = profit * executionTimes;
+            document.getElementById("profit-display").textContent = `Lucro estimado: R$ ${totalProfit.toFixed(2)} BRL`;
         });
 
-        // Função para realizar a compra e distribuir o lucro
-        document.getElementById("buy-button").addEventListener("click", async function () {
-            const totalAmount = investmentAmount + parseFloat(document.getElementById("profit-display").textContent.split(':')[1]);
-            const profit = totalAmount * 0.05; // 5% para a plataforma
+        // Função para confirmar a compra
+        document.getElementById("buy-button").addEventListener("click", async () => {
+            if (!account) {
+                alert("Por favor, conecte sua carteira MetaMask primeiro.");
+                return;
+            }
 
-            if (userBalance >= totalAmount) {
-                try {
-                    // Transação de lucro para a plataforma
-                    await signer.sendTransaction({
-                        to: "0x5AC8dE4d32Cb2e29Acb4c7Ee07ddCE1dF348a6cb", 
-                        value: ethers.utils.parseEther(profit.toString())
-                    });
+            const selectedAmount = document.getElementById("investment-amount").value;
+            const selectedPlan = document.getElementById("investment-plan").value;
 
-                    // Transação para a conta MetaMask
-                    await signer.sendTransaction({
-                        to: account,
-                        value: ethers.utils.parseEther((totalAmount - profit).toString())
-                    });
+            if (!selectedAmount || !selectedPlan) {
+                alert("Por favor, preencha todos os campos.");
+                return;
+            }
 
-                    alert("Compra confirmada! Lucro de 5% enviado para a plataforma e o restante para sua conta MetaMask.");
-                } catch (error) {
-                    console.error("Erro na transação:", error);
-                    alert("Erro ao realizar a transação.");
-                }
-            } else {
-                alert("Saldo insuficiente. Por favor, adicione mais fundos ao MetaMask.");
+            try {
+                // Realizar a transação de compra (simulação)
+                const tx = await signer.sendTransaction({
+                    to: selectedPlan, // Aqui você deve usar o endereço do contrato ou destino
+                    value: ethers.utils.parseEther(selectedAmount)
+                });
+
+                alert("Compra confirmada! A transação foi enviada: " + tx.hash);
+            } catch (error) {
+                console.error("Erro ao realizar a compra:", error);
+                alert("Erro ao realizar a compra.");
             }
         });
     </script>
