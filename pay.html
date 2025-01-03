@@ -6,7 +6,7 @@
     <title>Pagamento - HoloFi</title>
     <link rel="icon" href="z.png" type="image/x-icon">
     <style>
-        /* (Your existing CSS here) */
+        /* (Seu CSS existente aqui) */
     </style>
 </head>
 <body>
@@ -53,98 +53,7 @@
             }
 
             // Criação do pagamento com Mercado Pago
-            const mp = new MercadoPago('<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagamento - HoloFi</title>
-    <link rel="icon" href="z.png" type="image/x-icon">
-    <style>
-        /* (Your existing CSS here) */
-    </style>
-</head>
-<body>
-    <h1>Pagamento - HoloFi</h1>
-    <div class="container">
-        <div class="form-group">
-            <label for="investment-plan">Escolha o plano</label>
-            <select id="investment-plan">
-                <option value="" disabled selected>Selecione um plano</option>
-                <option value="zen BRL">zen BRL</option>
-                <option value="zion USD">zion USD</option>
-                <option value="zetha EUR">zetha EUR</option>
-                <option value="ethereum">Ethereum</option>
-                <option value="solana">Solana</option>
-                <option value="bitcoin">Bitcoin</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="investment-value">Valor a ser investido (R$)</label>
-            <input type="number" id="investment-value" placeholder="Digite o valor desejado" min="1" step="0.01">
-        </div>
-
-        <div class="buttons-group">
-            <button class="btn-green" id="confirm-payment">Confirmar Pagamento</button>
-            <a href="index.html"><button class="btn-red">Cancelar</button></a>
-        </div>
-    </div>
-
-    <footer>
-        <p>&copy; 2025 HoloFi. Todos os direitos reservados.</p>
-    </footer>
-
-    <script src="https://sdk.mercadopago.com/js/v2"></script>
-    <script>
-        // Lógica de pagamento
-        document.getElementById("confirm-payment").addEventListener("click", function () {
-            const planoSelecionado = document.getElementById("investment-plan").value;
-            const valorInvestido = document.getElementById("investment-value").value;
-
-            if (!planoSelecionado || !valorInvestido) {
-                alert('Por favor, selecione um plano e insira um valor para o investimento!');
-                return;
-            }
-
-            // Criação do pagamento com Mercado Pago
-            const mp = new MercadoPago('YOUR_ACCESS_TOKEN'); // Use seu token de acesso Mercado Pago
-
-            mp.checkout({
-                preference: {
-                    items: [
-                        {
-                            title: planoSelecionado,
-                            quantity: 1,
-                            currency_id: 'BRL',
-                            unit_price: parseFloat(valorInvestido),
-                        }
-                    ],
-                    back_urls: {
-                        success: 'https://www.exemplo.com/success',
-                        failure: 'https://www.exemplo.com/failure',
-                        pending: 'https://www.exemplo.com/pending'
-                    },
-                    auto_return: 'approved',
-                },
-                render: {
-                    container: '.buttons-group', // O botão de pagamento será renderizado neste container
-                    label: 'Pagar com Mercado Pago',
-                }
-            }).then(function (response) {
-                if (response.status === 'success') {
-                    // Redireciona o usuário para o link de pagamento
-                    window.location.href = response.preference.init_point;
-                }
-            }).catch(function (error) {
-                console.error('Erro ao criar pagamento:', error);
-                alert('Erro ao processar pagamento');
-            });
-        });
-    </script>
-</body>
-</html>
-'); // Use seu token de acesso Mercado Pago
+            const mp = new MercadoPago('APP_USR-5426605333181809-010315-b06229d80c1e63ed582dbd28e27c677a-1658720398'); // Substitua pelo seu token de acesso Mercado Pago
 
             mp.checkout({
                 preference: {
