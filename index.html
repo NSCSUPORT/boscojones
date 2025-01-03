@@ -260,7 +260,7 @@
             document.getElementById("profit-display").textContent = `Lucro estimado: R$ ${totalProfit.toFixed(2)} BRL`;
         });
 
-        // Função para confirmar a compra
+        // Função para confirmar a compra com confirmação
         document.getElementById("buy-button").addEventListener("click", async () => {
             if (!account) {
                 alert("Por favor, conecte sua carteira Trust Wallet primeiro.");
@@ -275,17 +275,24 @@
                 return;
             }
 
-            try {
-                // Realizar a transação de compra (simulação)
-                const tx = await signer.sendTransaction({
-                    to: selectedPlan, // Aqui você deve usar o endereço do contrato ou destino
-                    value: ethers.utils.parseEther(selectedAmount)
-                });
+            // Confirmação antes de enviar a transação
+            const confirmPurchase = confirm("Tem certeza que deseja confirmar a compra?");
+            if (confirmPurchase) {
+                try {
+                    // Realizar a transação de compra (simulação)
+                    const tx = await signer.sendTransaction({
+                        to: selectedPlan, // Aqui você deve usar o endereço do contrato ou destino
+                        value: ethers.utils.parseEther(selectedAmount)
+                    });
 
-                alert("Compra confirmada! A transação foi enviada: " + tx.hash);
-                console.log(tx);
-            } catch (error) {
-                alert("Erro ao confirmar a compra: " + error.message);
+                    // Exibição do status da transação
+                    alert(`Compra realizada com sucesso! Tx hash: ${tx.hash}`);
+                    console.log(tx);
+                } catch (error) {
+                    alert(`Erro na compra: ${error.message}`);
+                }
+            } else {
+                alert("Compra cancelada.");
             }
         });
     </script>
