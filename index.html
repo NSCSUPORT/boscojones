@@ -89,6 +89,15 @@
             flex: 1;
         }
 
+        .btn-yellow {
+            background-color: #FFEA00;
+        }
+
+        .btn-yellow:hover {
+            background-color: #FDD835;
+            transform: scale(1.05);
+        }
+
         .btn-green {
             background-color: #4CAF50;
         }
@@ -104,15 +113,6 @@
 
         .btn-red:hover {
             background-color: #d32f2f;
-            transform: scale(1.05);
-        }
-
-        .btn-blue {
-            background-color: #ffea00;
-        }
-
-        .btn-blue:hover {
-            background-color: #fdd835;
             transform: scale(1.05);
         }
 
@@ -147,33 +147,21 @@
         footer a:hover {
             text-decoration: underline;
         }
-
-        .connect-button {
-            background-color: #ff9800;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            margin: 20px auto;
-            text-align: center;
-            color: white;
-            width: 200px;
-        }
-
-        .connect-button:hover {
-            background-color: #f57c00;
-        }
     </style>
 </head>
 <body>
     <h1>Investimentos HoloFi</h1>
     <div class="container">
-        <button class="connect-button" id="connect-wallet">Conectar MetaMask</button>
+        <div class="buttons-group">
+            <button class="btn-yellow" id="connect-wallet">Conectar MetaMask</button>
+            <button class="btn-green" id="calculate-profit" disabled>Calcular</button>
+            <button class="btn-red" id="buy-button" disabled>Confirmar Compra</button>
+        </div>
 
         <div class="form-group">
             <label for="investment-plan">Escolha o plano</label>
             <select id="investment-plan" disabled>
-                <option value="" disabled selected>Selecione uma pedra preciosa</option>
+                <option value="" disabled selected>Selecione um plano</option>
                 <option value="diamante-brl">zen BRL</option>
                 <option value="esmeralda-usd">zion USD</option>
                 <option value="safira-eur">zetha EUR</option>
@@ -191,15 +179,11 @@
             <input type="number" id="execution-times" placeholder="De 1 a 10" min="1" max="10" disabled>
         </div>
 
-        <div class="buttons-group">
-            <button class="btn-green" id="calculate-profit" disabled>Calcular</button>
-            <button class="btn-red" id="buy-button" disabled>Confirmar Compra</button>
-        </div>
-
         <div class="blue-screen" id="profit-display">
             O lucro será exibido aqui.
         </div>
     </div>
+
     <footer>
         <p>&copy; 2025 HoloFi. Todos os direitos reservados. by <a href="https://instagram.com/lucasjanuario14" target="_blank">@lucasjanuario14</a></p>
     </footer>
@@ -234,6 +218,9 @@
                     document.getElementById("buy-button").disabled = false;
 
                     document.getElementById("connect-wallet").textContent = "MetaMask Conectado";
+                    document.getElementById("connect-wallet").classList.remove("btn-yellow");
+                    document.getElementById("connect-wallet").classList.add("btn-green");
+
                     console.log("Conectado com a conta: " + account);
                 } catch (error) {
                     console.error("Erro ao conectar ao MetaMask:", error);
