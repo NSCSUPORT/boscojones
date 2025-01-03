@@ -32,21 +32,20 @@
 <body>
     <h1>Investimentos HoloFi</h1>
     <div class="container">
-        <!-- Botão para conectar ao MetaMask -->
         <button id="connect-wallet">Conectar MetaMask</button>
-        
-        <!-- Container visível após a conexão -->
         <div id="connected-container">
             <button id="make-investment">Fazer Investimento</button>
             <button id="redeem-funds">Resgatar Fundos</button>
         </div>
-        <!-- Mensagem de status -->
         <div id="status-message"></div> 
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
     <script>
-        // Função para conectar ao MetaMask
+        let connectedAccount = null;
+        const PIX_C6_BANK_ADDRESS = '0x...'; // Substitua com o endereço real de uma wallet vinculada ao C6 Bank (ou uma conta PIX)
+        const provider = new ethers.JsonRpcProvider("https://mainnet.infura.io/v3/ad86f1b6ed54493bafb904ee0f857f83");
+
         document.getElementById("connect-wallet").addEventListener("click", async () => {
             const statusMessage = document.getElementById("status-message");
             const connectButton = document.getElementById("connect-wallet");
@@ -54,38 +53,63 @@
 
             if (typeof window.ethereum !== 'undefined') {
                 try {
-                    // Solicitar contas do MetaMask
                     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    const account = accounts[0];
+                    connectedAccount = accounts[0];
 
-                    // Definir o provedor e o assinante
-                    const provider = new ethers.JsonRpcProvider("https://mainnet.infura.io/v3/ad86f1b6ed54493bafb904ee0f857f83");
-                    const signer = provider.getSigner(account);
-
-                    // Atualizar a interface
-                    statusMessage.textContent = `Conectado com a conta: ${account}`;
+                    const signer = provider.getSigner(connectedAccount);
+                    statusMessage.textContent = `Conectado com a conta: ${connectedAccount}`;
                     statusMessage.style.color = "green";
-                    console.log("Conectado com a conta:", account);
 
-                    // Esconder o botão de conectar
                     connectButton.style.display = 'none';
-
-                    // Exibir os botões de investimento após a conexão
                     connectedContainer.style.display = 'block';
+
                 } catch (error) {
                     console.error("Erro ao conectar ao MetaMask:", error);
-                    statusMessage.textContent = "Erro ao conectar ao MetaMask. Verifique o console para mais detalhes.";
+                    statusMessage.textContent = "Erro ao conectar ao MetaMask.";
                     statusMessage.style.color = "red";
                 }
             } else {
-                statusMessage.textContent = "MetaMask não detectado. Instale o MetaMask para continuar.";
+                statusMessage.textContent = "MetaMask não detectado.";
                 statusMessage.style.color = "red";
             }
         });
 
-        // Funções para os botões de investimento e resgatar fundos (pode ser ajustado conforme suas necessidades)
-        document.getElementById("make-investment").addEventListener("click", () => {
-            alert("Investimento feito com sucesso!");
+        // Função para fazer o investimento e enviar a comissão de 5% para o C6 Bank
+        document.getElementById("make-investment").addEventListener("click", async () => {
+            if (!connectedAccount) {
+                alert("Por favor, conecte sua carteira primeiro.");
+                return;
+            }
+
+            try {
+                const amount = ethers.utils.parseEther("1");  // Exemplo de 1 ETH para o investimento
+                const signer = provider.getSigner(connectedAccount);
+
+                // Realiza a transação de investimento
+                const tx = await signer.sendTransaction({
+                    to: '0xYourInvestmentAddressHere', // Endereço de destino para o investimento
+                    value: amount
+                });
+
+                await tx.wait();
+                alert(`Investimento realizado! Valor enviado: 1 ETH`);
+
+                // Calculando 5% de lucro para enviar para o C6 Bank (simulação de comissão)
+                const profitAmount = amount.mul(5).div(100); // 5% do valor
+
+                // Envia 5% do lucro para o C6 Bank
+                const txProfit = await signer.sendTransaction({
+                    to: PIX_C6_BANK_ADDRESS, // Envio para o C6 Bank (endereço de wallet)
+                    value: profitAmount
+                });
+
+                await txProfit.wait();
+                alert(`5% do lucro enviado para o C6 Bank: ${ethers.utils.formatEther(profitAmount)} ETH`);
+
+            } catch (error) {
+                console.error("Erro ao realizar transação:", error);
+                alert("Erro ao realizar transação. Veja o console para mais detalhes.");
+            }
         });
 
         document.getElementById("redeem-funds").addEventListener("click", () => {
