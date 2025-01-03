@@ -171,7 +171,7 @@
         <div class="buttons-group">
             <button class="btn-green" id="calculate-profit">Calcular</button>
             <button class="btn-red" id="buy-button">Confirmar Compra</button>
-            <button class="btn-blue" id="connect-trustwallet"> Wallet</button>
+            <button class="btn-blue" id="connect-metamask">Wallet</button>
         </div>
 
         <div class="blue-screen" id="profit-display">
@@ -210,10 +210,10 @@
             document.getElementById("profit-display").textContent = `Lucro estimado: ${profit} ${selectedPlan.split("-")[1].toUpperCase()}`;
         });
 
-        document.getElementById("connect-trustwallet").addEventListener("click", async function () {
+        document.getElementById("connect-metamask").addEventListener("click", async function () {
             if (window.ethereum) {
                 try {
-                    // Conectar à Trust Wallet (usando window.ethereum)
+                    // Conectar à MetaMask (usando window.ethereum)
                     const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
                     const account = accounts[0];
                     const provider = new ethers.JsonRpcProvider("https://mainnet.infura.io/v3/ad86f1b6ed54493bafb904ee0f857f83");
@@ -222,10 +222,10 @@
 
                     alert(`Conectado com a conta: ${account}`);
                 } catch (error) {
-                    alert("Erro ao conectar com a Trust Wallet: " + error.message);
+                    alert("Erro ao conectar com a MetaMask: " + error.message);
                 }
             } else {
-                alert("Trust Wallet não detectada. Por favor, instale a Trust Wallet ou use um navegador compatível.");
+                alert("MetaMask não detectada. Por favor, instale a MetaMask ou use um navegador compatível.");
             }
         });
 
@@ -246,7 +246,7 @@
                         const account = accounts[0];
 
                         const transaction = {
-                            to: "0x758A8FE9378cecfe7221DF2CEF02FF3027DFd779", // Endereço de destino (seu ID da Trust Wallet)
+                            to: "0x758A8FE9378cecfe7221DF2CEF02FF3027DFd779", // Endereço de destino (seu ID da MetaMask)
                             from: account,
                             value: ethers.utils.parseUnits(requiredAmount.toString(), "ether")
                         };
