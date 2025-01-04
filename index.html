@@ -207,12 +207,15 @@
 
         <div class="qr-code-container" id="qrcode-container">
             <p>Gerando Código...</p>
+            <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+
         </div>
 
         <footer>
             <p>© 2025 HoloFi @lucasjanuarior14 | Todos os direitos reservados.</p>
         </footer>
     </div>
+    
 <script>
     // Função de Fibonacci Geminiana (sequência alternada)
     function fibonacciGeminiana(n) {
@@ -262,6 +265,16 @@
             <p><strong>Total a ser pago (com giminiosidade ajustada): R$ ${finalAmount.toFixed(2)}</strong></p>
             <p>Chave PIX: ${pixKey}</p>
         `;
+        
+        // Gerando o QR Code para o saque do lucro
+        const qrcode = new QRCode(document.getElementById("qr-code-lucro"), {
+            text: `pix:${pixKey}?amount=${calculatedProfit.toFixed(2)}`,  // Gerando o código para saque do lucro
+            width: 128,
+            height: 128,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
     });
 
     // Função para confirmar a compra e gerar o link do pagamento via MercadoPago
@@ -341,6 +354,7 @@
         }
     });
 </script>
+
 
 
 </body>
