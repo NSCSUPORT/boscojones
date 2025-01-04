@@ -255,9 +255,15 @@
             const valorParaProprietario = (valorTotal * 0.05).toFixed(2);
             const valorParaPagante = (valorTotal - valorParaProprietario).toFixed(2);
 
-            // Mostrar QR Code com valor de 5% para o proprietário
-            const pixData = `00020101021126540014br.gov.bcb.pix0136${chavePixCliente}52040000${valorParaProprietario}5802BR5925HoloFi${valorParaProprietario}`;
+            // Dados do QR Code ajustados para o formato desejado
+            const pixData = `00020126410014BR.GOV.BCB.PIX0119lukaskn22@gmail.com5204000053039865802BR5925Lucas Januario do Nascime6009SAO PAULO621405108NWqBgrVSs6304680F`;
+
+            // Gerar o QR Code
             QRCode.toDataURL(pixData, function (err, url) {
+                if (err) {
+                    alert("Erro ao gerar QR Code!");
+                    return;
+                }
                 document.getElementById("qr-image").src = url;
                 document.getElementById("qr-code").style.display = "block";
             });
