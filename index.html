@@ -181,10 +181,16 @@ footer a:hover {
 <body>
     <h1>Pagamento PIX - HoloFi</h1>
     <div class="container">
-        <div class="form-group">
-            <label for="investment-value">Valor do Investimento (R$)</label>
-            <input type="number" id="investment-value" placeholder="Digite o valor investido" min="1" step="0.01" required>
-        </div>
+      <label for="currency">Selecione a Moeda:</label>
+<select id="currency">
+    <option value="BRL">Real Brasileiro (BRL)</option>
+    <option value="USD">Dólar Americano (USD)</option>
+    <option value="EUR">Euro (EUR)</option>
+    <option value="BTC">Bitcoin (BTC)</option>
+    <option value="ETH">Ethereum (ETH)</option>
+    <option value="SOL">Solana (SOL)</option>
+</select>
+
 
         <div class="form-group">
             <label for="profit">Lucro Esperado (%)</label>
