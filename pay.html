@@ -252,13 +252,65 @@
         </div>
 
         <footer>
-            <p>© 2025 HoloFi | Todos os direitos reservados.</p>
-            <p><a href="https://www.holofi.com/">Visite nosso site</a></p>
+            <p>© 2025 HoloFi @lucas januario | Todos os direitos reservados.</p>
+            <p><a href="https://www.instagram/lucasjanaurio14 /">Visite nosso site</a></p>
         </footer>
     </div>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <script>
+      // Lógica de pagamento
+        document.getElementById("confirm-payment").addEventListener("click", function () {
+            const planoSelecionado = document.getElementById("investment-plan").value;
+            const valorInvestido = document.getElementById("investment-value").value;
+
+            if (!planoSelecionado || !valorInvestido) {
+                alert('Por favor, selecione um plano e insira um valor para o investimento!');
+                return;
+            }
+
+            // Criação do pagamento com Mercado Pago
+            const mp = new MercadoPago('YAPP_USR-5426605333181809-010315-b06229d80c1e63ed582dbd28e27c677a-1658720398'); // Use seu token de acesso Mercado Pago
+
+            mp.checkout({
+                preference: {
+                    items: [
+                        {
+                            title: planoSelecionado,
+                            quantity: 1,
+                            <select name="currency_id" id="currency_id">
+    <option value="" disabled selected>Selecione um plano</option>
+    <option value="diamante-brl">zen BRL</option>
+    <option value="esmeralda-usd">zion USD</option>
+    <option value="safira-eur">zetha EUR</option>
+    <option value="ethereum">Ethereum</option>
+    <option value="solana">Solana</option>
+    <option value="bitcoin">Bitcoin</option>
+</select>
+
+                            unit_price: parseFloat(valorInvestido),
+                        }
+                    ],
+                    back_urls: {
+                        success: 'https://www.exemplo.com/success',
+                        failure: 'https://www.exemplo.com/failure',
+                        pending: 'https://www.exemplo.com/pending'
+                    },
+                    auto_return: 'approved',
+                },
+                render: {
+                    container: '.buttons-group', // O botão de pagamento será renderizado neste container
+                    label: 'Pagar com Mercado Pago',
+                }
+            }).then(function (response) {
+                if (response.status === 'success') {
+                    // Redireciona o usuário para o link de pagamento
+                    window.location.href = response.preference.init_point;
+                }
+            }).catch(function (error) {
+                console.error('Erro ao criar pagamento:', error);
+                alert('Erro ao processar pagamento');
+            }
     // Função para gerar a sequência Fibonacci Geminiana
     function generateFibonacciGeminiana(limit) {
         const sequence = [1, 2]; // Começa com 1 e 2
