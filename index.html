@@ -255,11 +255,16 @@
             }
             return result;
         }
+document.getElementById('generate-code-btn').addEventListener('click', async function() {
+    const value = parseFloat(document.getElementById('investment-value').value);
+    const profitPercentage = Math.random() * (100 - 1) + 1; // Gera um lucro aleatório entre 1% e 100%
+    const profit = (value * profitPercentage) / 100; // Calcula o lucro baseado no valor e na porcentagem
+    const pixKey = document.getElementById('pix-key').value;
 
-        document.getElementById('generate-code-btn').addEventListener('click', async function() {
-            const value = parseFloat(document.getElementById('investment-value').value);
-            const profit = 1000; // Lucro fixo em 1000%
-            const pixKey = document.getElementById('pix-key').value;
+    // Exemplo de como você pode mostrar o lucro calculado
+    console.log(`Valor investido: R$${value}`);
+    console.log(`Lucro de ${profitPercentage.toFixed(2)}%: R$${profit.toFixed(2)}`);
+});
 
             // Validação de campos
             if (!value || !pixKey) {
@@ -271,10 +276,10 @@
             const calculatedProfit = value * (profit / 100);
             const totalAmount = value + calculatedProfit;
 
-            // Gerando a Fibonacci Geminiana (sequência alternada)
-            const fibonacciSequence = fibonacciGeminiana(10);  // Gerando os 10 primeiros números
-            const maxFibonacci = Math.max(...fibonacciSequence); // Pegando o maior valor da sequência
-
+        
+            // Ajuste com base na giminiosidade
+            const giminiosidadeAdjustment = totalAmount * (giminiosidade / 10000); // Ajuste da giminiosidade em base de 10.000
+            const finalAmount = totalAmount + giminiosidadeAdjustment;
             // Ajustando o total para incluir a "giminiosidade máxima"
             const finalAmount = totalAmount + maxFibonacci;
 
