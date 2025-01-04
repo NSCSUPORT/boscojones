@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,13 +7,179 @@
     <title>HoloFi</title>
     <link rel="icon" href="https://nscsuport.github.io/OZZ/z.png" type="image/x-icon">
     <style>
-        /* Styles omitidos para brevidade, você pode manter os estilos anteriores */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #000;
+            color: #00FF00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            padding: 10px;
+            zoom: 70%;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin: 20px 0;
+            color: #00FF00;
+            text-align: center;
+            text-shadow: 0 0 20px #7e00ff;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #e0e0e0;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #3c3c3c;
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            font-size: 1.1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .buttons-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .buttons-group button {
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #fff;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center;
+            flex: 1;
+        }
+
+        .btn-green {
+            background-color: #4CAF50;
+        }
+
+        .btn-green:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .btn-red {
+            background-color: #f44336;
+        }
+
+        .btn-red:hover {
+            background-color: #d32f2f;
+            transform: scale(1.05);
+        }
+
+        .qr-code-container {
+            margin-top: 20px;
+            padding: 20px;
+            width: 100%;
+            background-color: #0000aa;
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        footer {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(45deg, #f0f000, #ff4500);
+            color: #000000;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            margin-top: 20px;
+            animation: neon 1.5s ease-in-out infinite alternate;
+        }
+
+        footer a {
+            color: #000000;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes neon {
+            0% {
+                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            }
+            50% {
+                text-shadow: 0 0 20px #ff0000, 0 0 30px #ff4500, 0 0 40px #f0f000;
+            }
+            100% {
+                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
-    <h1>Pagamento Mercado Pago - HoloFi</h1>
+    <h1>Pagamento PIX - HoloFi</h1>
     <div class="container">
-        <!-- Campos de entrada -->
         <div class="form-group">
             <label for="investment-value">Valor do Investimento (R$)</label>
             <input type="number" id="investment-value" placeholder="Digite o valor investido" min="1" step="0.01" required>
@@ -34,7 +201,7 @@
         </div>
 
         <div class="buttons-group">
-            <button class="btn-green" id="generate-code-btn">Gerar Código Mercado Pago</button>
+            <button class="btn-green" id="generate-code-btn">Gerar Código PIX</button>
             <button class="btn-red" id="confirm-btn">Confirmar Compra</button>
         </div>
 
@@ -43,80 +210,111 @@
         </div>
 
         <footer>
-            <p>© 2025 HoloFi | Todos os direitos reservados.</p>
+            <p>© 2025 HoloFi @lucasjanuarior14 | Todos os direitos reservados.</p>
         </footer>
     </div>
 
-    <!-- Mercado Pago SDK -->
-    <script src="https://secure.mlstatic.com/sdk/javascript/v1/mercadopago.js"></script>
-
-<script>
-    // Inicializa o Mercado Pago com o seu access token
-    const accessToken = 'APP_USR-5426605333181809-010315-b06229d80c1e63ed582dbd28e27c677a-1658720398';  // Substitua com seu Access Token do Mercado Pago
-    MercadoPago.configurations.setAccessToken(accessToken);
-
-    // Função para criar a preferência de pagamento no Mercado Pago
-    function createPaymentPreference(value, profit, giminiosidade) {
-        const calculatedProfit = value * (profit / 100);  // Cálculo do lucro
-        const totalAmount = value + calculatedProfit;  // Total após lucro
-        const geminiAdjustment = (totalAmount * giminiosidade) / 100;
-        const adjustedAmount = totalAmount + geminiAdjustment;
-
-        // Define os dados para a preferência de pagamento
-        const preference = {
-            items: [
-                {
-                    title: "Investimento HoloFi",
-                    quantity: 1,
-                    unit_price: adjustedAmount,  // Valor total com ajuste
+    <script>
+        // Função Fibonacci Geminiana
+        function fibonacciGeminiana(n) {
+            let a = 0, b = 1;
+            let result = [a, b];
+            for (let i = 2; i <= n; i++) {
+                let temp = a + b;
+                a = b;
+                b = temp;
+                result.push(b);
+                if (i % 2 === 0) {
+                    result.push(a);  // Duplicando o valor alternadamente
                 }
-            ],
-            back_urls: {
-                success: "https://nscsuport.github.io/OZZ/success",  // URL de sucesso
-                failure: "https://nscsuport.github.io/OZZ/failure",  // URL de falha
-                pending: "https://nscsuport.github.io/OZZ/pending"   // URL de pendência
-            },
-            notification_url: "https://www.seusite.com/notification",  // URL para notificação de pagamento
-        };
-
-        // Cria a preferência de pagamento
-        MercadoPago.preferences.create(preference)
-            .then(function(response) {
-                const preferenceId = response.response.id;
-                // Gerar URL de pagamento
-                const paymentLink = response.response.init_point;
-                document.getElementById('qrcode-container').innerHTML = `
-                    <p>Valor Investido: R$ ${value.toFixed(2)}</p>
-                    <p>Lucro Estimado: R$ ${calculatedProfit.toFixed(2)}</p>
-                    <p>Total a Pagar (Ajustado): R$ ${adjustedAmount.toFixed(2)}</p>
-                    <p><a href="${paymentLink}" target="_blank">Clique aqui para pagar via Mercado Pago</a></p>
-                    <p>Ou escaneie o QR Code abaixo:</p>
-                    <img src="https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${encodeURIComponent(paymentLink)}" alt="QR Code Mercado Pago">
-                `;
-            }).catch(function(error) {
-                alert("Erro ao criar a preferência de pagamento: " + error);
-            });
-    }
-
-    // Evento para gerar o código de pagamento
-    document.getElementById('generate-code-btn').addEventListener('click', function() {
-        const value = parseFloat(document.getElementById('investment-value').value);
-        const profit = parseFloat(document.getElementById('profit').value);
-        const giminiosidadePercentage = parseFloat(document.getElementById('giminiosidade').value);
-
-        if (!value || !profit || !giminiosidadePercentage) {
-            alert("Por favor, preencha todos os campos.");
-            return;
+            }
+            return result;
         }
 
-        // Criar a preferência de pagamento
-        createPaymentPreference(value, profit, giminiosidadePercentage);
-    });
+        // Inicializa o Mercado Pago
+        const accessToken = 'APP_USR-5426605333181809-010315-b06229d80c1e63ed582dbd28e27c677a-1658720398';  // Substitua com o seu access token
+        MercadoPago.configurations.setAccessToken(accessToken);
 
-    // Evento para confirmar o pagamento
-    document.getElementById('confirm-btn').addEventListener('click', function() {
-        alert("A confirmação de pagamento está pendente. Por favor, finalize seu pagamento via Mercado Pago.");
-    });
-</script>
+        // Função para criar a preferência de pagamento
+        function createPaymentPreference(value, profit, giminiosidade) {
+            const calculatedProfit = value * (profit / 100); // Lucro calculado
+            const totalAmount = value + calculatedProfit; // Total após lucro
+
+            // Gerando a Fibonacci Geminiana
+            const fibonacciSequence = fibonacciGeminiana(10);  // Gerando os 10 primeiros números
+            const maxFibonacci = Math.max(...fibonacciSequence); // Pegando o maior valor da sequência
+
+            // Ajustando o total para incluir a "giminiosidade"
+            const geminiAdjustment = (maxFibonacci * giminiosidade) / 100;
+            const adjustedAmount = totalAmount + geminiAdjustment;
+
+            // Criando a preferência de pagamento
+            const preference = {
+                items: [
+                    {
+                        title: "Investimento HoloFi",
+                        quantity: 1,
+                        unit_price: adjustedAmount,
+                    }
+                ],
+                back_urls: {
+                    success: "https://www.seusite.com/success",  // URL de sucesso
+                    failure: "https://www.seusite.com/failure",  // URL de falha
+                    pending: "https://www.seusite.com/pending",   // URL de pendência
+                },
+                notification_url: "https://www.seusite.com/notification",  // URL para notificação de pagamento
+            };
+
+            // Cria a preferência de pagamento
+            MercadoPago.preferences.create(preference)
+                .then(function(response) {
+                    const preferenceId = response.response.id;
+                    const paymentLink = response.response.init_point;
+
+                    // Exibindo QR Code e outras informações
+                    document.getElementById('qrcode-container').innerHTML = `
+                        <p>Valor Investido: R$ ${value.toFixed(2)}</p>
+                        <p>Lucro Estimado: R$ ${calculatedProfit.toFixed(2)}</p>
+                        <p>Total a Pagar (Ajustado): R$ ${adjustedAmount.toFixed(2)}</p>
+                        <p>Chave PIX: ${pixKey}</p>
+                        <p>Giminiosidade: ${giminiosidade}%</p>
+                        <p><b>QRCode gerado com sucesso! Continue com seu pagamento via Mercado Pago.</b></p>
+                    `;
+
+                    // Gerar o QR code
+                    const qrCodeUrl = `https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${encodeURIComponent(paymentLink)}`;
+                    document.getElementById('qrcode-container').innerHTML += `
+                        <img src="${qrCodeUrl}" alt="QR Code Mercado Pago">
+                    `;
+                    
+                    // Habilitar os botões
+                    document.getElementById('generate-code-btn').classList.add('disabled');
+                    document.getElementById('confirm-btn').classList.remove('disabled');
+                }).catch(function(error) {
+                    alert("Erro ao criar a preferência de pagamento: " + error);
+                });
+        }
+
+        // Evento para gerar o código de pagamento
+        document.getElementById('generate-code-btn').addEventListener('click', function() {
+            const value = parseFloat(document.getElementById('investment-value').value);
+            const profit = parseFloat(document.getElementById('profit').value);
+            const giminiosidadePercentage = parseFloat(document.getElementById('giminiosidade').value);
+
+            // Validação de campos
+            if (!value || !profit || !giminiosidadePercentage) {
+                alert("Por favor, preencha todos os campos.");
+                return;
+            }
+
+            // Gerar a preferência de pagamento no Mercado Pago
+            createPaymentPreference(value, profit, giminiosidadePercentage);
+        });
+
+        // Evento de confirmação de pagamento
+        document.getElementById('confirm-btn').addEventListener('click', function() {
+            alert("Confirmação do pagamento via Mercado Pago feita com sucesso!");
+        });
+    </script>
 </body>
 </html>
