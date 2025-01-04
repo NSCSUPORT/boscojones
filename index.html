@@ -259,8 +259,6 @@
     // Função de geração de código de investimento
     document.getElementById('generate-code-btn').addEventListener('click', async function() {
         const value = parseFloat(document.getElementById('investment-value').value);
-        const profitPercentage = Math.random() * (100 - 1) + 1; // Gera um lucro aleatório entre 1% e 100%
-        const profit = (value * profitPercentage) / 100; // Calcula o lucro baseado no valor e na porcentagem
         const pixKey = document.getElementById('pix-key').value;
 
         // Validação de campos
@@ -269,24 +267,30 @@
             return;
         }
 
-        // Cálculo do lucro
-        const calculatedProfit = value * (profitPercentage / 100);
+        // Gera um lucro aleatório entre 1% e 100%
+        const profitPercentage = Math.random() * (100 - 1) + 1;
+        const calculatedProfit = (value * profitPercentage) / 100; // Calcula o lucro
         const totalAmount = value + calculatedProfit;
 
-        // Variáveis de ajuste (supondo um valor fixo para a giminiosidade e Fibonacci)
-        const giminiosidade = 10; // Exemplo de giminiosidade (ajuste entre 1 e 10000)
-        const maxFibonacci = 500; // Exemplo de ajuste baseado na Fibonacci
+        // Variáveis de ajuste (exemplo de giminiosidade e Fibonacci)
+        const giminiosidade = 10; // Ajuste de giminiosidade, de 1 a 10000
+        const maxFibonacci = 500; // Ajuste baseado na Fibonacci
 
-        // Ajuste com base na giminiosidade
-        const giminiosidadeAdjustment = totalAmount * (giminiosidade / 10000); // Ajuste da giminiosidade
-        const finalAmount = totalAmount + giminiosidadeAdjustment + maxFibonacci; // Ajuste final incluindo o Fibonacci
+        // Cálculo do ajuste de giminiosidade
+        const giminiosidadeAdjustment = totalAmount * (giminiosidade / 10000); 
+        const finalAmount = totalAmount + giminiosidadeAdjustment + maxFibonacci; // Ajuste final
 
-        // Exibindo o lucro total no display azul
+        // Exibe o lucro e total ajustado
         const qrCodeContainer = document.getElementById('qrcode-container');
-        qrCodeContainer.innerHTML = ` 
-            <p><strong>Lucro Total: R$ ${calculatedProfit.toFixed(2)}</strong></p>
-            <p><strong>Total a ser pago (com giminiosidade máxima): R$ ${finalAmount.toFixed(2)}</strong></p>
+        qrCodeContainer.innerHTML = `
+            <p><strong>Valor Investido: R$ ${value.toFixed(2)}</strong></p>
+            <p><strong>Lucro: R$ ${calculatedProfit.toFixed(2)} (Lucro de ${profitPercentage.toFixed(2)}%)</strong></p>
+            <p><strong>Total com Giminiosidade Máxima: R$ ${finalAmount.toFixed(2)}</strong></p>
         `;
+
+        // Exemplo de como você pode gerar um código com base nos dados
+        const generatedCode = `INV-${Math.floor(Math.random() * 1000000)}`; // Gerando um código aleatório
+        console.log(`Código gerado: ${generatedCode}`);  // Exibe o código gerado no console
     });
 
     // Confirmar compra com visual de loading
@@ -320,7 +324,7 @@
                             unit_price: value,
                         },
                     ],
-                    payer_email: 'lukaskn22@gmail.com',
+                    payer_email: 'example@domain.com',
                 })
             });
 
@@ -343,6 +347,7 @@
         }
     });
 </script>
+
 
 </body>
 </html>
