@@ -24,7 +24,7 @@ body {
     height: 100vh;
     flex-direction: column;
     padding: 10px;
-    zoom: 79%;
+    zoom: 80%; /* Zoom ajustado para 80% */
 }
 
 h1 {
@@ -177,48 +177,62 @@ footer a:hover {
     cursor: not-allowed;
 }
 
+/* Media Queries para tornar o layout responsivo */
 @media (max-width: 768px) {
+    body {
+        zoom: 100%; /* Ajuste do zoom para telas menores */
+    }
+
+    .container {
+        padding: 20px; /* Ajuste do padding */
+    }
+
+    .form-group input,
+    .form-group select {
+        font-size: 1rem; /* Ajuste do tamanho da fonte */
+    }
+
+    .buttons-group {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .buttons-group button {
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 2.4rem; /* Redução do tamanho da fonte para telas menores */
+    }
+
+    footer {
+        font-size: 1rem; /* Ajuste no tamanho da fonte do footer */
+    }
+}
+
+@media (max-width: 480px) {
     body {
         zoom: 100%;
     }
 
     .container {
-        padding: 15px;
+        padding: 15px; /* Ajuste adicional no padding */
     }
 
     .form-group input,
     .form-group select {
-        font-size: 1rem;
+        font-size: 0.9rem; /* Ajuste da fonte */
     }
 
-    .buttons-group {
-        flex-direction: column;
-    }
-
-    .buttons-group button {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-}
-
-@media (max-width: 480px) {
     h1 {
-        font-size: 2rem;
-    }
-
-    .container {
-        padding: 10px;
-    }
-
-    .form-group input,
-    .form-group select {
-        font-size: 0.9rem;
+        font-size: 2rem; /* Ajuste do tamanho da fonte para telas muito pequenas */
     }
 
     footer {
-        font-size: 1rem;
+        font-size: 0.9rem; /* Ajuste da fonte do footer */
     }
 }
+
 
     </style>
 </head>
