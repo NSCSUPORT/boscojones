@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -210,12 +211,11 @@
             <label for="investment-value">Valor do Investimento (R$)</label>
             <input type="number" id="investment-value" placeholder="Digite o valor investido" min="1" step="0.01" required>
         </div>
-  <div class="form-group">
+<div class="form-group">
     <label for="profit">Lucro Esperado (%)</label>
-    <input type="number" id="profit" min="1" max="1000" value="10" step="1">
-    <small>Insira um valor entre 1 e 1000.</small>
+    <input type="number" id="profit" min="1" max="10.0000" value="10" step="1">
+    <small>Insira um valor entre 1 e 10.0000.</small>
 </div>
-
 
         <div class="form-group">
             <label for="pix-key">Chave PIX de Cobrança</label>
@@ -253,41 +253,10 @@
             return result;
         }
 
-    document.getElementById('generate-code-btn').addEventListener('click', async function() {
-    const investmentInput = document.getElementById('investment-value');
-    const pixKey = document.getElementById('pix-key').value;
-
-    let value = parseFloat(investmentInput.value);
-
-    // Verifica se o valor do investimento é válido
-    if (isNaN(value) || value <= 0) {
-        alert('Por favor, insira um valor de investimento válido.');
-        return;
-    }
-
-    // Define o limite de investimento como 10k
-    if (value > 10000) {
-        alert('O valor máximo permitido para investimento é de 10.000.');
-        investmentInput.value = 10000; // Ajusta o valor no campo
-        value = 10000;
-    }
-
-    // Calcula o lucro proporcional
-    const profit = value * 0.1; // Exemplo: 10% de lucro sobre o valor investido
-
-    // Exibe o resultado ou realiza ações com as informações
-    console.log(`Investimento: R$${value.toFixed(2)}`);
-    console.log(`Lucro estimado: R$${profit.toFixed(2)}`);
-    console.log(`Chave Pix: ${pixKey}`);
-
-    if (!pixKey) {
-        alert('Por favor, insira uma chave Pix válida.');
-        return;
-    }
-
-    alert(`Código gerado com sucesso!\nInvestimento: R$${value.toFixed(2)}\nLucro: R$${profit.toFixed(2)}\nChave Pix: ${pixKey}`);
-});
-
+        document.getElementById('generate-code-btn').addEventListener('click', async function() {
+            const value = parseFloat(document.getElementById('investment-value').value);
+            const profit = 1000; // Lucro fixo em 1000%
+            const pixKey = document.getElementById('pix-key').value;
 
             // Validação de campos
             if (!value || !pixKey) {
