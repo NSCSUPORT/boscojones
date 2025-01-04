@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HoloFi - Cyberpunk 2077</title>
+    <title>HoloFi</title>
     <link rel="icon" href="https://nscsuport.github.io/OZZ/z.png" type="image/x-icon">
     <style>
         * {
@@ -14,7 +15,6 @@
 
         body {
             font-family: 'Roboto', Arial, sans-serif;
-            background-color: #0f0f0f;
             color: #00FF00;
             display: flex;
             justify-content: center;
@@ -22,14 +22,13 @@
             height: 100vh;
             flex-direction: column;
             padding: 10px;
-            zoom: 80%;
             overflow: hidden;
-            background: url('https://wallpapercave.com/wp/wp3687634.jpg') no-repeat center center fixed;
-            background-size: cover;
+            background-color: #000000;
+            margin: 0;
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 1.5rem;
             margin: 20px 0;
             color: #00FF00;
             text-align: center;
@@ -38,13 +37,14 @@
 
         .container {
             width: 100%;
-            max-width: 600px;
+            max-width: 500px;
             background-color: rgba(30, 30, 30, 0.9);
             border-radius: 15px;
             padding: 25px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
             margin: 0 auto;
             backdrop-filter: blur(10px);
+            flex: 1;
         }
 
         .form-group {
@@ -58,31 +58,33 @@
             color: #e0e0e0;
         }
 
-        .form-group input, .form-group select {
+        .form-group input,
+        .form-group select {
             width: 100%;
-            padding: 12px;
+            padding: 8px;
             border-radius: 8px;
             border: 1px solid #3c3c3c;
             background-color: #1e1e1e;
             color: #e0e0e0;
-            font-size: 1.1rem;
+            font-size: 1rem;
             transition: border-color 0.3s ease;
         }
 
-        .form-group input:focus, .form-group select:focus {
+        .form-group input:focus,
+        .form-group select:focus {
             outline: none;
             border-color: #4CAF50;
         }
 
         .buttons-group {
             display: flex;
-            justify-content: space-between;
-            gap: 10px;
+            flex-direction: column;
+            gap: 15px;
             margin-top: 20px;
         }
 
         .buttons-group button {
-            padding: 14px;
+            padding: 10px;
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
@@ -90,7 +92,7 @@
             border: none;
             transition: background-color 0.3s ease, transform 0.3s ease;
             text-align: center;
-            flex: 1;
+            width: 100%;
         }
 
         .btn-green {
@@ -115,6 +117,7 @@
             margin-top: 20px;
             padding: 20px;
             width: 100%;
+            max-width: 450px;
             background-color: #0000aa;
             color: #ffffff;
             font-family: 'Courier New', Courier, monospace;
@@ -122,15 +125,17 @@
             border-radius: 8px;
             text-align: center;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+            display: none; /* QR Code inicialmente oculto */
         }
 
         footer {
             width: 100%;
-            padding: 20px;
+            padding: 10px;
             background: linear-gradient(45deg, #f0f000, #ff4500);
             color: #000000;
             text-align: center;
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             font-weight: bold;
             letter-spacing: 2px;
             text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
@@ -151,9 +156,11 @@
             0% {
                 text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
             }
+
             50% {
                 text-shadow: 0 0 20px #ff0000, 0 0 30px #ff4500, 0 0 40px #f0f000;
             }
+
             100% {
                 text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
             }
@@ -170,22 +177,62 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .disabled {
             background-color: #cccccc;
             cursor: not-allowed;
         }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .form-group input,
+            .form-group select {
+                font-size: 0.9rem;
+            }
+
+            h1 {
+                font-size: 1.25rem;
+            }
+
+            footer {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            .buttons-group button {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+
+            .qr-code-container {
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
+
 <body>
-    <h1>Pagamento PIX - HoloFi</h1>
+    <h1>HoloFi</h1>
     <div class="container">
         <div class="form-group">
             <label for="currency">Selecione a Moeda</label>
-            <select id="currency" required>
+            <select id="currency" required="">
                 <option value="BRL">Real Brasileiro (BRL)</option>
                 <option value="USD">Dólar Americano (USD)</option>
                 <option value="EUR">Euro (EUR)</option>
@@ -197,22 +244,22 @@
 
         <div class="form-group">
             <label for="investment-value">Valor do Investimento</label>
-            <input type="number" id="investment-value" placeholder="Digite o valor investido" min="1" step="0.01" required>
+            <input type="number" id="investment-value" placeholder="Digite o valor investido" min="1" step="0.01" required="">
         </div>
 
         <div class="form-group">
             <label for="profit">Lucro Esperado (%)</label>
-            <input type="number" id="profit" placeholder="Digite o lucro em %" min="1" max="1000" value="100" required>
+            <input type="number" id="profit" placeholder="Digite o lucro em %" min="1" max="1000" value="100" required="">
         </div>
 
         <div class="form-group">
             <label for="giminiosidade">Giminiosidade (%)</label>
-            <input type="number" id="giminiosidade" placeholder="Digite a giminiosidade em %" min="1" max="10000" value="1" required>
+            <input type="number" id="giminiosidade" placeholder="Digite a giminiosidade em %" min="1" max="10000" value="1" required="">
         </div>
 
         <div class="form-group">
             <label for="pix-key">Chave PIX de Cobrança</label>
-            <input type="text" id="pix-key" placeholder="Insira a chave PIX" required>
+            <input type="text" id="pix-key" placeholder="Insira a chave PIX" required="">
         </div>
 
         <div class="buttons-group">
@@ -221,135 +268,74 @@
         </div>
 
         <div class="qr-code-container" id="qrcode-container">
-            <p>Gerando Código...</p>
+            <p><strong>Lucro Total: R$ <span id="total-profit">0.01</span></strong></p>
+            <p><strong>Total a ser pago (com giminiosidade ajustada): R$ <span id="total-to-pay">1.56</span></strong></p>
+            <p>Chave PIX: <span id="pix-key-output">lukaskn22@gmail.com</span></p>
+            <img id="qr-code-img" src="" style="display: none; max-width: 100%; height: auto;">
         </div>
-
-        <footer>
-            <p>© 2025 HoloFi @lucasjanuarior14 | Todos os direitos reservados.</p>
-        </footer>
     </div>
-</body>
-</html>
 
+    <footer>
+        <p>&copy; 2025 HoloFi. Todos os direitos reservados.</p>
+    </footer>
 
-  <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
-<script>
-    // Função de Fibonacci Geminiana (sequência alternada)
-    function fibonacciGeminiana(n) {
-        let a = 0, b = 1;
-        let result = [a, b];
-        for (let i = 2; i <= n; i++) {
-            let temp = a + b;
-            a = b;
-            b = temp;
-            result.push(b);
-            if (i % 2 === 0) {
-                result.push(a);  // Duplicando o valor alternadamente
+    <script>
+        let isConfirmedFirst = false;
+        let isConfirmedSecond = false;
+
+        document.getElementById('generate-code-btn').addEventListener('click', function () {
+            var investmentValue = parseFloat(document.getElementById('investment-value').value);
+            var profit = parseFloat(document.getElementById('profit').value);
+            var giminiosidade = parseFloat(document.getElementById('giminiosidade').value);
+
+            if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidade)) {
+                alert('Por favor, preencha todos os campos corretamente!');
+                return;
+            }
+
+            var totalProfit = investmentValue * (profit / 100);
+            var totalToPay = (investmentValue + totalProfit) * (1 + giminiosidade / 100);
+
+            document.getElementById('total-profit').innerText = totalProfit.toFixed(2);
+            document.getElementById('total-to-pay').innerText = totalToPay.toFixed(2);
+
+            var pixKey = document.getElementById('pix-key').value;
+            document.getElementById('pix-key-output').innerText = pixKey;
+
+            // First confirmation
+            isConfirmedFirst = true;
+            updateConfirmButtonState();
+        });
+
+        document.getElementById('confirm-btn').addEventListener('click', function () {
+            if (isConfirmedFirst) {
+                // Generate QR Code
+                var pixKey = document.getElementById('pix-key').value;
+
+                if (pixKey.trim() !== '') {
+                    var qrCodeImage = document.getElementById('qr-code-img');
+                    qrCodeImage.src = 'https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(pixKey) + '&size=200x200';
+                    qrCodeImage.style.display = 'block';
+
+                    // Show QR code container
+                    document.getElementById('qrcode-container').style.display = 'block';
+                }
+            } else {
+                alert('Por favor, gere o código PIX antes de confirmar a compra.');
+            }
+        });
+
+        function updateConfirmButtonState() {
+            var confirmBtn = document.getElementById('confirm-btn');
+            if (isConfirmedFirst) {
+                confirmBtn.classList.remove('disabled');
+                confirmBtn.disabled = false;
+            } else {
+                confirmBtn.classList.add('disabled');
+                confirmBtn.disabled = true;
             }
         }
-        return result;
-    }
-
-    // Função para gerar o código de investimento e calcular valores
-    document.getElementById('generate-code-btn').addEventListener('click', function() {
-        const value = parseFloat(document.getElementById('investment-value').value);
-        const profit = parseFloat(document.getElementById('profit').value);  // Lucro do usuário
-        const pixKey = document.getElementById('pix-key').value;
-        const giminiosidadePercentage = parseFloat(document.getElementById('giminiosidade').value);  // % da giminiosidade
-
-        // Validação de campos
-        if (!value || !pixKey || !profit || isNaN(giminiosidadePercentage)) {
-            alert("Por favor, preencha todos os campos.");
-            return;
-        }
-
-        // Cálculo do lucro e valor total
-        const calculatedProfit = value * (profit / 100);  // Lucro baseado no valor investido
-        const totalAmount = value + calculatedProfit;  // Total após lucro
-
-        // Gerando a sequência Fibonacci Geminiana
-        const fibonacciSequence = fibonacciGeminiana(10);  // Gerando os 10 primeiros números
-        const maxFibonacci = Math.max(...fibonacciSequence);  // Pegando o maior valor da sequência
-
-        // Ajuste do valor final para incluir a giminiosidade
-        const geminiAdjustment = (maxFibonacci * giminiosidadePercentage) / 100;
-        const finalAmount = totalAmount + geminiAdjustment;
-
-        // Function to display profit and final amount in the selected currency
-        const qrCodeContainer = document.getElementById('qrcode-container');
-
-        // Define a mapping of currency symbols
-        const currencySymbols = {
-            BRL: 'R$',     // Real Brasileiro
-            USD: '$',      // US Dollar
-            EUR: '€',      // Euro
-            SOL: 'SOL',    // Solana
-            BTC: 'BTC',    // Bitcoin
-            ETH: 'ETH'     // Ethereum
-        };
-
-        // Get the selected currency
-        const selectedCurrency = document.getElementById('currency').value;
-
-        // Use the currency symbol for the selected currency
-        const currencySymbol = currencySymbols[selectedCurrency];
-
-        // Display the profit and final amount with the correct currency
-        qrCodeContainer.innerHTML = `
-            <p><strong>Lucro Total: ${currencySymbol} ${calculatedProfit.toFixed(2)}</strong></p>
-            <p><strong>Total a ser pago (com giminiosidade ajustada): ${currencySymbol} ${finalAmount.toFixed(2)}</strong></p>
-            <p>Chave PIX: ${pixKey}</p>
-        `;
-
-        // Gerando o QR Code para o saque do lucro
-        const qrcode = new QRCode(document.getElementById("qrcode-container"), {
-            text: `pix:${pixKey}?amount=${calculatedProfit.toFixed(2)}`,  // Gerando o código para saque do lucro
-            width: 128,
-            height: 128,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.H
-        });
-    });
-
-    // Função para confirmar a compra e gerar o link do pagamento via MercadoPago
-    document.getElementById('confirm-btn').addEventListener('click', function() {
-        const value = parseFloat(document.getElementById('investment-value').value);
-        const pixKey = document.getElementById('pix-key').value;
-
-        // Verificando se todos os campos estão preenchidos
-        if (!value || !pixKey) {
-            alert("Preencha todos os campos corretamente.");
-            return;
-        }
-
-        // Gerar o pagamento no MercadoPago ou outro serviço aqui
-        fetch("https://api.mercadopago.com/v1/payments", {
-            method: "POST",
-            headers: {
-                "Authorization": "APP_USR-5426605333181809-010315-b06229d80c1e63ed582dbd28e27c677a-1658720398",  // Substitua pelo seu token de acesso MercadoPago
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                transaction_amount: value,
-                payment_method_id: "pix",
-                payer_email: "lukaskn22@gmail.com",  // Substitua pelo email do cliente
-                external_reference: "INVESTIMENTO_FUNDO"  // Referência de sua compra
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Aqui você pode tratar a resposta do MercadoPago e mostrar a confirmação
-            console.log(data);
-            alert("Compra confirmada com sucesso!");
-        })
-        .catch(error => {
-            console.error("Erro ao processar o pagamento:", error);
-            alert("Erro ao processar pagamento. Tente novamente.");
-        });
-    });
-</script>
-
-
+    </script>
 </body>
+
 </html>
