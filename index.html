@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -206,38 +205,26 @@
 </head>
 <body>
     <h1>Pagamento PIX - HoloFi</h1>
-<div class="container">
-    <div class="form-group">
-        <label for="investment-value">Valor do Investimento (R$)</label>
-        <input type="number" id="investment-value" placeholder="Digite o valor investido" min="1" step="0.01" required>
-    </div>
+    <div class="container">
+        <div class="form-group">
+            <label for="investment-value">Valor do Investimento (R$)</label>
+            <input type="number" id="investment-value" placeholder="Digite o valor investido" min="1" step="0.01" required>
+        </div>
 
-    <div class="form-group">
-        <label for="profit">Lucro Esperado (%)</label>
-        <input type="number" id="profit" min="1" max="10000" value="10" step="1">
-        <small>Insira um valor entre 1 e 10.0000.</small>
-    </div>
+        <div class="form-group">
+            <label for="profit">Lucro Esperado (%)</label>
+            <input type="number" id="profit" placeholder="Digite o lucro em %" min="1" max="1000" value="100" required>
+        </div>
 
-    <div class="form-group">
-        <label for="fibonacci-percentage">Porcentagem de Fibonacci Gemina</label>
-        <select id="fibonacci-percentage" required>
-            <option value="">Selecione uma porcentagem</option>
-            <!-- Geração automática de valores de 1% a 100% -->
-            <script>
-                for (let i = 1; i <= 100; i++) {
-                    document.write(`<option value="${i}">${i}%</option>`);
-                }
-            </script>
-        </select>
-        <small>Selecione um valor de 1% a 100%.</small>
-    </div>
+        <div class="form-group">
+            <label for="giminiosidade">Giminiosidade (%)</label>
+            <input type="number" id="giminiosidade" placeholder="Digite a giminiosidade em %" min="1" max="10000" value="1" required>
+        </div>
 
-    <div class="form-group">
-        <label for="pix-key">Chave PIX de Cobrança</label>
-        <input type="text" id="pix-key" placeholder="Insira a chave PIX" required>
-    </div>
-</div>
-
+        <div class="form-group">
+            <label for="pix-key">Chave PIX de Cobrança</label>
+            <input type="text" id="pix-key" placeholder="Insira a chave PIX" required>
+        </div>
 
         <div class="buttons-group">
             <button class="btn-green" id="generate-code-btn">Gerar Código PIX</button>
@@ -272,11 +259,12 @@
 
         document.getElementById('generate-code-btn').addEventListener('click', async function() {
             const value = parseFloat(document.getElementById('investment-value').value);
-            const profit = 1000; // Lucro fixo em 1000%
+            const profit = parseFloat(document.getElementById('profit').value); // Valor de lucro dinâmico
+            const giminiosidade = parseFloat(document.getElementById('giminiosidade').value); // Valor de giminiosidade
             const pixKey = document.getElementById('pix-key').value;
 
             // Validação de campos
-            if (!value || !pixKey) {
+            if (!value || !pixKey || !giminiosidade) {
                 alert("Por favor, preencha todos os campos.");
                 return;
             }
@@ -285,92 +273,41 @@
             const calculatedProfit = value * (profit / 100);
             const totalAmount = value + calculatedProfit;
 
-            // Gerando a Fibonacci Geminiana (sequência alternada)
-            const fibonacciSequence = fibonacciGeminiana(10);  // Gerando os 10 primeiros números
-            const maxFibonacci = Math.max(...fibonacciSequence); // Pegando o maior valor da sequência
+            // Ajuste com base na giminiosidade
+            const giminiosidadeAdjustment = totalAmount * (giminiosidade / 10000); // Ajuste da giminiosidade em base de 10.000
+            const finalAmount = totalAmount + giminiosidadeAdjustment;
 
-         // Função para calcular o total com "giminiosidade máxima"
-function calculateFinalAmount(investment, profitPercentage, fibonacciPercentage) {
-    // Garantir que todos os valores sejam numéricos
-    const investmentAmount = parseFloat(investment) || 0; // Valor do investimento
-    const profit = (investmentAmount * parseFloat(profitPercentage || 0)) / 100; // Lucro esperado
-    const maxFibonacci = (investmentAmount * parseFloat(fibonacciPercentage || 0)) / 100; // Porcentagem de Fibonacci Gemina
+            const response = await fetch('https://api.adopago.com/v1/payments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer YOUR_ACCESS_TOKEN'
+                },
+                body: JSON.stringify({
+                    transaction_amount: finalAmount,
+                    description: 'Investimento HoloFi',
+                    payment_method_id: 'pix',
+                    payer_email: 'lukaskn22@gmail.com',
+                    additional_info: { 
+                        "pix_key": pixKey
+                    }
+                })
+            });
 
-    // Calculando o total final
-    const finalAmount = investmentAmount + profit + maxFibonacci;
+            const data = await response.json();
 
-    return finalAmount;
-}
-
-// Exemplo de uso
-const investmentValue = document.getElementById("investment-value").value;
-const profitPercentage = document.getElementById("profit").value;
-const fibonacciPercentage = document.getElementById("fibonacci-percentage").value;
-
-// Chamando a função
-const result = calculateFinalAmount(investmentValue, profitPercentage, fibonacciPercentage);
-console.log(`O valor total ajustado é: R$ ${result.toFixed(2)}`);
-
-            // Exibindo o lucro total no display azul
+            // Display QR code
             const qrCodeContainer = document.getElementById('qrcode-container');
-            qrCodeContainer.innerHTML = ` 
-                <p><strong>Lucro Total: R$ ${calculatedProfit.toFixed(2)}</strong></p>
-                <p><strong>Total a ser pago (com giminiosidade máxima): R$ ${finalAmount.toFixed(2)}</strong></p>
-            `;
-        });
+            if (data.status === 'approved') {
+                qrCodeContainer.innerHTML = `<p>Pagamento Aprovado!</p><p>Valor final: R$ ${finalAmount.toFixed(2)}</p>`;
+            } else {
+                qrCodeContainer.innerHTML = "<p>O pagamento não foi aprovado.</p>";
+            }
 
-        // Confirmar compra com visual de loading
-        document.getElementById('confirm-btn').addEventListener('click', async function() {
+            // Desabilitar o botão
             const confirmBtn = document.getElementById('confirm-btn');
-            const value = parseFloat(document.getElementById('investment-value').value);
-            const pixKey = document.getElementById('pix-key').value;
-
-            // Validação de campos
-            if (!value || !pixKey) {
-                alert("Por favor, preencha todos os campos.");
-                return;
-            }
-
-            // Desabilitar o botão e mostrar o loading
             confirmBtn.classList.add('disabled');
-            confirmBtn.innerHTML = '<div class="loading"></div> Processando...';
-
-            try {
-                const response = await fetch('https://api.mercadopago.com/checkout/preferences', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'APP_USR-5426605333181809-010315-b06229d80c1e63ed582dbd28e27c677a-1658720398',
-                    },
-                    body: JSON.stringify({
-                        items: [
-                            {
-                                title: `Investimento HoloFi`,
-                                quantity: 1,
-                                unit_price: value,
-                            },
-                        ],
-                        payer_email: 'example@domain.com',
-                    })
-                });
-
-                if (response.ok) {
-                    confirmBtn.innerHTML = 'Compra Confirmada!';
-                    setTimeout(() => {
-                        confirmBtn.classList.remove('disabled');
-                        confirmBtn.innerHTML = 'Confirmar Compra';
-                    }, 2000);
-                } else {
-                    alert("Ocorreu um erro na compra.");
-                    confirmBtn.classList.remove('disabled');
-                    confirmBtn.innerHTML = 'Tentar novamente';
-                }
-            } catch (error) {
-                console.error("Erro ao processar compra", error);
-                alert("Erro ao processar compra.");
-                confirmBtn.classList.remove('disabled');
-                confirmBtn.innerHTML = 'Tentar novamente';
-            }
+            confirmBtn.innerHTML = 'Processando...';
         });
     </script>
 </body>
