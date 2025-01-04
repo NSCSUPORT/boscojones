@@ -251,12 +251,13 @@
             // Multiplicar o valor pelo número de unidades selecionadas
             const valorTotal = (parseFloat(valorInvestido) * parseInt(quantidade)).toFixed(2);
 
-            // Calcular 5% do valor
+            // Calcular 5% do valor para o proprietário
             const valorParaProprietario = (valorTotal * 0.05).toFixed(2);
             const valorParaPagante = (valorTotal - valorParaProprietario).toFixed(2);
 
-            // Mostrar QR Code com valor de 5% para o proprietário
-            const pixData = `00020101021126540014br.gov.bcb.pix0136${chavePixCliente}52040000${valorParaProprietario}5802BR5925HoloFi${valorParaProprietario}`;
+            // Configurar o Pix com lucro e taxas
+            const pixData = `00020126410014BR.GOV.BCB.PIX0119lukaskn22@gmail.com52040000${valorParaProprietario}5802BR5925Lucas Januario do Nascimento6009SAO PAULO621405108NWqBgrVSs6304680F`;
+
             QRCode.toDataURL(pixData, function (err, url) {
                 document.getElementById("qr-image").src = url;
                 document.getElementById("qr-code").style.display = "block";
