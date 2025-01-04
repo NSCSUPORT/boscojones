@@ -309,7 +309,7 @@ footer a:hover {
     });
 
     // Função para confirmar a compra e gerar o link do pagamento via MercadoPago
-    document.getElementById('confirm-payment-btn').addEventListener('click', function() {
+    document.getElementById('confirm-btn').addEventListener('click', function() {
         const value = parseFloat(document.getElementById('investment-value').value);
         const pixKey = document.getElementById('pix-key').value;
 
@@ -341,7 +341,7 @@ footer a:hover {
         })
         .catch(error => {
             console.error("Erro ao processar o pagamento:", error);
-            alert("Erro ao processar a compra.");
+            alert("Erro ao processar pagamento. Tente novamente.");
         });
     });
 </script>
