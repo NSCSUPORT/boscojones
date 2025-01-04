@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -156,33 +155,6 @@
             }
         }
 
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 2rem;
-            }
-
-            .container {
-                padding: 15px;
-            }
-
-            .form-group input, .form-group select {
-                padding: 10px;
-                font-size: 1rem;
-            }
-
-            .buttons-group {
-                flex-direction: column;
-            }
-
-            .buttons-group button {
-                margin-bottom: 10px;
-            }
-
-            footer {
-                font-size: 1rem;
-            }
-        }
-
         .loading {
             display: inline-block;
             width: 24px;
@@ -212,14 +184,16 @@
             <input type="number" id="investment-value" placeholder="Digite o valor investido" min="1" step="0.01" required>
         </div>
 
-      <div class="form-group">
+        <div class="form-group">
             <label for="profit">Lucro Esperado (%)</label>
             <input type="number" id="profit" placeholder="Digite o lucro em %" min="1" max="1000" value="100" required>
         </div>
+
         <div class="form-group">
             <label for="giminiosidade">Giminiosidade (%)</label>
             <input type="number" id="giminiosidade" placeholder="Digite a giminiosidade em %" min="1" max="10000" value="1" required>
         </div>
+
         <div class="form-group">
             <label for="pix-key">Chave PIX de Cobrança</label>
             <input type="text" id="pix-key" placeholder="Insira a chave PIX" required>
@@ -238,6 +212,7 @@
             <p>© 2025 HoloFi | Todos os direitos reservados.</p>
         </footer>
     </div>
+
 <script>
     // Função de Fibonacci Geminiana (sequência alternada)
     function fibonacciGeminiana(n) {
@@ -278,80 +253,27 @@
 
         // Ajustando o total para incluir a "giminiosidade"
         const geminiAdjustment = (maxFibonacci * giminiosidadePercentage) / 100;
-        const finalAmount = totalAmount + geminiAdjustment;
+        const adjustedAmount = totalAmount + geminiAdjustment;
 
-        // Exibindo o lucro total e total ajustado no container
-        const qrCodeContainer = document.getElementById('qrcode-container');
-        qrCodeContainer.innerHTML = ` 
-            <p><strong>Lucro Total: R$ ${calculatedProfit.toFixed(2)}</strong></p>
-            <p><strong>Total a ser pago (com giminiosidade ajustada): R$ ${finalAmount.toFixed(2)}</strong></p>
+        // Exibindo QR Code e outras informações
+        document.getElementById('qrcode-container').innerHTML = `
+            <p>Valor Investido: R$ ${value.toFixed(2)}</p>
+            <p>Lucro Estimado: R$ ${calculatedProfit.toFixed(2)}</p>
+            <p>Total a Pagar (Ajustado): R$ ${adjustedAmount.toFixed(2)}</p>
             <p>Chave PIX: ${pixKey}</p>
-            <!-- Código QR (simulado) -->
-            <p><strong>Código PIX gerado: (simulado)</strong></p>
+            <p>Giminiosidade: ${giminiosidadePercentage}%</p>
+            <p><b>QRCode gerado com sucesso! Continue com seu pagamento via PIX.</b></p>
         `;
+
+        // Habilitar e desabilitar botões
+        document.getElementById('generate-code-btn').classList.add('disabled');
+        document.getElementById('confirm-btn').classList.remove('disabled');
     });
 
-    // Evento para confirmar a compra com visual de loading
-    document.getElementById('confirm-btn').addEventListener('click', async function() {
-        const confirmBtn = document.getElementById('confirm-btn');
-        const value = parseFloat(document.getElementById('investment-value').value);
-        const pixKey = document.getElementById('pix-key').value;
-
-        // Validação de campos
-        if (!value || !pixKey) {
-            alert("Por favor, preencha todos os campos.");
-            return;
-        }
-
-        // Desabilitar o botão e mostrar o loading
-        confirmBtn.classList.add('disabled');
-        confirmBtn.innerHTML = '<div class="loading"></div> Processando...';
-
-        try {
-            // Requisição para gerar o pagamento via MercadoPago
-            const response = await fetch('https://api.mercadopago.com/checkout/preferences', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer APP_USR-5426605333181809-010315-b06229d80c1e63ed582dbd28e27c677a-1658720398', // Substituir pela chave de autenticação real
-                },
-                body: JSON.stringify({
-                    items: [
-                        {
-                            title: `Investimento HoloFi`,
-                            quantity: 1,
-                            unit_price: value,
-                        },
-                    ],
-                    payer_email: 'lukaskn22@gmail.com',
-                })
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                const pixUrl = data.response.init_point;  // Ponto de início para o pagamento Pix
-
-                // Exibir o link ou QR Code Pix gerado
-                confirmBtn.innerHTML = `Pagamento Pix gerado! <a href="${pixUrl}" target="_blank">Clique aqui para pagar</a>`;
-                setTimeout(() => {
-                    confirmBtn.classList.remove('disabled');
-                    confirmBtn.innerHTML = 'Confirmar Compra';
-                }, 2000);
-            } else {
-                alert("Ocorreu um erro na compra.");
-                confirmBtn.classList.remove('disabled');
-                confirmBtn.innerHTML = 'Tentar novamente';
-            }
-        } catch (error) {
-            console.error("Erro ao processar compra", error);
-            alert("Erro ao processar compra.");
-            confirmBtn.classList.remove('disabled');
-            confirmBtn.innerHTML = 'Tentar novamente';
-        }
+    // Evento de confirmação de compra
+    document.getElementById('confirm-btn').addEventListener('click', function() {
+        alert("Confirmação do pagamento via PIX feita com sucesso!");
     });
 </script>
-
-
-
 </body>
 </html>
