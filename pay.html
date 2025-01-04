@@ -251,15 +251,21 @@
             // Gerando a Fibonacci Geminiana (sequência alternada)
             const fibonacciSequence = fibonacciGeminiana(10);  // Gerando os 10 primeiros números
 
-            // Simulação do uso de Detrix como oráculo (simulação simples)
-            const detrixResult = `Oráculo Detrix: Lucro de ${calculatedProfit.toFixed(2)} R$ calculado com base no investimento.`;
+          
 
             // Exibindo o resultado
-            const qrCodeData = {
-                pixKey: pixKey,
-                amount: totalAmount.toFixed(2),
-                description: `Investimento: R$${value.toFixed(2)} + Lucro: R$${calculatedProfit.toFixed(2)}`
-            };
+const qrCodeData = {
+    amount: calculatedProfit.toFixed(2),
+    description: `Lucro Total: R$${calculatedProfit.toFixed(2)}`
+};
+
+const qrCodeContainer = document.getElementById('qrcode-container');
+qrCodeContainer.innerHTML = `
+    <p><strong>Código PIX para pagamento:</strong></p>
+    <pre>${JSON.stringify(qrCodeData, null, 2)}</pre>
+    <p><strong>Lucro Total: R$ ${calculatedProfit.toFixed(2)}</strong></p>
+`;
+
 
             const qrCodeContainer = document.getElementById('qrcode-container');
             qrCodeContainer.innerHTML = `
