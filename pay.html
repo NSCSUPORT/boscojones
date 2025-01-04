@@ -1,191 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagamento Pix - HoloFi</title>
-    <link rel="icon" href="https://nscsuport.github.io/OZZ/z.png" type="image/x-icon">
+    <title>Pagamento - HoloFi</title>
     <style>
-        /* Configuração global */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Roboto', Arial, sans-serif;
-            background-color: #000;
-            color: #00FF00;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-            padding: 10px;
-            zoom: 70%;
-        }
-
-        h1 {
-            font-size: 2.8rem;
-            margin: 20px 0;
-            color: #00FF00;
-            text-align: center;
-            text-shadow: 0 0 20px #7e00ff;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 600px;
-            background-color: #1e1e1e;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-            margin: 0 auto;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #e0e0e0;
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #3c3c3c;
-            background-color: #2a2a2a;
-            color: #e0e0e0;
-            font-size: 1.1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: #4CAF50;
-        }
-
-        .buttons-group {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .buttons-group button {
-            padding: 14px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #fff;
-            border: none;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            text-align: center;
-            flex: 1;
-        }
-
-        .btn-blue {
-            background-color: #1A73E8;
-        }
-
-        .btn-blue:hover {
-            background-color: #0F59C9;
-            transform: scale(1.05);
-        }
-
-        .btn-red {
-            background-color: #f44336;
-        }
-
-        .btn-red:hover {
-            background-color: #d32f2f;
-            transform: scale(1.05);
-        }
-
-        .blue-screen {
-            margin-top: 20px;
-            padding: 20px;
-            width: 100%;
-            background-color: #0000aa;
-            color: #ffffff;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 1.1rem;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-        }
-
-        footer {
-            width: 100%;
-            padding: 20px;
-            background: linear-gradient(45deg, #f0f000, #ff4500);
-            color: #000000;
-            text-align: center;
-            font-size: 1.1rem;
-            font-weight: bold;
-            letter-spacing: 2px;
-            text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
-            margin-top: 20px;
-            animation: neon 1.5s ease-in-out infinite alternate;
-        }
-
-        footer a {
-            color: #000000;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        @keyframes neon {
-            0% {
-                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
-            }
-            50% {
-                text-shadow: 0 0 20px #ff0000, 0 0 30px #ff4500, 0 0 40px #f0f000;
-            }
-            100% {
-                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
-            }
-        }
-
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 2rem;
-            }
-
-            .container {
-                padding: 15px;
-            }
-
-            .form-group input, .form-group select {
-                padding: 10px;
-                font-size: 1rem;
-            }
-
-            .buttons-group {
-                flex-direction: column;
-            }
-
-            .buttons-group button {
-                margin-bottom: 10px;
-            }
-
-            footer {
-                font-size: 1rem;
-            }
-        }
+        /* Estilos de botão e layout */
     </style>
 </head>
 <body>
-    <h1>Pagamento Pix - HoloFi</h1>
+    <h1>Pagamento via Pix</h1>
     <div class="container">
         <div class="form-group">
             <label for="investment-value">Valor a ser investido (R$)</label>
@@ -204,29 +28,12 @@
 
         <div class="form-group">
             <label for="pix-key">Chave PIX do Cliente</label>
-            <input type="text" id="pix-key" placeholder="Digite sua chave PIX" value="lukaskn22@gmail.com" readonly required>
+            <input type="text" id="pix-key" placeholder="Digite sua chave PIX" required>
         </div>
 
-        <div class="form-group">
-            <label for="investment-plan">Escolha o plano</label>
-            <select id="investment-plan" required>
-                <option value="" disabled selected>Selecione um plano</option>
-                <option value="diamante-brl">zen BRL</option>
-                <option value="esmeralda-usd">zion USD</option>
-                <option value="safira-eur">zetha EUR</option>
-                <option value="ethereum">Ethereum</option>
-                <option value="solana">Solana</option>
-                <option value="bitcoin">Bitcoin</option>
-            </select>
-        </div>
+        <button class="btn-blue" id="generate-pix">Gerar QR Code de Pagamento</button>
 
-        <div class="buttons-group">
-            <button class="btn-blue" id="generate-pix">Gerar PIX</button>
-            <a href="https://nscsuport.github.io/OZZ/index.html"><button class="btn-red">Cancelar</button></a>
-        </div>
-
-        <!-- Exibir QR Code -->
-        <div id="qr-code" style="display: none; margin-top: 20px; text-align: center;">
+        <div id="qr-code" style="display: none;">
             <h2>QR Code de Pagamento</h2>
             <img id="qr-image" src="" alt="QR Code" style="width: 200px;">
         </div>
@@ -239,7 +46,7 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
     <script>
         document.getElementById("generate-pix").addEventListener("click", function () {
-            const valorInvestido = document.getElementById("investment-value").value;
+            const valorInvestido = parseFloat(document.getElementById("investment-value").value);
             const quantidade = document.getElementById("quantity").value;
             const chavePixCliente = document.getElementById("pix-key").value;
 
@@ -248,23 +55,25 @@
                 return;
             }
 
-            // Multiplicar o valor pelo número de unidades selecionadas
-            const valorTotal = (parseFloat(valorInvestido) * parseInt(quantidade)).toFixed(2);
+            // Calcular o valor total (valor investido * quantidade)
+            const valorTotal = (valorInvestido * quantidade).toFixed(2);
 
-            // Calcular 5% do valor para o proprietário
-            const valorParaProprietario = (valorTotal * 0.05).toFixed(2);
-            const valorParaPagante = (valorTotal - valorParaProprietario).toFixed(2);
+            // Gerar o payload para o QR Code Pix
+            const chavePixRecebedor = "00020126490014br.gov.bcb.pix0114+55119588498940209BRNC INC 5204000053039865802BR5925LUCAS JANUARIO DO NASCIME6009SAO PAULO62580520SAN2025010401565743150300017br.gov.bcb.brcode01051.0.06304B739";
+            
+            // Gerar o QR Code
+            const payload = chavePixRecebedor.replace("SAN2025010401565743150300017", `SAN${valorTotal.replace('.', '')}`); // Substituir valor total no QR
+            const qrCodeElement = document.getElementById("qr-image");
 
-            // Configurar o Pix com lucro e taxas
-            const pixData = `00020126410014BR.GOV.BCB.PIX0119lukaskn22@gmail.com5204000053039865802BR5925Lucas Januario do Nascimento6009SAO PAULO62140510BBfEdkNU6H63047310`;
-
-            QRCode.toDataURL(pixData, function (err, url) {
-                document.getElementById("qr-image").src = url;
-                document.getElementById("qr-code").style.display = "block";
+            QRCode.toDataURL(payload, { errorCorrectionLevel: 'H' }, function (err, url) {
+                if (err) {
+                    console.error('Erro ao gerar QR Code:', err);
+                    alert('Erro ao gerar o QR Code!');
+                } else {
+                    document.getElementById("qr-code").style.display = "block";
+                    qrCodeElement.src = url;
+                }
             });
-
-            // Exibir informações de valor para o pagante
-            alert(`Valor total: R$${valorTotal}\nValor para o proprietário (5%): R$${valorParaProprietario}\nValor a pagar: R$${valorParaPagante}`);
         });
     </script>
 </body>
