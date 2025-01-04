@@ -213,7 +213,6 @@
             <p>© 2025 HoloFi @lucasjanuarior14 | Todos os direitos reservados.</p>
         </footer>
     </div>
-
 <script>
     // Função de Fibonacci Geminiana (sequência alternada)
     function fibonacciGeminiana(n) {
@@ -231,45 +230,42 @@
         return result;
     }
 
-    // Evento para gerar o código de investimento
-    document.getElementById('generate-code-btn').addEventListener('click', async function() {
+    // Função para gerar o código de investimento e calcular valores
+    document.getElementById('generate-code-btn').addEventListener('click', function() {
         const value = parseFloat(document.getElementById('investment-value').value);
-        const profit = parseFloat(document.getElementById('profit').value); // Lucro do usuário
+        const profit = parseFloat(document.getElementById('profit').value);  // Lucro do usuário
         const pixKey = document.getElementById('pix-key').value;
-        const giminiosidadePercentage = parseFloat(document.getElementById('giminiosidade').value); // % da giminiosidade
+        const giminiosidadePercentage = parseFloat(document.getElementById('giminiosidade').value);  // % da giminiosidade
 
         // Validação de campos
-        if (!value || !pixKey || !profit || !giminiosidadePercentage) {
+        if (!value || !pixKey || !profit || isNaN(giminiosidadePercentage)) {
             alert("Por favor, preencha todos os campos.");
             return;
         }
 
-        // Cálculo do lucro
-        const calculatedProfit = value * (profit / 100); // Cálculo do lucro baseado no valor e lucro fixo
+        // Cálculo do lucro e valor total
+        const calculatedProfit = value * (profit / 100);  // Lucro baseado no valor investido
         const totalAmount = value + calculatedProfit;  // Total após lucro
 
-        // Gerando a Fibonacci Geminiana (sequência alternada)
+        // Gerando a sequência Fibonacci Geminiana
         const fibonacciSequence = fibonacciGeminiana(10);  // Gerando os 10 primeiros números
-        const maxFibonacci = Math.max(...fibonacciSequence); // Pegando o maior valor da sequência
+        const maxFibonacci = Math.max(...fibonacciSequence);  // Pegando o maior valor da sequência
 
-        // Ajustando o total para incluir a "giminiosidade"
+        // Ajuste do valor final para incluir a giminiosidade
         const geminiAdjustment = (maxFibonacci * giminiosidadePercentage) / 100;
         const finalAmount = totalAmount + geminiAdjustment;
 
-        // Exibindo o lucro total e total ajustado no container
+        // Exibindo o lucro e o total ajustado no container
         const qrCodeContainer = document.getElementById('qrcode-container');
         qrCodeContainer.innerHTML = ` 
             <p><strong>Lucro Total: R$ ${calculatedProfit.toFixed(2)}</strong></p>
             <p><strong>Total a ser pago (com giminiosidade ajustada): R$ ${finalAmount.toFixed(2)}</strong></p>
             <p>Chave PIX: ${pixKey}</p>
-            <!-- Código QR (simulado) -->
-            <p><strong>Código PIX gerado: (simulado)</strong></p>
         `;
     });
 
-    // Evento para confirmar a compra com visual de loading
+    // Função para confirmar a compra e gerar o link do pagamento via MercadoPago
     document.getElementById('confirm-btn').addEventListener('click', async function() {
-        const confirmBtn = document.getElementById('confirm-btn');
         const value = parseFloat(document.getElementById('investment-value').value);
         const pixKey = document.getElementById('pix-key').value;
 
@@ -279,7 +275,14 @@
             return;
         }
 
-        // Desabilitar o botão e mostrar o loading
+        // Alerta de confirmação de compra
+        const confirmPurchase = confirm(`Você está prestes a realizar um investimento no valor de R$ ${value.toFixed(2)}. Deseja continuar?`);
+
+        if (!confirmPurchase) {
+            return; // Interrompe a execução se o usuário não confirmar
+        }
+
+        const confirmBtn = document.getElementById('confirm-btn');
         confirmBtn.classList.add('disabled');
         confirmBtn.innerHTML = '<div class="loading"></div> Processando...';
 
@@ -299,7 +302,19 @@
                             unit_price: value,
                         },
                     ],
-                    payer_email: 'lukaskn22@gmail.com',
+                    payer_email: 'lukaskn22@gmail.com',  // E-mail do pagador
+                    back_urls: {
+                        success: 'https://seusite.com/sucesso',
+                        failure: 'https://seusite.com/falha',
+                        pending: 'https://seusite.com/pendente',
+                    },
+                    payment_methods: {
+                        excluded_payment_types: [{
+                            id: 'ticket'
+                        }],
+                        installments: 1
+                    },
+                    notifications_url: 'https://seusite.com/notification',  // URL para receber notificações do pagamento
                 })
             });
 
@@ -314,18 +329,19 @@
                     confirmBtn.innerHTML = 'Confirmar Compra';
                 }, 2000);
             } else {
-                alert("Ocorreu um erro na compra.");
+                alert("Ocorreu um erro na compra. Tente novamente.");
                 confirmBtn.classList.remove('disabled');
                 confirmBtn.innerHTML = 'Tentar novamente';
             }
         } catch (error) {
             console.error("Erro ao processar compra", error);
-            alert("Erro ao processar compra.");
+            alert("Erro ao processar compra. Tente novamente.");
             confirmBtn.classList.remove('disabled');
             confirmBtn.innerHTML = 'Tentar novamente';
         }
     });
 </script>
+
 
 </body>
 </html>
