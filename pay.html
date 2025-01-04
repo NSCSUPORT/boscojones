@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagamento PIX - HoloFi</title>
     <link rel="icon" href="https://nscsuport.github.io/OZZ/z.png" type="image/x-icon">
-  <style>
+    <style>
         * {
             box-sizing: border-box;
             margin: 0;
@@ -212,7 +212,7 @@
 
         <footer>
             <p>© 2025 HoloFi | Todos os direitos reservados.</p>
-         
+        </footer>
     </div>
 
     <script>
@@ -249,29 +249,23 @@
 
             // Gerando a Fibonacci Geminiana (sequência alternada)
             const fibonacciSequence = fibonacciGeminiana(10);  // Gerando os 10 primeiros números
+            const maxFibonacci = Math.max(...fibonacciSequence); // Pegando o maior valor da sequência
 
-          
+            // Ajustando o total para incluir a "giminiosidade máxima"
+            const finalAmount = totalAmount + maxFibonacci;
 
             // Exibindo o resultado
-const qrCodeData = {
-    amount: calculatedProfit.toFixed(2),
-    description: `Lucro Total: R$${calculatedProfit.toFixed(2)}`
-};
-
-const qrCodeContainer = document.getElementById('qrcode-container');
-qrCodeContainer.innerHTML = `
-    <p><strong>Código PIX para pagamento:</strong></p>
-    <pre>${JSON.stringify(qrCodeData, null, 2)}</pre>
-    <p><strong>Lucro Total: R$ ${calculatedProfit.toFixed(2)}</strong></p>
-`;
-
+            const qrCodeData = {
+                amount: calculatedProfit.toFixed(2),
+                description: `Lucro Total: R$${calculatedProfit.toFixed(2)} + Giminiosidade Máxima`
+            };
 
             const qrCodeContainer = document.getElementById('qrcode-container');
-            qrCodeContainer.innerHTML = `
+            qrCodeContainer.innerHTML = ` 
                 <p><strong>Código PIX para pagamento:</strong></p>
                 <pre>${JSON.stringify(qrCodeData, null, 2)}</pre>
-                <p><strong>Total a ser pago: R$ ${totalAmount.toFixed(2)}</strong></p>
-                <p>${detrixResult}</p>
+                <p><strong>Lucro Total: R$ ${calculatedProfit.toFixed(2)}</strong></p>
+                <p><strong>Total a ser pago (com giminiosidade máxima): R$ ${finalAmount.toFixed(2)}</strong></p>
                 <p><strong>Sequência Fibonacci Geminiana:</strong> ${fibonacciSequence.join(', ')}</p>
             `;
 
@@ -286,36 +280,24 @@ qrCodeContainer.innerHTML = `
                     body: JSON.stringify({
                         items: [
                             {
-                                title: `Investimento HoloFi`,
+                                title: `Investimento HoloFi ${finalAmount.toFixed(2)}`,
                                 quantity: 1,
-                                unit_price: totalAmount,
-                                currency_id: 'BRL',
+                                unit_price: finalAmount,
                             },
                         ],
                         back_urls: {
-                            success: 'http://www.holofi.com/success',
-                            failure: 'http://www.holofi.com/failure',
-                            pending: 'http://www.holofi.com/pending',
+                            success: "http://www.your-site.com/success",
+                            failure: "http://www.your-site.com/failure",
+                            pending: "http://www.your-site.com/pending",
                         },
-                        payer_email: pixKey, // Coloque aqui o email do comprador
-                    }),
+                    })
                 });
 
-                const data = await response.json();
-                const initPoint = data.init_point; // URL de pagamento gerada pelo Mercado Pago
-
-                qrCodeContainer.innerHTML += `
-                    <p><strong>Pagamento Mercado Pago:</strong> <a href="${initPoint}" target="_blank"></a></p>
-                `;
+                const jsonResponse = await response.json();
+                console.log("Responda Mercado Pago:", jsonResponse);
             } catch (error) {
-                console.error("Erro ao gerar pagamento no Mercado Pago:", error);
-                qrCodeContainer.innerHTML += `<p>Erro ao gerar pagamento Mercado Pago. Tente novamente.</p>`;
+                console.error("Erro ao gerar código de pagamento:", error);
             }
-        });
-
-        document.getElementById('confirm-btn').addEventListener('click', function() {
-            alert("Compra confirmada com sucesso!");
-            // Integrar a API de pagamento do Mercado Pago aqui.
         });
     </script>
 </body>
