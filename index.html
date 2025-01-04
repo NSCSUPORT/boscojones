@@ -8,228 +8,146 @@
     <title>HoloFi</title>
     <link rel="icon" href="https://nscsuport.github.io/OZZ/z.png" type="image/x-icon">
     <style>
- * {
-    box-sizing: border-box;
+/* Estilos gerais */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000;
+    color: #fff;
     margin: 0;
     padding: 0;
 }
 
-body {
-    font-family: 'Roboto', Arial, sans-serif;
-    background-color: #000;
-    color: #00FF00;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    flex-direction: column;
-    padding: 10px;
-    zoom: 80%; /* Zoom ajustado para 80% */
-}
-
 h1 {
-    font-size: 2.8rem;
-    margin: 20px 0;
-    color: #00FF00;
     text-align: center;
-    text-shadow: 0 0 20px #7e00ff;
+    color: #fff;
+    margin: 20px 0;
 }
 
+/* Container principal */
 .container {
-    width: 100%;
-    max-width: 600px;
-    background-color: #1e1e1e;
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    width: 80%;
+    max-width: 800px;
     margin: 0 auto;
+    padding: 20px;
+    background-color: #1a1a1a;
+    border-radius: 10px;
 }
 
+/* Estilo do formulário */
 .form-group {
     margin-bottom: 20px;
 }
 
-.form-group label {
+label {
     display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #e0e0e0;
+    font-size: 14px;
+    color: #fff;
+    margin-bottom: 5px;
 }
 
-.form-group input, .form-group select {
+input[type="number"],
+input[type="text"],
+select {
     width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #3c3c3c;
-    background-color: #2a2a2a;
-    color: #e0e0e0;
-    font-size: 1.1rem;
-    transition: border-color 0.3s ease;
+    padding: 10px;
+    font-size: 14px;
+    background-color: #333;
+    border: 1px solid #555;
+    border-radius: 5px;
+    color: #fff;
+    box-sizing: border-box;
 }
 
-.form-group input:focus, .form-group select:focus {
+input[type="number"]:focus,
+input[type="text"]:focus,
+select:focus {
     outline: none;
     border-color: #4CAF50;
 }
 
+/* Botões */
 .buttons-group {
     display: flex;
     justify-content: space-between;
-    gap: 10px;
-    margin-top: 20px;
 }
 
-.buttons-group button {
-    padding: 14px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
+.btn-green,
+.btn-red {
+    padding: 15px 25px;
+    font-size: 16px;
     color: #fff;
     border: none;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    text-align: center;
-    flex: 1;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
 }
 
 .btn-green {
     background-color: #4CAF50;
 }
 
-.btn-green:hover {
-    background-color: #45a049;
-    transform: scale(1.05);
-}
-
 .btn-red {
     background-color: #f44336;
 }
 
+.btn-green:hover {
+    background-color: #388E3C;
+}
+
 .btn-red:hover {
     background-color: #d32f2f;
-    transform: scale(1.05);
 }
 
+.btn-green:disabled,
+.btn-red:disabled {
+    background-color: #bdbdbd;
+    cursor: not-allowed;
+}
+
+/* QR Code Container */
 .qr-code-container {
+    display: none;
     margin-top: 20px;
-    padding: 20px;
-    width: 100%;
-    background-color: #0000aa;
-    color: #ffffff;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 1.1rem;
-    border-radius: 8px;
     text-align: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
+.qr-code-container p {
+    font-size: 18px;
+    color: #fff;
+}
+
+.qr-code-container img {
+    margin-top: 20px;
+    width: 128px;
+    height: 128px;
+}
+
+/* Footer */
 footer {
-    width: 100%;
-    padding: 20px;
-    background: linear-gradient(45deg, #f0f000, #ff4500);
-    color: #000000;
     text-align: center;
-    font-size: 1.1rem;
-    font-weight: bold;
-    letter-spacing: 2px;
-    text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
-    margin-top: 20px;
-    animation: neon 1.5s ease-in-out infinite alternate;
+    padding: 20px;
+    font-size: 14px;
+    background-color: #111;
+    color: #fff;
+    margin-top: 30px;
 }
 
-footer a {
-    color: #000000;
-    text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
-
-@keyframes neon {
-    0% {
-        text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
-    }
-    50% {
-        text-shadow: 0 0 20px #ff0000, 0 0 30px #ff4500, 0 0 40px #f0f000;
-    }
-    100% {
-        text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
-    }
-}
-
+/* Estilo do botão de carregamento */
 .loading {
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #4CAF50;
+    border: 2px solid #fff;
+    border-top: 2px solid #4CAF50;
     border-radius: 50%;
+    width: 20px;
+    height: 20px;
     animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-}
-
-/* Media Queries para tornar o layout responsivo */
-@media (max-width: 768px) {
-    body {
-        zoom: 100%; /* Ajuste do zoom para telas menores */
+    0% {
+        transform: rotate(0deg);
     }
-
-    .container {
-        padding: 20px; /* Ajuste do padding */
-    }
-
-    .form-group input,
-    .form-group select {
-        font-size: 1rem; /* Ajuste do tamanho da fonte */
-    }
-
-    .buttons-group {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .buttons-group button {
-        width: 100%;
-    }
-
-    h1 {
-        font-size: 2.4rem; /* Redução do tamanho da fonte para telas menores */
-    }
-
-    footer {
-        font-size: 1rem; /* Ajuste no tamanho da fonte do footer */
-    }
-}
-
-@media (max-width: 480px) {
-    body {
-        zoom: 100%;
-    }
-
-    .container {
-        padding: 15px; /* Ajuste adicional no padding */
-    }
-
-    .form-group input,
-    .form-group select {
-        font-size: 0.9rem; /* Ajuste da fonte */
-    }
-
-    h1 {
-        font-size: 2rem; /* Ajuste do tamanho da fonte para telas muito pequenas */
-    }
-
-    footer {
-        font-size: 0.9rem; /* Ajuste da fonte do footer */
+    100% {
+        transform: rotate(360deg);
     }
 }
 
