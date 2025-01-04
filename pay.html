@@ -204,7 +204,7 @@
 
         <div class="form-group">
             <label for="pix-key">Chave PIX do Cliente</label>
-            <input type="text" id="pix-key" placeholder="Digite sua chave PIX" required>
+            <input type="text" id="pix-key" placeholder="Digite sua chave PIX" value="lukaskn22@gmail.com" readonly required>
         </div>
 
         <div class="form-group">
@@ -256,7 +256,7 @@
             const valorParaPagante = (valorTotal - valorParaProprietario).toFixed(2);
 
             // Configurar o Pix com lucro e taxas
-            const pixData = `00020126410014BR.GOV.BCB.PIX0119lukaskn22@gmail.com52040000${valorParaProprietario}5802BR5925Lucas Januario do Nascimento6009SAO PAULO621405108NWqBgrVSs6304680F`;
+            const pixData = `00020126410014BR.GOV.BCB.PIX0119lukaskn22@gmail.com5204000053039865802BR5925Lucas Januario do Nascimento6009SAO PAULO62140510BBfEdkNU6H63047310`;
 
             QRCode.toDataURL(pixData, function (err, url) {
                 document.getElementById("qr-image").src = url;
