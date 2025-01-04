@@ -211,8 +211,8 @@
         </div>
 
         <footer>
-            <p>© 2025 HoloFi | Todos os direitos reservados.</p>
-            <p><a href="https://www.holofi.com">Visite nosso site</a></p>
+            <p>© 2025 HoloFi | Todos os direitos reservados.@lucasjanaurio14</p>
+      
         </footer>
     </div>
 
@@ -305,9 +305,6 @@ qrCodeContainer.innerHTML = `
                 const data = await response.json();
                 const initPoint = data.init_point; // URL de pagamento gerada pelo Mercado Pago
 
-                qrCodeContainer.innerHTML += `
-                    <p><strong>Pagamento Mercado Pago:</strong> <a href="${initPoint}" target="_blank">Clique aqui para realizar o pagamento</a></p>
-                `;
             } catch (error) {
                 console.error("Erro ao gerar pagamento no Mercado Pago:", error);
                 qrCodeContainer.innerHTML += `<p>Erro ao gerar pagamento Mercado Pago. Tente novamente.</p>`;
