@@ -2,7 +2,6 @@
 <html lang="pt-BR">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="icon" href="z.png" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagamento Pix - HoloFi</title>
     <link rel="icon" href="https://nscsuport.github.io/OZZ/z.png" type="image/x-icon">
@@ -156,6 +155,33 @@
                 text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
             }
         }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .form-group input, .form-group select {
+                padding: 10px;
+                font-size: 1rem;
+            }
+
+            .buttons-group {
+                flex-direction: column;
+            }
+
+            .buttons-group button {
+                margin-bottom: 10px;
+            }
+
+            footer {
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -194,26 +220,6 @@
             </select>
         </div>
 
-        <div class="form-group">
-            <label for="bank">Escolha o banco</label>
-            <select id="bank" required>
-                <option value="" disabled selected>Selecione um banco</option>
-                <option value="nubank">Nubank</option>
-                <option value="bradesco">Bradesco</option>
-                <option value="itau">Itaú</option>
-                <option value="banco-do-brasil">Banco do Brasil</option>
-                <option value="caixa">Caixa Econômica Federal</option>
-                <option value="santander">Santander</option>
-                <option value="hsbc">HSBC</option>
-                <option value="chase">Chase</option>
-                <option value="bank-of-america">Bank of America</option>
-                <option value="citibank">Citibank</option>
-                <option value="barclays">Barclays</option>
-                <option value="hsbc-uk">HSBC UK</option>
-                <option value="deutsche-bank">Deutsche Bank</option>
-            </select>
-        </div>
-
         <div class="buttons-group">
             <button class="btn-blue" id="generate-pix">Gerar PIX</button>
             <a href="https://nscsuport.github.io/OZZ/index.html"><button class="btn-red">Cancelar</button></a>
@@ -245,56 +251,20 @@
             // Multiplicar o valor pelo número de unidades selecionadas
             const valorTotal = (parseFloat(valorInvestido) * parseInt(quantidade)).toFixed(2);
 
-            // Criar o payload do QR Code Pix
-            const payload = {
-                "v": "01", // versão
-                "cal": [
-                    {
-                        "tag": "00",
-                        "value": "01"
-                    },
-                    {
-                        "tag": "26", // Chave Pix do recebedor
-                        "value": chavePixCliente
-                    },
-                    {
-                        "tag": "51",
-                        "value": valorTotal
-                    },
-                    {
-                        "tag": "52",
-                        "value": "BR"
-                    },
-                    {
-                        "tag": "59",
-                        "value": "HoloFi"
-                    },
-                    {
-                        "tag": "60",
-                        "value": "Pagamento de Investimento"
-                    },
-                    {
-                        "tag": "63",
-                        "value": "00"
-                    }
-                ]
-            };
+            // Calcular 5% do valor
+            const valorParaProprietario = (valorTotal * 0.05).toFixed(2);
+            const valorParaPagante = (valorTotal - valorParaProprietario).toFixed(2);
 
-            // Gerar o QR Code com os dados do Pix
-            const qrCodeData = JSON.stringify(payload);
-            const qrCodeElement = document.getElementById("qr-image");
-
-            QRCode.toDataURL(qrCodeData, { errorCorrectionLevel: 'H' }, function (err, url) {
-                if (err) {
-                    console.error('Erro ao gerar QR Code:', err);
-                    alert('Erro ao gerar o QR Code!');
-                } else {
-                    document.getElementById("qr-code").style.display = "block";
-                    qrCodeElement.src = url;
-                }
+            // Mostrar QR Code com valor de 5% para o proprietário
+            const pixData = `00020101021126540014br.gov.bcb.pix0136${chavePixCliente}52040000${valorParaProprietario}5802BR5925HoloFi${valorParaProprietario}`;
+            QRCode.toDataURL(pixData, function (err, url) {
+                document.getElementById("qr-image").src = url;
+                document.getElementById("qr-code").style.display = "block";
             });
+
+            // Exibir informações de valor para o pagante
+            alert(`Valor total: R$${valorTotal}\nValor para o proprietário (5%): R$${valorParaProprietario}\nValor a pagar: R$${valorParaPagante}`);
         });
     </script>
-
 </body>
 </html>
