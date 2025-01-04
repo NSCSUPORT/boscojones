@@ -5,195 +5,203 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cálculo de Lucro de Investimento</title>
     <style>
-    /* Configuração global */
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
+        /* Configuração global */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    body {
-        font-family: 'Roboto', Arial, sans-serif;
-        background-color: #000;
-        color: #00FF00;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        flex-direction: column;
-        padding: 10px;
-        zoom: 80%;
-    }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #000;
+            color: #00FF00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            padding: 10px;
+            zoom: 80%;
+        }
 
-    h1 {
-        font-size: 2.8rem;
-        margin: 20px 0;
-        color: #00FF00;
-        text-align: center;
-        text-shadow: 0 0 20px #7e00ff;
-    }
+        h1 {
+            font-size: 2.8rem;
+            margin: 20px 0;
+            color: #00FF00;
+            text-align: center;
+            text-shadow: 0 0 20px #7e00ff;
+        }
 
-    .container {
-        width: 100%;
-        max-width: 600px;
-        background-color: #1e1e1e;
-        border-radius: 12px;
-        padding: 25px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-        margin: 0 auto;
-    }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+            margin: 0 auto;
+        }
 
-    .form-group {
-        margin-bottom: 20px;
-    }
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-    .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: bold;
-        color: #e0e0e0;
-    }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #e0e0e0;
+        }
 
-    .form-group input, .form-group select {
-        width: 100%;
-        padding: 12px;
-        border-radius: 8px;
-        border: 1px solid #3c3c3c;
-        background-color: #2a2a2a;
-        color: #e0e0e0;
-        font-size: 1.1rem;
-        transition: border-color 0.3s ease;
-    }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #3c3c3c;
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            font-size: 1.1rem;
+            transition: border-color 0.3s ease;
+        }
 
-    .form-group input:focus, .form-group select:focus {
-        outline: none;
-        border-color: #4CAF50;
-    }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
 
-    .buttons-group {
-        display: flex;
-        justify-content: space-between;
-        gap: 10px;
-        margin-top: 20px;
-    }
+        .buttons-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+        }
 
-    .buttons-group button {
-        padding: 14px;
-        border-radius: 8px;
-        font-weight: bold;
-        cursor: pointer;
-        color: #000;
-        border: none;
-        transition: background-color 0.3s ease, transform 0.3s ease;
-        text-align: center;
-        flex: 1;
-    }
+        .buttons-group button {
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #000;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center;
+            flex: 1;
+        }
 
-    .btn-yellow {
-        background-color: #FFEA00;
-    }
+        .btn-yellow {
+            background-color: #FFEA00;
+        }
 
-    .btn-yellow:hover {
-        background-color: #FDD835;
-        transform: scale(1.05);
-    }
+        .btn-yellow:hover {
+            background-color: #FDD835;
+            transform: scale(1.05);
+        }
 
-    .btn-green {
-        background-color: #4CAF50;
-    }
+        .btn-green {
+            background-color: #4CAF50;
+        }
 
-    .btn-green:hover {
-        background-color: #388e3c;
-        transform: scale(1.05);
-    }
+        .btn-green:hover {
+            background-color: #388e3c;
+            transform: scale(1.05);
+        }
 
-    .btn-red {
-        background-color: #f44336;
-    }
+        .btn-red {
+            background-color: #f44336;
+        }
 
-    .btn-red:hover {
-        background-color: #d32f2f;
-        transform: scale(1.05);
-    }
+        .btn-red:hover {
+            background-color: #d32f2f;
+            transform: scale(1.05);
+        }
 
-    .blue-screen {
-        margin-top: 20px;
-        padding: 20px;
-        width: 100%;
-        background-color: #0000aa;
-        color: #ffffff;
-        font-family: 'Courier New', Courier, monospace;
-        font-size: 1.1rem;
-        border-radius: 8px;
-        text-align: center;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-    }
+        .blue-screen {
+            margin-top: 20px;
+            padding: 20px;
+            width: 100%;
+            background-color: #0000aa;
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
 
-    footer {
-        width: 100%;
-        padding: 20px;
-        background: linear-gradient(45deg, #f0f000, #ff4500);
-        color: #000000;
-        text-align: center;
-        font-size: 1.1rem;
-        font-weight: bold;
-        letter-spacing: 2px;
-        text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
-        margin-top: 20px;
-        animation: neon 1.5s ease-in-out infinite alternate;
-    }
-
-    footer a {
-        color: #000000;
-        text-decoration: none;
-    }
-
-    footer a:hover {
-        text-decoration: underline;
-    }
-
-    @keyframes neon {
-        0% {
+        footer {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(45deg, #f0f000, #ff4500);
+            color: #000000;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            letter-spacing: 2px;
             text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            margin-top: 20px;
+            animation: neon 1.5s ease-in-out infinite alternate;
         }
-        50% {
-            text-shadow: 0 0 20px #ff0000, 0 0 30px #ff4500, 0 0 40px #f0f000;
-        }
-        100% {
-            text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
-        }
-    }
 
-</style>
+        footer a {
+            color: #000000;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes neon {
+            0% {
+                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            }
+            50% {
+                text-shadow: 0 0 20px #ff0000, 0 0 30px #ff4500, 0 0 40px #f0f000;
+            }
+            100% {
+                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            }
+        }
+
+    </style>
 
 </head>
 <body>
     <h1>Cálculo de Lucro de Investimento</h1>
 
-    <label for="investment-plan">Selecione um plano de investimento:</label>
-    <select id="investment-plan">
-        <option value="diamante-brl">Diamante BRL</option>
-        <option value="esmeralda-usd">Esmeralda USD</option>
-        <option value="safira-eur">Safira EUR</option>
-        <option value="ethereum">Ethereum</option>
-        <option value="solana">Solana</option>
-        <option value="bitcoin">Bitcoin</option>
-    </select>
+    <div class="container">
+        <div class="form-group">
+            <label for="investment-plan">Selecione um plano de investimento:</label>
+            <select id="investment-plan">
+                <option value="diamante-brl">Diamante BRL</option>
+                <option value="esmeralda-usd">Esmeralda USD</option>
+                <option value="safira-eur">Safira EUR</option>
+                <option value="ethereum">Ethereum</option>
+                <option value="solana">Solana</option>
+                <option value="bitcoin">Bitcoin</option>
+            </select>
+        </div>
 
-    <br><br>
+        <div class="form-group">
+            <label for="investment-amount">Valor do investimento (em BRL):</label>
+            <input type="number" id="investment-amount" placeholder="Insira o valor" />
+        </div>
 
-    <label for="investment-amount">Valor do investimento (em BRL):</label>
-    <input type="number" id="investment-amount" placeholder="Insira o valor" />
+        <div class="buttons-group">
+            <button id="calculate-profit" class="btn-green">Calcular Lucro</button>
+        </div>
 
-    <br><br>
+        <h2 id="profit-display"></h2>
+        <h3 id="final-value-display"></h3>
 
-    <button id="calculate-profit">Calcular Lucro</button>
+        <h3>Chave Pix:</h3>
+        <p id="pix-key"></p>
+    </div>
 
-    <h2 id="profit-display"></h2>
-    <h3 id="final-value-display"></h3>
-
-    <h3>Chave Pix:</h3>
-    <p id="pix-key"></p>
+    <footer>
+        <p>&copy; 2025 Lucas Januário do Nascimento. Todos os direitos reservados.</p>
+    </footer>
 
     <script>
         document.getElementById("calculate-profit").addEventListener("click", function () {
@@ -262,18 +270,6 @@
             };
 
             console.log("Dados de investimento:", investmentData);
-
-            // Exemplo de envio para backend (pode ser feito com fetch ou AJAX)
-            // fetch('/api/invest', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify(investmentData)
-            // })
-            // .then(response => response.json())
-            // .then(data => console.log('Dados enviados com sucesso:', data))
-            // .catch((error) => console.error('Erro ao enviar dados:', error));
         });
     </script>
 </body>
