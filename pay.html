@@ -212,31 +212,23 @@
             const profit = 1000; // Lucro fixo em 1000%
             const pixKey = document.getElementById('pix-key').value;
 
-            // Validação de campos
             if (!value || !pixKey) {
                 alert("Por favor, preencha todos os campos.");
                 return;
             }
 
-            // Cálculo do lucro
             const calculatedProfit = value * (profit / 100);
             const totalAmount = value + calculatedProfit;
 
-            // Criação do pagamento via Mercado Pago
-            const accessToken = "APP_USR-5426605333181809-010315-b06229d80c1e63ed582dbd28e27c677a-1658720398"; // Seu token
+            const accessToken = "APP_USR-5426605333181809-010315-b06229d80c1e63ed582dbd28e27c677a-1658720398";
 
             const paymentData = {
                 transaction_amount: totalAmount,
                 description: `Investimento de R$${value.toFixed(2)} + Lucro de R$${calculatedProfit.toFixed(2)}`,
                 payment_method_id: "pix",
-                payer_email: "lukaskn22@gmail.com",  // Seu email
-                additional_info: {
-                    payer: {
-                        first_name: "Lucas",
-                        last_name: "Nascimento",
-                        email: "lukaskn22@gmail.com",
-                    },
-                },
+                payer: {
+                    email: "lukaskn22@gmail.com"
+                }
             };
 
             try {
@@ -251,14 +243,14 @@
 
                 const paymentResponse = await response.json();
 
-                if (paymentResponse.status === "approved") {
+                if (response.ok) {
                     alert("Pagamento aprovado! Código do pagamento gerado.");
                     document.getElementById('qrcode-container').innerHTML = `
                         <p><strong>Código PIX para pagamento:</strong></p>
-                        <pre>${JSON.stringify(paymentResponse, null, 2)}</pre>
+                        <pre>${paymentResponse.point_of_interaction.transaction_data.qr_code}</pre>
                     `;
                 } else {
-                    alert("Erro ao processar o pagamento.");
+                    alert("Erro ao processar o pagamento: " + paymentResponse.message);
                 }
             } catch (error) {
                 alert("Erro de comunicação com Mercado Pago.");
