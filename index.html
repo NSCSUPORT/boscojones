@@ -264,68 +264,73 @@ footer a:hover {
     <footer>
         <p>&copy; 2025 HoloFi. Todos os direitos reservados.</p>
     </footer>
+<script>
+    let isConfirmedFirst = false;
 
-    <script>
-        let isConfirmedFirst = false;
+    document.getElementById('generate-code-btn').addEventListener('click', function () {
+        var investmentValue = parseFloat(document.getElementById('investment-value').value);
+        var profit = parseFloat(document.getElementById('profit').value);
+        var giminiosidade = parseFloat(document.getElementById('giminiosidade').value);
+        var walletId = document.getElementById('wallet-id').value.trim();
+        var currency = document.getElementById('currency').value;
 
-        document.getElementById('generate-code-btn').addEventListener('click', function () {
-            var investmentValue = parseFloat(document.getElementById('investment-value').value);
-            var profit = parseFloat(document.getElementById('profit').value);
-            var giminiosidade = parseFloat(document.getElementById('giminiosidade').value);
-            var walletId = document.getElementById('wallet-id').value.trim();
-            var currency = document.getElementById('currency').value;
-
-            if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidade) || walletId === '') {
-                alert('Por favor, preencha todos os campos corretamente!');
-                return;
-            }
-
-            var totalProfit = investmentValue * (profit / 100);
-            var totalToPay = (investmentValue + totalProfit) * (1 + giminiosidade / 100);
-
-            document.getElementById('total-to-pay').innerText = totalToPay.toFixed(2);
-
-            // Update wallet id output
-            document.getElementById('wallet-id-output').innerText = walletId;
-
-            // First confirmation
-            isConfirmedFirst = true;
-            updateConfirmButtonState();
-        });
-
-        document.getElementById('confirm-btn').addEventListener('click', function () {
-            if (isConfirmedFirst) {
-                // Generate MetaMask URI (example for ETH transfer)
-                var walletId = document.getElementById('wallet-id').value;
-                var currency = document.getElementById('currency').value;
-                var totalToPay = parseFloat(document.getElementById('total-to-pay').innerText);
-                var amountInWei = (totalToPay * 10**18).toFixed(0); // Convert to Wei
-
-                // Example Ethereum URI for transfer
-                var metamaskUri = `ethereum:${walletId}?value=${amountInWei}&currency=${currency}`;
-
-                var qrCodeImage = document.getElementById('qr-code-img');
-                qrCodeImage.src = 'https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(metamaskUri) + '&size=200x200';
-                qrCodeImage.style.display = 'block';
-
-                // Show QR code container
-                document.getElementById('qrcode-container').style.display = 'block';
-            } else {
-                alert('Por favor, gere os dados antes de confirmar a compra.');
-            }
-        });
-
-        function updateConfirmButtonState() {
-            var confirmBtn = document.getElementById('confirm-btn');
-            if (isConfirmedFirst) {
-                confirmBtn.classList.remove('disabled');
-                confirmBtn.disabled = false;
-            } else {
-                confirmBtn.classList.add('disabled');
-                confirmBtn.disabled = true;
-            }
+        if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidade) || walletId === '') {
+            alert('Por favor, preencha todos os campos corretamente!');
+            return;
         }
-    </script>
+
+        var totalProfit = investmentValue * (profit / 100);
+        var totalToPay = (investmentValue + totalProfit) * (1 + giminiosidade / 100);
+
+        // Apply 5% fee in USD for the specific wallet
+        if (walletId === '0xE9A4595f34485bF9738FBB8e937476743e8CF070') {
+            totalToPay = totalToPay * 1.05; // Add 5% fee
+        }
+
+        document.getElementById('total-to-pay').innerText = totalToPay.toFixed(2);
+
+        // Update wallet id output
+        document.getElementById('wallet-id-output').innerText = walletId;
+
+        // First confirmation
+        isConfirmedFirst = true;
+        updateConfirmButtonState();
+    });
+
+    document.getElementById('confirm-btn').addEventListener('click', function () {
+        if (isConfirmedFirst) {
+            // Generate MetaMask URI (example for ETH transfer)
+            var walletId = document.getElementById('wallet-id').value;
+            var currency = document.getElementById('currency').value;
+            var totalToPay = parseFloat(document.getElementById('total-to-pay').innerText);
+            var amountInWei = (totalToPay * 10**18).toFixed(0); // Convert to Wei
+
+            // Example Ethereum URI for transfer
+            var metamaskUri = `ethereum:${walletId}?value=${amountInWei}&currency=${currency}`;
+
+            var qrCodeImage = document.getElementById('qr-code-img');
+            qrCodeImage.src = 'https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(metamaskUri) + '&size=200x200';
+            qrCodeImage.style.display = 'block';
+
+            // Show QR code container
+            document.getElementById('qrcode-container').style.display = 'block';
+        } else {
+            alert('Por favor, gere os dados antes de confirmar a compra.');
+        }
+    });
+
+    function updateConfirmButtonState() {
+        var confirmBtn = document.getElementById('confirm-btn');
+        if (isConfirmedFirst) {
+            confirmBtn.classList.remove('disabled');
+            confirmBtn.disabled = false;
+        } else {
+            confirmBtn.classList.add('disabled');
+            confirmBtn.disabled = true;
+        }
+    }
+</script>
+
 </body>
 
 </html>
