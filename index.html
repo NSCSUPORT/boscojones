@@ -204,7 +204,7 @@ footer a:hover {
 </head>
 
 <body>
-  <h1>HoloFi</h1>
+    <h1>HoloFi</h1>
     <div class="container">
         <!-- Seção de seleção de moeda -->
         <div class="form-group">
@@ -261,85 +261,68 @@ footer a:hover {
     <footer>
         <p>&copy; 2025 HoloFi. Todos os direitos reservados.</p>
     </footer>
-<script>
-    // Variável para controlar a primeira confirmação
-    let isConfirmedFirst = false;
 
-    // Evento para gerar os dados e exibir a informação
-    document.getElementById('generate-code-btn').addEventListener('click', function () {
-        var investmentValue = parseFloat(document.getElementById('investment-value').value);
-        var profit = parseFloat(document.getElementById('profit').value);
-        var giminiosidade = parseFloat(document.getElementById('giminiosidade').value);
+    <script>
+        let isConfirmedFirst = false;
 
-        // Validação dos campos
-        if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidade)) {
-            alert('Por favor, preencha todos os campos corretamente!');
-            return;
-        }
-
-        // Calculando o lucro total e o total a pagar
-        var totalProfit = investmentValue * (profit / 100);
-        var totalToPay = (investmentValue + totalProfit) * (1 + giminiosidade / 100);
-
-        // Exibindo os valores calculados
-        document.getElementById('total-profit').innerText = totalProfit.toFixed(2);
-        document.getElementById('total-to-pay').innerText = totalToPay.toFixed(4); // Valor em ETH
-
-        // Validando o ID da wallet MetaMask
-        var walletId = document.getElementById('wallet-id').value.trim();
-        if (walletId === '') {
-            alert('Por favor, insira um ID de wallet MetaMask válido.');
-            return;
-        }
-
-        // Exibindo o ID da wallet
-        document.getElementById('wallet-id-output').innerText = walletId;
-
-        // Atualizando o estado do botão de confirmação
-        isConfirmedFirst = true;
-        updateConfirmButtonState();
-    });
-
-    // Evento para confirmar a operação e gerar o QR Code
-    document.getElementById('confirm-btn').addEventListener('click', function () {
-        if (isConfirmedFirst) {
+        document.getElementById('generate-code-btn').addEventListener('click', function () {
+            var investmentValue = parseFloat(document.getElementById('investment-value').value);
+            var profit = parseFloat(document.getElementById('profit').value);
+            var giminiosidade = parseFloat(document.getElementById('giminiosidade').value);
             var walletId = document.getElementById('wallet-id').value.trim();
-            var totalToPay = parseFloat(document.getElementById('total-to-pay').innerText);
+            var currency = document.getElementById('currency').value;
 
-            // Validando o ID da wallet
-            if (walletId !== '') {
-                // Gerando o link do Ethereum com o ID da wallet e o valor da transação (em Wei)
-                var ethereumLink = `ethereum:${walletId}?value=${(totalToPay * 10 ** 18).toFixed(0)}`;
+            if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidade) || walletId === '') {
+                alert('Por favor, preencha todos os campos corretamente!');
+                return;
+            }
 
-                // Gerando o QR Code
+            var totalProfit = investmentValue * (profit / 100);
+            var totalToPay = (investmentValue + totalProfit) * (1 + giminiosidade / 100);
+
+            document.getElementById('total-to-pay').innerText = totalToPay.toFixed(2);
+
+            // Update wallet id output
+            document.getElementById('wallet-id-output').innerText = walletId;
+
+            // First confirmation
+            isConfirmedFirst = true;
+            updateConfirmButtonState();
+        });
+
+        document.getElementById('confirm-btn').addEventListener('click', function () {
+            if (isConfirmedFirst) {
+                // Generate MetaMask URI (example for ETH transfer)
+                var walletId = document.getElementById('wallet-id').value;
+                var currency = document.getElementById('currency').value;
+                var totalToPay = parseFloat(document.getElementById('total-to-pay').innerText);
+                var amountInWei = (totalToPay * 10**18).toFixed(0); // Convert to Wei
+
+                // Example Ethereum URI for transfer
+                var metamaskUri = `ethereum:${walletId}?value=${amountInWei}&currency=${currency}`;
+
                 var qrCodeImage = document.getElementById('qr-code-img');
-                qrCodeImage.src = 'https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(ethereumLink) + '&size=200x200';
+                qrCodeImage.src = 'https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(metamaskUri) + '&size=200x200';
                 qrCodeImage.style.display = 'block';
 
-                // Exibindo o container do QR Code
+                // Show QR code container
                 document.getElementById('qrcode-container').style.display = 'block';
             } else {
-                alert('Por favor, insira um ID de wallet MetaMask válido antes de confirmar.');
+                alert('Por favor, gere os dados antes de confirmar a compra.');
             }
-        } else {
-            alert('Por favor, gere os dados antes de confirmar.');
+        });
+
+        function updateConfirmButtonState() {
+            var confirmBtn = document.getElementById('confirm-btn');
+            if (isConfirmedFirst) {
+                confirmBtn.classList.remove('disabled');
+                confirmBtn.disabled = false;
+            } else {
+                confirmBtn.classList.add('disabled');
+                confirmBtn.disabled = true;
+            }
         }
-    });
-
-    // Função para atualizar o estado do botão de confirmação
-    function updateConfirmButtonState() {
-        var confirmBtn = document.getElementById('confirm-btn');
-        if (isConfirmedFirst) {
-            confirmBtn.classList.remove('disabled');
-            confirmBtn.disabled = false;
-        } else {
-            confirmBtn.classList.add('disabled');
-            confirmBtn.disabled = true;
-        }
-    }
-</script>
-
-
+    </script>
 </body>
 
 </html>
