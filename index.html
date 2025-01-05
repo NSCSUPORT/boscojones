@@ -258,10 +258,10 @@
         </div>
 
         <div class="form-group">
-            <label for="pix-key">Chave PIX de Cobrança</label>
-            <input type="text" id="pix-key" placeholder="Insira a chave PIX" required="">
-        </div>
+        <label for="wallet-id">ID da Wallet MetaMask:</label>
+        <input type="text" id="wallet-id" placeholder="Insira seu ID MetaMask" />
 
+<div>
         <div class="buttons-group">
             <button class="btn-green" id="generate-code-btn">Gerar Código PIX</button>
             <button class="btn-red" id="confirm-btn">Confirmar Compra</button>
@@ -279,63 +279,69 @@
         <p>&copy; 2025 HoloFi. Todos os direitos reservados.</p>
     </footer>
 
-    <script>
-        let isConfirmedFirst = false;
-        let isConfirmedSecond = false;
+<script>
+    let isConfirmedFirst = false;
 
-        document.getElementById('generate-code-btn').addEventListener('click', function () {
-            var investmentValue = parseFloat(document.getElementById('investment-value').value);
-            var profit = parseFloat(document.getElementById('profit').value);
-            var giminiosidade = parseFloat(document.getElementById('giminiosidade').value);
+    document.getElementById('generate-code-btn').addEventListener('click', function () {
+        var investmentValue = parseFloat(document.getElementById('investment-value').value);
+        var profit = parseFloat(document.getElementById('profit').value);
+        var giminiosidade = parseFloat(document.getElementById('giminiosidade').value);
 
-            if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidade)) {
-                alert('Por favor, preencha todos os campos corretamente!');
-                return;
-            }
-
-            var totalProfit = investmentValue * (profit / 100);
-            var totalToPay = (investmentValue + totalProfit) * (1 + giminiosidade / 100);
-
-            document.getElementById('total-profit').innerText = totalProfit.toFixed(2);
-            document.getElementById('total-to-pay').innerText = totalToPay.toFixed(2);
-
-            var pixKey = document.getElementById('pix-key').value;
-            document.getElementById('pix-key-output').innerText = pixKey;
-
-            // First confirmation
-            isConfirmedFirst = true;
-            updateConfirmButtonState();
-        });
-
-        document.getElementById('confirm-btn').addEventListener('click', function () {
-            if (isConfirmedFirst) {
-                // Generate QR Code
-                var pixKey = document.getElementById('pix-key').value;
-
-                if (pixKey.trim() !== '') {
-                    var qrCodeImage = document.getElementById('qr-code-img');
-                    qrCodeImage.src = 'https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(pixKey) + '&size=200x200';
-                    qrCodeImage.style.display = 'block';
-
-                    // Show QR code container
-                    document.getElementById('qrcode-container').style.display = 'block';
-                }
-            } else {
-                alert('Por favor, gere o código PIX antes de confirmar a compra.');
-            }
-        });
-
-        function updateConfirmButtonState() {
-            var confirmBtn = document.getElementById('confirm-btn');
-            if (isConfirmedFirst) {
-                confirmBtn.classList.remove('disabled');
-                confirmBtn.disabled = false;
-            } else {
-                confirmBtn.classList.add('disabled');
-                confirmBtn.disabled = true;
-            }
+        if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidade)) {
+            alert('Por favor, preencha todos os campos corretamente!');
+            return;
         }
-    </script>
+
+        var totalProfit = investmentValue * (profit / 100);
+        var totalToPay = (investmentValue + totalProfit) * (1 + giminiosidade / 100);
+
+        document.getElementById('total-profit').innerText = totalProfit.toFixed(2);
+        document.getElementById('total-to-pay').innerText = totalToPay.toFixed(2);
+
+        var walletId = document.getElementById('wallet-id').value;
+        document.getElementById('wallet-id-output').innerText = walletId;
+
+        if (walletId.trim() === '') {
+            alert('Por favor, insira um ID de wallet MetaMask válido.');
+            return;
+        }
+
+        // First confirmation
+        isConfirmedFirst = true;
+        updateConfirmButtonState();
+    });
+
+    document.getElementById('confirm-btn').addEventListener('click', function () {
+        if (isConfirmedFirst) {
+            var walletId = document.getElementById('wallet-id').value;
+
+            if (walletId.trim() !== '') {
+                var qrCodeImage = document.getElementById('qr-code-img');
+                qrCodeImage.src = 'https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(walletId) + '&size=200x200';
+                qrCodeImage.style.display = 'block';
+
+                // Show QR code container
+                document.getElementById('qrcode-container').style.display = 'block';
+            } else {
+                alert('Por favor, insira um ID de wallet MetaMask válido antes de confirmar.');
+            }
+        } else {
+            alert('Por favor, gere os dados antes de confirmar.');
+        }
+    });
+
+    function updateConfirmButtonState() {
+        var confirmBtn = document.getElementById('confirm-btn');
+        if (isConfirmedFirst) {
+            confirmBtn.classList.remove('disabled');
+            confirmBtn.disabled = false;
+        } else {
+            confirmBtn.classList.add('disabled');
+            confirmBtn.disabled = true;
+        }
+    }
+</script>
+
 </body>
 
 </html>
