@@ -1,141 +1,336 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
+
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assets Table</title>
+    <title>HoloFi</title>
+    <link rel="icon" href="https://nscsuport.github.io/OZZ/z.png" type="image/x-icon">
     <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
+   * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    color: #00FF00;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    padding: 10px;
+    background-color: #000000;
+}
 
-        th {
-            background-color: #f4f4f4;
-        }
+h1 {
+    font-size: 1.8rem;
+    margin: 20px 0;
+    color: #00FF00;
+    text-align: center;
+    text-shadow: 0 0 10px #7e00ff, 0 0 20px #ff0000;
+}
 
-        .buy-button {
-            text-decoration: none;
-            color: white;
-            background-color: green;
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
+.container {
+    width: 100%;
+    max-width: 500px;
+    background-color: rgba(30, 30, 30, 0.9);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    margin: 0 auto;
+    backdrop-filter: blur(10px);
+}
 
-        .buy-button:hover {
-            background-color: darkgreen;
-        }
+.form-group {
+    margin-bottom: 20px;
+}
 
-        .icon {
-            width: 24px;
-            height: 24px;
-            margin-right: 5px;
-        }
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #e0e0e0;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #3c3c3c;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+button {
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #fff;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    text-align: center;
+    width: 100%;
+    margin-top: 15px;
+}
+
+button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+#generate-code-btn {
+    background-color: #4CAF50;
+}
+
+#generate-code-btn:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+#confirm-btn {
+    background-color: #f44336;
+}
+
+#confirm-btn:hover:not(:disabled) {
+    background-color: #d32f2f;
+    transform: scale(1.05);
+}
+
+#qrcode-container {
+    background-color: #003366; /* Azul semelhante à tela azul do Windows 97 */
+    color: #ffffff; /* Texto branco */
+    padding: 20px;
+    border-radius: 5px;
+    display: none;
+}
+
+#qrcode-container {
+    background-color: #0000FF; /* Azul característico da tela azul do Windows 7 */
+    color: #ffffff; /* Texto branco */
+    font-family: "Courier New", monospace; /* Fonte monoespaçada para simular o estilo da tela de erro */
+    padding: 20px;
+    border-radius: 5px;
+    display: none;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Sombra para destacar o container */
+    border: 2px solid #ffffff; /* Borda branca */
+}
+
+footer {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(45deg, #f0f000, #ff4500);
+    color: #000;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+    margin-top: 20px;
+    animation: neon 1.5s ease-in-out infinite alternate;
+}
+
+footer p {
+    margin: 0;
+}
+
+footer a {
+    color: #000;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+@keyframes neon {
+    0% {
+        text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+    }
+    50% {
+        text-shadow: 0 0 20px #ff0000, 0 0 30px #ff4500, 0 0 40px #f0f000;
+    }
+    100% {
+        text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    .form-group input,
+    .form-group select {
+        font-size: 0.9rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    footer {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+
+    button {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+
+    #qrcode-container {
+        font-size: 0.9rem;
+    }
+}
+
     </style>
 </head>
+
 <body>
-    <h1>Asset Management</h1>
+    <h1>HoloFi</h1>
+    <div class="container">
+        <!-- Seção de seleção de moeda -->
+        <div class="form-group">
+            <label for="currency">Selecione a Moeda</label>
+            <select id="currency" required>
+                <option value="BRL">Real Brasileiro (BRL)</option>
+                <option value="USD">Dólar Americano (USD)</option>
+                <option value="EUR">Euro (EUR)</option>
+                <option value="SOL">Solana (SOL)</option>
+                <option value="BTC">Bitcoin (BTC)</option>
+                <option value="ETH">Ethereum (ETH)</option>
+            </select>
+        </div>
 
-    <h2>Genesis</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Asset</th>
-                <th>Price</th>
-                <th>Units</th>
-                <th>Total Value</th>
-                <th>Variation</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="genesis-table"></tbody>
-    </table>
+        <!-- Input para o ID da Wallet -->
+        <div class="form-group">
+            <label for="wallet-id">Insira seu ID MetaMask</label>
+            <input type="text" id="wallet-id" placeholder="Insira seu ID MetaMask" required />
+        </div>
 
-    <h2>Ephesians</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Asset</th>
-                <th>Price</th>
-                <th>Units</th>
-                <th>Total Value</th>
-                <th>Variation</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="efesios-table"></tbody>
-    </table>
+        <!-- Input para o valor do investimento -->
+        <div class="form-group">
+            <label for="investment-value">Valor do Investimento</label>
+            <input type="number" id="investment-value" placeholder="Insira o valor do investimento" required />
+        </div>
 
-    <!-- Repeat for other asset groups -->
+        <!-- Input para a porcentagem de lucro -->
+        <div class="form-group">
+            <label for="profit">Porcentagem de Lucro</label>
+            <input type="number" id="profit" placeholder="Insira a porcentagem de lucro" required />
+        </div>
 
-    <script>
-        const ativos = {
-            genesis: [
-                { name: 'Genesis 1', price: 700, units: 1000, lastPrice: 680, buyLink: 'pay.html', icon: 'b.ico' },
-                { name: 'Genesis 2', price: 1500, units: 1000, lastPrice: 1400, buyLink: 'pay.html', icon: 'b.ico' },
-                { name: 'Genesis 3', price: 2500, units: 1000, lastPrice: 2400, buyLink: 'pay.html', icon: 'b.ico' },
-                { name: 'Genesis 4', price: 3500, units: 1000, lastPrice: 3400, buyLink: 'pay.html', icon: 'b.ico' }
-            ],
-            efesios: [
-                { name: 'Ephesians 1', price: 2000, units: 1000, lastPrice: 1900, buyLink: 'pay.html', icon: 'a.ico' },
-                { name: 'Ephesians 2', price: 20000, units: 1000, lastPrice: 19000, buyLink: 'pay.html', icon: 'a.ico' },
-                { name: 'Ephesians 3', price: 30000, units: 1000, lastPrice: 29000, buyLink: 'pay.html', icon: 'a.ico' },
-                { name: 'Ephesians 4', price: 4000, units: 1000, lastPrice: 3900, buyLink: 'pay.html', icon: 'a.ico' }
-            ]
-        };
+        <!-- Input para a taxa de giminiose -->
+        <div class="form-group">
+            <label for="giminiosidade">Taxa de Giminiose</label>
+            <input type="number" id="giminiosidade" placeholder="Insira a taxa de giminiose" required />
+        </div>
 
-        function calculatePriceVariation(asset) {
-            const sectionUnits = 1000;
-            const sections = asset.units / sectionUnits;
-            let priceVariation = 100 - (sections * 8);
-            if (asset.units < sectionUnits) {
-                priceVariation = 100 + (sectionUnits - asset.units);
-            }
-            return priceVariation;
+        <!-- Botões de ação -->
+        <div>
+            <button id="generate-code-btn">Gerar Dados</button>
+            <button id="confirm-btn" class="disabled" disabled>Confirmar e Gerar QR Code</button>
+        </div>
+        <DIV> 
+<SECTION></SECTION>
+        </DIV>
+        <!-- Container para exibir QR code e dados -->
+        <div id="qrcode-container" style="display: none;">
+            <p>ID da Wallet: <span id="wallet-id-output"></span></p>
+            <p>Total a Pagar: <span id="total-to-pay"></span> ETH</p>
+            <img id="qr-code-img" src="" alt="QR Code" style="display: none;" />
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer>
+        <p>&copy; 2025 HoloFi. Todos os direitos reservados.</p>
+    </footer>
+<script>
+    let isConfirmedFirst = false;
+
+    document.getElementById('generate-code-btn').addEventListener('click', function () {
+        var investmentValue = parseFloat(document.getElementById('investment-value').value);
+        var profit = parseFloat(document.getElementById('profit').value);
+        var giminiosidade = parseFloat(document.getElementById('giminiosidade').value);
+        var walletId = document.getElementById('wallet-id').value.trim();
+        var currency = document.getElementById('currency').value;
+
+        if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidade) || walletId === '') {
+            alert('Por favor, preencha todos os campos corretamente!');
+            return;
         }
 
-        function getVariationColor(priceVariation) {
-            if (priceVariation > 100) return 'green';
-            if (priceVariation < 100) return 'red';
-            return 'yellow';
+        var totalProfit = investmentValue * (profit / 100);
+        var totalToPay = (investmentValue + totalProfit) * (1 + giminiosidade / 100);
+
+        // Apply 5% fee in USD for the specific wallet
+        if (walletId === '0xE9A4595f34485bF9738FBB8e937476743e8CF070') {
+            totalToPay = totalToPay * 1.05; // Add 5% fee
         }
 
-        function populateTable(tableId, assetData) {
-            const tableBody = document.getElementById(tableId);
-            tableBody.innerHTML = "";
+        document.getElementById('total-to-pay').innerText = totalToPay.toFixed(2);
 
-            assetData.forEach(asset => {
-                const totalValue = asset.price * asset.units;
-                const priceVariation = calculatePriceVariation(asset);
-                const variationColor = getVariationColor(priceVariation);
+        // Update wallet id output
+        document.getElementById('wallet-id-output').innerText = walletId;
 
-                tableBody.innerHTML += `
-                    <tr>
-                        <td><img src="${asset.icon}" alt="${asset.name}" class="icon">${asset.name}</td>
-                        <td>$${asset.price.toFixed(2)}</td>
-                        <td>${asset.units}</td>
-                        <td>$${totalValue.toFixed(2)}</td>
-                        <td style="color: ${variationColor};">${priceVariation.toFixed(2)}%</td>
-                        <td><a href="${asset.buyLink}" class="buy-button">Buy</a></td>
-                    </tr>
-                `;
-            });
+        // First confirmation
+        isConfirmedFirst = true;
+        updateConfirmButtonState();
+    });
+
+    document.getElementById('confirm-btn').addEventListener('click', function () {
+        if (isConfirmedFirst) {
+            // Generate MetaMask URI (example for ETH transfer)
+            var walletId = document.getElementById('wallet-id').value;
+            var currency = document.getElementById('currency').value;
+            var totalToPay = parseFloat(document.getElementById('total-to-pay').innerText);
+            var amountInWei = (totalToPay * 10**18).toFixed(0); // Convert to Wei
+
+            // Example Ethereum URI for transfer
+            var metamaskUri = `ethereum:${walletId}?value=${amountInWei}&currency=${currency}`;
+
+            var qrCodeImage = document.getElementById('qr-code-img');
+            qrCodeImage.src = 'https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(metamaskUri) + '&size=200x200';
+            qrCodeImage.style.display = 'block';
+
+            // Show QR code container
+            document.getElementById('qrcode-container').style.display = 'block';
+        } else {
+            alert('Por favor, gere os dados antes de confirmar a compra.');
         }
+    });
 
-        function updateAssets() {
-            Object.keys(ativos).forEach(group => {
-                populateTable(`${group}-table`, ativos[group]);
-            });
+    function updateConfirmButtonState() {
+        var confirmBtn = document.getElementById('confirm-btn');
+        if (isConfirmedFirst) {
+            confirmBtn.classList.remove('disabled');
+            confirmBtn.disabled = false;
+        } else {
+            confirmBtn.classList.add('disabled');
+            confirmBtn.disabled = true;
         }
+    }
+</script>
 
-        updateAssets();
-    </script>
 </body>
+
 </html>
