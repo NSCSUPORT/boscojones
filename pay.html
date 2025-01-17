@@ -207,129 +207,146 @@ footer a:hover {
 <body>
     <h1>HoloFi</h1>
     <div class="container">
-        <!-- Seção de seleção de moeda -->
-        <div class="form-group">
-            <label for="currency">Selecione a Moeda</label>
-            <select id="currency" required>
-                <option value="BRL">Real Brasileiro (BRL)</option>
-                <option value="USD">Dólar Americano (USD)</option>
-                <option value="EUR">Euro (EUR)</option>
-                <option value="SOL">Solana (SOL)</option>
-                <option value="BTC">Bitcoin (BTC)</option>
-                <option value="ETH">Ethereum (ETH)</option>
-            </select>
-        </div>
-
-        <!-- Input para o ID da Wallet -->
-        <div class="form-group">
-            <label for="wallet-id">Insira seu ID MetaMask</label>
-            <input type="text" id="wallet-id" placeholder="Insira seu ID MetaMask" required />
-        </div>
-
-        <!-- Input para o valor do investimento -->
-        <div class="form-group">
-            <label for="investment-value">Valor do Investimento</label>
-            <input type="number" id="investment-value" placeholder="Insira o valor do investimento" required />
-        </div>
-
-        <!-- Input para a porcentagem de lucro -->
-        <div class="form-group">
-            <label for="profit">Porcentagem de Lucro</label>
-            <input type="number" id="profit" placeholder="Insira a porcentagem de lucro" required />
-        </div>
-
-        <!-- Input para a taxa de giminiose -->
-        <div class="form-group">
-            <label for="giminiosidade">Taxa de Giminiose</label>
-            <input type="number" id="giminiosidade" placeholder="Insira a taxa de giminiose" required />
-        </div>
-
-        <!-- Botões de ação -->
-        <div>
-            <button id="generate-code-btn">Gerar Dados</button>
-            <button id="confirm-btn" class="disabled" disabled>Confirmar e Gerar QR Code</button>
-        </div>
-        <DIV> 
-<SECTION></SECTION>
-        </DIV>
-        <!-- Container para exibir QR code e dados -->
-        <div id="qrcode-container" style="display: none;">
-            <p>ID da Wallet: <span id="wallet-id-output"></span></p>
-            <p>Total a Pagar: <span id="total-to-pay"></span> ETH</p>
-            <img id="qr-code-img" src="" alt="QR Code" style="display: none;" />
-        </div>
+    <!-- Seção de seleção de moeda -->
+    <div class="form-group">
+        <label for="currency">Selecione a Moeda / Ativo</label>
+        <select id="currency" required>
+            <option value="BRL">Real Brasileiro (BRL)</option>
+            <option value="USD">Dólar Americano (USD)</option>
+            <option value="EUR">Euro (EUR)</option>
+            <option value="SOL">Solana (SOL)</option>
+            <option value="BTC">Bitcoin (BTC)</option>
+            <option value="ETH">Ethereum (ETH)</option>
+            <!-- Adicionando os nomes dos ativos -->
+            <option value="Genesis 1">Genesis 1</option>
+            <option value="Genesis 2">Genesis 2</option>
+            <option value="Genesis 3">Genesis 3</option>
+            <option value="Genesis 4">Genesis 4</option>
+            <option value="Ephesians 1">Ephesians 1</option>
+            <option value="Ephesians 2">Ephesians 2</option>
+            <option value="Ephesians 3">Ephesians 3</option>
+            <option value="Ephesians 4">Ephesians 4</option>
+            <option value="Psalms 1">Psalms 1</option>
+            <option value="Psalms 2">Psalms 2</option>
+            <option value="Psalms 3">Psalms 3</option>
+            <option value="Psalms 4">Psalms 4</option>
+            <option value="Luke 1">Luke 1</option>
+            <option value="Luke 2">Luke 2</option>
+            <option value="Luke 3">Luke 3</option>
+            <option value="Luke 4">Luke 4</option>
+            <option value="Medusa 1">Medusa 1</option>
+            <option value="Medusa 2">Medusa 2</option>
+            <option value="Medusa 3">Medusa 3</option>
+            <option value="Medusa 4">Medusa 4</option>
+            <option value="Cerberus 1">Cerberus 1</option>
+            <option value="Cerberus 2">Cerberus 2</option>
+            <option value="Cerberus 3">Cerberus 3</option>
+            <option value="Cerberus 4">Cerberus 4</option>
+            <option value="Minotaur 1">Minotaur 1</option>
+            <option value="Minotaur 2">Minotaur 2</option>
+            <option value="Minotaur 3">Minotaur 3</option>
+            <option value="Minotaur 4">Minotaur 4</option>
+        </select>
     </div>
 
-    <!-- Rodapé -->
-    <footer>
-        <p>&copy; 2025 HoloFi. Todos os direitos reservados.</p>
-    </footer>
+    <!-- Input para o ID da Wallet -->
+    <div class="form-group">
+        <label for="wallet-id">Insira seu ID MetaMask</label>
+        <input type="text" id="wallet-id" placeholder="Insira seu ID MetaMask" required />
+    </div>
+
+    <!-- Input para o valor do investimento -->
+    <div class="form-group">
+        <label for="investment-value">Valor do Investimento</label>
+        <input type="number" id="investment-value" placeholder="Insira o valor do investimento" required />
+    </div>
+
+    <!-- Input para a porcentagem de lucro -->
+    <div class="form-group">
+        <label for="profit">Porcentagem de Lucro</label>
+        <input type="number" id="profit" placeholder="Insira a porcentagem de lucro" required />
+    </div>
+
+    <!-- Input para a taxa de giminiose -->
+    <div class="form-group">
+        <label for="giminiosidade">Taxa de Giminiose</label>
+        <input type="number" id="giminiosidade" placeholder="Insira a taxa de giminiose" required />
+    </div>
+
+    <!-- Botões de ação -->
+    <div>
+        <button id="generate-code-btn">Gerar Dados</button>
+        <button id="confirm-btn" class="disabled" disabled>Confirmar e Gerar QR Code</button>
+    </div>
+
+    <!-- Container para exibir QR code e dados -->
+    <div id="qrcode-container" style="display: none;">
+        <p>ID da Wallet: <span id="wallet-id-output"></span></p>
+        <p>Total a Pagar: <span id="total-to-pay"></span> ETH</p>
+        <img id="qr-code-img" src="" alt="QR Code" style="display: none;" />
+    </div>
+</div>
+
+<!-- Rodapé -->
+<footer>
+    <p>&copy; 2025 HoloFi. Todos os direitos reservados.</p>
+</footer>
 <script>
-    let isConfirmedFirst = false;
+    // Elementos principais do formulário
+    const generateBtn = document.getElementById('generate-code-btn');
+    const confirmBtn = document.getElementById('confirm-btn');
+    const walletIdInput = document.getElementById('wallet-id');
+    const investmentValueInput = document.getElementById('investment-value');
+    const profitInput = document.getElementById('profit');
+    const giminioseInput = document.getElementById('giminiosidade');
+    const totalToPayOutput = document.getElementById('total-to-pay');
+    const qrCodeImg = document.getElementById('qr-code-img');
 
-    document.getElementById('generate-code-btn').addEventListener('click', function () {
-        var investmentValue = parseFloat(document.getElementById('investment-value').value);
-        var profit = parseFloat(document.getElementById('profit').value);
-        var giminiosidade = parseFloat(document.getElementById('giminiosidade').value);
-        var walletId = document.getElementById('wallet-id').value.trim();
-        var currency = document.getElementById('currency').value;
+    // Função para calcular o total a pagar
+    function calculateTotal(investment, profitPercent, giminiosePercent) {
+        const profit = investment * (profitPercent / 100);
+        const giminioseCost = investment * (giminiosePercent / 100);
+        return investment + profit + giminioseCost;
+    }
 
-        if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidade) || walletId === '') {
-            alert('Por favor, preencha todos os campos corretamente!');
+    // Gerar dados com validação básica
+    generateBtn.addEventListener('click', () => {
+        const walletId = walletIdInput.value.trim();
+        const investment = parseFloat(investmentValueInput.value);
+        const profitPercent = parseFloat(profitInput.value);
+        const giminiosePercent = parseFloat(giminioseInput.value);
+
+        if (!walletId || isNaN(investment) || isNaN(profitPercent) || isNaN(giminiosePercent)) {
+            alert('Preencha todos os campos corretamente!');
             return;
         }
 
-        var totalProfit = investmentValue * (profit / 100);
-        var totalToPay = (investmentValue + totalProfit) * (1 + giminiosidade / 100);
+        // Calcular e exibir o total
+        const total = calculateTotal(investment, profitPercent, giminiosePercent);
+        totalToPayOutput.textContent = total.toFixed(2);
 
-        // Apply 5% fee in USD for the specific wallet
-        if (walletId === '0xE9A4595f34485bF9738FBB8e937476743e8CF070') {
-            totalToPay = totalToPay * 1.05; // Add 5% fee
-        }
-
-        document.getElementById('total-to-pay').innerText = totalToPay.toFixed(2);
-
-        // Update wallet id output
-        document.getElementById('wallet-id-output').innerText = walletId;
-
-        // First confirmation
-        isConfirmedFirst = true;
-        updateConfirmButtonState();
+        // Liberar botão de confirmação
+        confirmBtn.disabled = false;
     });
 
-    document.getElementById('confirm-btn').addEventListener('click', function () {
-        if (isConfirmedFirst) {
-            // Generate MetaMask URI (example for ETH transfer)
-            var walletId = document.getElementById('wallet-id').value;
-            var currency = document.getElementById('currency').value;
-            var totalToPay = parseFloat(document.getElementById('total-to-pay').innerText);
-            var amountInWei = (totalToPay * 10**18).toFixed(0); // Convert to Wei
+    // Gerar QR Code
+    confirmBtn.addEventListener('click', () => {
+        const walletId = walletIdInput.value.trim();
+        const totalToPay = totalToPayOutput.textContent;
 
-            // Example Ethereum URI for transfer
-            var metamaskUri = `ethereum:${walletId}?value=${amountInWei}&currency=${currency}`;
-
-            var qrCodeImage = document.getElementById('qr-code-img');
-            qrCodeImage.src = 'https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(metamaskUri) + '&size=200x200';
-            qrCodeImage.style.display = 'block';
-
-            // Show QR code container
-            document.getElementById('qrcode-container').style.display = 'block';
-        } else {
-            alert('Por favor, gere os dados antes de confirmar a compra.');
+        if (!walletId || !totalToPay) {
+            alert('Erro ao gerar QR Code. Verifique os dados.');
+            return;
         }
+
+        // Gerar QR Code (exemplo simples)
+        const qrCodeUrl = `https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=wallet:${walletId},total:${totalToPay}&choe=UTF-8`;
+        qrCodeImg.src = qrCodeUrl;
+        qrCodeImg.style.display = 'block';
     });
-
-    function updateConfirmButtonState() {
-        var confirmBtn = document.getElementById('confirm-btn');
-        if (isConfirmedFirst) {
-            confirmBtn.classList.remove('disabled');
-            confirmBtn.disabled = false;
-        } else {
-            confirmBtn.classList.add('disabled');
-            confirmBtn.disabled = true;
-        }
-    }
 </script>
+
+
 
 </body>
 
