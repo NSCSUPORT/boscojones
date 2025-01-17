@@ -494,22 +494,7 @@ hydra: [
     { name: 'Hydra 3', price: 21000, units: 1000, lastPrice: 20800, buyLink: 'pay.html', icon: 'j.png' },
     { name: 'Hydra 4', price: 25000, units: 1000, lastPrice: 24800, buyLink: 'pay.html', icon: 'j.png' }
 ]
-
-};
-
-
-function calculatePriceVariation(asset) {
-    // Verifica se o último preço e a quantidade de unidades estão salvos no localStorage
-    const storedLastPrice = localStorage.getItem(`lastPrice_${asset.name}`);
-    const storedLastUnits = localStorage.getItem(`lastUnits_${asset.name}`);
-    const lastPrice = storedLastPrice ? parseFloat(storedLastPrice) : asset.price;
-    const lastUnits = storedLastUnits ? parseInt(storedLastUnits) : asset.units;
-
-    // Se o preço ou as unidades anteriores não existirem (primeira vez), define a variação como 100%
-    let priceVariation = 100;
-
-    // Variação de preço baseada na quantidade de ativos e seções
-    const sectionUnits = 1000; // 1000 ativos por seção
+ const sectionUnits = 1000; // 1000 ativos por seção
     const sections = asset.units / sectionUnits; // Divide os ativos em seções de 1000 unidades
     priceVariation = 100 - (sections * 8); // Diminui 8% para cada seção extra de 1000 ativos
 
