@@ -293,77 +293,80 @@ footer a:hover {
     <footer>
         <p>&copy; 2025 trix fi bosco jones fx . Todos os direitos reservados.</p>
     </footer>
-<script>
-    let isConfirmedFirst = false;
 
-    document.getElementById('generate-code-btn').addEventListener('click', function () {
-        var investmentValue = parseFloat(document.getElementById('investment-value').value);
-        var profit = parseFloat(document.getElementById('profit').value);
-        var giminiosidadeBase = parseFloat(document.getElementById('giminiosidade').value); // Geminiosidade base
-        var walletId = document.getElementById('wallet-id').value.trim();
-        var currency = document.getElementById('currency').value;
+    <script>
+        let isConfirmedFirst = false;
 
-        if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidadeBase) || walletId === '') {
-            alert('Por favor, preencha todos os campos corretamente!');
-            return;
-        }
-
-        // Cálculo da geminiosidade máxima (base * fator máximo, exemplo: fator de 2)
-        var giminiosidadeMaxima = giminiosidadeBase * 2;  // Você pode ajustar o fator de acordo com o sistema TrixFi-Z1
-
-        // Cálculo do lucro total
-        var totalProfit = investmentValue * (profit / 100);
-        var totalToPay = (investmentValue + totalProfit) * (1 + giminiosidadeMaxima / 100);
-
-        // Aplica taxa de 5% em USD para carteira específica
-        if (walletId === '0x6D8eF3D3271B17A75bF606eE59614735bF764D10') {
-            totalToPay = totalToPay * 1.05; // Adiciona a taxa de 5%
-        }
-
-        document.getElementById('total-to-pay').innerText = totalToPay.toFixed(2);
-
-        // Atualiza o ID da carteira
-        document.getElementById('wallet-id-output').innerText = walletId;
-
-        // Primeira confirmação
-        isConfirmedFirst = true;
-        updateConfirmButtonState();
-    });
-
-    document.getElementById('confirm-btn').addEventListener('click', function () {
-        if (isConfirmedFirst) {
-            // Gerar URI MetaMask (exemplo para transferência ETH)
-            var walletId = document.getElementById('wallet-id').value;
+        // Evento para gerar o código de pagamento
+        document.getElementById('generate-code-btn').addEventListener('click', function () {
+            var investmentValue = parseFloat(document.getElementById('investment-value').value);
+            var profit = parseFloat(document.getElementById('profit').value);
+            var giminiosidadeBase = parseFloat(document.getElementById('giminiosidade').value);
+            var walletId = document.getElementById('wallet-id').value.trim();
             var currency = document.getElementById('currency').value;
-            var totalToPay = parseFloat(document.getElementById('total-to-pay').innerText);
-            var amountInWei = (totalToPay * 10 ** 18).toFixed(0); // Converte para Wei
 
-            // Exemplo de URI Ethereum para transferência
-            var metamaskUri = `ethereum:${walletId}?value=${amountInWei}&currency=${currency}`;
+            if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidadeBase) || walletId === '') {
+                alert('Por favor, preencha todos os campos corretamente!');
+                return;
+            }
 
-            var qrCodeImage = document.getElementById('qr-code-img');
-            qrCodeImage.src = 'https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(metamaskUri) + '&size=200x200';
-            qrCodeImage.style.display = 'block';
+            // Cálculo da geminiosidade máxima
+            var giminiosidadeMaxima = giminiosidadeBase * 2;
 
-            // Exibe o QR code
-            document.getElementById('qrcode-container').style.display = 'block';
-        } else {
-            alert('Por favor, gere os dados antes de confirmar a compra.');
+            // Cálculo do lucro total
+            var totalProfit = investmentValue * (profit / 100);
+            var totalToPay = (investmentValue + totalProfit) * (1 + giminiosidadeMaxima / 100);
+
+            // Aplica taxa de 5% em USD para carteira específica
+            if (walletId === '0x6D8eF3D3271B17A75bF606eE59614735bF764D10') {
+                totalToPay = totalToPay * 1.05;
+            }
+
+            document.getElementById('total-to-pay').innerText = totalToPay.toFixed(2);
+
+            // Atualiza o ID da carteira
+            document.getElementById('wallet-id-output').innerText = walletId;
+
+            // Confirmação de primeira vez
+            isConfirmedFirst = true;
+            updateConfirmButtonState();
+        });
+
+        // Evento para confirmar a compra
+        document.getElementById('confirm-btn').addEventListener('click', function () {
+            if (isConfirmedFirst) {
+                // Gerar URI MetaMask (exemplo para transferência ETH)
+                var walletId = document.getElementById('wallet-id').value;
+                var currency = document.getElementById('currency').value;
+                var totalToPay = parseFloat(document.getElementById('total-to-pay').innerText);
+                var amountInWei = (totalToPay * 10 ** 18).toFixed(0);
+
+                // Exemplo de URI Ethereum para transferência
+                var metamaskUri = `ethereum:${walletId}?value=${amountInWei}&currency=${currency}`;
+
+                var qrCodeImage = document.getElementById('qr-code-img');
+                qrCodeImage.src = 'https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(metamaskUri) + '&size=200x200';
+                qrCodeImage.style.display = 'block';
+
+                // Exibe o QR Code
+                document.getElementById('qrcode-container').style.display = 'block';
+            } else {
+                alert('Por favor, gere os dados antes de confirmar a compra.');
+            }
+        });
+
+        // Função para habilitar/desabilitar o botão de confirmação
+        function updateConfirmButtonState() {
+            var confirmBtn = document.getElementById('confirm-btn');
+            if (isConfirmedFirst) {
+                confirmBtn.classList.remove('disabled');
+                confirmBtn.disabled = false;
+            } else {
+                confirmBtn.classList.add('disabled');
+                confirmBtn.disabled = true;
+            }
         }
-    });
-
-    function updateConfirmButtonState() {
-        var confirmBtn = document.getElementById('confirm-btn');
-        if (isConfirmedFirst) {
-            confirmBtn.classList.remove('disabled');
-            confirmBtn.disabled = false;
-        } else {
-            confirmBtn.classList.add('disabled');
-            confirmBtn.disabled = true;
-        }
-    }
-</script>
-
+    </script>
 </body>
 
 </html>
