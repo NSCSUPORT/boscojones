@@ -10,7 +10,7 @@
     <link rel="icon" href="logo.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Market Assets</title>
-<style>/* Estilos globais */
+/* Estilos globais */
 * {
     margin: 0;
     padding: 0;
@@ -84,7 +84,6 @@ th {
     font-weight: 500;
 }
 
-/* Adicionando cor de fundo alternada para melhor visualização das seções */
 tbody tr:nth-child(even) {
     background-color: #444;
 }
@@ -159,73 +158,48 @@ td {
     }
 }
 
-/* Estilos dos botões de top-right */
+/* Botões no canto superior direito */
 .top-right-buttons {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
-}
-/* Estilos globais */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    margin-bottom: 20px;
 }
 
-body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(to right, #000000, #222222); /* Fundo escuro com gradiente */
-    color: #f1f1f1;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: 1fr; /* 1 coluna por padrão */
-    gap: 20px;
-    padding: 20px;
-    transform: scale(0.95); /* Ajuste do zoom para 95% */
-    transform-origin: top left;
-    min-height: 100vh;
+/* Estilos dos botões */
+.support-whatsapp, .trix-button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Botões no canto superior direito */
-/* Botões no canto superior direito */
-        .top-right-buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+.support-whatsapp {
+    background-color: #25D366; /* Cor padrão WhatsApp */
+}
 
-        /* Estilos dos botões */
-        .support-whatsapp, .trix-button {
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: bold;
-            color: #fff;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
+.support-whatsapp:hover {
+    background-color: #1EBE5B; /* Cor mais escura no hover */
+}
 
-        .support-whatsapp {
-            background-color: #25D366; /* Cor padrão WhatsApp */
-        }
+.trix-button {
+    background: linear-gradient(to right, #8e44ad, #e67e22); /* Gradiente */
+}
 
-        .support-whatsapp:hover {
-            background-color: #1EBE5B; /* Cor mais escura no hover */
-        }
-
-        .trix-button {
-            background: linear-gradient(to right, #8e44ad, #e67e22); /* Gradiente */
-        }
-
-        .trix-button:hover {
-            background: linear-gradient(to right, #71368a, #d35400); /* Gradiente ao passar o mouse */
-        }
-</style>
+.trix-button:hover {
+    background: linear-gradient(to right, #71368a, #d35400); /* Gradiente ao passar o mouse */
+}
 
 
- <h1>Ativos do Mercado</h1>
+
+<h1>Ativos do Mercado</h1>
+    <div class="button-container">
+        <a href="https://brncincsuport.github.io/HORIGAMIF" class="btn btn-horigami" target="_blank">Horigami</a>
+        <a href="https://brncbrics.github.io/brics/" class="btn btn-brics" target="_blank">BRICS</a>
+    </div>
 <div class="asset-container">
     <div>
         <h2>Gênesis</h2>
