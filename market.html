@@ -54,30 +54,38 @@ h2 {
     padding: 20px;
 }
 
-/* Botões Horigami e BRICS com fundo degradê rosa e azul */
-.brics, .origami {
-    background: linear-gradient(45deg, #FF1493, #1E90FF); /* Rosa forte e azul */
-    color: black; /* Texto preto */
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px; /* Igual ao botão Comprar */
-    font-weight: bold;
+/* Estilo base para os botões */
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
     font-size: 16px;
-    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
     text-decoration: none;
-    transition: background-color 0.3s, color 0.3s, transform 0.2s;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
 }
 
-.brics:hover, .origami:hover {
-    background: linear-gradient(45deg, #1E90FF, #FF1493); /* Inverte as cores no hover */
-    color: white; /* Texto branco ao passar o mouse */
+/* Estilo para os botões Horigami e BRICS */
+.btn-horigami, .btn-brics {
+    background: linear-gradient(45deg, #FF1493, #1E90FF); /* Degradê rosa e azul */
+    color: white; /* Texto branco */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-.brics:active, .origami:active {
-    background: linear-gradient(45deg, #C71585, #4682B4); /* Cores mais escuras ao pressionar */
-    transform: translateY(2px); /* Efeito de clique */
+/* Efeito hover - inverte o degradê */
+.btn-horigami:hover, .btn-brics:hover {
+    background: linear-gradient(45deg, #1E90FF, #FF1493);
+    transform: scale(1.05); /* Leve aumento no tamanho */
 }
 
+/* Efeito de clique */
+.btn-horigami:active, .btn-brics:active {
+    background: linear-gradient(45deg, #C71585, #4682B4); /* Tons mais escuros */
+    transform: scale(0.98); /* Pequena redução para efeito de clique */
+}
 
 /* Estilos das tabelas */
 table {
@@ -216,7 +224,7 @@ td {
 <body>
 <h1>Ativos do Mercado</h1>
     <div class="button-container">
-       <a href="https://brncincsuport.github.io/HORIGAMIFX" class="btn btn-horigami" target="_blank">Horigami</a>
+<a href="https://brncincsuport.github.io/HORIGAMIFX/" class="btn btn-horigami" target="_blank">Horigami</a>
 <a href="https://brncbrics.github.io/brics/" class="btn btn-brics" target="_blank">BRICS</a>
 
     </div>
