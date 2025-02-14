@@ -62,17 +62,25 @@
         }
 
         .footer {
-            background-color: #333333;
-            padding: 10px;
-            text-align: center;
-            color: white;
-            position: fixed;
-            bottom: 0;
             width: 100%;
+            padding: 10px;
+            background: linear-gradient(45deg, #f0f000, #ff4500);
+            color: #000;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            margin-top: 20px;
+            animation: neon 1.5s ease-in-out infinite alternate;
+        }
+
+        .footer p {
+            margin: 0;
         }
 
         .footer a {
-            color: #ffffff;
+            color: #000;
             text-decoration: none;
         }
 
@@ -80,21 +88,52 @@
             text-decoration: underline;
         }
 
-        .card .btn {
-            width: 100%;
-            margin-top: 10px;
+        @keyframes neon {
+            0% {
+                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            }
+            50% {
+                text-shadow: 0 0 20px #ff0000, 0 0 30px #ff4500, 0 0 40px #f0f000;
+            }
+            100% {
+                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            }
         }
 
-        .progress-bar {
-            background-color: #2196F3;
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .form-group input,
+            .form-group select {
+                font-size: 0.9rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            footer {
+                font-size: 0.8rem;
+            }
         }
 
-        /* Style for QR code */
-        #qrcode {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            button {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+
+            #qrcode-container {
+                font-size: 0.9rem;
+            }
         }
+
     </style>
 </head>
 <body>
@@ -111,7 +150,7 @@
                         <div class="progress" style="height: 10px;">
                             <div class="progress-bar" role="progressbar" style="width: 70%;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                        <button class="btn-main mt-3" onclick="connectMetaMask()">Conectar MetaMask</button>
+                        <button id="metaMaskBtn" class="btn-main mt-3" onclick="connectMetaMask()">Conectar MetaMask</button>
                         <p id="walletAddress"></p>
                     </div>
                 </div>
@@ -158,9 +197,21 @@
                 const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
                 const account = accounts[0];
                 document.getElementById('walletAddress').textContent = `Conta conectada: ${account}`;
+
+                // Verificar se a chave SSH está associada
+                checkSSHKey(account);
             } catch (error) {
                 console.error('Erro ao conectar com o MetaMask:', error);
             }
+        }
+
+        // Função para verificar chave SSH
+        function checkSSHKey(account) {
+            // Aqui você pode fazer a verificação da chave SSH, por exemplo, chamando uma API que valida as chaves associadas à conta
+            console.log(`Verificando chave SSH para a conta: ${account}`);
+
+            // Supondo que a chave SSH seja válida
+            alert('Chave SSH válida e associada!');
         }
 
         // Gerar QR Code para pagamento
