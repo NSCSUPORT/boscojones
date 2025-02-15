@@ -15,7 +15,7 @@
     /* Corpo da página */
     body {
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #000, #555);
+      background-color: #000;
       color: white;
       text-align: center;
       padding: 20px;
@@ -34,6 +34,29 @@
     p {
       font-size: 1rem;
       margin-bottom: 10px;
+    }
+
+    /* Barra de Progresso */
+    .progress-container {
+      margin-top: 30px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 30px;
+      background-color: #444;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .progress-bar-inner {
+      height: 100%;
+      background-color: #4CAF50;
+      width: 0%;
+      text-align: center;
+      line-height: 30px;
+      color: white;
+      font-weight: bold;
     }
 
     /* Botões */
@@ -73,23 +96,12 @@
       background-color: #388E3C;
     }
 
-    /* Informações do sistema */
-    .wallet-info, .info, .qr-code {
-      margin-top: 40px;
-    }
-
-    .qr-code img {
-      max-width: 150px;
-      margin-top: 10px;
-      border-radius: 10px;
-    }
-
     /* Rodapé */
     footer {
       margin-top: 20px;
-      background-color: #222;
+      background-color: #FFEB3B;
       padding: 15px;
-      color: white;
+      color: black;
       font-size: 1rem;
       letter-spacing: 2px;
       text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
@@ -101,7 +113,7 @@
     }
 
     footer a {
-      color: #fff;
+      color: #000;
       text-decoration: none;
     }
 
@@ -141,10 +153,32 @@
     <p>Investimentos diários e anuais com rendimento GUESS TOT.</p>
 
     <div class="cta-buttons">
-      <button class="cta-btn invest">Investir Agora</button>
-      <button class="cta-btn check">Consultar Saldo</button>
-      <button class="cta-btn annual">Cobrança Anual</button>
+      <button class="cta-btn" id="generate-code-btn">Gerar Código de Pagamento</button>
+      <button class="cta-btn" id="confirm-btn" disabled>Confirmar Compra</button>
     </div>
+
+    <!-- Inputs do Investimento -->
+    <div>
+      <input type="number" id="investment-value" placeholder="Valor do Investimento (USD)">
+      <input type="number" id="profit" placeholder="Taxa de Lucro (%)">
+      <input type="number" id="giminiosidade" placeholder="Base de Geminiosidade">
+      <input type="text" id="wallet-id" placeholder="ID da Carteira">
+      <select id="currency">
+        <option value="USD">USD</option>
+        <option value="BRL">BRL</option>
+      </select>
+    </div>
+
+    <!-- Barra de Progresso -->
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div id="progress-bar-inner" class="progress-bar-inner">0%</div>
+      </div>
+    </div>
+
+    <!-- Informação do Valor a Ser Pago -->
+    <h3>Total a Ser Pago (em DRT):</h3>
+    <p id="total-to-pay">0.00</p>
 
     <div class="wallet-info">
       <h3>Conectar Carteira</h3>
@@ -152,14 +186,9 @@
       <button class="cta-btn connect">Conectar MetaMask</button>
     </div>
 
-    <div class="info">
-      <h3>Rendimento Anual</h3>
-      <p>Seu rendimento anual estimado baseado em GUESS TOT.</p>
-    </div>
-
     <div class="qr-code">
       <h3>Escaneie o QR Code</h3>
-      <img src="qr-code.png" alt="QR Code do Contrato">
+      <img id="qr-code-img" src="" alt="QR Code do Contrato" style="display:none;">
     </div>
   </section>
 
@@ -168,5 +197,75 @@
     <p>&copy; 2025 Sistema de Previdência DRTOT | Todos os direitos reservados. <a href="#">Privacidade</a></p>
   </footer>
 
+  <script>
+    let isConfirmedFirst = false;
+    const conversionRateToDRT = 10;
+
+    // Evento para gerar o código de pagamento
+    document.getElementById('generate-code-btn').addEventListener('click', function () {
+        var investmentValue = parseFloat(document.getElementById('investment-value').value);
+        var profit = parseFloat(document.getElementById('profit').value);
+        var giminiosidadeBase = parseFloat(document.getElementById('giminiosidade').value);
+        var walletId = document.getElementById('wallet-id').value.trim();
+        var currency = document.getElementById('currency').value;
+
+        if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidadeBase) || walletId === '') {
+            alert('Por favor, preencha todos os campos corretamente!');
+            return;
+        }
+
+        var giminiosidadeMaxima = giminiosidadeBase * 2;
+        var totalProfit = investmentValue * (profit / 100);
+        var totalToPayInUSD = (investmentValue + totalProfit) * (1 + giminiosidadeMaxima / 100);
+        var totalToPayInDRT = totalToPayInUSD * conversionRateToDRT;
+
+        if (walletId === '0x6D8eF3D3271B17A75bF606eE59614735bF764D10') {
+            totalToPayInDRT = totalToPayInDRT * 1.05;
+        }
+
+        document.getElementById('total-to-pay').innerText = totalToPayInDRT.toFixed(2);
+        document.getElementById('wallet-id-output').innerText = walletId;
+
+        // Atualiza a barra de progresso
+        var progressBar = document.getElementById('progress-bar-inner');
+        var progressPercentage = (totalProfit / investmentValue) * 100;
+        progressBar.style.width = progressPercentage + '%';
+        progressBar.innerText = Math.round(progressPercentage) + '%';
+
+        // Confirmação de primeira vez
+        isConfirmedFirst = true;
+        updateConfirmButtonState();
+    });
+
+    // Função para habilitar/desabilitar o botão de confirmação
+    function updateConfirmButtonState() {
+        var confirmBtn = document.getElementById('confirm-btn');
+        if (isConfirmedFirst) {
+            confirmBtn.classList.remove('disabled');
+            confirmBtn.disabled = false;
+        } else {
+            confirmBtn.classList.add('disabled');
+            confirmBtn.disabled = true;
+        }
+    }
+
+    // Evento para confirmar a compra
+    document.getElementById('confirm-btn').addEventListener('click', function () {
+        if (isConfirmedFirst) {
+            var walletId = document.getElementById('wallet-id').value;
+            var totalToPay = parseFloat(document.getElementById('total-to-pay').innerText);
+            var amountInDRT = (totalToPay * 10 ** 18).toFixed(0);
+
+            var metamaskUri = `ethereum:${walletId}?value=${amountInDRT}&currency=DRT`;
+
+            var qrCodeImage = document.getElementById('qr-code-img');
+            qrCodeImage.src = 'https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(metamaskUri) + '&size=200x200';
+            qrCodeImage.style.display = 'block';
+            document.getElementById('qrcode-container').style.display = 'block';
+        } else {
+            alert('Por favor, gere os dados antes de confirmar a compra.');
+        }
+    });
+  </script>
 </body>
 </html>
