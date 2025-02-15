@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário de Investimento</title>
+    <title>PREVIDENCIA</title>
     <style>
         /* Estilo geral do body */
         body {
@@ -34,7 +34,7 @@
         /* Estilos para inputs e botões */
         input, select, button {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin: 10px 0;
             border: 2px solid #444;
             border-radius: 5px;
@@ -112,17 +112,35 @@
 
         /* Estilo do Footer */
         .footer {
-            background-color: #1f1f1f;
+            background-color: #FFEB3B;
             text-align: center;
             padding: 20px;
-            color: #ffeb3b;
+            color: #FFEB3B;
             box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.6);
             margin-top: 30px;
+            position: relative;
         }
 
         .footer p {
             margin: 0;
             font-size: 14px;
+            animation: neon-flash 1.5s infinite alternate;
+        }
+
+        @keyframes neon-flash {
+            0% {
+                color: #FF5733;
+                text-shadow: 0 0 5px #FF5733, 0 0 10px #FF5733, 0 0 15px #FF5733;
+            }
+            100% {
+                color: #FFEB3B;
+                text-shadow: 0 0 5px #FFEB3B, 0 0 10px #FFEB3B, 0 0 15px #FFEB3B;
+            }
+        }
+
+        /* Adicionando uma borda ao QR Code */
+        #qrcode-container img {
+            border: 3px solid #4CAF50;
         }
     </style>
 </head>
@@ -148,7 +166,8 @@
                 <option value="BRL">BRL</option>
                 <option value="ETH">Ethereum</option>
                 <option value="BTC">Bitcoin</option>
-                <!-- Adicionar mais moedas conforme necessário -->
+                <option value="SOL">Solana</option>
+                <option value="EUR">Euro</option>
             </select>
 
             <button type="button" id="generate-code-btn">Gerar Código de Pagamento</button>
@@ -234,26 +253,29 @@
                     metamaskUri = `ethereum:${walletId}?value=${amountInDRT}&currency=ETH`;
                 } else if (currency === 'BTC') {
                     metamaskUri = `bitcoin:${walletId}?amount=${totalToPay}&currency=BTC`;
+                } else if (currency === 'SOL') {
+                    metamaskUri = `solana:${walletId}?amount=${totalToPay}&currency=SOL`;
+                } else if (currency === 'EUR') {
+                    metamaskUri = `euro:${walletId}?amount=${totalToPay}&currency=EUR`;
                 } else {
                     metamaskUri = `ethereum:${walletId}?value=${amountInDRT}&currency=DRT`;
                 }
 
                 var qrCodeImage = document.getElementById('qr-code-img');
                 qrCodeImage.src = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(metamaskUri)}&size=200x200`;
-                document.getElementById('qrcode-container').style.display = 'block';
 
-                alert(`Pagamento de ${currency} para ${walletId} realizado com sucesso!`);
+                document.getElementById('qrcode-container').style.display = 'block';
             }
         });
 
         function updateConfirmButtonState() {
-            var confirmBtn = document.getElementById('confirm-btn');
+            const confirmBtn = document.getElementById('confirm-btn');
             if (isConfirmedFirst) {
-                confirmBtn.disabled = false;
                 confirmBtn.classList.remove('disabled');
+                confirmBtn.disabled = false;
             } else {
-                confirmBtn.disabled = true;
                 confirmBtn.classList.add('disabled');
+                confirmBtn.disabled = true;
             }
         }
     </script>
