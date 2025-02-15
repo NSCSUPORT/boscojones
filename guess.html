@@ -36,34 +36,6 @@
       margin-bottom: 10px;
     }
 
-    /* Menu de navegação */
-    nav {
-      background-color: #333;
-      padding: 15px;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      justify-content: center;
-    }
-
-    nav ul li {
-      margin: 0 20px;
-    }
-
-    nav ul li a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      text-transform: uppercase;
-      transition: color 0.3s;
-    }
-
-    nav ul li a:hover {
-      color: #f44336;
-    }
-
     /* Botões */
     .cta-buttons {
       margin: 30px 0;
@@ -93,6 +65,14 @@
       background-color: #1565c0;
     }
 
+    .cta-btn.annual {
+      background-color: #4CAF50;
+    }
+
+    .cta-btn.annual:hover {
+      background-color: #388E3C;
+    }
+
     /* Informações do sistema */
     .wallet-info, .info, .qr-code {
       margin-top: 40px;
@@ -106,28 +86,54 @@
 
     /* Rodapé */
     footer {
-      margin-top: 50px;
+      margin-top: 20px;
       background-color: #222;
       padding: 15px;
       color: white;
       font-size: 1rem;
+      letter-spacing: 2px;
+      text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+      animation: neon 1.5s ease-in-out infinite alternate;
     }
 
     footer p {
-      text-align: center;
+      margin: 0;
+    }
+
+    footer a {
+      color: #000;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @keyframes neon {
+      0% {
+        text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+      }
+      50% {
+        text-shadow: 0 0 20px #ff0000, 0 0 30px #ff4500, 0 0 40px #f0f000;
+      }
+      100% {
+        text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+
+      .form-group input,
+      .form-group select {
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Menu de Navegação -->
-  <nav>
-    <ul>
-      <li><a href="#">Início</a></li>
-      <li><a href="#">Planos</a></li>
-      <li><a href="#">Conectar</a></li>
-      <li><a href="#">Sobre</a></li>
-    </ul>
-  </nav>
 
   <!-- Seção Principal -->
   <section class="main-content">
@@ -137,6 +143,7 @@
     <div class="cta-buttons">
       <button class="cta-btn invest">Investir Agora</button>
       <button class="cta-btn check">Consultar Saldo</button>
+      <button class="cta-btn annual">Cobrança Anual</button>
     </div>
 
     <div class="wallet-info">
@@ -158,7 +165,8 @@
 
   <!-- Rodapé -->
   <footer>
-    <p>&copy; 2025 Sistema de Previdência DRTOT | Todos os direitos reservados.</p>
+    <p>&copy; 2025 Sistema de Previdência DRTOT | Todos os direitos reservados. <a href="#">Privacidade</a></p>
   </footer>
+
 </body>
 </html>
