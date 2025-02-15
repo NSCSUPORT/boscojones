@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Previdência DRTOT</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Corpo da página */
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #000, #555);
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      margin-top: 20px;
+    }
+
+    p {
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+
+    /* Menu de navegação */
+    nav {
+      background-color: #333;
+      padding: 15px;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+    }
+
+    nav ul li {
+      margin: 0 20px;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: #f44336;
+    }
+
+    /* Botões */
+    .cta-buttons {
+      margin: 30px 0;
+    }
+
+    .cta-btn {
+      background-color: #f44336;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      padding: 15px 30px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px;
+      transition: background-color 0.3s;
+    }
+
+    .cta-btn:hover {
+      background-color: #d32f2f;
+    }
+
+    .cta-btn.connect {
+      background-color: #1a73e8;
+    }
+
+    .cta-btn.connect:hover {
+      background-color: #1565c0;
+    }
+
+    /* Informações do sistema */
+    .wallet-info, .info, .qr-code {
+      margin-top: 40px;
+    }
+
+    .qr-code img {
+      max-width: 150px;
+      margin-top: 10px;
+      border-radius: 10px;
+    }
+
+    /* Rodapé */
+    footer {
+      margin-top: 50px;
+      background-color: #222;
+      padding: 15px;
+      color: white;
+      font-size: 1rem;
+    }
+
+    footer p {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- Menu de Navegação -->
+  <nav>
+    <ul>
+      <li><a href="#">Início</a></li>
+      <li><a href="#">Planos</a></li>
+      <li><a href="#">Conectar</a></li>
+      <li><a href="#">Sobre</a></li>
+    </ul>
+  </nav>
+
+  <!-- Seção Principal -->
+  <section class="main-content">
+    <h1>Sistema de Previdência DRTOT</h1>
+    <p>Investimentos diários e anuais com rendimento GUESS TOT.</p>
+
+    <div class="cta-buttons">
+      <button class="cta-btn invest">Investir Agora</button>
+      <button class="cta-btn check">Consultar Saldo</button>
+    </div>
+
+    <div class="wallet-info">
+      <h3>Conectar Carteira</h3>
+      <p>Conecte sua carteira MetaMask para contribuir com o sistema.</p>
+      <button class="cta-btn connect">Conectar MetaMask</button>
+    </div>
+
+    <div class="info">
+      <h3>Rendimento Anual</h3>
+      <p>Seu rendimento anual estimado baseado em GUESS TOT.</p>
+    </div>
+
+    <div class="qr-code">
+      <h3>Escaneie o QR Code</h3>
+      <img src="qr-code.png" alt="QR Code do Contrato">
+    </div>
+  </section>
+
+  <!-- Rodapé -->
+  <footer>
+    <p>&copy; 2025 Sistema de Previdência DRTOT | Todos os direitos reservados.</p>
+  </footer>
+</body>
+</html>
