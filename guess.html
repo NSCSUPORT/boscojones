@@ -5,277 +5,177 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulário de Investimento</title>
     <style>
-        /* Estilo geral do body */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #000; /* Fundo preto */
-            color: #fff;
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
-        h1, h2, h3 {
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            color: #00FF00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            padding: 10px;
+            background-color: #000000;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #00FF00;
             text-align: center;
-            color: #fff;
+            text-shadow: 0 0 15px #7e00ff, 0 0 25px #ff0000;
         }
 
-        /* Container do formulário */
-        .form-container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #333;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
-            color: #fff;
-            background-image: linear-gradient(to right, #1f1f1f, #333);
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
         }
 
-        /* Estilos para inputs e botões */
-        input, select, button {
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #e0e0e0;
+        }
+
+        .form-group input,
+        .form-group select {
             width: 100%;
             padding: 12px;
-            margin: 10px 0;
-            border: 2px solid #444;
-            border-radius: 5px;
-            background-color: #222;
-            color: #fff;
-            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #3c3c3c;
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
         }
 
-        input::placeholder, select::placeholder {
-            color: #bbb; /* Cor do placeholder */
-            font-size: 14px; /* Tamanho menor do placeholder */
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4CAF50;
         }
 
         button {
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
             cursor: pointer;
-            background-color: #4CAF50;
             color: #fff;
             border: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center;
+            width: 100%;
+            margin-top: 10px;
         }
 
-        button.disabled {
-            background-color: #757575;
+        button:disabled {
+            background-color: #555;
             cursor: not-allowed;
         }
 
-        button:hover:not(.disabled) {
+        #generate-code-btn {
+            background-color: #4CAF50;
+        }
+
+        #generate-code-btn:hover {
             background-color: #45a049;
+            transform: scale(1.05);
         }
 
-        /* Progresso da barra */
+        #confirm-btn {
+            background-color: #f44336;
+        }
+
+        #confirm-btn:hover:not(:disabled) {
+            background-color: #d32f2f;
+            transform: scale(1.05);
+        }
+
         .progress-bar-container {
-            margin-top: 20px;
+            margin-top: 15px;
+            text-align: center;
         }
 
-        progress {
+        footer {
             width: 100%;
-            height: 15px;
-            border-radius: 10px;
-            appearance: none;
-            background-color: #333;
-        }
-
-        progress::-webkit-progress-bar {
-            background-color: #333;
-            border-radius: 10px;
-        }
-
-        progress::-webkit-progress-value {
-            background-color: #4CAF50;
-            border-radius: 10px;
-        }
-
-        progress::-moz-progress-bar {
-            background-color: #4CAF50;
-            border-radius: 10px;
-        }
-
-        /* QR Code */
-        #qrcode-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        #qr-code-img {
-            width: 200px;
-            height: 200px;
-            margin-top: 10px;
-            border: 3px solid #4CAF50;
-            box-shadow: 0 0 10px 0 #4CAF50;
-            transition: transform 0.3s ease-in-out;
-        }
-
-        #qr-code-img:hover {
-            transform: scale(1.1);
-        }
-
-        /* Estilo do Footer */
-        .footer {
-            background-color: #FFB74D; /* Amarelo mais escuro */
-            text-align: center;
-            padding: 30px;
-            color: #FFEB3B;
-            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.6);
-            margin-top: 30px;
-            position: relative;
-            font-size: 18px; /* Aumentando o tamanho do texto */
-        }
-
-        .footer p {
-            margin: 0;
-            font-size: 18px;
-            animation: neon-flash 1.5s infinite alternate;
-        }
-
-        @keyframes neon-flash {
-            0% {
-                color: #FF5733;
-                text-shadow: 0 0 5px #FF5733, 0 0 10px #FF5733, 0 0 15px #FF5733;
-            }
-            100% {
-                color: #FFEB3B;
-                text-shadow: 0 0 5px #FFEB3B, 0 0 10px #FFEB3B, 0 0 15px #FFEB3B;
-            }
-        }
-
-        /* Adicionando uma borda ao QR Code */
-        #qrcode-container img {
-            border: 3px solid #4CAF50;
-        }
-
-        /* Estilo para MetaMask button */
-        .metamask-btn {
-            display: block;
-            margin-top: 20px;
             padding: 12px;
-            background-color: #f6851b;
-            color: white;
-            font-size: 16px;
+            background: linear-gradient(45deg, #f0f000, #ff4500);
+            color: #000;
             text-align: center;
-            border-radius: 5px;
-            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 0 0 8px #ff0000;
+            margin-top: 20px;
+            animation: neon 1.5s ease-in-out infinite alternate;
         }
 
-        .metamask-btn:hover {
-            background-color: #f5841b;
+        @keyframes neon {
+            0% { text-shadow: 0 0 5px #ff0000; }
+            50% { text-shadow: 0 0 20px #ff4500; }
+            100% { text-shadow: 0 0 5px #ff0000; }
         }
     </style>
 </head>
 <body>
-    <div class="form-container">
+    <div class="container">
         <h1>Formulário de Investimento</h1>
         <form id="investment-form">
-            <label for="investment-value">Valor do Investimento:</label>
-            <input type="number" id="investment-value" required>
-            
-            <label for="profit">Lucro Esperado (%):</label>
-            <input type="number" id="profit" required>
-            
-            <label for="giminiosidade">Giminiosidade:</label>
-            <input type="number" id="giminiosidade" required>
-            
-            <label for="wallet-id">ID da Carteira:</label>
-            <input type="text" id="wallet-id" required>
+            <div class="form-group">
+                <label for="investment-value">Valor do Investimento:</label>
+                <input type="number" id="investment-value" required>
+            </div>
 
-            <label for="currency">Moeda:</label>
-            <select id="currency" required>
-                <option value="USD">USD</option>
-                <option value="BRL">BRL</option>
-                <option value="ETH">Ethereum</option>
-                <option value="BTC">Bitcoin</option>
-                <option value="SOL">Solana</option>
-                <option value="EUR">Euro</option>
-            </select>
+            <div class="form-group">
+                <label for="profit">Lucro Esperado (%):</label>
+                <input type="number" id="profit" required>
+            </div>
+
+            <div class="form-group">
+                <label for="giminiosidade">Giminiosidade:</label>
+                <input type="number" id="giminiosidade" required>
+            </div>
+
+            <div class="form-group">
+                <label for="wallet-id">ID da Carteira:</label>
+                <input type="text" id="wallet-id" required>
+            </div>
+
+            <div class="form-group">
+                <label for="currency">Moeda:</label>
+                <select id="currency" required>
+                    <option value="USD">USD</option>
+                    <option value="BRL">BRL</option>
+                    <option value="ETH">Ethereum</option>
+                    <option value="BTC">Bitcoin</option>
+                    <option value="SOL">Solana</option>
+                    <option value="EUR">Euro</option>
+                </select>
+            </div>
 
             <button type="button" id="generate-code-btn">Gerar Código de Pagamento</button>
-            
-            <div id="qrcode-container" style="display: none;">
-                <h2>QR Code para Transferência</h2>
-                <img id="qr-code-img" src="" alt="QR Code">
-            </div>
-            
             <h3>Total a Pagar (DRT): <span id="total-to-pay">0.00</span></h3>
-            <button type="button" id="confirm-btn" class="disabled" disabled>Confirmar Compra</button>
+            <button type="button" id="confirm-btn" disabled>Confirmar Compra</button>
         </form>
-
-        <div class="progress-bar-container">
-            <label for="progress-bar">Progresso:</label>
-            <progress id="progress-bar" value="0" max="100"></progress>
-        </div>
-
-        <!-- MetaMask Button -->
-        <button class="metamask-btn" id="connect-metamask">Conectar MetaMask</button>
     </div>
 
-    <footer class="footer">
-        <p>&copy; 2025 HoloFi. Todos os direitos reservados.</p>
+    <footer>
+        <p>&copy; 2025 HoloFi. Todos os direitos reservados.Lucas januario </p>
     </footer>
-
-    <script>
-        let isConfirmedFirst = false;
-        
-        // Taxa de conversão (exemplo: 1 USD = 10 DRT)
-        const conversionRateToDRT = 10; 
-
-        // Evento para gerar o código de pagamento
-        document.getElementById('generate-code-btn').addEventListener('click', function () {
-            var investmentValue = parseFloat(document.getElementById('investment-value').value);
-            var profit = parseFloat(document.getElementById('profit').value);
-            var giminiosidadeBase = parseFloat(document.getElementById('giminiosidade').value);
-            var walletId = document.getElementById('wallet-id').value.trim();
-            var currency = document.getElementById('currency').value;
-
-            if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidadeBase) || walletId === '') {
-                alert('Por favor, preencha todos os campos corretamente!');
-                return;
-            }
-
-            // Cálculo da geminiosidade máxima
-            var giminiosidadeMaxima = giminiosidadeBase * 2;
-
-            // Cálculo do lucro total
-            var totalProfit = investmentValue * (profit / 100);
-            var totalToPayInUSD = (investmentValue + totalProfit) * (1 + giminiosidadeMaxima / 100);
-
-            // Conversão para DRT
-            var totalToPayInDRT = totalToPayInUSD * conversionRateToDRT;
-
-            // Aplica taxa de 5% em DRT para carteira específica
-            if (walletId === '0x6D8eF3D3271B17A75bF606eE59614735bF764D10') {
-                totalToPayInDRT = totalToPayInDRT * 1.05;
-            }
-
-            document.getElementById('total-to-pay').innerText = totalToPayInDRT.toFixed(2);
-
-            // Atualiza a barra de progresso
-            var progressValue = Math.min((totalToPayInDRT / 1000) * 100, 100);  // Valor máximo de 100% de progresso
-            document.getElementById('progress-bar').value = progressValue;
-
-            // Atualiza o QR Code (simulando a geração de um QR Code)
-            var qrCodeImage = "https://api.qrserver.com/v1/create-qr-code/?data=" + encodeURIComponent("Valor a pagar: " + totalToPayInDRT.toFixed(2));
-            document.getElementById('qr-code-img').src = qrCodeImage;
-            document.getElementById('qrcode-container').style.display = 'block';
-
-            // Habilita o botão "Confirmar Compra"
-            document.getElementById('confirm-btn').disabled = false;
-            document.getElementById('confirm-btn').classList.remove('disabled');
-        });
-
-        // Função para conectar ao MetaMask
-        document.getElementById('connect-metamask').addEventListener('click', async function() {
-            if (typeof window.ethereum !== 'undefined') {
-                try {
-                    await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    alert('MetaMask conectado!');
-                } catch (error) {
-                    alert('Erro ao conectar ao MetaMask!');
-                }
-            } else {
-                alert('MetaMask não está instalado!');
-            }
-        });
-    </script>
 </body>
 </html>
