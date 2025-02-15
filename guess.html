@@ -2,14 +2,13 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-      <link rel="icon" href="logo.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PREVIDENCIA</title>
+    <title>Formulário de Investimento</title>
     <style>
         /* Estilo geral do body */
         body {
             font-family: Arial, sans-serif;
-            background-color: #121212;
+            background-color: #000; /* Fundo preto */
             color: #fff;
             margin: 0;
             padding: 0;
@@ -44,6 +43,11 @@
             font-size: 16px;
         }
 
+        input::placeholder, select::placeholder {
+            color: #bbb; /* Cor do placeholder */
+            font-size: 14px; /* Tamanho menor do placeholder */
+        }
+
         button {
             cursor: pointer;
             background-color: #4CAF50;
@@ -54,10 +58,6 @@
         button.disabled {
             background-color: #757575;
             cursor: not-allowed;
-        }
-
-        input, select {
-            border-color: #555;
         }
 
         button:hover:not(.disabled) {
@@ -113,18 +113,19 @@
 
         /* Estilo do Footer */
         .footer {
-            background-color: #FFEB3B;
+            background-color: #FFB74D; /* Amarelo mais escuro */
             text-align: center;
-            padding: 20px;
+            padding: 30px;
             color: #FFEB3B;
             box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.6);
             margin-top: 30px;
             position: relative;
+            font-size: 18px; /* Aumentando o tamanho do texto */
         }
 
         .footer p {
             margin: 0;
-            font-size: 14px;
+            font-size: 18px;
             animation: neon-flash 1.5s infinite alternate;
         }
 
@@ -142,6 +143,23 @@
         /* Adicionando uma borda ao QR Code */
         #qrcode-container img {
             border: 3px solid #4CAF50;
+        }
+
+        /* Estilo para MetaMask button */
+        .metamask-btn {
+            display: block;
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #f6851b;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .metamask-btn:hover {
+            background-color: #f5841b;
         }
     </style>
 </head>
@@ -186,6 +204,9 @@
             <label for="progress-bar">Progresso:</label>
             <progress id="progress-bar" value="0" max="100"></progress>
         </div>
+
+        <!-- MetaMask Button -->
+        <button class="metamask-btn" id="connect-metamask">Conectar MetaMask</button>
     </div>
 
     <footer class="footer">
@@ -232,53 +253,29 @@
             var progressValue = Math.min((totalToPayInDRT / 1000) * 100, 100);  // Valor máximo de 100% de progresso
             document.getElementById('progress-bar').value = progressValue;
 
-            // Atualiza o ID da carteira
-            document.getElementById('wallet-id-output').innerText = walletId;
+            // Atualiza o QR Code (simulando a geração de um QR Code)
+            var qrCodeImage = "https://api.qrserver.com/v1/create-qr-code/?data=" + encodeURIComponent("Valor a pagar: " + totalToPayInDRT.toFixed(2));
+            document.getElementById('qr-code-img').src = qrCodeImage;
+            document.getElementById('qrcode-container').style.display = 'block';
 
-            // Confirmação de primeira vez
-            isConfirmedFirst = true;
-            updateConfirmButtonState();
+            // Habilita o botão "Confirmar Compra"
+            document.getElementById('confirm-btn').disabled = false;
+            document.getElementById('confirm-btn').classList.remove('disabled');
         });
 
-        // Evento para confirmar a compra
-        document.getElementById('confirm-btn').addEventListener('click', function () {
-            if (isConfirmedFirst) {
-                // Gerar URI MetaMask ou para outras criptos (Ethereum ou Bitcoin)
-                var walletId = document.getElementById('wallet-id').value;
-                var currency = document.getElementById('currency').value;
-                var totalToPay = parseFloat(document.getElementById('total-to-pay').innerText);
-                var amountInDRT = (totalToPay * 10 ** 18).toFixed(0);
-
-                let metamaskUri;
-                if (currency === 'ETH') {
-                    metamaskUri = `ethereum:${walletId}?value=${amountInDRT}&currency=ETH`;
-                } else if (currency === 'BTC') {
-                    metamaskUri = `bitcoin:${walletId}?amount=${totalToPay}&currency=BTC`;
-                } else if (currency === 'SOL') {
-                    metamaskUri = `solana:${walletId}?amount=${totalToPay}&currency=SOL`;
-                } else if (currency === 'EUR') {
-                    metamaskUri = `euro:${walletId}?amount=${totalToPay}&currency=EUR`;
-                } else {
-                    metamaskUri = `ethereum:${walletId}?value=${amountInDRT}&currency=DRT`;
+        // Função para conectar ao MetaMask
+        document.getElementById('connect-metamask').addEventListener('click', async function() {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    alert('MetaMask conectado!');
+                } catch (error) {
+                    alert('Erro ao conectar ao MetaMask!');
                 }
-
-                var qrCodeImage = document.getElementById('qr-code-img');
-                qrCodeImage.src = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(metamaskUri)}&size=200x200`;
-
-                document.getElementById('qrcode-container').style.display = 'block';
+            } else {
+                alert('MetaMask não está instalado!');
             }
         });
-
-        function updateConfirmButtonState() {
-            const confirmBtn = document.getElementById('confirm-btn');
-            if (isConfirmedFirst) {
-                confirmBtn.classList.remove('disabled');
-                confirmBtn.disabled = false;
-            } else {
-                confirmBtn.classList.add('disabled');
-                confirmBtn.disabled = true;
-            }
-        }
     </script>
 </body>
 </html>
