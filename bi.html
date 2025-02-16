@@ -18,13 +18,12 @@
             background-color: #000;
             color: #00FF00;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            justify-content: flex-start;
+            align-items: flex-start;
             flex-direction: column;
-            height: 100vh;
+            height: 100%;
+            overflow: auto;
             padding: 0 10px;
-            overflow: hidden;
-            zoom: 0.5; /* Set zoom to 50% */
         }
 
         h1, h2, p {
@@ -62,6 +61,8 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(12px);
             animation: fadeIn 2s ease-in-out;
+            max-height: calc(100vh - 120px); /* Adjust based on footer height */
+            overflow-y: auto; /* Add scrolling for the container */
         }
 
         .sector {
@@ -84,6 +85,9 @@
             letter-spacing: 2px;
             text-shadow: 0 0 8px #ff0000;
             margin-top: 20px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
             animation: neon 1.5s ease-in-out infinite alternate;
         }
 
@@ -326,6 +330,5 @@
             }
         });
     </script>
-
 </body>
 </html>
