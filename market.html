@@ -46,7 +46,73 @@ h2 {
 /* Container */
 .container {
     padding: 20px;
+}/* Estilos gerais da navbar */
+.navbar {
+    background-color: #333;
+    padding: 10px;
+    text-align: center;
 }
+
+/* Estilo para os links */
+.navbar-links {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Estilo para os itens da lista */
+.navbar-links li {
+    display: inline-block;
+}
+
+/* Estilo dos botões */
+.navbar-links a {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+/* Estilo individual para cada botão */
+.btn-google-blue {
+    background-color: #4285F4;
+}
+
+.btn-google-green {
+    background-color: #34A853;
+}
+
+.btn-google-yellow {
+    background-color: #FBBC05;
+}
+
+.btn-google-red {
+    background-color: #EA4335;
+}
+
+/* Efeito de hover */
+.navbar-links a:hover {
+    opacity: 0.8;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .navbar-links {
+        flex-direction: column;
+    }
+
+    .navbar-links a {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+}
+
 /* Estilo base para os botões */
 .btn {
     display: inline-block;
@@ -232,16 +298,18 @@ td {
     </style>
 </head>
 <body>
-<h1>Ativos do Mercado</h1>
-    <div class="button-container">
-        <a href="https://brncincsuport.github.io/HORIGAMIFX" class="btn btn-google-blue" target="_blank">Horigami</a>
-        <a href="https://brncbrics.github.io/brics/" class="btn btn-google-green" target="_blank">BRICS</a>
-        <a href="https://nscsuport.github.io/boscojones/oasis.html" class="btn btn-google-yellow" target="_blank">Oasis Key</a>
-        <a href="https://nscsuport.github.io/boscojones/guess.html" class="btn btn-google-red" target="_blank">Previdência</a>
-        <a href="https://nscsuport.github.io/boscojones/bi.html" class="btn btn-google-blue" target="_blank">Growth</a>
-        <a href="https://wa.me/5511958849894" class="btn btn-google-blue" target="_blank">suport</a>
+<h1>booking</h1>
+   <nav class="navbar">
+    <ul class="navbar-links">
+        <li><a href="https://brncincsuport.github.io/HORIGAMIFX" class="btn btn-google-blue" target="_blank">Horigami</a></li>
+        <li><a href="https://brncbrics.github.io/brics/" class="btn btn-google-green" target="_blank">BRICS</a></li>
+        <li><a href="https://nscsuport.github.io/boscojones/oasis.html" class="btn btn-google-yellow" target="_blank">Oasis Key</a></li>
+        <li><a href="https://nscsuport.github.io/boscojones/guess.html" class="btn btn-google-red" target="_blank">Previdência</a></li>
+        <li><a href="https://nscsuport.github.io/boscojones/bi.html" class="btn btn-google-blue" target="_blank">Growth</a></li>
+        <li><a href="https://wa.me/5511958849894" class="btn btn-google-blue" target="_blank">Suporte</a></li>
+    </ul>
+</nav>
 
-    </div>
 
 
     </div>
