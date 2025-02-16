@@ -53,7 +53,6 @@ h2 {
 .container {
     padding: 20px;
 }
-
 /* Estilo base para os botões */
 .btn {
     display: inline-block;
@@ -70,9 +69,9 @@ h2 {
     text-transform: uppercase; /* Letras maiúsculas para um visual mais impactante */
 }
 
-/* Estilo para os botões Horigami e BRICS */
-.btn-horigami, .btn-brics {
-    background: linear-gradient(45deg, #4285F4, #FBBC05); /* Degradê azul e amarelo (cores do Google) */
+/* Botões com as cores do Google */
+.btn-google-blue, .btn-google-green, .btn-google-red, .btn-google-yellow {
+    background: linear-gradient(45deg, #4285F4, #34A853); /* Degradê azul e verde (cores do Google) */
     color: white; /* Texto branco */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     font-size: 14px; /* Ajuste de fonte para um estilo mais "pixel" */
@@ -80,13 +79,13 @@ h2 {
 }
 
 /* Efeito hover - inverte o degradê */
-.btn-horigami:hover, .btn-brics:hover {
-    background: linear-gradient(45deg, #34A853, #EA4335); /* Degradê verde e vermelho do Google */
+.btn-google-blue:hover, .btn-google-green:hover, .btn-google-red:hover, .btn-google-yellow:hover {
+    background: linear-gradient(45deg, #FBBC05, #EA4335); /* Degradê amarelo e vermelho do Google */
     transform: scale(1.05); /* Leve aumento no tamanho */
 }
 
 /* Efeito de clique */
-.btn-horigami:active, .btn-brics:active {
+.btn-google-blue:active, .btn-google-green:active, .btn-google-red:active, .btn-google-yellow:active {
     background: linear-gradient(45deg, #0F9D58, #DB4437); /* Tons mais escuros */
     transform: scale(0.98); /* Pequena redução para efeito de clique */
 }
@@ -139,6 +138,7 @@ h2 {
 .btn-whatsapp:hover {
     background-color: #128C7E; /* Cor verde escuro do WhatsApp no hover */
 }
+
 
 /* Estilos das tabelas */
 table {
@@ -237,13 +237,6 @@ td {
     }
 }
 
-/* Botões no canto superior direito */
-.top-right-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-bottom: 20px;
-}
 
 
 
