@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
     <link rel="icon" href="logo.ico">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard BRNC Inc. - Bosco Jones FX</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -24,7 +24,7 @@
             height: 100vh;
             padding: 0 10px;
             overflow: hidden;
-            zoom: 1.33; /* Aplica zoom de 33% */
+            zoom: 0.5; /* Set zoom to 50% */
         }
 
         h1, h2, p {
@@ -147,8 +147,8 @@
 
     <h1>Dashboard BRNC Inc. - Bosco Jones FX</h1>
     
-    <h2>Visão Geral</h2>
-    <p>Monitorando o crescimento do BRNC Inc. no mercado global e sua comparação com os principais concorrentes.</p>
+    <h2>Visão Geral da Performance de Mercado</h2>
+    <p>Bem-vindo ao Dashboard de **BRNC Inc.**, o coração do crescimento financeiro global. Aqui você poderá monitorar o crescimento e os resultados do BRNC Inc. em comparação com outros competidores, além de explorar o impacto no **Bosco Jones FX**.</p>
     
     <div class="container">
         <!-- Gráfico de Crescimento BRNC -->
@@ -159,19 +159,19 @@
 
         <!-- Gráfico de Ranking Competidores -->
         <div class="sector">
-            <h2>Ranking de Crescimento</h2>
+            <h2>Ranking de Crescimento: BRNC Inc. vs Concorrentes</h2>
             <canvas id="competitorRankingChart"></canvas>
         </div>
 
-        <!-- Gráfico de Mercado Livre HoloFi -->
+        <!-- Gráfico de Crescimento e Gastos - Lua -->
         <div class="sector">
-            <h2>Mercado Livre HoloFi</h2>
-            <canvas id="marketHoloFiChart"></canvas>
+            <h2>Gastos e Crescimento Geral (Lua)</h2>
+            <canvas id="growthAndSpendingChart"></canvas>
         </div>
 
         <!-- Gráfico do Setor de Investimentos BRNC -->
         <div class="sector">
-            <h2>Investimentos BRNC</h2>
+            <h2>Setor de Investimentos BRNC</h2>
             <canvas id="investmentSectorChart"></canvas>
         </div>
     </div>
@@ -262,17 +262,29 @@
             }
         });
 
-        // Dados para o gráfico de Mercado Livre HoloFi
-        var marketHoloFiChart = new Chart(document.getElementById('marketHoloFiChart'), {
-            type: 'pie',
+        // Dados para o gráfico de Crescimento e Gastos - Lua
+        var growthAndSpendingChart = new Chart(document.getElementById('growthAndSpendingChart'), {
+            type: 'line',
             data: {
-                labels: ['Plano 1', 'Plano 2', 'Plano 3', 'Plano 4'],
-                datasets: [{
-                    label: 'Distribuição de Planos HoloFi',
-                    data: [40, 30, 20, 10],
-                    backgroundColor: ['#8e24aa', '#f44336', '#1e88e5', '#43a047'],
-                    borderWidth: 1,
-                }]
+                labels: ['2022', '2023', '2024', '2025'],
+                datasets: [
+                    {
+                        label: 'Gastos',
+                        data: [500, 800, 1200, 1500], // Exemplo de gastos (pode ser ajustado conforme seu modelo Lua)
+                        borderColor: '#f44336',
+                        backgroundColor: 'rgba(244, 67, 54, 0.2)',
+                        borderWidth: 2,
+                        fill: true,
+                    },
+                    {
+                        label: 'Crescimento',
+                        data: [10, 30, 50, 70],
+                        borderColor: '#4CAF50',
+                        backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                        borderWidth: 2,
+                        fill: true,
+                    }
+                ]
             },
             options: {
                 responsive: true,
@@ -281,7 +293,7 @@
                         position: 'top',
                     },
                     tooltip: {
-                        backgroundColor: '#1e88e5',
+                        backgroundColor: '#00FF00',
                     }
                 },
             }
