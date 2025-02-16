@@ -66,26 +66,32 @@ h2 {
     border: none;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
+    font-family: 'Roboto', sans-serif; /* Fonte estilo Google */
+    text-transform: uppercase; /* Letras maiúsculas para um visual mais impactante */
 }
 
 /* Estilo para os botões Horigami e BRICS */
 .btn-horigami, .btn-brics {
-    background: linear-gradient(45deg, #FF1493, #1E90FF); /* Degradê rosa e azul */
+    background: linear-gradient(45deg, #4285F4, #FBBC05); /* Degradê azul e amarelo (cores do Google) */
     color: white; /* Texto branco */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    font-size: 14px; /* Ajuste de fonte para um estilo mais "pixel" */
+    padding: 14px 28px;
 }
 
 /* Efeito hover - inverte o degradê */
 .btn-horigami:hover, .btn-brics:hover {
-    background: linear-gradient(45deg, #1E90FF, #FF1493);
+    background: linear-gradient(45deg, #34A853, #EA4335); /* Degradê verde e vermelho do Google */
     transform: scale(1.05); /* Leve aumento no tamanho */
 }
 
 /* Efeito de clique */
 .btn-horigami:active, .btn-brics:active {
-    background: linear-gradient(45deg, #C71585, #4682B4); /* Tons mais escuros */
+    background: linear-gradient(45deg, #0F9D58, #DB4437); /* Tons mais escuros */
     transform: scale(0.98); /* Pequena redução para efeito de clique */
-/* Estilos dos botões */
+}
+
+/* Estilos para os botões do WhatsApp */
 .support-whatsapp, .trix-button {
     padding: 10px 20px;
     border-radius: 5px;
@@ -96,6 +102,7 @@ h2 {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* WhatsApp */
 .support-whatsapp {
     background-color: #25D366; /* Cor padrão WhatsApp */
 }
@@ -104,32 +111,33 @@ h2 {
     background-color: #1EBE5B; /* Cor mais escura no hover */
 }
 
+/* Botão trix com gradiente */
 .trix-button {
-    background: linear-gradient(to right, #8e44ad, #e67e22); /* Gradiente */
+    background: linear-gradient(to right, #FF3B30, #4CAF50); /* Gradiente com cores vibrantes */
 }
 
 .trix-button:hover {
-    background: linear-gradient(to right, #71368a, #d35400); /* Gradiente ao passar o mouse */
+    background: linear-gradient(to right, #D32F2F, #388E3C); /* Gradiente ao passar o mouse */
 }
-        .btn-whatsapp {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  background-color: #25D366; /* Cor verde do WhatsApp */
-  color: white;
-  padding: 10px 20px;
-  border-radius: 50px;
-  font-size: 16px;
-  text-align: center;
-  text-decoration: none;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s;
+
+/* Botão flutuante do WhatsApp */
+.btn-whatsapp {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background-color: #25D366; /* Cor verde do WhatsApp */
+    color: white;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s;
 }
 
 .btn-whatsapp:hover {
-  background-color: #128C7E; /* Cor verde escuro do WhatsApp no hover */
-}
-
+    background-color: #128C7E; /* Cor verde escuro do WhatsApp no hover */
 }
 
 /* Estilos das tabelas */
