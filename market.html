@@ -99,6 +99,92 @@ h2 {
 .navbar-links a:hover {
     opacity: 0.8;
 }
+/* Estilos gerais da navbar */
+.navbar {
+    background-color: #333;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Estilo para os links da navbar */
+.navbar-links {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Estilo para os itens da lista */
+.navbar-links li {
+    display: inline-block;
+}
+
+/* Estilo dos botões */
+.navbar-links a {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+/* Estilo individual para cada botão */
+.btn-google-blue {
+    background-color: #4285F4;
+}
+
+.btn-google-green {
+    background-color: #34A853;
+}
+
+.btn-google-yellow {
+    background-color: #FBBC05;
+}
+
+.btn-google-red {
+    background-color: #EA4335;
+}
+
+/* Efeito de hover */
+.navbar-links a:hover {
+    opacity: 0.8;
+}
+
+/* Estilos para os ícones de redes sociais */
+.social-icons {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0 0;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-icons li a {
+    font-size: 24px;
+    color: white;
+    transition: color 0.3s ease;
+}
+
+.social-icons li a:hover {
+    color: #ddd;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .navbar-links {
+        flex-direction: column;
+    }
+
+    .navbar-links a {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+}
 
 /* Responsividade para telas menores */
 @media (max-width: 768px) {
@@ -307,6 +393,11 @@ td {
         <li><a href="https://nscsuport.github.io/boscojones/guess.html" class="btn btn-google-red" target="_blank">Previdência</a></li>
         <li><a href="https://nscsuport.github.io/boscojones/bi.html" class="btn btn-google-blue" target="_blank">Growth</a></li>
         <li><a href="https://wa.me/5511958849894" class="btn btn-google-blue" target="_blank">Suporte</a></li>
+    </ul>
+    <ul class="social-icons">
+        <li><a href="https://www.instagram.com/brncinc" target="_blank"><i class="fab fa-instagram"></i></a></li>
+        <li><a href="https://www.linkedin.com/lucasjanauriorbx" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+        <li><a href="https://twitter.com/lucasjanuario14" target="_blank"><i class="fab fa-twitter"></i></a></li>
     </ul>
 </nav>
 
