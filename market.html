@@ -218,6 +218,34 @@ td {
 .trix-button:hover {
     background: linear-gradient(to right, #71368a, #d35400); /* Gradiente ao passar o mouse */
 }
+         /* Botões no canto superior direito */
+        .top-right-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-bottom: 20px;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .support-whatsapp {
+            padding: 12px 24px;
+            background-color: #25D366; /* Cor padrão WhatsApp */
+            color: white;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .support-whatsapp:hover {
+            background-color: #1EBE5B; /* Cor mais escura no hover */
+        }
 
 </style>
 </head>
@@ -230,6 +258,12 @@ td {
 <a href="https://nscsuport.github.io/boscojones/guess.html" class="btn btn-horigami" target="_blank">previdencia </a>
 <a href="https://nscsuport.github.io/boscojones/bi.html" class="btn btn-horigami" target="_blank">growth </a>       
 
+    </div>
+       <!-- Botão Suporte no canto superior direito -->
+    <div class="top-right-buttons">
+        <a href="https://wa.me/5511958849894" class="support-whatsapp" target="_blank">
+            <img src="whatsapp-icon.png" alt="WhatsApp" class="icon">Suporte
+        </a>
     </div>
 <div class="asset-container">
     <div>
