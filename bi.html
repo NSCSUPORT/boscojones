@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard BRNC Inc. - Bosco Jones FX</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #000;
+            color: #00FF00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            padding: 0 10px;
+            overflow: hidden;
+        }
+
+        h1, h2, p {
+            text-align: center;
+            color: #00FF00;
+            text-shadow: 0 0 15px #7e00ff, 0 0 25px #ff0000;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 3rem;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #d1d1d1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .sector {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        footer {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #f0f000, #ff4500);
+            color: #000;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 0 0 8px #ff0000;
+            margin-top: 20px;
+            animation: neon 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes neon {
+            0% { text-shadow: 0 0 5px #ff0000; }
+            50% { text-shadow: 0 0 20px #ff4500; }
+            100% { text-shadow: 0 0 5px #ff0000; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        canvas {
+            width: 100%;
+            height: 300px;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            margin-top: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        canvas:hover {
+            transform: scale(1.05);
+        }
+
+        .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            color: #00FF00;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="loader" id="loadingMessage">Carregando gráficos...</div>
+
+    <h1>Dashboard BRNC Inc. - Bosco Jones FX</h1>
+    
+    <h2>Visão Geral da Performance de Mercado</h2>
+    <p>Bem-vindo ao Dashboard de **BRNC Inc.**, o coração do crescimento financeiro global. Aqui você poderá monitorar o crescimento e os resultados do BRNC Inc. em comparação com outros competidores, além de explorar o mercado de **HoloFi** e o impacto no **Bosco Jones FX**.</p>
+    
+    <div class="container">
+        <!-- Gráfico de Crescimento BRNC -->
+        <div class="sector">
+            <h2>Crescimento BRNC Inc. (%)</h2>
+            <canvas id="growthBRNCChart"></canvas>
+        </div>
+
+        <!-- Gráfico de Ranking Competidores -->
+        <div class="sector">
+            <h2>Ranking de Crescimento: BRNC Inc. vs Concorrentes</h2>
+            <canvas id="competitorRankingChart"></canvas>
+        </div>
+
+        <!-- Gráfico de Mercado Livre HoloFi -->
+        <div class="sector">
+            <h2>Mercado Livre HoloFi</h2>
+            <canvas id="marketHoloFiChart"></canvas>
+        </div>
+
+        <!-- Gráfico do Setor de Investimentos BRNC -->
+        <div class="sector">
+            <h2>Setor de Investimentos BRNC</h2>
+            <canvas id="investmentSectorChart"></canvas>
+        </div>
+    </div>
+
+    <footer>
+        © 2025 BRNC Inc. Todos os direitos reservados. Bosco Jones FX - Tecnologia e Inovação.
+    </footer>
+
+    <script>
+        // Ocultar mensagem de carregamento assim que os gráficos estiverem prontos
+        window.onload = function () {
+            document.getElementById("loadingMessage").style.display = "none";
+        }
+
+        // Dados para o gráfico de Crescimento BRNC
+        var growthBRNCChart = new Chart(document.getElementById('growthBRNCChart'), {
+            type: 'line',
+            data: {
+                labels: ['2022', '2023', '2024', '2025'],
+                datasets: [{
+                    label: 'Crescimento BRNC (%)',
+                    data: [10, 30, 50, 70],
+                    borderColor: '#4CAF50',
+                    backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                    borderWidth: 2,
+                    fill: true,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        backgroundColor: '#00FF00',
+                    }
+                },
+            }
+        });
+
+        // Dados para o gráfico de Ranking Competidores
+        var competitorRankingChart = new Chart(document.getElementById('competitorRankingChart'), {
+            type: 'bar',
+            data: {
+                labels: ['2022', '2023', '2024', '2025'],
+                datasets: [
+                    {
+                        label: 'BRNC Inc.',
+                        data: [1, 1, 1, 1],
+                        backgroundColor: '#4CAF50',
+                        borderColor: '#4CAF50',
+                        borderWidth: 2,
+                    },
+                    {
+                        label: 'Competidor 1',
+                        data: [3, 2, 2, 2],
+                        backgroundColor: '#ff5722',
+                        borderColor: '#ff5722',
+                        borderWidth: 2,
+                    },
+                    {
+                        label: 'Competidor 2',
+                        data: [2, 3, 3, 3],
+                        backgroundColor: '#f44336',
+                        borderColor: '#f44336',
+                        borderWidth: 2,
+                    },
+                    {
+                        label: 'Competidor 3',
+                        data: [4, 4, 4, 4],
+                        backgroundColor: '#2196F3',
+                        borderColor: '#2196F3',
+                        borderWidth: 2,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        backgroundColor: '#ff5722',
+                    }
+                },
+            }
+        });
+
+        // Dados para o gráfico de Mercado Livre HoloFi
+        var marketHoloFiChart = new Chart(document.getElementById('marketHoloFiChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Plano 1', 'Plano 2', 'Plano 3', 'Plano 4'],
+                datasets: [{
+                    label: 'Distribuição de Planos HoloFi',
+                    data: [40, 30, 20, 10],
+                    backgroundColor: ['#8e24aa', '#f44336', '#1e88e5', '#43a047'],
+                    borderWidth: 1,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        backgroundColor: '#1e88e5',
+                    }
+                },
+            }
+        });
+
+        // Dados para o gráfico do Setor de Investimentos BRNC
+        var investmentSectorChart = new Chart(document.getElementById('investmentSectorChart'), {
+            type: 'line',
+            data: {
+                labels: ['2022', '2023', '2024', '2025'],
+                datasets: [{
+                    label: 'Retorno Setor Investimentos BRNC (%)',
+                    data: [12, 28, 45, 65],
+                    borderColor: '#3f51b5',
+                    backgroundColor: 'rgba(63, 81, 181, 0.2)',
+                    borderWidth: 2,
+                    fill: true,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        backgroundColor: '#3f51b5',
+                    }
+                },
+            }
+        });
+    </script>
+
+</body>
+</html>
