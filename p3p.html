@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link rel="icon" href="logo.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>p3p/title>
+    <title>p3p</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -67,7 +67,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>DARK CDB </h1>
+        <h1>DARK CDB</h1>
         <form id="investment-form">
             <div class="form-group">
                 <label for="investment-value">Valor do Investimento:</label>
@@ -81,14 +81,38 @@
                 <label for="wallet-id">ID da Carteira:</label>
                 <input type="text" id="wallet-id" required>
             </div>
+            <div class="form-group">
+                <label for="giminiosidade">Giminiosidade Base:</label>
+                <input type="number" id="giminiosidade" required>
+            </div>
+            <div class="form-group">
+                <label for="currency">Moeda:</label>
+                <select id="currency" required>
+                    <option value="USD">USD</option>
+        <option value="BRL">BRL</option>
+        <option value="EUR">EUR</option>
+        <option value="JPY">JPY</option>
+        <option value="GBP">GBP</option>
+        <option value="BTC">BTC (Bitcoin)</option>
+        <option value="ETH">ETH (Ethereum)</option>
+        <option value="LTC">LTC (Litecoin)</option>
+        <option value="XRP">XRP (Ripple)</option>
+        <option value="ADA">ADA (Cardano)</option>
+        <option value="SOL">SOL (Solana)</option>ded -->
+                </select>
+            </div>
             <button type="button" id="generate-code-btn">Criar Ativo 3P3</button>
             <h3>Ativo Gerado: <span id="generated-asset">Nenhum</span></h3>
         </form>
+        <button type="button" id="confirm-btn" disabled>Confirmar Compra</button>
+        <div id="qrcode-container" style="display: none;">
+            <img id="qr-code-img" style="display: block; margin: 20px auto;">
+        </div>
     </div>
     <footer>
         <p>&copy; 2025 HoloFi. Todos os direitos reservados. Lucas Januário</p>
     </footer>
-        <script>
+    <script>
         let isConfirmedFirst = false;
         const conversionRateToDRT = 10;
         
@@ -177,6 +201,5 @@
             }
         }
     </script>
-
 </body>
 </html>
