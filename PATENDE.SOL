@@ -1,0 +1,68 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract IntellectualProperty {
+    address public owner;
+    string public intellectualPropertyName;
+    uint256 public registrationTimestamp;
+    string public description;
+
+    mapping(address => bool) public authorizedParties;
+
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    event AuthorizationGranted(address indexed authorizedParty);
+    event AuthorizationRevoked(address indexed authorizedParty);
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only the owner can perform this action.");
+        _;
+    }
+
+    modifier onlyAuthorized() {
+        require(authorizedParties[msg.sender] == true, "You are not authorized.");
+        _;
+    }
+
+    constructor(string memory _intellectualPropertyName, string memory _description) {
+        owner = msg.sender;
+        intellectualPropertyName = _intellectualPropertyName;
+        description = _description;
+        registrationTimestamp = block.timestamp;
+        emit OwnershipTransferred(address(0), owner);
+    }
+
+    // Grant authorization to a third party
+    function grantAuthorization(address _party) public onlyOwner {
+        authorizedParties[_party] = true;
+        emit AuthorizationGranted(_party);
+    }
+
+    // Revoke authorization from a third party
+    function revokeAuthorization(address _party) public onlyOwner {
+        authorizedParties[_party] = false;
+        emit AuthorizationRevoked(_party);
+    }
+
+    // Transfer ownership of the intellectual property
+    function transferOwnership(address newOwner) public onlyOwner {
+        require(newOwner != address(0), "New owner cannot be the zero address.");
+        address previousOwner = owner;
+        owner = newOwner;
+        emit OwnershipTransferred(previousOwner, newOwner);
+    }
+
+    // Retrieve information about the intellectual property
+    function getIntellectualPropertyInfo() public view returns (string memory, string memory, uint256, address) {
+        return (intellectualPropertyName, description, registrationTimestamp, owner);
+    }
+
+    // Function to authorize the use of the intellectual property
+    function authorizeUse(address user) public onlyAuthorized {
+        // Implement your logic for granting usage rights
+    }
+
+    // Function to revoke the use of the intellectual property
+    function revokeUse(address user) public onlyAuthorized {
+        // Implement your logic for revoking usage rights
+    }
+}
