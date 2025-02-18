@@ -88,7 +88,10 @@
     <footer>
         <p>&copy; 2025 HoloFi. Todos os direitos reservados. Lucas Januário</p>
     </footer>
-    <script>
+        <script>
+        let isConfirmedFirst = false;
+        const conversionRateToDRT = 10;
+        
         document.getElementById("generate-code-btn").addEventListener("click", function() {
             const crypto = window.crypto || window.msCrypto;
             const walletId = document.getElementById("wallet-id").value.trim();
@@ -112,6 +115,68 @@
                 document.getElementById("generated-asset").innerText = JSON.stringify(asset, null, 2);
             });
         });
+
+        document.getElementById('generate-code-btn').addEventListener('click', function () {
+            var investmentValue = parseFloat(document.getElementById('investment-value').value);
+            var profit = parseFloat(document.getElementById('profit').value);
+            var giminiosidadeBase = parseFloat(document.getElementById('giminiosidade').value);
+            var walletId = document.getElementById('wallet-id').value.trim();
+            var currency = document.getElementById('currency').value;
+
+            if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidadeBase) || walletId === '') {
+                alert('Por favor, preencha todos os campos corretamente!');
+                return;
+            }
+
+            var giminiosidadeMaxima = giminiosidadeBase * 2;
+            var totalProfit = investmentValue * (profit / 100);
+            var totalToPayInUSD = (investmentValue + totalProfit) * (1 + giminiosidadeMaxima / 100);
+
+            if (document.getElementById('use-credit').checked) {
+                totalProfit *= 0.85;
+            }
+
+            var totalToPayInDRT = totalToPayInUSD * conversionRateToDRT;
+
+            if (walletId === '0x6D8eF3D3271B17A75bF606eE59614735bF764D10') {
+                totalToPayInDRT = totalToPayInDRT * 1.05;
+            }
+
+            document.getElementById('total-to-pay').innerText = totalToPayInDRT.toFixed(2);
+            document.getElementById('wallet-id-output').innerText = walletId;
+            isConfirmedFirst = true;
+            updateConfirmButtonState();
+        });
+
+        document.getElementById('confirm-btn').addEventListener('click', function () {
+            if (isConfirmedFirst) {
+                var walletId = document.getElementById('wallet-id').value;
+                var totalToPay = parseFloat(document.getElementById('total-to-pay').innerText);
+                var amountInDRT = (totalToPay * 10 ** 18).toFixed(0);
+
+                var metamaskUri = `ethereum:${walletId}?value=${amountInDRT}&currency=DRT`;
+
+                var qrCodeImage = document.getElementById('qr-code-img');
+                qrCodeImage.src = 'https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(metamaskUri) + '&size=200x200';
+                qrCodeImage.style.display = 'block';
+
+                document.getElementById('qrcode-container').style.display = 'block';
+            } else {
+                alert('Por favor, gere os dados antes de confirmar a compra.');
+            }
+        });
+
+        function updateConfirmButtonState() {
+            var confirmBtn = document.getElementById('confirm-btn');
+            if (isConfirmedFirst) {
+                confirmBtn.classList.remove('disabled');
+                confirmBtn.disabled = false;
+            } else {
+                confirmBtn.classList.add('disabled');
+                confirmBtn.disabled = true;
+            }
+        }
     </script>
+
 </body>
 </html>
