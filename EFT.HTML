@@ -90,15 +90,46 @@
         <p>&copy; 2025 HoloFi. Todos os direitos reservados. Lucas Januário</p>
     </footer>
 <script>
+    let isConfirmedFirst = false;
+    const conversionRateToDRT = 10;
+
     document.getElementById("generate-code-btn").addEventListener("click", function() {
+        const crypto = window.crypto || window.msCrypto;
         const walletId = document.getElementById("wallet-id").value.trim();
         if (!walletId) {
             alert("Por favor, insira um ID de carteira válido.");
             return;
         }
-        const currency = document.getElementById("currency").value;
-        document.getElementById("generated-asset").innerText = "Ativo 3P3 criado em " + currency + " para " + walletId;
-        document.getElementById("confirm-btn").disabled = false;
+        function generateHash(data) {
+            return crypto.subtle.digest("SHA-256", new TextEncoder().encode(data)).then(hash => {
+                return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+            });
+        }
+        generateHash(walletId).then(hash => {
+            const asset = {
+                name: "Geminiosisade Scale Farm",
+                type: "3P3",
+                hash: hash,
+                network: "Dark USD",
+                features: { feminilidade: true, indexedBy: "darkusd" }
+            };
+            document.getElementById("generated-asset").innerText = JSON.stringify(asset, null, 2);
+        });
+    });
+
+    document.getElementById("confirm-btn").addEventListener("click", function() {
+        if (isConfirmedFirst) {
+            const walletId = document.getElementById("wallet-id").value;
+            const totalToPay = parseFloat(document.getElementById("total-to-pay").innerText);
+            const amountInDRT = (totalToPay * 10 ** 18).toFixed(0);
+            const metamaskUri = `ethereum:${walletId}?value=${amountInDRT}&currency=DRT`;
+            const qrCodeImage = document.getElementById("qr-code-img");
+            qrCodeImage.src = 'https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(metamaskUri) + '&size=200x200';
+            qrCodeImage.style.display = 'block';
+            document.getElementById("qrcode-container").style.display = 'block';
+        } else {
+            alert("Por favor, gere os dados antes de confirmar a compra.");
+        }
     });
 </script>
 </body>
