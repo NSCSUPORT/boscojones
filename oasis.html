@@ -8,6 +8,7 @@
     <title>BOSCO CELERON</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -190,7 +191,20 @@
                         <div id="existingKey" class="mb-3">
                             <label for="existingKeyInput" class="form-label">Digite a chave SSH existente (caso tenha):</label>
                             <input type="text" id="existingKeyInput" class="form-control" placeholder="Insira a chave SSH da sua VM" />
+                            <button class="btn-warning mt-2" onclick="validateKey()">Validar Chave</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráfico de Crescimento OS -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Crescimento do OS
+                    </div>
+                    <div class="card-body">
+                        <canvas id="growthChart" width="400" height="200"></canvas>
                     </div>
                 </div>
             </div>
@@ -199,7 +213,7 @@
     </div>
 
     <div class="footer">
-        <p>&copy; 2025 OASIS API - Todos os direitos reservados | <a href="https://holofi.vercel.app/">Sobre a tecnologia HoloFi</a></p>
+        <p>&copy; 2025 BOSCO CELERON API - Todos os direitos reservados | <a href="https://holofi.vercel.app/">Sobre a tecnologia HoloFi</a></p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -207,6 +221,23 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
     <script>
+        // Simular o gráfico de crescimento
+        const ctx = document.getElementById('growthChart').getContext('2d');
+        const growthChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                datasets: [{
+                    label: 'Crescimento do OS (%)',
+                    data: [5, 10, 15, 30, 50, 75, 100],
+                    borderColor: '#ff9800',
+                    backgroundColor: 'rgba(255, 152, 0, 0.2)',
+                    borderWidth: 2,
+                    fill: true,
+                }]
+            }
+        });
+
         // Verificar o status do servidor (simulação)
         function checkServerStatus() {
             const status = Math.random() > 0.5 ? "Conectado" : "Desconectado";
@@ -223,6 +254,18 @@
             document.getElementById('userStatus').textContent = `Usuário ${username} adicionado com sucesso!`;
             document.getElementById('userStatus').style.color = "green";
             document.getElementById('insertUserForm').reset();
+        }
+
+        // Validar chave SSH (simulação)
+        function validateKey() {
+            const existingKey = document.getElementById('existingKeyInput').value;
+            // Simulação de verificação da chave no banco de dados
+            const validKeys = ["ssh-rsa AAAA...VNC2", "ssh-rsa BBB...VNC3"];
+            if (validKeys.includes(existingKey)) {
+                alert("Chave válida!");
+            } else {
+                alert("Chave inválida!");
+            }
         }
     </script>
 </body>
