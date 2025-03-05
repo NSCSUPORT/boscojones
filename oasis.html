@@ -150,21 +150,14 @@
                 </div>
             </div>
 
-            <!-- Dashboard Card 2 -->
+            <!-- Dashboard Card 2 (Removido o formulário de inserção de usuário) -->
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
                         Inserir Novo Usuário
                     </div>
                     <div class="card-body">
-                        <form id="insertUserForm" onsubmit="return insertUser(event)">
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Nome do Usuário</label>
-                                <input type="text" class="form-control" id="username" required>
-                            </div>
-                            <button type="submit" class="btn-main w-100">Adicionar Usuário</button>
-                        </form>
-                        <p id="userStatus" style="color: orange;"></p>
+                        <p>Para adicionar um usuário, por favor, visualize o sistema.</p>
                     </div>
                 </div>
             </div>
@@ -213,7 +206,7 @@
     </div>
 
     <div class="footer">
-        <p>&copy; 2025 BOSCO CELERON API - Todos os direitos reservados | <a href="https://holofi.vercel.app/">Sobre a tecnologia HoloFi</a></p>
+        <p>&copy; 2025 BOSCO CELERON - Todos os direitos reservados | <a href="https://holofi.vercel.app/">Sobre a tecnologia HoloFi</a></p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -245,15 +238,6 @@
             document.getElementById('serverStatus').textContent = status;
             document.getElementById('serverStatus').style.color = status === "Conectado" ? "green" : "red";
             document.querySelector('.progress-bar').style.width = `${progress}%`;
-        }
-
-        // Inserir novo usuário (simulação)
-        function insertUser(event) {
-            event.preventDefault();
-            const username = document.getElementById('username').value;
-            document.getElementById('userStatus').textContent = `Usuário ${username} adicionado com sucesso!`;
-            document.getElementById('userStatus').style.color = "green";
-            document.getElementById('insertUserForm').reset();
         }
 
         // Validar chave SSH (simulação)
