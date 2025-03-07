@@ -249,3 +249,254 @@
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="logo.ico">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento Bosco Jones</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Seu código de estilo fornecido */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            color: #00FF00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            padding: 10px;
+            background-color: #000000;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin: 20px 0;
+            color: #00FF00;
+            text-align: center;
+            text-shadow: 0 0 10px #7e00ff, 0 0 20px #ff0000;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+            margin: 0 auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #e0e0e0;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #3c3c3c;
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        button {
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #fff;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+
+        #generate-code-btn {
+            background-color: #4CAF50;
+        }
+
+        #generate-code-btn:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        #confirm-btn {
+            background-color: #f44336;
+        }
+
+        #confirm-btn:hover:not(:disabled) {
+            background-color: #d32f2f;
+            transform: scale(1.05);
+        }
+
+        #qrcode-container {
+            background-color: #0000FF;
+            color: #ffffff;
+            font-family: "Courier New", monospace;
+            padding: 20px;
+            border-radius: 5px;
+            display: none;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            border: 2px solid #ffffff;
+        }
+
+        footer {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(45deg, #f0f000, #ff4500);
+            color: #000;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            margin-top: 20px;
+            animation: neon 1.5s ease-in-out infinite alternate;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        footer a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes neon {
+            0% {
+                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            }
+            50% {
+                text-shadow: 0 0 20px #ff0000, 0 0 30px #ff4500, 0 0 40px #f0f000;
+            }
+            100% {
+                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .form-group input,
+            .form-group select {
+                font-size: 0.9rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            footer {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            button {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+
+            #qrcode-container {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Pagamento Bosco Jones</h1>
+    <div class="container">
+        <div class="form-group">
+            <label for="payment-amount">Valor a ser pago (em R$):</label>
+            <input type="number" id="payment-amount" placeholder="Digite o valor em reais" />
+        </div>
+        <button id="generate-code-btn">Gerar Código QR</button>
+
+        <div id="qrcode-container">
+            <p>Para completar seu pagamento, escaneie o QR Code abaixo com o PIX.</p>
+            <div id="qrcode"></div>
+        </div>
+        
+        <button id="confirm-btn" disabled>Confirmar Pagamento</button>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Banco Bosco Jones | <a href="#">Termos e Condições</a></p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        // Definir o valor do dólar em reais (dark USD)
+        const darkUSD = 5.5;  // Exemplo de valor do dólar em reais
+
+        // Função para gerar um código hexadecimal aleatório
+        function generateHexadecimal() {
+            return Math.floor(Math.random() * 16777215).toString(16);
+        }
+
+        document.getElementById('generate-code-btn').addEventListener('click', function() {
+            const amountInBRL = document.getElementById('payment-amount').value;
+            if (amountInBRL) {
+                // Converter o valor para USD usando darkUSD
+                const amountInUSD = (amountInBRL / darkUSD).toFixed(2);
+                const transactionId = generateHexadecimal(); // Gerar número hexadecimal
+                const qrData = `PIX-QR|Valor=R$${amountInBRL} (${amountInUSD} USD)|Destino=BancoBoscoJones|ID=${transactionId}`;
+                document.getElementById('qrcode').innerHTML = '';
+                new QRCode(document.getElementById("qrcode"), qrData);
+                document.getElementById('qrcode-container').style.display = 'block';
+                document.getElementById('confirm-btn').disabled = false;
+            } else {
+                alert('Por favor, insira um valor.');
+            }
+        });
+
+        document.getElementById('confirm-btn').addEventListener('click', function() {
+            alert('Pagamento confirmado! A transação está sendo processada.');
+        });
+    </script>
+</body>
+</html>
