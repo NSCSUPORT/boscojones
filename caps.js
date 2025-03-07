@@ -155,3 +155,69 @@ app.listen(3000, () => {
 
 // Exporta funções para uso em outros módulos, se necessário
 module.exports = { checkBalance, transferDarkCoin, mintTokens };
+// caps.js
+const { applyTransactionFee } = require('./tax');  // Importa a função de taxa
+
+app.post('/criar-cobranca-pix', async (req, res) => {
+    const { chavePix, valor, plano } = req.body;
+    if (!chavePix || !valor || !plano) {
+        return res.status(400).json({ error: 'Faltam informações para gerar a cobrança' });
+    }
+    
+    // Aplica a taxa de transação
+    const valorComTaxa = applyTransactionFee(valor);  // Aplica a taxa de 5%
+
+    try {
+        // Envia a solicitação de cobrança Pix para a API do banco com o valor com a taxa
+        const response = await axios.post(`${pixApiUrl}/cobranca`, {
+            chave: chavePix,
+            valor: valorComTaxa,  // Envia o valor com a taxa
+            descricao: `Pagamento para o plano ${plano}`,
+        }, {
+            headers: {
+                'Authorization': `Bearer ${process.env.PIX_API_KEY}`
+            }
+        });
+        const qrCodeData = response.data.qrCode;  // Supõe que a resposta contenha o QR Code
+        res.json({ qrCode: qrCodeData });
+    } catch (error) {
+        console.error('Erro ao criar cobrança Pix:', error);
+        res.status(500).json({ error: 'Erro ao criar cobrança Pix' });
+    }
+  // caps.js
+app.post('/transfer-darkcoin', async (req, res) => {
+    const { toAddress, amount } = req.body;
+    if (!web3.utils.isAddress(toAddress) || !amount) {
+        return res.status(400).json({ error: 'Endereço ou valor inválido' });
+    }
+
+    // Aplica a taxa de transação
+    const amountWithFee = applyTransactionFee(amount);  // Aplica a taxa de 5%
+
+    try {
+        const tx = await transferDarkCoin(toAddress, amountWithFee);  // Usa o valor com taxa
+        res.json({ tx });
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao transferir tokens' });
+    }
+});
+// caps.js
+app.post('/mint-tokens', async (req, res) => {
+    const { amount } = req.body;
+    if (!amount) {
+        return res.status(400).json({ error: 'Valor para mintagem não especificado' });
+    }
+
+    // Aplica a taxa de transação
+    const amountWithFee = applyTransactionFee(amount);  // Aplica a taxa de 5%
+
+    try {
+        const tx = await mintTokens(amountWithFee);  // Usa o valor com taxa
+        res.json({ tx });
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao mintear tokens' });
+    }
+});
+
+});
+
