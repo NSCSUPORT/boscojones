@@ -1,65 +1,80 @@
-// app.js
+require('dotenv').config();  // Carrega as variáveis de ambiente do arquivo .env
 const express = require('express');
 const axios = require('axios');
-const { checkBalance, transferDarkCoin, mintTokens } = require('./blockchain'); // Importar funções da blockchain
-require('dotenv').config();
+const Web3 = require('web3');
+const bodyParser = require('body-parser');
 
+// Configuração do servidor Express
 const app = express();
-const port = process.env.PORT || 3000;
+app.use(bodyParser.json());
 
-// Middleware para lidar com JSON
-app.use(express.json());
+// Configuração da conexão Ethereum (Infura)
+const infuraUrl = process.env.INFURA_URL;  // A URL do Infura é carregada da variável de ambiente
+const web3 = new Web3(new Web3.providers.HttpProvider(infuraUrl));
 
-// URL da API da Dark Coin da main net
-const darkCoinAPIUrl = process.env.DARKCOIN_API_URL;
-const apiKey = process.env.DARKCOIN_API_KEY;
+// Defina o endereço da carteira e o contrato (substitua com seus próprios valores)
+const userAddress = '0xYourWalletAddress';  // Substitua com o endereço real
+const contractAddress = '0xYourContractAddress';  // Substitua com o endereço real do contrato
+const abi = [/* ABI do contrato aqui */];  // Substitua com a ABI do seu contrato inteligente
 
-// Rota para obter o saldo
-app.get('/balance', async (req, res) => {
+const darkCoinContract = new web3.eth.Contract(abi, contractAddress);
+
+// Endpoint para verificar o saldo do usuário
+app.get('/check-balance', async (req, res) => {
     try {
-        const balance = await checkBalance();  // Chama a função para verificar o saldo na blockchain
-        res.json({ balance });
+        const balance = await darkCoinContract.methods.balanceOf(userAddress).call();
+        const balanceInEther = web3.utils.fromWei(balance, 'ether');  // Converte de Wei para Ether
+        res.json({ balance: balanceInEther });
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Erro ao consultar o saldo');
+        console.error('Erro ao verificar saldo:', error);
+        res.status(500).json({ error: 'Erro ao verificar saldo' });
     }
 });
 
-// Rota para realizar uma transação
-app.post('/transaction', async (req, res) => {
-    const { amount, recipient } = req.body;
+// Endpoint para transferir DarkCoin
+app.post('/transfer', async (req, res) => {
+    const { toAddress, amount } = req.body;
 
-    if (!amount || !recipient) {
-        return res.status(400).send('Valor e destinatário são obrigatórios');
+    if (!toAddress || !amount) {
+        return res.status(400).json({ error: 'Faltando endereço ou valor para transferência' });
     }
 
     try {
-        const transaction = await transferDarkCoin(recipient, amount); // Chama a função para transferir
-        res.json(transaction);
+        const amountInWei = web3.utils.toWei(amount.toString(), 'ether');
+        const tx = await darkCoinContract.methods.transfer(toAddress, amountInWei).send({ from: userAddress });
+        res.json(tx);
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Erro ao realizar transação');
+        console.error('Erro ao transferir tokens:', error);
+        res.status(500).json({ error: 'Erro ao transferir tokens' });
     }
 });
 
-// Rota para mintar tokens
-app.post('/mint', async (req, res) => {
-    const { amount } = req.body;
+// Endpoint para gerar QR Code Pix
+const pixApiUrl = 'https://api.banco.com.br/pix';  // Substitua com a URL da API Pix real
 
-    if (!amount) {
-        return res.status(400).send('Valor de tokens a serem minteados é obrigatório');
+app.post('/criar-cobranca-pix', async (req, res) => {
+    const { chavePix, valor, plano } = req.body;
+
+    if (!chavePix || !valor || !plano) {
+        return res.status(400).json({ error: 'Faltam informações para gerar a cobrança' });
     }
 
     try {
-        const mintResult = await mintTokens(amount); // Chama a função para mintar tokens
-        res.json(mintResult);
+        const response = await axios.post(`${pixApiUrl}/cobrança`, {
+            chave: chavePix,
+            valor: valor,
+            descricao: `Pagamento para o plano ${plano}`,
+        });
+
+        const qrCodeData = response.data.qrCode; // QR Code gerado pela API do banco
+        res.json({ qrCode: qrCodeData });
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Erro ao mintear tokens');
+        console.error('Erro ao criar cobrança Pix:', error);
+        res.status(500).json({ error: 'Erro ao criar cobrança Pix' });
     }
 });
 
-// Iniciar o servidor Express
-app.listen(port, () => {
-    console.log(`Servidor rodando na porta ${port}`);
+// Inicia o servidor na porta 3000
+app.listen(3000, () => {
+    console.log('Servidor Express iniciado na porta 3000');
 });
