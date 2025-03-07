@@ -1,10 +1,9 @@
-// blockchain.js
 const Web3 = require('web3');
 const HoloFi = require('holofi-js');
 const { abi, address } = require('./DarkCoinABI.json');  // ABI do contrato e endereço do contrato
 
 // Configuração da conexão Ethereum (Infura ou outro provedor)
-const infuraUrl = process.env.INFURA_URL || 'https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID'; // Carregar a URL do Infura de variáveis de ambiente ou usar uma padrão
+const infuraUrl = process.env.INFURA_URL || 'https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID';  // Carregar a URL do Infura de variáveis de ambiente ou usar uma padrão
 const web3 = new Web3(infuraUrl);
 const holofi = new HoloFi(web3);
 
@@ -26,8 +25,12 @@ async function checkBalance() {
 
 // Função para transferir Dark Coin
 async function transferDarkCoin(toAddress, amount) {
+    // Validações de entrada
     if (!web3.utils.isAddress(toAddress)) {
         throw new Error('Endereço inválido');
+    }
+    if (isNaN(amount) || amount <= 0) {
+        throw new Error('Quantidade inválida');
     }
 
     const amountInWei = web3.utils.toWei(amount.toString(), 'ether');
@@ -41,6 +44,10 @@ async function transferDarkCoin(toAddress, amount) {
 
 // Função para mintar novos tokens
 async function mintTokens(amount) {
+    if (isNaN(amount) || amount <= 0) {
+        throw new Error('Quantidade inválida');
+    }
+
     const amountInWei = web3.utils.toWei(amount.toString(), 'ether');
     
     try {
@@ -59,9 +66,9 @@ async function mintTokens(amount) {
 
 // Função de verificação de autorização (exemplo, pode ser baseada em contrato ou outro critério)
 async function isAuthorizedToMint(address) {
-    // Aqui você pode adicionar uma lógica real para verificar se o endereço tem permissão de mintagem
-    // Exemplo: Verifique um estado no contrato inteligente ou em uma lista de permissões
-    return address === '0xAuthorizedAddress';  // Substitua com a lógica real
+    // Lógica de autorização real pode ser baseada em um critério como verificação em contrato inteligente ou lista de permissões
+    const ownerAddress = await darkCoinContract.methods.owner().call();  // Supondo que o contrato tenha uma função owner() que retorna o dono
+    return address === ownerAddress;  // Verifique se o endereço tem permissão para mintar
 }
 
 // Exportar funções para uso na API
