@@ -67,42 +67,23 @@
 </head>
 <body>
     <div class="container">
-        <h1>DARK CDB</h1>
-        <form id="investment-form">
+        <h1>PIX para Nota Fiscal</h1>
+        <form id="pix-form">
             <div class="form-group">
-                <label for="investment-value">Valor do Investimento:</label>
-                <input type="number" id="investment-value" required>
+                <label for="amount">Valor:</label>
+                <input type="number" id="amount" required>
             </div>
             <div class="form-group">
-                <label for="profit">Lucro Esperado (%):</label>
-                <input type="number" id="profit" required>
+                <label for="pix-key">Chave Pix (ID HoloFi):</label>
+                <input type="text" id="pix-key" required>
             </div>
             <div class="form-group">
-                <label for="wallet-id">ID da Carteira:</label>
-                <input type="text" id="wallet-id" required>
+                <label for="description">Descrição da Nota:</label>
+                <input type="text" id="description" required>
             </div>
-            <div class="form-group">
-                <label for="giminiosidade">Giminiosidade Base:</label>
-                <input type="number" id="giminiosidade" required>
-            </div>
-            <div class="form-group">
-                <label for="currency">Moeda:</label>
-                <select id="currency" required>
-                    <option value="USD">USD</option>
-                    <option value="ETH">ETH (Ethereum)</option>
-                    <option value="BNB">BNB (Binance Smart Chain)</option>
-                    <option value="MATIC">MATIC (Polygon)</option>
-                    <option value="AVAX">AVAX (Avalanche)</option>
-                    <option value="FANTOM">FANTOM (Fantom)</option>
-                    <option value="HECO">HECO (HECO Chain)</option>
-                    <option value="OKEX">OKEX (OKExChain)</option>
-                    <option value="XDAI">XDAI (xDai Chain)</option>
-                </select>
-            </div>
-            <button type="button" id="generate-code-btn">Criar Ativo 3P3</button>
-            <h3>Ativo Gerado: <span id="generated-asset">Nenhum</span></h3>
+            <button type="button" id="generate-code-btn">Gerar QR Code</button>
+            <h3>QR Code Gerado:</h3>
         </form>
-        <button type="button" id="confirm-btn" disabled>Confirmar Compra</button>
         <div id="qrcode-container" style="display: none;">
             <img id="qr-code-img" style="display: block; margin: 20px auto;">
         </div>
@@ -110,89 +91,53 @@
     <footer>
         <p>&copy; 2025 HoloFi. Todos os direitos reservados. Lucas Januário</p>
     </footer>
+
 <script>
-    let isConfirmedFirst = false;
-    const conversionRateToDRT = 10;
-
     document.getElementById("generate-code-btn").addEventListener("click", function() {
-        const crypto = window.crypto || window.msCrypto;
-        const walletId = document.getElementById("wallet-id").value.trim();
-        if (!walletId) {
-            alert("Por favor, insira um ID de carteira válido.");
-            return;
-        }
-        function generateHash(data) {
-            return crypto.subtle.digest("SHA-256", new TextEncoder().encode(data)).then(hash => {
-                return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
-            });
-        }
-        generateHash(walletId).then(hash => {
-            const asset = {
-                name: "Geminiosisade Scale Farm",
-                type: "3P3",
-                hash: hash,
-                network: "Dark USD",
-                features: { feminilidade: true, indexedBy: "darkusd" }
-            };
-            document.getElementById("generated-asset").innerText = JSON.stringify(asset, null, 2);
-        });
-    });
+        const amount = parseFloat(document.getElementById('amount').value);
+        const pixKey = document.getElementById('pix-key').value.trim();
+        const description = document.getElementById('description').value.trim();
 
-    document.getElementById('generate-code-btn').addEventListener('click', function () {
-        var investmentValue = parseFloat(document.getElementById('investment-value').value);
-        var profit = parseFloat(document.getElementById('profit').value);
-        var giminiosidadeBase = parseFloat(document.getElementById('giminiosidade').value);
-        var walletId = document.getElementById('wallet-id').value.trim();
-        var currency = document.getElementById('currency').value;
-
-        if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidadeBase) || walletId === '') {
+        if (isNaN(amount) || pixKey === '' || description === '') {
             alert('Por favor, preencha todos os campos corretamente!');
             return;
         }
 
-        var giminiosidadeMaxima = giminiosidadeBase * 2;
-        var totalProfit = investmentValue * (profit / 100);
-        var totalToPayInUSD = (investmentValue + totalProfit) * (1 + giminiosidadeMaxima / 100);
+        // Gerar um HoloFi ID único para a transação
+        const holoFiId = generateHoloFiId();
 
-        var totalToPayInDRT = totalToPayInUSD * conversionRateToDRT;
+        const pixUri = generatePixUri(amount, pixKey, description, holoFiId);
 
-        if (walletId === '0x6D8eF3D3271B17A75bF606eE59614735bF764D10') {
-            totalToPayInDRT = totalToPayInDRT * 1.05;
-        }
+        const qrCodeImage = document.getElementById('qr-code-img');
+        qrCodeImage.src = 'https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(pixUri) + '&size=200x200';
+        qrCodeImage.style.display = 'block';
 
-        document.getElementById('total-to-pay').innerText = totalToPayInDRT.toFixed(2);
-        document.getElementById('wallet-id-output').innerText = walletId;
-        isConfirmedFirst = true;
-        updateConfirmButtonState();
+        document.getElementById('qrcode-container').style.display = 'block';
     });
 
-    document.getElementById('confirm-btn').addEventListener('click', function () {
-        if (isConfirmedFirst) {
-            var walletId = document.getElementById('wallet-id').value;
-            var totalToPay = parseFloat(document.getElementById('total-to-pay').innerText);
-            var amountInDRT = (totalToPay * 10 ** 18).toFixed(0);
+    function generateHoloFiId() {
+        // Gerar um HoloFi ID único para cada transação, por exemplo, utilizando UUID
+        return 'holofi-' + Math.random().toString(36).substr(2, 9);  // Exemplo de ID único
+    }
 
-            var metamaskUri = `ethereum:${walletId}?value=${amountInDRT}&currency=DRT`;
+    function generatePixUri(amount, pixKey, description, holoFiId) {
+        // Formato do QR Code Pix
+        const pixData = {
+            "pix": {
+                "chave": pixKey, // HoloFi ID
+                "valor": amount.toFixed(2),
+                "descricao": description,
+                "holoFiId": holoFiId, // HoloFi ID único para a transação
+                "cep": "00000-000",
+                "cidade": "São Paulo",
+                "uf": "SP",
+                "telefone": "+55 11 12345678"
+            }
+        };
 
-            var qrCodeImage = document.getElementById('qr-code-img');
-            qrCodeImage.src = 'https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(metamaskUri) + '&size=200x200';
-            qrCodeImage.style.display = 'block';
+        const pixUri = `00020101021226830014BR.GOV.BCB.PIX0136${pixData.pix.chave}520400005303986540${amount.toFixed(2)}5802BR5925${pixData.pix.descricao}6009${pixData.pix.cep}62130505${pixData.pix.telefone}6304${pixData.pix.holoFiId}`;
 
-            document.getElementById('qrcode-container').style.display = 'block';
-        } else {
-            alert('Por favor, gere os dados antes de confirmar a compra.');
-        }
-    });
-
-    function updateConfirmButtonState() {
-        var confirmBtn = document.getElementById('confirm-btn');
-        if (isConfirmedFirst) {
-            confirmBtn.classList.remove('disabled');
-            confirmBtn.removeAttribute('disabled');
-        } else {
-            confirmBtn.classList.add('disabled');
-            confirmBtn.setAttribute('disabled', 'true');
-        }
+        return pixUri;
     }
 </script>
 </body>
