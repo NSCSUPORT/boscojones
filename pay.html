@@ -1,380 +1,251 @@
 <!DOCTYPE html>
-<link rel="icon" href="logo.ico">
-
-<html lang="pt-BR">
-
+<html lang="pt-br">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <link rel="icon" href="logo.ico">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>trix fi</title>
-    <link rel="icon" href="https://nscsuport.github.io/OZZ/z.png" type="image/x-icon">
+    <title>Pagamento Bosco Jones</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
-   * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+        /* Seu código de estilo fornecido */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-body {
-    font-family: 'Roboto', Arial, sans-serif;
-    color: #00FF00;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    flex-direction: column;
-    padding: 10px;
-    background-color: #000000;
-}
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            color: #00FF00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            padding: 10px;
+            background-color: #000000;
+        }
 
-h1 {
-    font-size: 1.8rem;
-    margin: 20px 0;
-    color: #00FF00;
-    text-align: center;
-    text-shadow: 0 0 10px #7e00ff, 0 0 20px #ff0000;
-}
+        h1 {
+            font-size: 1.8rem;
+            margin: 20px 0;
+            color: #00FF00;
+            text-align: center;
+            text-shadow: 0 0 10px #7e00ff, 0 0 20px #ff0000;
+        }
 
-.container {
-    width: 100%;
-    max-width: 500px;
-    background-color: rgba(30, 30, 30, 0.9);
-    border-radius: 15px;
-    padding: 25px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-    margin: 0 auto;
-    backdrop-filter: blur(10px);
-}
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+            margin: 0 auto;
+            backdrop-filter: blur(10px);
+        }
 
-.form-group {
-    margin-bottom: 20px;
-}
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #e0e0e0;
-}
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #e0e0e0;
+        }
 
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #3c3c3c;
-    background-color: #1e1e1e;
-    color: #e0e0e0;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-}
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #3c3c3c;
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
 
-.form-group input:focus,
-.form-group select:focus {
-    outline: none;
-    border-color: #4CAF50;
-}
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
 
-button {
-    padding: 10px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    color: #fff;
-    border: none;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    text-align: center;
-    width: 100%;
-    margin-top: 15px;
-}
+        button {
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #fff;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center;
+            width: 100%;
+            margin-top: 15px;
+        }
 
-button:disabled {
-    background-color: #555;
-    cursor: not-allowed;
-}
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
 
-#generate-code-btn {
-    background-color: #4CAF50;
-}
+        #generate-code-btn {
+            background-color: #4CAF50;
+        }
 
-#generate-code-btn:hover {
-    background-color: #45a049;
-    transform: scale(1.05);
-}
+        #generate-code-btn:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
 
-#confirm-btn {
-    background-color: #f44336;
-}
+        #confirm-btn {
+            background-color: #f44336;
+        }
 
-#confirm-btn:hover:not(:disabled) {
-    background-color: #d32f2f;
-    transform: scale(1.05);
-}
+        #confirm-btn:hover:not(:disabled) {
+            background-color: #d32f2f;
+            transform: scale(1.05);
+        }
 
-#qrcode-container {
-    background-color: #003366; /* Azul semelhante à tela azul do Windows 97 */
-    color: #ffffff; /* Texto branco */
-    padding: 20px;
-    border-radius: 5px;
-    display: none;
-}
+        #qrcode-container {
+            background-color: #0000FF;
+            color: #ffffff;
+            font-family: "Courier New", monospace;
+            padding: 20px;
+            border-radius: 5px;
+            display: none;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            border: 2px solid #ffffff;
+        }
 
-#qrcode-container {
-    background-color: #0000FF; /* Azul característico da tela azul do Windows 7 */
-    color: #ffffff; /* Texto branco */
-    font-family: "Courier New", monospace; /* Fonte monoespaçada para simular o estilo da tela de erro */
-    padding: 20px;
-    border-radius: 5px;
-    display: none;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Sombra para destacar o container */
-    border: 2px solid #ffffff; /* Borda branca */
-}
+        footer {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(45deg, #f0f000, #ff4500);
+            color: #000;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            margin-top: 20px;
+            animation: neon 1.5s ease-in-out infinite alternate;
+        }
 
-footer {
-    width: 100%;
-    padding: 10px;
-    background: linear-gradient(45deg, #f0f000, #ff4500);
-    color: #000;
-    text-align: center;
-    font-size: 0.9rem;
-    font-weight: bold;
-    letter-spacing: 2px;
-    text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
-    margin-top: 20px;
-    animation: neon 1.5s ease-in-out infinite alternate;
-}
+        footer p {
+            margin: 0;
+        }
 
-footer p {
-    margin: 0;
-}
+        footer a {
+            color: #000;
+            text-decoration: none;
+        }
 
-footer a {
-    color: #000;
-    text-decoration: none;
-}
+        footer a:hover {
+            text-decoration: underline;
+        }
 
-footer a:hover {
-    text-decoration: underline;
-}
+        @keyframes neon {
+            0% {
+                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            }
+            50% {
+                text-shadow: 0 0 20px #ff0000, 0 0 30px #ff4500, 0 0 40px #f0f000;
+            }
+            100% {
+                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            }
+        }
 
-@keyframes neon {
-    0% {
-        text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
-    }
-    50% {
-        text-shadow: 0 0 20px #ff0000, 0 0 30px #ff4500, 0 0 40px #f0f000;
-    }
-    100% {
-        text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
-    }
-}
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
 
-@media (max-width: 768px) {
-    .container {
-        padding: 15px;
-    }
+            .form-group input,
+            .form-group select {
+                font-size: 0.9rem;
+            }
 
-    .form-group input,
-    .form-group select {
-        font-size: 0.9rem;
-    }
+            h1 {
+                font-size: 1.5rem;
+            }
 
-    h1 {
-        font-size: 1.5rem;
-    }
+            footer {
+                font-size: 0.8rem;
+            }
+        }
 
-    footer {
-        font-size: 0.8rem;
-    }
-}
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
 
-@media (max-width: 480px) {
-    .container {
-        padding: 10px;
-    }
+            button {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
 
-    button {
-        font-size: 0.9rem;
-        padding: 8px;
-    }
-
-    #qrcode-container {
-        font-size: 0.9rem;
-    }
-}
-
+            #qrcode-container {
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
-
 <body>
-    <h1>HoloFi</h1>
+    <h1>Pagamento Bosco Jones</h1>
     <div class="container">
-     <!-- Seção de seleção de moeda -->
-    <div class="form-group">
-        <label for="currency">Selecione a Moeda / Ativo</label>
-        <select id="currency" required>
-            <option value="BRL">Real Brasileiro (BRL)</option>
-            <option value="EUR">Euro (EUR)</option>
-            <option value="SOL">Solana (SOL)</option>
-            <option value="BTC">Bitcoin (BTC)</option>
-            <option value="ETH">Ethereum (ETH)</option>
-            <option value="trix"> $10.000,00</p/>
-            <!-- Adicionando os nomes dos ativos -->
-            <option value="Genesis 1">Genesis 1</option>
-            <option value="Genesis 2">Genesis 2</option>
-            <option value="Genesis 3">Genesis 3</option>
-            <option value="Genesis 4">Genesis 4</option>
-            <option value="Ephesians 1">Ephesians 1</option>
-            <option value="Ephesians 2">Ephesians 2</option>
-            <option value="Ephesians 3">Ephesians 3</option>
-            <option value="Ephesians 4">Ephesians 4</option>
-            <option value="Psalms 1">Psalms 1</option>
-            <option value="Psalms 2">Psalms 2</option>
-            <option value="Psalms 3">Psalms 3</option>
-            <option value="Psalms 4">Psalms 4</option>
-            <option value="Luke 1">Luke 1</option>
-            <option value="Luke 2">Luke 2</option>
-            <option value="Luke 3">Luke 3</option>
-            <option value="Luke 4">Luke 4</option>
-            <option value="Medusa 1">Medusa 1</option>
-            <option value="Medusa 2">Medusa 2</option>
-            <option value="Medusa 3">Medusa 3</option>
-            <option value="Medusa 4">Medusa 4</option>
-            <option value="Cerberus 1">Cerberus 1</option>
-            <option value="Cerberus 2">Cerberus 2</option>
-            <option value="Cerberus 3">Cerberus 3</option>
-            <option value="Cerberus 4">Cerberus 4</option>
-            <option value="Minotaur 1">Minotaur 1</option>
-            <option value="Minotaur 2">Minotaur 2</option>
-            <option value="Minotaur 3">Minotaur 3</option>
-            <option value="Minotaur 4">Minotaur 4</option>
-        </select>
+        <div class="form-group">
+            <label for="payment-amount">Valor a ser pago (em R$):</label>
+            <input type="number" id="payment-amount" placeholder="Digite o valor em reais" />
+        </div>
+        <button id="generate-code-btn">Gerar Código QR</button>
+
+        <div id="qrcode-container">
+            <p>Para completar seu pagamento, escaneie o QR Code abaixo com o PIX.</p>
+            <div id="qrcode"></div>
+        </div>
+        
+        <button id="confirm-btn" disabled>Confirmar Pagamento</button>
     </div>
-
-        <!-- Input para o ID da Wallet -->
-        <div class="form-group">
-            <label for="wallet-id">Insira seu ID MetaMask</label>
-            <input type="text" id="wallet-id" placeholder="Insira seu ID MetaMask" required />
-        </div>
-
-        <!-- Input para o valor do investimento -->
-        <div class="form-group">
-            <label for="investment-value">Valor do Investimento</label>
-            <input type="number" id="investment-value" placeholder="Insira o valor do investimento" required />
-        </div>
-
-        <!-- Input para a porcentagem de lucro -->
-        <div class="form-group">
-            <label for="profit">Porcentagem de Lucro</label>
-            <input type="number" id="profit" placeholder="Insira a porcentagem de lucro" required />
-        </div>
-
-        <!-- Input para a taxa de giminiose -->
-        <div class="form-group">
-            <label for="giminiosidade">Taxa de Giminiose</label>
-            <input type="number" id="giminiosidade" placeholder="Insira a taxa de giminiose" required />
-        </div>
-
-        <!-- Botões de ação -->
-        <div>
-            <button id="generate-code-btn">Gerar Dados</button>
-            <button id="confirm-btn" class="disabled" disabled>Confirmar e Gerar QR Code</button>
-        </div>
-        <DIV> 
-<SECTION></SECTION>
-        </DIV>
-        <!-- Container para exibir QR code e dados -->
-        <div id="qrcode-container" style="display: none;">
-            <p>ID da Wallet: <span id="wallet-id-output"></span></p>
-            <p>Total a Pagar: <span id="total-to-pay"></span> ETH</p>
-            <img id="qr-code-img" src="" alt="QR Code" style="display: none;" />
-        </div>
-    </div>
-
-    <!-- Rodapé -->
-    <footer>
-        <p>&copy; 2025 trix fi bosco jones fx . Todos os direitos reservados.</p>
-    </footer>
-<script>
-    let isConfirmedFirst = false;
     
-    // Taxa de conversão (exemplo: 1 USD = 10 DRT)
-    const conversionRateToDRT = 10; 
+    <footer>
+        <p>&copy; 2025 Banco Bosco Jones | <a href="#">Termos e Condições</a></p>
+    </footer>
 
-    // Evento para gerar o código de pagamento
-    document.getElementById('generate-code-btn').addEventListener('click', function () {
-        var investmentValue = parseFloat(document.getElementById('investment-value').value);
-        var profit = parseFloat(document.getElementById('profit').value);
-        var giminiosidadeBase = parseFloat(document.getElementById('giminiosidade').value);
-        var walletId = document.getElementById('wallet-id').value.trim();
-        var currency = document.getElementById('currency').value;
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        // Definir o valor do dólar em reais (dark USD)
+        const darkUSD = 5.5;  // Exemplo de valor do dólar em reais
 
-        if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidadeBase) || walletId === '') {
-            alert('Por favor, preencha todos os campos corretamente!');
-            return;
+        // Função para gerar um código hexadecimal aleatório
+        function generateHexadecimal() {
+            return Math.floor(Math.random() * 16777215).toString(16);
         }
 
-        // Cálculo da geminiosidade máxima
-        var giminiosidadeMaxima = giminiosidadeBase * 2;
+        document.getElementById('generate-code-btn').addEventListener('click', function() {
+            const amountInBRL = document.getElementById('payment-amount').value;
+            if (amountInBRL) {
+                // Converter o valor para USD usando darkUSD
+                const amountInUSD = (amountInBRL / darkUSD).toFixed(2);
+                const transactionId = generateHexadecimal(); // Gerar número hexadecimal
+                const qrData = `PIX-QR|Valor=R$${amountInBRL} (${amountInUSD} USD)|Destino=BancoBoscoJones|ID=${transactionId}`;
+                document.getElementById('qrcode').innerHTML = '';
+                new QRCode(document.getElementById("qrcode"), qrData);
+                document.getElementById('qrcode-container').style.display = 'block';
+                document.getElementById('confirm-btn').disabled = false;
+            } else {
+                alert('Por favor, insira um valor.');
+            }
+        });
 
-        // Cálculo do lucro total
-        var totalProfit = investmentValue * (profit / 100);
-        var totalToPayInUSD = (investmentValue + totalProfit) * (1 + giminiosidadeMaxima / 100);
-
-        // Conversão para DRT
-        var totalToPayInDRT = totalToPayInUSD * conversionRateToDRT;
-
-        // Aplica taxa de 5% em DRT para carteira específica
-        if (walletId === '0x6D8eF3D3271B17A75bF606eE59614735bF764D10') {
-            totalToPayInDRT = totalToPayInDRT * 1.05;
-        }
-
-        document.getElementById('total-to-pay').innerText = totalToPayInDRT.toFixed(2);
-
-        // Atualiza o ID da carteira
-        document.getElementById('wallet-id-output').innerText = walletId;
-
-        // Confirmação de primeira vez
-        isConfirmedFirst = true;
-        updateConfirmButtonState();
-    });
-
-    // Evento para confirmar a compra
-    document.getElementById('confirm-btn').addEventListener('click', function () {
-        if (isConfirmedFirst) {
-            // Gerar URI MetaMask (exemplo para transferência DRT)
-            var walletId = document.getElementById('wallet-id').value;
-            var currency = document.getElementById('currency').value;
-            var totalToPay = parseFloat(document.getElementById('total-to-pay').innerText);
-            var amountInDRT = (totalToPay * 10 ** 18).toFixed(0);
-
-            // Exemplo de URI para transferência DRT
-            var metamaskUri = `ethereum:${walletId}?value=${amountInDRT}&currency=DRT`;
-
-            var qrCodeImage = document.getElementById('qr-code-img');
-            qrCodeImage.src = 'https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(metamaskUri) + '&size=200x200';
-            qrCodeImage.style.display = 'block';
-
-            // Exibe o QR Code
-            document.getElementById('qrcode-container').style.display = 'block';
-        } else {
-            alert('Por favor, gere os dados antes de confirmar a compra.');
-        }
-    });
-
-    // Função para habilitar/desabilitar o botão de confirmação
-    function updateConfirmButtonState() {
-        var confirmBtn = document.getElementById('confirm-btn');
-        if (isConfirmedFirst) {
-            confirmBtn.classList.remove('disabled');
-            confirmBtn.disabled = false;
-        } else {
-            confirmBtn.classList.add('disabled');
-            confirmBtn.disabled = true;
-        }
-    }
-</script>
-
+        document.getElementById('confirm-btn').addEventListener('click', function() {
+            alert('Pagamento confirmado! A transação está sendo processada.');
+        });
+    </script>
 </body>
-
 </html>
