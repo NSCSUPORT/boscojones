@@ -1,0 +1,14 @@
+{
+  "name": "darkcoin-express",
+  "version": "1.0.0",
+  "description": "API Express para interagir com a main net da Dark Coin",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "axios": "^1.2.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1"
+  }
+}
