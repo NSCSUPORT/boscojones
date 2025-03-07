@@ -89,14 +89,14 @@
                 <label for="currency">Moeda:</label>
                 <select id="currency" required>
                     <option value="USD">USD</option>
-          <option value="ETH">ETH (Ethereum)</option>
-    <option value="BNB">BNB (Binance Smart Chain)</option>
-    <option value="MATIC">MATIC (Polygon)</option>
-    <option value="AVAX">AVAX (Avalanche)</option>
-    <option value="FANTOM">FANTOM (Fantom)</option>
-    <option value="HECO">HECO (HECO Chain)</option>
-    <option value="OKEX">OKEX (OKExChain)</option>
-    <option value="XDAI">XDAI (xDai Chain)</option>
+                    <option value="ETH">ETH (Ethereum)</option>
+                    <option value="BNB">BNB (Binance Smart Chain)</option>
+                    <option value="MATIC">MATIC (Polygon)</option>
+                    <option value="AVAX">AVAX (Avalanche)</option>
+                    <option value="FANTOM">FANTOM (Fantom)</option>
+                    <option value="HECO">HECO (HECO Chain)</option>
+                    <option value="OKEX">OKEX (OKExChain)</option>
+                    <option value="XDAI">XDAI (xDai Chain)</option>
                 </select>
             </div>
             <button type="button" id="generate-code-btn">Criar Ativo 3P3</button>
@@ -154,10 +154,6 @@
         var totalProfit = investmentValue * (profit / 100);
         var totalToPayInUSD = (investmentValue + totalProfit) * (1 + giminiosidadeMaxima / 100);
 
-        if (document.getElementById('use-credit').checked) {
-            totalProfit *= 0.85;
-        }
-
         var totalToPayInDRT = totalToPayInUSD * conversionRateToDRT;
 
         if (walletId === '0x6D8eF3D3271B17A75bF606eE59614735bF764D10') {
@@ -192,13 +188,12 @@
         var confirmBtn = document.getElementById('confirm-btn');
         if (isConfirmedFirst) {
             confirmBtn.classList.remove('disabled');
-            confirmBtn.disabled = false;
+            confirmBtn.removeAttribute('disabled');
         } else {
             confirmBtn.classList.add('disabled');
-            confirmBtn.disabled = true;
+            confirmBtn.setAttribute('disabled', 'true');
         }
     }
 </script>
-
 </body>
 </html>
