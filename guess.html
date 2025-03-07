@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link rel="icon" href="logo.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>previdencia</title>
+    <title>Previdência</title>
     <style>
         * {
             box-sizing: border-box;
@@ -131,35 +131,42 @@
             50% { text-shadow: 0 0 20px #ff4500; }
             100% { text-shadow: 0 0 5px #ff0000; }
         }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                width: 90%;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>MONEY PREVIDENCE</h1>
-        <form id="investment-form">
+        <form id="investment-form" novalidate>
             <div class="form-group">
-                <label for="investment-value">Valor do Investimento:</label>
-                <input type="number" id="investment-value" required>
+                <label for="investment-value">Valor do Investimento (R$):</label>
+                <input type="number" id="investment-value" name="investment-value" min="1" required aria-required="true">
             </div>
 
             <div class="form-group">
                 <label for="profit">Lucro Esperado (%):</label>
-                <input type="number" id="profit" required>
+                <input type="number" id="profit" name="profit" min="0" required aria-required="true">
             </div>
 
             <div class="form-group">
-                <label for="giminiosidade">Giminiosidade:</label>
-                <input type="number" id="giminiosidade" required>
+                <label for="giminiosidade">Giminiosidade (em %):</label>
+                <input type="number" id="giminiosidade" name="giminiosidade" min="0" required aria-required="true">
             </div>
 
             <div class="form-group">
                 <label for="wallet-id">ID da Carteira:</label>
-                <input type="text" id="wallet-id" required>
+                <input type="text" id="wallet-id" name="wallet-id" required aria-required="true">
             </div>
 
             <div class="form-group">
                 <label for="currency">Moeda:</label>
-                <select id="currency" required>
+                <select id="currency" name="currency" required aria-required="true">
                     <option value="USD">USD</option>
                     <option value="BRL">BRL</option>
                     <option value="ETH">Ethereum</option>
@@ -176,7 +183,24 @@
     </div>
 
     <footer>
-        <p>&copy; 2025 HoloFi. Todos os direitos reservados.Lucas januario </p>
+        <p>&copy; 2025 HoloFi. Todos os direitos reservados. Lucas Januário</p>
     </footer>
+
+    <script>
+        document.getElementById("generate-code-btn").addEventListener("click", function() {
+            // Example: Calculate total to pay based on input values
+            var investmentValue = parseFloat(document.getElementById("investment-value").value);
+            var profit = parseFloat(document.getElementById("profit").value);
+            var geminiosidade = parseFloat(document.getElementById("giminiosidade").value);
+
+            if (investmentValue && profit && geminiosidade) {
+                var totalToPay = investmentValue + (investmentValue * profit / 100) + (investmentValue * geminiosidade / 100);
+                document.getElementById("total-to-pay").textContent = totalToPay.toFixed(2);
+
+                // Enable the confirm button after generating the code
+                document.getElementById("confirm-btn").disabled = false;
+            }
+        });
+    </script>
 </body>
 </html>
