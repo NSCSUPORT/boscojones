@@ -21,13 +21,15 @@
       flex-direction: column;
       padding: 10px;
       background-color: #000;
+      overflow: hidden;
     }
     h1 {
-      font-size: 2rem;
+      font-size: 3rem;
       margin-bottom: 20px;
       color: #00FF00;
       text-align: center;
-      text-shadow: 0 0 15px #7e00ff, 0 0 25px #ff0000;
+      text-shadow: 0 0 25px #7e00ff, 0 0 35px #ff0000;
+      animation: glowingText 1.5s infinite alternate;
     }
     .container {
       width: 100%;
@@ -37,6 +39,8 @@
       padding: 30px;
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
       backdrop-filter: blur(12px);
+      border: 2px solid #4CAF50;
+      animation: gemination 2s ease-in-out infinite;
     }
     .form-group {
       margin-bottom: 15px;
@@ -56,12 +60,13 @@
       background-color: #1e1e1e;
       color: #e0e0e0;
       font-size: 1rem;
-      transition: border-color 0.3s ease;
+      transition: border-color 0.3s ease, transform 0.3s ease;
     }
     .form-group input:focus,
     .form-group select:focus {
       outline: none;
       border-color: #4CAF50;
+      transform: scale(1.05);
     }
     button {
       padding: 12px;
@@ -74,23 +79,15 @@
       text-align: center;
       width: 100%;
       margin-top: 10px;
+      background-color: #4CAF50;
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.7);
     }
     button:disabled {
       background-color: #555;
       cursor: not-allowed;
     }
-    #generate-code-btn {
-      background-color: #4CAF50;
-    }
-    #generate-code-btn:hover {
+    button:hover {
       background-color: #45a049;
-      transform: scale(1.05);
-    }
-    #confirm-btn {
-      background-color: #f44336;
-    }
-    #confirm-btn:hover:not(:disabled) {
-      background-color: #d32f2f;
       transform: scale(1.05);
     }
     #qrcode-container {
@@ -117,10 +114,15 @@
       margin-top: 20px;
       animation: neon 1.5s ease-in-out infinite alternate;
     }
-    @keyframes neon {
-      0% { text-shadow: 0 0 5px #ff0000; }
-      50% { text-shadow: 0 0 20px #ff4500; }
-      100% { text-shadow: 0 0 5px #ff0000; }
+    @keyframes glowingText {
+      0% { text-shadow: 0 0 5px #00FF00, 0 0 10px #7e00ff; }
+      50% { text-shadow: 0 0 20px #ff0000, 0 0 30px #00FF00; }
+      100% { text-shadow: 0 0 5px #00FF00, 0 0 10px #7e00ff; }
+    }
+    @keyframes gemination {
+      0% { transform: scale(1); box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); }
+      50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(0, 255, 0, 0.7); }
+      100% { transform: scale(1); box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); }
     }
     @media (max-width: 768px) {
       .container {
@@ -146,7 +148,6 @@
           <option value="ethereum">Ethereum</option>
           <option value="solana">Solana</option>
           <option value="jiufi-token">JiuFi Token</option>
-          <!-- Adicione mais criptos conforme necessário -->
         </select>
       </div>
       <div class="form-group">
@@ -170,53 +171,42 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    // Evento de clique para gerar o QR Code
     document.getElementById("generate-code-btn").addEventListener("click", function() {
       const amount = parseFloat(document.getElementById('amount').value);
       const cryptoType = document.getElementById('crypto-type').value.trim();
       const jiufiKey = document.getElementById('jiufi-key').value.trim();
       const description = document.getElementById('description').value.trim();
 
-      // Validação simples
       if (isNaN(amount) || cryptoType === '' || jiufiKey === '' || description === '') {
         alert('Por favor, preencha todos os campos corretamente!');
         return;
       }
 
-      // Gera um HoloFi ID único para a transação
       const holoFiId = generateHoloFiId();
-
-      // Gera a URI de transação JiuFi com os dados informados
       const jiufiUri = generateJiuFiUri(amount, cryptoType, jiufiKey, description, holoFiId);
 
-      // Cria o QR Code usando a API do QRCode.js
       const qrCodeImage = document.getElementById('qr-code-img');
       qrCodeImage.src = 'https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(jiufiUri) + '&size=200x200';
       qrCodeImage.style.display = 'block';
       document.getElementById('qrcode-container').style.display = 'block';
     });
 
-    // Função para gerar um HoloFi ID único (exemplo)
     function generateHoloFiId() {
       return 'holofi-' + Math.random().toString(36).substr(2, 9);
     }
 
-    // Função para gerar a URI do JiuFi conforme o formato necessário
     function generateJiuFiUri(amount, cryptoType, jiufiKey, description, holoFiId) {
-      // Criação de um objeto com os dados de JiuFi
       const jiufiData = {
         "jiufi": {
-          "tipo": cryptoType,       // Seleciona a criptomoeda
+          "tipo": cryptoType,
           "valor": amount.toFixed(2),
           "descricao": description,
-          "jiufiKey": jiufiKey,   // Chave JiuFi única para a transação
-          "holoFiId": holoFiId,   // HoloFi ID único para a transação
+          "jiufiKey": jiufiKey,
+          "holoFiId": holoFiId,
         }
       };
 
-      // Monta a string de URI JiuFi conforme o padrão (exemplo simplificado)
       const jiufiUri = `jiufi:${jiufiData.jiufi.tipo}:${jiufiData.jiufi.valor}:${jiufiData.jiufi.jiufiKey}:${jiufiData.jiufi.descricao}:${jiufiData.jiufi.holoFiId}`;
-
       return jiufiUri;
     }
   </script>
