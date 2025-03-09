@@ -13,10 +13,11 @@ const infuraUrl = process.env.INFURA_URL;  // A URL do Infura é carregada da va
 const web3 = new Web3(new Web3.providers.HttpProvider(infuraUrl));
 
 // Defina o endereço da carteira e o contrato (substitua com seus próprios valores)
-const userAddress = '0xYourWalletAddress';  // Substitua com o endereço real
-const contractAddress = '0xYourContractAddress';  // Substitua com o endereço real do contrato
-const abi = [/* ABI do contrato aqui */];  // Substitua com a ABI do seu contrato inteligente
+const userAddress = process.env.USER_ADDRESS;  // O endereço da carteira agora é carregado da variável de ambiente
+const contractAddress = process.env.CONTRACT_ADDRESS;  // O endereço do contrato também é carregado da variável de ambiente
+const abi = JSON.parse(process.env.CONTRACT_ABI);  // ABI do contrato (em formato JSON)
 
+// Instância do contrato DarkCoin
 const darkCoinContract = new web3.eth.Contract(abi, contractAddress);
 
 // Endpoint para verificar o saldo do usuário
@@ -50,7 +51,7 @@ app.post('/transfer', async (req, res) => {
 });
 
 // Endpoint para gerar QR Code Pix
-const pixApiUrl = 'https://api.banco.com.br/pix';  // Substitua com a URL da API Pix real
+const pixApiUrl = process.env.PIX_API_URL;  // A URL da API Pix é carregada da variável de ambiente
 
 app.post('/criar-cobranca-pix', async (req, res) => {
     const { chavePix, valor, plano } = req.body;
@@ -60,7 +61,7 @@ app.post('/criar-cobranca-pix', async (req, res) => {
     }
 
     try {
-        const response = await axios.post(`${pixApiUrl}/cobrança`, {
+        const response = await axios.post(`${pixApiUrl}/cobranca`, {
             chave: chavePix,
             valor: valor,
             descricao: `Pagamento para o plano ${plano}`,
