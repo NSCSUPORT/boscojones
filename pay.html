@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <link rel="icon" href="logo.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pagamento Bosco Jones</title>
+  <title>Pagamento Bosco Jones - Criptos</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <style>
     * {
@@ -134,11 +134,19 @@
 </head>
 <body>
   <div class="container">
-    <h1>Pagamento Bosco Jones</h1>
+    <h1>Pagamento Bosco Jones - Criptos</h1>
     <form id="investment-form" novalidate>
       <div class="form-group">
         <label for="payment-amount">Valor a ser pago (em R$):</label>
         <input type="number" id="payment-amount" placeholder="Digite o valor em reais" required>
+      </div>
+      <div class="form-group">
+        <label for="crypto-selection">Escolha a Cripto:</label>
+        <select id="crypto-selection">
+          <option value="dark-coin">DARK COIN</option>
+          <option value="jiufi">JIUFI</option>
+          <option value="dark-holofi">DARK HOLOFI</option>
+        </select>
       </div>
       <button type="button" id="generate-code-btn">Gerar Código QR</button>
       <h3>Total a Pagar (OZZ): <span id="total-to-pay">0.00</span></h3>
@@ -149,12 +157,17 @@
     </div>
   </div>
   <footer>
-    <p>&copy; 2025 Banco Bosco Jones | <a href="#">Termos e Condições</a></p>
+    <p>&copy; 2025 Banco Bosco Jones | <a href="https://docs.google.com/document/d/1lxfQGedIeqf4Tqj0xeRu84LGCT0nbPore9V_C3n7FkI/edit?usp=sharing">Termos e Condições</a></p>
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
     const darkUSD = 5.5;  // Exemplo de valor do dólar em reais
+    const cryptoRates = {
+      "dark-coin": 0.5,
+      "jiufi": 1.2,
+      "dark-holofi": 2.3
+    };
     let isConfirmedFirst = false;
     const conversionRateToOZZ = 10;
 
@@ -166,19 +179,20 @@
         alert('Por favor, insira um valor válido.');
         return;
       }
-      
-      // Converter o valor para USD
-      const amountInUSD = (amountInBRL / darkUSD).toFixed(2);
-      
-      // Gerar um ID de transação único
-      const transactionId = generateHexadecimal();
-      
+
+      // Pegar o tipo de criptomoeda selecionada
+      const selectedCrypto = document.getElementById("crypto-selection").value;
+
       // Calcular o total a pagar em OZZ (Exemplo: valor em USD * fator de conversão)
-      const totalToPayOZZ = (amountInUSD * conversionRateToOZZ).toFixed(2);
+      const amountInUSD = (amountInBRL / darkUSD).toFixed(2);
+      const totalToPayOZZ = (amountInUSD * conversionRateToOZZ * cryptoRates[selectedCrypto]).toFixed(2);
       document.getElementById("total-to-pay").textContent = totalToPayOZZ;
       
       isConfirmedFirst = true;
       updateConfirmButtonState();
+      
+      // Gerar um ID de transação único
+      const transactionId = generateHexadecimal();
       
       // Gerar dados para o QR Code (exemplo de URI para pagamento via PIX)
       const qrData = `PIX-QR|Valor=R$${amountInBRL} (${amountInUSD} USD)|Destino=BancoBoscoJones|ID=${transactionId}`;
