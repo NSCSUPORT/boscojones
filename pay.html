@@ -7,129 +7,7 @@
   <title>Pagamento Bosco Jones - Criptos</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      font-family: 'Roboto', Arial, sans-serif;
-      color: #00FF00;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
-      padding: 10px;
-      background-color: #000;
-    }
-    h1 {
-      font-size: 1.8rem;
-      margin: 20px 0;
-      color: #00FF00;
-      text-align: center;
-      text-shadow: 0 0 10px #7e00ff, 0 0 20px #ff0000;
-    }
-    .container {
-      width: 100%;
-      max-width: 500px;
-      background-color: rgba(30, 30, 30, 0.9);
-      border-radius: 15px;
-      padding: 30px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
-      margin: 0 auto;
-      backdrop-filter: blur(12px);
-    }
-    .form-group {
-      margin-bottom: 20px;
-    }
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
-      color: #e0e0e0;
-    }
-    .form-group input,
-    .form-group select {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #3c3c3c;
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-      font-size: 1rem;
-      transition: border-color 0.3s ease;
-    }
-    .form-group input:focus,
-    .form-group select:focus {
-      outline: none;
-      border-color: #4CAF50;
-    }
-    button {
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      color: #fff;
-      border: none;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-      text-align: center;
-      width: 100%;
-      margin-top: 10px;
-    }
-    button:disabled {
-      background-color: #555;
-      cursor: not-allowed;
-    }
-    #generate-code-btn {
-      background-color: #4CAF50;
-    }
-    #generate-code-btn:hover {
-      background-color: #45a049;
-      transform: scale(1.05);
-    }
-    #confirm-btn {
-      background-color: #f44336;
-    }
-    #confirm-btn:hover:not(:disabled) {
-      background-color: #d32f2f;
-      transform: scale(1.05);
-    }
-    #qrcode-container {
-      background-color: #0000FF;
-      color: #fff;
-      font-family: "Courier New", monospace;
-      padding: 20px;
-      border-radius: 5px;
-      display: none;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-      border: 2px solid #fff;
-      margin-top: 15px;
-    }
-    footer {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(45deg, #f0f000, #ff4500);
-      color: #000;
-      text-align: center;
-      font-size: 0.9rem;
-      font-weight: bold;
-      letter-spacing: 2px;
-      text-shadow: 0 0 8px #ff0000;
-      margin-top: 20px;
-      animation: neon 1.5s ease-in-out infinite alternate;
-    }
-    @keyframes neon {
-      0% { text-shadow: 0 0 5px #ff0000; }
-      50% { text-shadow: 0 0 20px #ff4500; }
-      100% { text-shadow: 0 0 5px #ff0000; }
-    }
-    @media (max-width: 768px) {
-      .container {
-        padding: 20px;
-        width: 90%;
-      }
-    }
+    /* Seu código de estilo aqui */
   </style>
 </head>
 <body>
@@ -143,9 +21,16 @@
       <div class="form-group">
         <label for="crypto-selection">Escolha a Cripto:</label>
         <select id="crypto-selection">
-          <option value="dark-coin">DARK COIN</option>
-          <option value="jiufi">JIUFI</option>
-          <option value="dark-holofi">DARK HOLOFI</option>
+          <option value="dark-bitcoin">Dark Bitcoin</option>
+          <option value="dark-ethereum">Dark Ethereum</option>
+          <option value="dark-ripple">Dark Ripple</option>
+          <option value="dark-litecoin">Dark Litecoin</option>
+          <option value="dark-cardano">Dark Cardano</option>
+          <option value="dark-doge">Dark Dogecoin</option>
+          <option value="dark-solana">Dark Solana</option>
+          <option value="dark-polkadot">Dark Polkadot</option>
+          <option value="dark-bnb">Dark BNB</option>
+          <option value="dark-chainlink">Dark Chainlink</option>
         </select>
       </div>
       <button type="button" id="generate-code-btn">Gerar Código QR</button>
@@ -164,9 +49,16 @@
   <script>
     const darkUSD = 5.5;  // Exemplo de valor do dólar em reais
     const cryptoRates = {
-      "dark-coin": 0.5,
-      "jiufi": 1.2,
-      "dark-holofi": 2.3
+      "dark-bitcoin": 0.5,
+      "dark-ethereum": 1.2,
+      "dark-ripple": 0.9,
+      "dark-litecoin": 0.4,
+      "dark-cardano": 0.8,
+      "dark-doge": 0.2,
+      "dark-solana": 1.5,
+      "dark-polkadot": 1.0,
+      "dark-bnb": 1.3,
+      "dark-chainlink": 1.1
     };
     let isConfirmedFirst = false;
     const conversionRateToOZZ = 10;
