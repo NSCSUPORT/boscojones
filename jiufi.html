@@ -21,38 +21,36 @@
       flex-direction: column;
       padding: 10px;
       background-color: #000;
-      overflow: hidden;
     }
     h1 {
-      font-size: 3rem;
-      margin-bottom: 20px;
+      font-size: 2.5rem;
+      margin-bottom: 15px;
       color: #00FF00;
       text-align: center;
     }
     .container {
       width: 100%;
-      max-width: 500px;
-      background-color: rgba(30, 30, 30, 0.9);
-      border-radius: 15px;
-      padding: 30px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(12px);
+      max-width: 480px;
+      background-color: rgba(30, 30, 30, 0.95);
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
       border: 2px solid #4CAF50;
     }
     .form-group {
-      margin-bottom: 15px;
+      margin-bottom: 12px;
     }
     .form-group label {
       display: block;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       font-weight: bold;
       color: #e0e0e0;
     }
     .form-group input,
     .form-group select {
       width: 100%;
-      padding: 12px;
-      border-radius: 8px;
+      padding: 10px;
+      border-radius: 6px;
       border: 1px solid #3c3c3c;
       background-color: #1e1e1e;
       color: #e0e0e0;
@@ -72,20 +70,33 @@
       border: none;
       width: 100%;
       margin-top: 10px;
-      background-color: #4CAF50;
+      background: linear-gradient(45deg, #4CAF50, #2E7D32);
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: linear-gradient(45deg, #2E7D32, #1B5E20);
     }
     button:disabled {
       background-color: #555;
       cursor: not-allowed;
     }
+    .qr-section {
+      text-align: center;
+      margin-top: 15px;
+    }
+    #qrcode-container img {
+      max-width: 100%;
+      border-radius: 8px;
+    }
     footer {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
       background: linear-gradient(45deg, #f0f000, #ff4500);
       color: #000;
       text-align: center;
       font-size: 1rem;
       font-weight: bold;
+      margin-top: 15px;
     }
     @media (max-width: 768px) {
       .container {
@@ -123,16 +134,17 @@
         <input type="text" id="description" required>
       </div>
       <button type="button" id="generate-code-btn">Gerar QR Code</button>
-      <h3>QR Code Gerado:</h3>
+      <div class="qr-section">
+        <h3>QR Code Gerado:</h3>
+        <div id="qrcode-container">
+          <img id="qr-code-img" style="display: none;">
+        </div>
+      </div>
     </form>
-    <div id="qrcode-container">
-      <img id="qr-code-img" style="display: block; margin: 20px auto;">
-    </div>
   </div>
   <footer>
     <p>&copy; 2025 JiuFi. Todos os direitos reservados. Lucas Januário</p>
   </footer>
-  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
     document.getElementById("generate-code-btn").addEventListener("click", function() {
@@ -146,33 +158,12 @@
         return;
       }
 
-      const holoFiId = generateHoloFiId();
-      const jiufiUri = generateJiuFiUri(amount, cryptoType, jiufiKey, description, holoFiId);
-
+      const jiufiUri = `jiufi:${cryptoType}:${amount.toFixed(2)}:${jiufiKey}:${description}`;
+      
       const qrCodeImage = document.getElementById('qr-code-img');
       qrCodeImage.src = 'https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(jiufiUri) + '&size=200x200';
       qrCodeImage.style.display = 'block';
-      document.getElementById('qrcode-container').style.display = 'block';
     });
-
-    function generateHoloFiId() {
-      return 'holofi-' + Math.random().toString(36).substr(2, 9);
-    }
-
-    function generateJiuFiUri(amount, cryptoType, jiufiKey, description, holoFiId) {
-      const jiufiData = {
-        "jiufi": {
-          "tipo": cryptoType,
-          "valor": amount.toFixed(2),
-          "descricao": description,
-          "jiufiKey": jiufiKey,
-          "holoFiId": holoFiId,
-        }
-      };
-
-      const jiufiUri = `jiufi:${jiufiData.jiufi.tipo}:${jiufiData.jiufi.valor}:${jiufiData.jiufi.jiufiKey}:${jiufiData.jiufi.descricao}:${jiufiData.jiufi.holoFiId}`;
-      return jiufiUri;
-    }
   </script>
 </body>
 </html>
