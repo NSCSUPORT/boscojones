@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="icon" href="logo.ico">
+<!-- saved from url=(0044)file:///C:/Users/jobsj/Downloads/market.html -->
+<html lang="pt-br"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <link rel="icon" href="file:///C:/Users/jobsj/Downloads/logo.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BOOKING</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="./BOOKING_files/bootstrap.min.css" rel="stylesheet">
+    <link href="./BOOKING_files/all.min.css" rel="stylesheet">
     <style>
         /* Animação de piscamento com base na variação do ativo */
         @keyframes blink {
@@ -172,6 +172,106 @@
             font-weight: bold;
         }
 
+              /* Navbar com fonte preta */
+        .navbar {
+            background: linear-gradient(90deg, #ff7f00, #fdd835);
+            padding: 8px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-links {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        .navbar-links li {
+            margin: 0 8px;
+        }
+
+        .navbar-links a {
+            color: black;
+            padding: 5px 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .navbar-links a:hover {
+            color: black;
+        }
+
+        .social-icons {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .social-icons li {
+            margin-left: 10px;
+        }
+
+        .social-icons a {
+            color: black;
+            font-size: 18px;
+        }
+
+        .social-icons a:hover {
+            color: #444;
+        }
+
+        /* Layout para matriz 2x2 */
+        .asset-table {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .asset-card {
+            background-color: #2c2c2c;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .asset-card h4 {
+            color: black;
+        }
+
+        .asset-card p {
+            font-size: 18px;
+            color: black;
+        }
+
+        .asset-card .blink {
+            font-size: 24px;
+            color: black;
+        }
+
+        /* Estilos para o painel de cotação */
+        .exchange-rate-panel {
+            background-color: #000;
+            color: black; /* Fonte preta */
+            padding: 10px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            margin-top: 10px;
+        }
+
+        /* Adiciona um efeito de transição suave para a atualização */
+        .exchange-rate-panel h3 {
+            font-size: 18px;
+            font-weight: bold;
+            color: black;
+        }
+
         /* Estilos para o navbar e outros componentes */
         .navbar {
             background-color: #333;
@@ -190,7 +290,7 @@
         }
 
         .navbar-links a {
-            color: white;
+            color: black;
             text-decoration: none;
         }
 
@@ -203,7 +303,7 @@
             background-color: #1A73E8;
             padding: 10px;
             text-decoration: none;
-            color: white;
+            color: black;
         }
 
         .btn-blue:hover {
@@ -212,6 +312,7 @@
 
         .blink {
             animation: blink 1s step-start infinite;
+            color: black;
         }
 
         @keyframes blink {
@@ -226,13 +327,13 @@
     <!-- NavBar -->
     <nav class="navbar">
         <ul class="navbar-links">
-            <li><a href="AKB.HTML" target="_blank">AKB</a></li>
-            <li><a href="jiufi.html" target="_blank">JIUFI</a></li>
-            <li><a href="found.html" target="_blank">FOUND</a></li>
-            <li><a href="EVO.HTML" target="_blank">EVO</a></li>
-            <li><a href="p3p.html" target="_blank">CDB</a></li>
-            <li><a href="OZZ.HTML" target="_blank">OZZ</a></li>
-            <li><a href="ARK.HTML" target="_blank">ARK</a></li>
+            <li><a href="file:///C:/Users/jobsj/Downloads/AKB.HTML" target="_blank">AKB</a></li>
+            <li><a href="file:///C:/Users/jobsj/Downloads/jiufi.html" target="_blank">JIUFI</a></li>
+            <li><a href="file:///C:/Users/jobsj/Downloads/found.html" target="_blank">FOUND</a></li>
+            <li><a href="file:///C:/Users/jobsj/Downloads/EVO.HTML" target="_blank">EVO</a></li>
+            <li><a href="file:///C:/Users/jobsj/Downloads/p3p.html" target="_blank">CDB</a></li>
+            <li><a href="file:///C:/Users/jobsj/Downloads/OZZ.HTML" target="_blank">OZZ</a></li>
+            <li><a href="file:///C:/Users/jobsj/Downloads/ARK.HTML" target="_blank">ARK</a></li>
             <li><a href="https://docs.google.com/document/d/14k4L8ycI3LfkvBVSqKA20oo6V1wfNofbvb9BezFqMQQ/edit?usp=sharingl" target="_blank">Docs</a></li>
         </ul>
         <ul class="social-icons">
@@ -242,51 +343,127 @@
         </ul>
     </nav>
 
-    <!-- Painel de Câmbio (Dólar) -->
-    <div id="exchange-rate-panel" class="exchange-rate-panel">
-        <h3>Cotação do Dólar: <span id="usd-to-brl"></span> BRL</h3>
-    </div>
-   <div class="container">
+ <!-- Navbar de Câmbio -->
+<nav id="exchange-rate-navbar" class="exchange-rate-navbar">
+    <span class="exchange-rate-item">USD: <span id="usd-to-brl" class="blink-green">5.35</span> BRL</span>
+    <span class="exchange-rate-item">EUR: <span id="eur-to-brl" class="blink-green"></span> BRL</span>
+    <span class="exchange-rate-item">GBP: <span id="gbp-to-brl" class="blink-green"></span> BRL</span>
+    <span class="exchange-rate-item">JPY: <span id="jpy-to-brl" class="blink-green"></span> BRL</span>
+    <span class="exchange-rate-item">BTC: <span id="btc-to-brl" class="blink-green"></span> BRL</span>
+    <span class="exchange-rate-item">ETH: <span id="eth-to-brl" class="blink-green"></span> BRL</span>
+</nav>
+
+<script>
+async function fetchExchangeRates() {
+    try {
+        const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+        const data = await response.json();
+
+        // Moedas Fiat
+        document.getElementById("usd-to-brl").textContent = data.rates.BRL.toFixed(2);
+        
+        const eurToBrl = data.rates.BRL / data.rates.EUR;
+        document.getElementById("eur-to-brl").textContent = eurToBrl.toFixed(2);
+
+        const gbpToBrl = data.rates.BRL / data.rates.GBP;
+        document.getElementById("gbp-to-brl").textContent = gbpToBrl.toFixed(2);
+
+        const jpyToBrl = data.rates.BRL / data.rates.JPY;
+        document.getElementById("jpy-to-brl").textContent = jpyToBrl.toFixed(4);
+
+        // Criptomoedas
+        const cryptoResponse = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=brl');
+        const cryptoData = await cryptoResponse.json();
+
+        document.getElementById("btc-to-brl").textContent = cryptoData.bitcoin.brl.toFixed(2);
+        document.getElementById("eth-to-brl").textContent = cryptoData.ethereum.brl.toFixed(2);
+        
+    } catch (error) {
+        console.error("Erro ao buscar cotações:", error);
+    }
+}
+
+// Buscar cotações ao carregar a página
+fetchExchangeRates();
+</script>
+
+<style>
+/* Navbar de Câmbio */
+.exchange-rate-navbar {
+    background-color: #000;
+    padding: 10px;
+    color: white;
+    font-size: 1.2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    white-space: nowrap;
+    overflow-x: auto;
+    border-bottom: 2px solid #444;
+}
+
+/* Itens da Navbar */
+.exchange-rate-item {
+    padding: 5px 15px;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Animação de piscar */
+.blink-green {
+    color: rgb(0, 255, 0);
+    animation: blink-green 1s infinite;
+}
+
+@keyframes blink-green {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+</style>
+
+
     <div class="asset-table">
         <div class="asset-card">
             <h4 style="color: #39FF14;">Dark Bitcoin</h4>
             <p style="color: white;">Preço: $57,000</p>
-            <a href="pay.html" class="btn-blue">Comprar</a>
+            <a href="file:///C:/Users/jobsj/Downloads/pay.html" class="btn-blue">Comprar</a>
         </div>
         <div class="asset-card">
             <h4 style="color: #39FF14;">Dark Ethereum</h4>
             <p style="color: white;">Preço: $4,500</p>
-            <a href="pay.html" class="btn-blue">Comprar</a>
+            <a href="file:///C:/Users/jobsj/Downloads/pay.html" class="btn-blue">Comprar</a>
         </div>
         <div class="asset-card">
             <h4 style="color: #39FF14;">Dark Ripple</h4>
             <p style="color: white;">Preço: $1.20</p>
-            <a href="pay.html" class="btn-blue">Comprar</a>
+            <a href="file:///C:/Users/jobsj/Downloads/pay.html" class="btn-blue">Comprar</a>
         </div>
         <div class="asset-card">
             <h4 style="color: #39FF14;">Dark Litecoin</h4>
             <p style="color: white;">Preço: $300</p>
-            <a href="pay.html" class="btn-blue">Comprar</a>
+            <a href="file:///C:/Users/jobsj/Downloads/pay.html" class="btn-blue">Comprar</a>
         </div>
         <div class="asset-card">
             <h4 style="color: #39FF14;">Dark Cardano</h4>
             <p style="color: white;">Preço: $2.50</p>
-            <a href="pay.html" class="btn-blue">Comprar</a>
+            <a href="file:///C:/Users/jobsj/Downloads/pay.html" class="btn-blue">Comprar</a>
         </div>
         <div class="asset-card">
             <h4 style="color: #39FF14;">Dark Dogecoin</h4>
             <p style="color: white;">Preço: $0.25</p>
-            <a href="pay.html" class="btn-blue">Comprar</a>
+            <a href="file:///C:/Users/jobsj/Downloads/pay.html" class="btn-blue">Comprar</a>
         </div>
         <div class="asset-card">
             <h4 style="color: #39FF14;">Dark Solana</h4>
             <p style="color: white;">Preço: $150</p>
-            <a href="pay.html" class="btn-blue">Comprar</a>
+            <a href="file:///C:/Users/jobsj/Downloads/pay.html" class="btn-blue">Comprar</a>
         </div>
         <div class="asset-card">
             <h4 style="color: #39FF14;">Dark Polkadot</h4>
             <p style="color: white;">Preço: $35</p>
-            <a href="pay.html" class="btn-blue">Comprar</a>
+            <a href="file:///C:/Users/jobsj/Downloads/pay.html" class="btn-blue">Comprar</a>
         </div>
     </div>
 </div>
@@ -366,5 +543,6 @@
     }
 </style>
 
-</body>
-</html>
+
+
+</body></html>
