@@ -153,6 +153,69 @@
         .asset-card .blink {
             font-size: 24px;
         }
+        /* Estilos para o painel de cotação */
+        .exchange-rate-panel {
+            background-color: #000;
+            color: #4CAF50; /* Fonte verde */
+            padding: 10px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            margin-top: 10px;
+        }
+
+        /* Adiciona um efeito de transição suave para a atualização */
+        .exchange-rate-panel h3 {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Estilos para o navbar e outros componentes */
+        .navbar {
+            background-color: #333;
+            padding: 10px;
+        }
+
+        .navbar-links {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar-links li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        .navbar-links a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .social-icons li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        .btn-blue {
+            background-color: #1A73E8;
+            padding: 10px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .btn-blue:hover {
+            background-color: #0c63e4;
+        }
+
+        .blink {
+            animation: blink 1s step-start infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
