@@ -1,522 +1,277 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="logo.ico">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Market Assets</title>
-     <style>
-        /* Estilos globais */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+    <title>Mercado de Ativos - Computação</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        @keyframes blink {
+            0% { color: #ff0000; } /* Red for negative variation */
+            50% { color: #ffff00; } /* Yellow for neutral variation */
+            100% { color: #00ff00; } /* Green for positive variation */
+        }
+
+        .blink {
+            animation: blink 1s infinite; /* Blink every 1 second */
+            font-weight: bold;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(to right, #000000, #222222); /* Fundo escuro com gradiente */
-            color: #f1f1f1;
-            margin: 0;
-            padding: 0;
-            display: grid;
-            grid-template-columns: 1fr; /* 1 coluna por padrão */
-            gap: 20px;
-            padding: 20px;
-            transform: scale(0.95); /* Ajuste do zoom para 95% */
-            transform-origin: top left;
-            min-height: 100vh;
+            background-color: #121212;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
         }
 
-        /* Cabeçalhos */
-        h1 {
-            text-align: center;
+        table {
+            width: 100%;
             margin-top: 20px;
-            color: #f1f1f1;
-            font-size: 2.5em;
-            font-weight: 600;
         }
 
-        h2 {
-            color: #FFEB3B; /* Amarelo vibrante */
-            font-size: 1.6em;
-            margin-bottom: 10px;
-            text-align: center;
+        th, td {
+            padding: 12px;
+            text-align: left;
         }
 
-        /* Container */
+        th {
+            background-color: #2a2a2a;
+        }
+
+        tr:nth-child(even) {
+            background-color: #2c2c2c;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #1f1f1f;
+        }
+
+        .btn-blue {
+            background-color: #1A73E8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .btn-blue:hover {
+            background-color: #165ab6;
+        }
+
         .container {
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 20px;
         }
 
-        /* Estilos gerais da navbar */
-        .navbar {
-            background-color: #333;
-            padding: 10px;
+        h1 {
+            color: #4CAF50;
             text-align: center;
         }
 
-        /* Estilo para os links */
+        .navbar {
+            background: linear-gradient(90deg, #ff7f00, #fdd835);
+            padding: 8px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         .navbar-links {
             list-style-type: none;
+            padding: 0;
             margin: 0;
-            padding: 0;
             display: flex;
-            justify-content: center;
-            gap: 20px;
         }
 
-        /* Estilo para os itens da lista */
         .navbar-links li {
-            display: inline-block;
+            margin: 0 8px;
         }
 
-        /* Estilo dos botões */
         .navbar-links a {
+            color: black;
+            padding: 5px 8px;
             text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            color: white;
             font-weight: bold;
-            transition: background-color 0.3s ease;
+            font-size: 14px;
         }
 
-        /* Estilo individual para cada botão */
-        .btn-google-blue {
-            background-color: #4285F4;
-        }
-
-        .btn-google-green {
-            background-color: #34A853;
-        }
-
-        .btn-google-yellow {
-            background-color: #FBBC05;
-        }
-
-        .btn-google-red {
-            background-color: #EA4335;
-        }
-
-        /* Efeito de hover */
         .navbar-links a:hover {
-            opacity: 0.8;
-        }
-
-        /* Estilos para os ícones de redes sociais */
-        .social-icons {
-            list-style-type: none;
-            padding: 0;
-            margin: 10px 0 0;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .social-icons li a {
-            font-size: 24px;
             color: white;
-            transition: color 0.3s ease;
         }
 
-        .social-icons li a:hover {
-            color: #ddd;
+        .social-icons {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            margin-left: auto;
         }
 
-        /* Responsividade para telas menores */
-        @media (max-width: 768px) {
-            .navbar-links {
-                flex-direction: column;
-            }
-
-            .navbar-links a {
-                width: 100%;
-                text-align: center;
-                margin-bottom: 10px;
-            }
+        .social-icons li {
+            margin-left: 10px;
         }
 
-        /* Estilo base para os botões */
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            font-size: 16px;
-            font-weight: bold;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-            font-family: 'Roboto', sans-serif; /* Fonte estilo Google */
-            text-transform: uppercase; /* Letras maiúsculas para um visual mais impactante */
+        .social-icons a {
+            color: black;
+            font-size: 18px;
         }
 
-        /* Botões com as cores do Google */
-        .btn-google-blue, .btn-google-green, .btn-google-red, .btn-google-yellow {
-            background: linear-gradient(45deg, #4285F4, #34A853); /* Degradê azul e verde (cores do Google) */
-            color: white; /* Texto branco */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            font-size: 14px; /* Ajuste de fonte para um estilo mais "pixel" */
-            padding: 14px 28px;
-        }
-
-        /* Efeito hover - inverte o degradê */
-        .btn-google-blue:hover, .btn-google-green:hover, .btn-google-red:hover, .btn-google-yellow:hover {
-            background: linear-gradient(45deg, #FBBC05, #EA4335); /* Degradê amarelo e vermelho do Google */
-            transform: scale(1.05); /* Leve aumento no tamanho */
-        }
-
-        /* Efeito de clique */
-        .btn-google-blue:active, .btn-google-green:active, .btn-google-red:active, .btn-google-yellow:active {
-            background: linear-gradient(45deg, #0F9D58, #DB4437); /* Tons mais escuros */
-            transform: scale(0.98); /* Pequena redução para efeito de clique */
+        .social-icons a:hover {
+            color: white;
         }
     </style>
-
-
 </head>
 <body>
-<h1>booking</h1>
-   <nav class="navbar">
-    <ul class="navbar-links">
-                <li><a href="https://nscsuport.github.io/boscojones/AKB.HTML" class="btn btn-google-red" target="_blank">AKB</a></li>
-        <li><a href="https://nscsuport.github.io/boscojones/guess.html" class="btn btn-google-red" target="_blank">Previdência</a></li>
-        <li><a href="https://nscsuport.github.io/boscojones/jiufi.html" class="btn btn-google-blue" target="_blank">jiuFI</a></li>
-            <li><a href="https://nscsuport.github.io/boscojones/found.html" class="btn btn-google-blue" target="_blank">found</a></li>
-        <li><a href="https://nscsuport.github.io/boscojones/EVO.HTML" class="btn btn-google-blue" target="_blank">EVO </a></li>
-        <li><a href="https://nscsuport.github.io/boscojones/jiufi.html" class="btn btn-google-blue" target="_blank">jiuFI</a></li>
-        <li><a href="https://nscsuport.github.io/boscojones/p3p.html" class="btn btn-google-blue" target="_blank">CDB</a></li>
-        <li><a href="https://nscsuport.github.io/boscojones/OZZ.HTML" class="btn btn-google-blue" target="_blank">OZZ</a></li>
-        <li><a href="https://nscsuport.github.io/boscojones/ARK.HTML" class="btn btn-google-blue" target="_blank">ARK</a></li>
-        <li><a href="https://docs.google.com/document/d/14k4L8ycI3LfkvBVSqKA20oo6V1wfNofbvb9BezFqMQQ/edit?usp=sharing" class="btn btn-google-red" target="_blank">docs</a></li>
-    </ul>
-    <ul class="social-icons">
-        <li><a href="https://www.instagram.com/brncinc" target="_blank"><i class="fab fa-instagram"></i></a></li>
-        <li><a href="https://www.linkedin.com/company/brncx/" target="_blank"><i class="fab fa-linkedin"></i></a></li>
-        <li><a href="https://twitter.com/lucasjanuario14" target="_blank"><i class="fab fa-twitter"></i></a></li>
-    </ul>
-</nav>
 
+    <!-- NavBar -->
+    <nav class="navbar">
+        <ul class="navbar-links">
+            <li><a href="AKB.HTML" target="_blank">AKB</a></li>
+            <li><a href="guess.html" target="_blank">Previdência</a></li>
+            <li><a href="jiufi.html" target="_blank">jiuFI</a></li>
+            <li><a href="found.html" target="_blank">found</a></li>
+            <li><a href="EVO.HTML" target="_blank">EVO</a></li>
+            <li><a href="p3p.html" target="_blank">CDB</a></li>
+            <li><a href="OZZ.HTML" target="_blank">OZZ</a></li>
+            <li><a href="ARK.HTML" target="_blank">ARK</a></li>
+            <li><a href="docs.html" target="_blank">Docs</a></li>
+        </ul>
+        <ul class="social-icons">
+            <li><a href="https://www.instagram.com/brncinc" target="_blank"><i class="fab fa-instagram"></i></a></li>
+            <li><a href="https://www.linkedin.com/company/brncx/" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+            <li><a href="https://twitter.com/lucasjanuario14" target="_blank"><i class="fab fa-twitter"></i></a></li>
+        </ul>
+    </nav>
 
+    <div class="container">
+        <h1>BOOKING</h1>
+
+        <div>
+            <table id="computacao-quantica">
+                <thead>
+                    <tr>
+                        <th>Ativo</th>
+                        <th>Preço</th>
+                        <th>Unidades</th>
+                        <th>Valor Total</th>
+                        <th>Variação</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Gandalf (Bitcoin)</td>
+                        <td>$ 1134.00</td>
+                        <td>2</td>
+                        <td>$ 2268.00</td>
+                        <td class="variação-verde">10%</td>
+                        <td><a href="pay.html" class="btn-blue">Comprar</a></td>
+                    </tr>
+                    <tr>
+                        <td>Arthas (Ethereum)</td>
+                        <td>$ 85.05</td>
+                        <td>5</td>
+                        <td>$ 425.25</td>
+                        <td class="variação-verde">5%</td>
+                        <td><a href="pay.html" class="btn-blue">Comprar</a></td>
+                    </tr>
+                    <tr>
+                        <td>Link (Binance Coin)</td>
+                        <td>$ 8.50</td>
+                        <td>3</td>
+                        <td>$ 25.52</td>
+                        <td class="variação-verde">6%</td>
+                        <td><a href="pay.html" class="btn-blue">Comprar</a></td>
+                    </tr>
+                    <tr>
+                        <td>Shepard (Cardano)</td>
+                        <td>$ 45.36</td>
+                        <td>4</td>
+                        <td>$ 181.44</td>
+                        <td class="variação-verde">7%</td>
+                        <td><a href="pay.html" class="btn-blue">Comprar</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+            <h3>Algoritmos de Computação</h3>
+            <table id="algoritmos-computacao">
+                <thead>
+                    <tr>
+                        <th>Ativo</th>
+                        <th>Preço</th>
+                        <th>Unidades</th>
+                        <th>Valor Total</th>
+                        <th>Variação</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Cloud (Bitcoin)</td>
+                        <td>$ 113.40</td>
+                        <td>3</td>
+                        <td>$ 340.20</td>
+                        <td class="variação-vermelha">9%</td>
+                        <td><a href="pay.html" class="btn-blue">Comprar</a></td>
+                    </tr>
+                    <tr>
+                        <td>Ezio (Ethereum)</td>
+                        <td>$ 42.52</td>
+                        <td>6</td>
+                        <td>$ 255.15</td>
+                        <td class="variação-vermelha">4%</td>
+                        <td><a href="pay.html" class="btn-blue">Comprar</a></td>
+                    </tr>
+                    <tr>
+                        <td>Sonic (Binance Coin)</td>
+                        <td>$ 68.04</td>
+                        <td>2</td>
+                        <td>$ 136.08</td>
+                        <td class="variação-vermelha">8%</td>
+                        <td><a href="pay.html" class="btn-blue">Comprar</a></td>
+                    </tr>
+                    <tr>
+                        <td>Kratos (Cardano)</td>
+                        <td>$ 102.06</td>
+                        <td>1</td>
+                        <td>$ 102.06</td>
+                        <td class="variação-vermelha">3%</td>
+                        <td><a href="pay.html" class="btn-blue">Comprar</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
     </div>
-<div class="asset-container">
-    <div>
-        <h2>Gênesis</h2>
-        <table id="genesis-table">
-            <thead>
-                <tr>
-                    <th>Ativo</th>
-                    <th>Preço</th>
-                    <th>Unidades</th>
-                    <th>Valor Total</th>
-                    <th>Variação de Preço</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-    <div>
-        <h2>Efésios</h2>
-        <table id="efesios-table">
-            <thead>
-                <tr>
-                    <th>Ativo</th>
-                    <th>Preço</th>
-                    <th>Unidades</th>
-                    <th>Valor Total</th>
-                    <th>Variação de Preço</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-    <div>
-        <h2>Salmos</h2>
-        <table id="salmos-table">
-            <thead>
-                <tr>
-                    <th>Ativo</th>
-                    <th>Preço</th>
-                    <th>Unidades</th>
-                    <th>Valor Total</th>
-                    <th>Variação de Preço</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-    <div>
-        <h2>Lucas</h2>
-        <table id="lucas-table">
-            <thead>
-                <tr>
-                    <th>Ativo</th>
-                    <th>Preço</th>
-                    <th>Unidades</th>
-                    <th>Valor Total</th>
-                    <th>Variação de Preço</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-    <div>
-        <h2>Medusa</h2>
-        <table id="medusa-table">
-            <thead>
-                <tr>
-                    <th>Ativo</th>
-                    <th>Preço</th>
-                    <th>Unidades</th>
-                    <th>Valor Total</th>
-                    <th>Variação de Preço</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-    <div>
-        <h2>Cérbero</h2>
-        <table id="cerberus-table">
-            <thead>
-                <tr>
-                    <th>Ativo</th>
-                    <th>Preço</th>
-                    <th>Unidades</th>
-                    <th>Valor Total</th>
-                    <th>Variação de Preço</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-    <div>
-        <h2>Minotauro</h2>
-        <table id="minotaur-table">
-            <thead>
-                <tr>
-                    <th>Ativo</th>
-                    <th>Preço</th>
-                    <th>Unidades</th>
-                    <th>Valor Total</th>
-                    <th>Variação de Preço</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-    <div>
-        <h2>Hidra</h2>
-        <table id="hydra-table">
-            <thead>
-                <tr>
-                    <th>Ativo</th>
-                    <th>Preço</th>
-                    <th>Unidades</th>
-                    <th>Valor Total</th>
-                    <th>Variação de Preço</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-</div>
 
     <script>
-    const ativos = {
-  genesis: [
-    { name: 'Genesis 1', price: 700, units: 1000, lastPrice: 680, buyLink: 'pay.html', icon: 'b.png' },
-    { name: 'Genesis 2', price: 1500, units: 1000, lastPrice: 1400, buyLink: 'pay.html', icon: 'b.png' },
-    { name: 'Genesis 3', price: 2500, units: 1000, lastPrice: 2400, buyLink: 'pay.html', icon: 'b.png' },
-    { name: 'Genesis 4', price: 3500, units: 1000, lastPrice: 3400, buyLink: 'pay.html', icon: 'b.png' }
-],
-efesios: [
-    { name: 'Ephesians 1', price: 2000, units: 1000, lastPrice: 1900, buyLink: 'pay.html', icon: 'a.png' },
-    { name: 'Ephesians 2', price: 20000, units: 1000, lastPrice: 19000, buyLink: 'pay.html', icon: 'a.png' },
-    { name: 'Ephesians 3', price: 30000, units: 1000, lastPrice: 29000, buyLink: 'pay.html', icon: 'a.png' },
-    { name: 'Ephesians 4', price: 4000, units: 1000, lastPrice: 3900, buyLink: 'pay.html', icon: 'a.png' }
-],
-salmos: [
-    { name: 'Psalms 1', price: 800, units: 1000, lastPrice: 780, buyLink: 'pay.html', icon: 'c.png' },
-    { name: 'Psalms 2', price: 1500, units: 1000, lastPrice: 1400, buyLink: 'pay.html', icon: 'c.png' },
-    { name: 'Psalms 3', price: 2500, units: 1000, lastPrice: 2400, buyLink: 'pay.html', icon: 'c.png' },
-    { name: 'Psalms 4', price: 3500, units: 1000, lastPrice: 3400, buyLink: 'pay.html', icon: 'c.png' }
-],
-lucas: [
-    { name: 'Luke 1', price: 8000, units: 1000, lastPrice: 7800, buyLink: 'pay.html', icon: 'd.png' },
-    { name: 'Luke 2', price: 7000, units: 1000, lastPrice: 6800, buyLink: 'pay.html', icon: 'd.png' },
-    { name: 'Luke 3', price: 6000, units: 1000, lastPrice: 5800, buyLink: 'pay.html', icon: 'd.png' },
-    { name: 'Luke 4', price: 5000, units: 1000, lastPrice: 4800, buyLink: 'pay.html', icon: 'd.png' }
-],
-medusa: [
-    { name: 'Medusa 1', price: 700, units: 1000, lastPrice: 680, buyLink: 'pay.html', icon: 'e.png' },
-    { name: 'Medusa 2', price: 2000, units: 1000, lastPrice: 1900, buyLink: 'pay.html', icon: 'e.png' },
-    { name: 'Medusa 3', price: 2500, units: 1000, lastPrice: 2400, buyLink: 'pay.html', icon: 'e.png' },
-    { name: 'Medusa 4', price: 3500, units: 1000, lastPrice: 3400, buyLink: 'pay.html', icon: 'e.png' }
-],
-cerberus: [
-    { name: 'Cerberus 1', price: 800, units: 1000, lastPrice: 780, buyLink: 'pay.html', icon: 'l.png' },
-    { name: 'Cerberus 2', price: 1600, units: 1000, lastPrice: 1500, buyLink: 'pay.html', icon: 'l.png' },
-    { name: 'Cerberus 3', price: 2200, units: 1000, lastPrice: 2100, buyLink: 'pay.html', icon: 'l.png' },
-    { name: 'Cerberus 4', price: 3200, units: 1000, lastPrice: 3100, buyLink: 'pay.html', icon: 'l.png' }
-],
-minotaur: [
-    { name: 'Minotaur 1', price: 700, units: 1000, lastPrice: 680, buyLink: 'pay.html', icon: 'g.png' },
-    { name: 'Minotaur 2', price: 1500, units: 1000, lastPrice: 1400, buyLink: 'pay.html', icon: 'g.png' },
-    { name: 'Minotaur 3', price: 2500, units: 1000, lastPrice: 2400, buyLink: 'pay.html', icon: 'g.png' },
-    { name: 'Minotaur 4', price: 3500, units: 1000, lastPrice: 3400, buyLink: 'pay.html', icon: 'g.png' }
-],
-hydra: [
-    { name: 'Hydra 1', price: 6000, units: 1000, lastPrice: 5900, buyLink: 'pay.html', icon: 'j.png' },
-    { name: 'Hydra 2', price: 15000, units: 1000, lastPrice: 14800, buyLink: 'pay.html', icon: 'j.png' },
-    { name: 'Hydra 3', price: 21000, units: 1000, lastPrice: 20800, buyLink: 'pay.html', icon: 'j.png' },
-    { name: 'Hydra 4', price: 25000, units: 1000, lastPrice: 24800, buyLink: 'pay.html', icon: 'j.png' }
-]
+        // Fetch live USD to BRL exchange rate from Fixer.io
+        const fetchExchangeRate = async () => {
+  
+            const apiKey = 'f94c6bb4d02fd29ef8f4492dee2cc59a'; // Use your actual API key securely
+            const url = `https://api.exchangerate-api.com/v4/latest/USD`; // This endpoint fetches the latest USD exchange rates
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                const exchangeRate = data.rates.BRL;  // Get the exchange rate for BRL
+                console.log(`Exchange Rate (USD to BRL): ${exchangeRate}`);
+            } catch (error) {
+                console.error('Error fetching exchange rate:', error);
+            }
+        };
 
-};
-
-
-function calculatePriceVariation(asset) {
-    // Verifica se o último preço e a quantidade de unidades estão salvos no localStorage
-    const storedLastPrice = localStorage.getItem(`lastPrice_${asset.name}`);
-    const storedLastUnits = localStorage.getItem(`lastUnits_${asset.name}`);
-    const lastPrice = storedLastPrice ? parseFloat(storedLastPrice) : asset.price;
-    const lastUnits = storedLastUnits ? parseInt(storedLastUnits) : asset.units;
-
-    // Se o preço ou as unidades anteriores não existirem (primeira vez), define a variação como 100%
-    let priceVariation = 100;
-
-    // Variação de preço baseada na quantidade de ativos e seções
-    const sectionUnits = 1000; // 1000 ativos por seção
-    const sections = asset.units / sectionUnits; // Divide os ativos em seções de 1000 unidades
-    priceVariation = 100 - (sections * 8); // Diminui 8% para cada seção extra de 1000 ativos
-
-    // Verifica a quantidade de unidades e ajusta a variação de acordo
-    if (asset.units === sectionUnits) {
-        priceVariation = 100; // Mantém 100% de variação quando houver exatamente 1000 unidades
-    } else if (asset.units < sectionUnits) {
-        const decreaseUnits = sectionUnits - asset.units;
-        priceVariation = 100 + decreaseUnits; // Aumenta a variação em 1% para cada unidade perdida
-    }
-
-    // Calcula a variação semanal baseada no tempo
-    const storedLastDecreaseTime = localStorage.getItem(`lastDecreaseTime_${asset.name}`);
-    const lastDecreaseTime = storedLastDecreaseTime ? parseInt(storedLastDecreaseTime) : Date.now();
-
-    // Se passou 5 dias (5 dias = 5 * 24 * 60 * 60 * 1000 ms), diminui a variação em 5%
-    if (Date.now() - lastDecreaseTime >= 5 * 24 * 60 * 60 * 1000) {
-        priceVariation -= 5; // Diminui 5% se não houver diminuição das unidades
-        localStorage.setItem(`lastDecreaseTime_${asset.name}`, Date.now()); // Atualiza o tempo da última alteração
-    }
-
-    // Salva o preço e as unidades atuais no localStorage
-    localStorage.setItem(`lastPrice_${asset.name}`, asset.price);
-    localStorage.setItem(`lastUnits_${asset.name}`, asset.units);
-
-    return priceVariation;
-}
-
-// Função para definir a cor da variação de preço
-function getVariationColor(priceVariation) {
-    if (priceVariation > 100) {
-        return 'green'; // Variação positiva (para unidades diminuídas)
-    } else if (priceVariation < 100) {
-        return 'red'; // Variação negativa (para queda no preço)
-    } else {
-        return 'yellow'; // Variação neutra (100%)
-    }
-}
-
-// Função para popular a tabela com os ativos
-function populateTable(tableId, assetData) {
-    const tableBody = document.getElementById(tableId);
-    tableBody.innerHTML = ""; // Limpa o conteúdo existente
-
-    assetData.forEach(asset => {
-        const totalValue = asset.price * asset.units;
-        const priceVariation = calculatePriceVariation(asset);
-        const variationColor = getVariationColor(priceVariation); // Obtém a cor da variação
-
-        tableBody.innerHTML += `
-            <tr>
-                <td><img src="path/to/icons/${asset.icon}" alt="${asset.name} icon" class="icon"> ${asset.name}</td>
-                <td>$${asset.price.toFixed(2)}</td>
-                <td>${asset.units}</td>
-                <td>$${totalValue.toFixed(2)}</td>
-                <td style="color: ${variationColor};">${priceVariation.toFixed(2)}%</td>
-                <td><a href="${asset.buyLink}" class="buy-button">Buy</a></td>
-            </tr>
-        `;
-    });
-}
-
-// Função para atualizar os preços de forma realista
-function updateAssetPrices(assetData) {
-    assetData.forEach(asset => {
-        // Atualiza os preços com base na variação calculada
-        const priceChangeRate = calculatePriceVariation(asset) / 100; // Calcula a variação de preço
-        const priceChange = asset.price * priceChangeRate; // Ajusta o preço de acordo com a variação
-        asset.price += priceChange; // Aplica a variação no preço
-        if (asset.price < 0) asset.price = 0.01; // Garante que o preço não fique negativo
-    });
-}
-
-// Função para atualizar todas as tabelas
-function updateAssets() {
-    // Atualiza os preços e popula as tabelas com os ativos
-    Object.keys(ativos).forEach(group => {
-        updateAssetPrices(ativos[group]);
-        populateTable(`${group}-table`, ativos[group]);
-    });
-}
-
-// Preencher as tabelas inicialmente
-document.addEventListener("DOMContentLoaded", () => {
-    updateAssets(); // Preenche as tabelas ao carregar a página
-
-    // Atualiza os dados a cada 30 segundos (30.000 ms)
-    setInterval(updateAssets, 30000); // Atualiza a cada 30 segundos
-});
-// master.js (Backend)
-const express = require('express');
-const app = express();
-const port = 3000;
-
-app.use(express.static('public')); // Servindo arquivos estáticos
-
-// Função para calcular lucro no backend
-function calculateProfit(amount) {
-    // Calculando lucro conforme lógica do seu sistema
-    const profitRate = 0.12; // Exemplo de taxa mensal
-    const profit = amount * profitRate;
-    return profit;
-}
-
-// Rota para retornar dados ao frontend
-app.get('/master', (req, res) => {
-    res.json({
-        calculateProfit: calculateProfit(1000), // Exemplo de valor, pode ser dinâmico
-    });
-});
-
-app.listen(port, () => {
-    console.log(`Servidor backend rodando em http://localhost:${port}`);
-});
-
-
-</script>
+        // Call the function
+        fetchExchangeRate();
+    </script>
 
 </body>
 </html>
