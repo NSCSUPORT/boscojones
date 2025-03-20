@@ -7,11 +7,10 @@
   <title>Pagamento Bosco Jones - Criptos</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    /* Estilo global */
     body {
       font-family: 'Roboto', sans-serif;
-      background-color: #121212; /* Fundo escuro */
-      color: #ffffff; /* Texto claro */
+      background-color: #121212;
+      color: #ffffff;
       margin: 0;
       padding: 0;
       display: flex;
@@ -22,7 +21,7 @@
 
     h1 {
       margin-top: 40px;
-      color: #00FF00; /* Cor verde destacada */
+      color: #00FF00;
       font-size: 2rem;
       text-align: center;
     }
@@ -37,13 +36,12 @@
       width: 90%;
       max-width: 600px;
       padding: 20px;
-      background-color: #1F1F1F; /* Fundo escuro do conteúdo */
+      background-color: #1F1F1F;
       border-radius: 8px;
       box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
       margin: 20px auto;
     }
 
-    /* Estilos para os campos de input */
     .form-group {
       margin-bottom: 15px;
     }
@@ -52,11 +50,10 @@
       display: block;
       font-size: 1.1rem;
       margin-bottom: 8px;
-      color: #B0B0B0; /* Cor de texto mais suave para as labels */
+      color: #B0B0B0;
     }
 
-    input[type="number"],
-    select {
+    input[type="number"], select {
       width: 100%;
       padding: 10px;
       font-size: 1rem;
@@ -66,15 +63,14 @@
       color: #fff;
     }
 
-    input[type="number"]:focus,
-    select:focus {
+    input[type="number"]:focus, select:focus {
       outline: none;
-      border-color: #00FF00; /* Cor verde quando focado */
+      border-color: #00FF00;
     }
 
     button {
       padding: 10px 20px;
-      background-color: #4CAF50; /* Botão verde */
+      background-color: #4CAF50;
       color: white;
       font-size: 1rem;
       border: none;
@@ -85,21 +81,17 @@
     }
 
     button:disabled {
-      background-color: #555; /* Botão desabilitado */
+      background-color: #555;
       cursor: not-allowed;
     }
 
     button:hover {
-      background-color: #45a049; /* Hover para o botão de pagamento */
+      background-color: #45a049;
     }
 
     #qrcode-container {
       display: none;
       text-align: center;
-      margin-top: 20px;
-    }
-
-    #qrcode {
       margin-top: 20px;
     }
 
@@ -168,7 +160,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    const darkUSD = 5.5;  // Exemplo de valor do dólar em reais
+    const darkUSD = 5.5; 
     const cryptoRates = {
       "dark-bitcoin": 0.5,
       "dark-ethereum": 1.2,
@@ -189,7 +181,6 @@
     let isConfirmedFirst = false;
     const conversionRateToOZZ = 10;
 
-    // Evento para gerar código QR e calcular o total a pagar
     document.getElementById("generate-code-btn").addEventListener("click", function() {
       const amountInBRL = parseFloat(document.getElementById("payment-amount").value);
       
@@ -219,7 +210,6 @@
       document.getElementById("qrcode-container").style.display = "block";
     });
 
-    // Função para confirmar pagamento
     document.getElementById("confirm-btn").addEventListener("click", function() {
       if (isConfirmedFirst) {
         alert("Pagamento confirmado! A transação está sendo processada.");
@@ -228,13 +218,11 @@
       }
     });
 
-    // Função para atualizar o estado do botão de confirmação
     function updateConfirmButtonState() {
       const confirmBtn = document.getElementById("confirm-btn");
       confirmBtn.disabled = !isConfirmedFirst;
     }
 
-    // Função para gerar um código hexadecimal aleatório
     function generateHexadecimal() {
       return Math.floor(Math.random() * 16777215).toString(16);
     }
