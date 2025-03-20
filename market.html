@@ -7,232 +7,176 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Market Assets</title>
-    <style>
-/* Estilos globais */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+     <style>
+        /* Estilos globais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(to right, #000000, #222222); /* Fundo escuro com gradiente */
-    color: #f1f1f1;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: 1fr; /* 1 coluna por padrão */
-    gap: 20px;
-    padding: 20px;
-    transform: scale(0.95); /* Ajuste do zoom para 95% */
-    transform-origin: top left;
-    min-height: 100vh;
-}
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #000000, #222222); /* Fundo escuro com gradiente */
+            color: #f1f1f1;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            grid-template-columns: 1fr; /* 1 coluna por padrão */
+            gap: 20px;
+            padding: 20px;
+            transform: scale(0.95); /* Ajuste do zoom para 95% */
+            transform-origin: top left;
+            min-height: 100vh;
+        }
 
-/* Cabeçalhos */
-h1 {
-    text-align: center;
-    margin-top: 20px;
-    color: #f1f1f1;
-    font-size: 2.5em;
-    font-weight: 600;
-}
+        /* Cabeçalhos */
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #f1f1f1;
+            font-size: 2.5em;
+            font-weight: 600;
+        }
 
-h2 {
-    color: #FFEB3B; /* Amarelo vibrante */
-    font-size: 1.6em;
-    margin-bottom: 10px;
-    text-align: center;
-}
+        h2 {
+            color: #FFEB3B; /* Amarelo vibrante */
+            font-size: 1.6em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
 
-/* Navbar */
-.navbar {
-    background-color: #333;
-    padding: 10px;
-    text-align: center;
-}
+        /* Container */
+        .container {
+            padding: 20px;
+        }
 
-.navbar-links {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
+        /* Estilos gerais da navbar */
+        .navbar {
+            background-color: #333;
+            padding: 10px;
+            text-align: center;
+        }
 
-.navbar-links li {
-    display: inline-block;
-}
+        /* Estilo para os links */
+        .navbar-links {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
 
-.navbar-links a {
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    color: white;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
+        /* Estilo para os itens da lista */
+        .navbar-links li {
+            display: inline-block;
+        }
 
-/* Estilos dos botões */
-.btn-google-blue {
-    background-color: #4285F4;
-}
+        /* Estilo dos botões */
+        .navbar-links a {
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
 
-.btn-google-green {
-    background-color: #34A853;
-}
+        /* Estilo individual para cada botão */
+        .btn-google-blue {
+            background-color: #4285F4;
+        }
 
-.btn-google-yellow {
-    background-color: #FBBC05;
-}
+        .btn-google-green {
+            background-color: #34A853;
+        }
 
-.btn-google-red {
-    background-color: #EA4335;
-}
+        .btn-google-yellow {
+            background-color: #FBBC05;
+        }
 
-.navbar-links a:hover {
-    opacity: 0.8;
-}
+        .btn-google-red {
+            background-color: #EA4335;
+        }
 
-/* Responsividade para telas menores */
-@media (max-width: 768px) {
-    .navbar-links {
-        flex-direction: column;
-        gap: 10px;
-    }
+        /* Efeito de hover */
+        .navbar-links a:hover {
+            opacity: 0.8;
+        }
 
-    .navbar-links a {
-        width: 100%;
-        text-align: center;
-    }
-}
+        /* Estilos para os ícones de redes sociais */
+        .social-icons {
+            list-style-type: none;
+            padding: 0;
+            margin: 10px 0 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
 
-/* Estilos para os ícones de redes sociais */
-.social-icons {
-    list-style-type: none;
-    padding: 0;
-    margin: 10px 0 0;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
+        .social-icons li a {
+            font-size: 24px;
+            color: white;
+            transition: color 0.3s ease;
+        }
 
-.social-icons li a {
-    font-size: 24px;
-    color: white;
-    transition: color 0.3s ease;
-}
+        .social-icons li a:hover {
+            color: #ddd;
+        }
 
-.social-icons li a:hover {
-    color: #ddd;
-}
+        /* Responsividade para telas menores */
+        @media (max-width: 768px) {
+            .navbar-links {
+                flex-direction: column;
+            }
 
-/* Botões com cores do Google */
-.btn {
-    display: inline-block;
-    padding: 12px 24px;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    font-family: 'Roboto', sans-serif;
-    text-transform: uppercase;
-}
+            .navbar-links a {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+        }
 
-.btn-google-blue, .btn-google-green, .btn-google-red, .btn-google-yellow {
-    background: linear-gradient(45deg, #4285F4, #34A853); 
-    color: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    font-size: 14px;
-    padding: 14px 28px;
-}
+        /* Estilo base para os botões */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            font-family: 'Roboto', sans-serif; /* Fonte estilo Google */
+            text-transform: uppercase; /* Letras maiúsculas para um visual mais impactante */
+        }
 
-.btn-google-blue:hover, .btn-google-green:hover, .btn-google-red:hover, .btn-google-yellow:hover {
-    background: linear-gradient(45deg, #FBBC05, #EA4335);
-    transform: scale(1.05);
-}
+        /* Botões com as cores do Google */
+        .btn-google-blue, .btn-google-green, .btn-google-red, .btn-google-yellow {
+            background: linear-gradient(45deg, #4285F4, #34A853); /* Degradê azul e verde (cores do Google) */
+            color: white; /* Texto branco */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            font-size: 14px; /* Ajuste de fonte para um estilo mais "pixel" */
+            padding: 14px 28px;
+        }
 
-.btn-google-blue:active, .btn-google-green:active, .btn-google-red:active, .btn-google-yellow:active {
-    background: linear-gradient(45deg, #0F9D58, #DB4437);
-    transform: scale(0.98);
-}
+        /* Efeito hover - inverte o degradê */
+        .btn-google-blue:hover, .btn-google-green:hover, .btn-google-red:hover, .btn-google-yellow:hover {
+            background: linear-gradient(45deg, #FBBC05, #EA4335); /* Degradê amarelo e vermelho do Google */
+            transform: scale(1.05); /* Leve aumento no tamanho */
+        }
 
-/* Estilos do botão WhatsApp */
-.support-whatsapp {
-    background-color: #25D366;
-}
-
-.support-whatsapp:hover {
-    background-color: #1EBE5B;
-}
-
-/* Efeito de tendência */
-.trend-up {
-    color: #4CAF50; 
-}
-
-.trend-down {
-    color: #f44336; 
-}
-
-.trend-neutral {
-    color: #FFEB3B;
-}
-
-/* Estilos de tabela */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #333;
-    border-radius: 15px;
-    margin-top: 20px;
-}
-
-th, td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid #444;
-}
-
-th {
-    background-color: #222;
-    color: #f1f1f1;
-    font-size: 1.1em;
-    font-weight: 500;
-}
-
-tbody tr:nth-child(even) {
-    background-color: #444;
-}
-
-td {
-    font-size: 1em;
-    color: #ddd;
-}
-
-/* Responsividade adicional */
-@media (max-width: 768px) {
-    table {
-        font-size: 0.9em;
-    }
-
-    th, td {
-        padding: 12px 10px;
-    }
-
-    .icon {
-        width: 18px;
-        height: 18px;
-    }
-}
-
+        /* Efeito de clique */
+        .btn-google-blue:active, .btn-google-green:active, .btn-google-red:active, .btn-google-yellow:active {
+            background: linear-gradient(45deg, #0F9D58, #DB4437); /* Tons mais escuros */
+            transform: scale(0.98); /* Pequena redução para efeito de clique */
+        }
     </style>
+
+
 </head>
 <body>
 <h1>booking</h1>
