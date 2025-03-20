@@ -1,578 +1,233 @@
-
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="icon" href="file:///C:/Users/jobsj/Downloads/logo.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BOOKING</title>
     <link href="./BOOKING_files/bootstrap.min.css" rel="stylesheet">
     <link href="./BOOKING_files/all.min.css" rel="stylesheet">
     <style>
-  /* Animação de piscamento com base na variação do ativo */
-@keyframes blink {
-    0% { color: #ff0000; } /* Vermelho para variação negativa */
-    50% { color: #ffff00; } /* Amarelo para variação neutra */
-    100% { color: #00ff00; } /* Verde para variação positiva */
-}
-
-.blink {
-    animation: blink 1s infinite; /* Piscando a cada 1 segundo */
-    font-weight: bold;
-}
-
-/* Estilos gerais */
-body {
-    background-color: #121212;
-    color: #fff;
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-/* Tabela */
-table {
-    width: 100%;
-    margin-top: 20px;
-    border-collapse: collapse;
-}
-
-th, td {
-    padding: 12px;
-    text-align: left;
-}
-
-th {
-    background-color: #2a2a2a;
-}
-
-tr:nth-child(even) {
-    background-color: #2c2c2c;
-}
-
-tr:nth-child(odd) {
-    background-color: #1f1f1f;
-}
-
-/* Botões */
-/* Improved hover effect for buttons */
-.btn-blue {
-    background-color: #1A73E8;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: bold;
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.btn-blue:hover {
-    background-color: #165ab6;
-}
-You could also combine similar CSS rules for .social-icons a into one, and avoid repeating them.
-
-css
-Copiar
-Editar
-/* Combined social icons styling */
-.social-icons a {
-    color: black;
-    font-size: 20px;
-    margin: 0 10px;
-    transition: color 0.3s ease;
-}
-
-.social-icons a:hover {
-    color: gray;
-}
-Would you like help adding specific features or further customization?
-
-
-
-
-
-
-Você disse:
-de a stag style completa
-O ChatGPT disse:
-Aqui está a versão completa do seu código, com todos os estilos e elementos, incluindo a parte que estava faltando:
-
-html
-Copiar
-Editar
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BOOKING</title>
-<link href="./BOOKING_files/bootstrap.min.css" rel="stylesheet">
-<link href="./BOOKING_files/all.min.css" rel="stylesheet">
-<style>
-/* Animação de piscamento com base na variação do ativo */
-@keyframes blink {
-    0% { color: #ff0000; } /* Vermelho para variação negativa */
-    50% { color: #ffff00; } /* Amarelo para variação neutra */
-    100% { color: #00ff00; } /* Verde para variação positiva */
-}
-
-.blink {
-    animation: blink 1s infinite; /* Piscando a cada 1 segundo */
-    font-weight: bold;
-}
-
-/* Estilos gerais */
-body {
-    background-color: #121212;
-    color: #fff;
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-/* Tabela */
-table {
-    width: 100%;
-    margin-top: 20px;
-    border-collapse: collapse;
-}
-
-th, td {
-    padding: 12px;
-    text-align: left;
-}
-
-th {
-    background-color: #2a2a2a;
-}
-
-tr:nth-child(even) {
-    background-color: #2c2c2c;
-}
-
-tr:nth-child(odd) {
-    background-color: #1f1f1f;
-}
-
-/* Botões */
-.btn-blue {
-    background-color: #1A73E8;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: bold;
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-.btn-blue:hover {
-    background-color: #165ab6;
-}
-
-/* Container principal */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-/* Títulos */
-h1 {
-    color: #4CAF50;
-    text-align: center;
-}
-
-/* Navbar */
-.navbar {
-    background: linear-gradient(90deg, #ff7f00, #fdd835);
-    padding: 8px 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.navbar-links {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-}
-
-.navbar-links li {
-    margin: 0 8px;
-}
-
-.navbar-links a {
-    color: black;
-    padding: 5px 8px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 14px;
-}
-
-.navbar-links a:hover {
-    color: #000;
-}
-
-/* Ícones sociais */
-.social-icons {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-}
-
-.social-icons li {
-    margin-left: 10px;
-}
-
-.social-icons a {
-    color: black;
-    font-size: 18px;
-}
-
-.social-icons a:hover {
-    color: white;
-}
-
-/* Layout para matriz 2x2 */
-.asset-table {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    margin-top: 40px;
-}
-
-.asset-card {
-    background-color: #2c2c2c;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-}
-
-.asset-card h4 {
-    color: #fdd835;
-}
-
-.asset-card p {
-    font-size: 18px;
-}
-
-.asset-card .blink {
-    font-size: 24px;
-}
-
-/* Estilos para o painel de cotação */
-.exchange-rate-panel {
-    background-color: #000;
-    color: #4CAF50; /* Fonte verde */
-    padding: 10px;
-    text-align: center;
-    font-family: Arial, sans-serif;
-    margin-top: 10px;
-}
-
-/* Adiciona um efeito de transição suave para a atualização */
-.exchange-rate-panel h3 {
-    font-size: 18px;
-    font-weight: bold;
-}
-
-/* Ajustes para links sociais */
-.social-icons a {
-    color: black;
-    font-size: 20px;
-    margin: 0 10px;
-}
-
-.social-icons a:hover {
-    color: gray;
-}
-
-/* Navbar de Câmbio */
-.exchange-rate-navbar {
-    background-color: #000;
-    padding: 10px;
-    color: white;
-    font-size: 1.2em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    white-space: nowrap;
-    overflow-x: auto;
-    border-bottom: 2px solid #444;
-}
-
-/* Itens da Navbar */
-.exchange-rate-item {
-    padding: 5px 15px;
-    border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Animação de piscar */
-.blink-green {
-    color: rgb(0, 255, 0);
-    animation: blink-green 1s infinite;
-}
-
-@keyframes blink-green {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
-}
-</style>
-</head>
-<body>
-
-    <!-- NavBar -->
-<nav class="navbar">
-    <ul class="navbar-links">
-        <li><a href="file:///C:/Users/jobsj/Downloads/AKB.HTML" target="_blank">AKB</a></li>
-        <li><a href="file:///C:/Users/jobsj/Downloads/jiufi.html" target="_blank">JIUFI</a></li>
-        <li><a href="file:///C:/Users/jobsj/Downloads/found.html" target="_blank">FOUND</a></li>
-        <li><a href="file:///C:/Users/jobsj/Downloads/EVO.HTML" target="_blank">EVO</a></li>
-        <li><a href="file:///C:/Users/jobsj/Downloads/p3p.html" target="_blank">CDB</a></li>
-        <li><a href="file:///C:/Users/jobsj/Downloads/OZZ.HTML" target="_blank">OZZ</a></li>
-        <li><a href="file:///C:/Users/jobsj/Downloads/ARK.HTML" target="_blank">ARK</a></li>
-        <li><a href="https://docs.google.com/document/d/14k4L8ycI3LfkvBVSqKA20oo6V1wfNofbvb9BezFqMQQ/edit?usp=sharingl" target="_blank">Docs</a></li>
-    </ul>
-    <ul class="social-icons">
-        <li><a href="https://www.instagram.com/brncinc" target="_blank"><i class="fab fa-instagram"></i></a></li>
-        <li><a href="https://www.linkedin.com/company/brncx/" target="_blank"><i class="fab fa-linkedin"></i></a></li>
-        <li><a href="https://twitter.com/lucasjanuario14" target="_blank"><i class="fab fa-twitter"></i></a></li>
-    </ul>
-</nav>
-
-<!-- CSS -->
-<style>
-    .social-icons a {
-        color: black; /* Define a cor preta para os ícones */
-        font-size: 20px; /* Ajuste do tamanho dos ícones */
-        margin: 0 10px;
-    }
-    
-    .social-icons a:hover {
-        color: gray; /* Muda para cinza ao passar o mouse */
-    }
-</style>
-
- <!-- Navbar de Câmbio -->
-<nav id="exchange-rate-navbar" class="exchange-rate-navbar">
-    <span class="exchange-rate-item">USD: <span id="usd-to-brl" class="blink-green">5.35</span> BRL</span>
-    <span class="exchange-rate-item">EUR: <span id="eur-to-brl" class="blink-green"></span> BRL</span>
-    <span class="exchange-rate-item">GBP: <span id="gbp-to-brl" class="blink-green"></span> BRL</span>
-    <span class="exchange-rate-item">JPY: <span id="jpy-to-brl" class="blink-green"></span> BRL</span>
-    <span class="exchange-rate-item">BTC: <span id="btc-to-brl" class="blink-green"></span> BRL</span>
-    <span class="exchange-rate-item">ETH: <span id="eth-to-brl" class="blink-green"></span> BRL</span>
-</nav>
-
-<script>
-async function fetchExchangeRates() {
-    try {
-        const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
-        const data = await response.json();
-
-        // Moedas Fiat
-        document.getElementById("usd-to-brl").textContent = data.rates.BRL.toFixed(2);
-        
-        const eurToBrl = data.rates.BRL / data.rates.EUR;
-        document.getElementById("eur-to-brl").textContent = eurToBrl.toFixed(2);
-
-        const gbpToBrl = data.rates.BRL / data.rates.GBP;
-        document.getElementById("gbp-to-brl").textContent = gbpToBrl.toFixed(2);
-
-        const jpyToBrl = data.rates.BRL / data.rates.JPY;
-        document.getElementById("jpy-to-brl").textContent = jpyToBrl.toFixed(4);
-
-        // Criptomoedas
-        const cryptoResponse = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=brl');
-        const cryptoData = await cryptoResponse.json();
-
-        document.getElementById("btc-to-brl").textContent = cryptoData.bitcoin.brl.toFixed(2);
-        document.getElementById("eth-to-brl").textContent = cryptoData.ethereum.brl.toFixed(2);
-        
-    } catch (error) {
-        console.error("Erro ao buscar cotações:", error);
-    }
-}
-
-// Buscar cotações ao carregar a página
-fetchExchangeRates();
-</script>
-
-<style>
-/* Navbar de Câmbio */
-.exchange-rate-navbar {
-    background-color: #000;
-    padding: 10px;
-    color: white;
-    font-size: 1.2em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    white-space: nowrap;
-    overflow-x: auto;
-    border-bottom: 2px solid #444;
-}
-
-/* Itens da Navbar */
-.exchange-rate-item {
-    padding: 5px 15px;
-    border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Animação de piscar */
-.blink-green {
-    color: rgb(0, 255, 0);
-    animation: blink-green 1s infinite;
-}
-
-@keyframes blink-green {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
-}
-</style>
-
-
-    <div class="asset-table">
-        <div class="asset-card">
-            <h4 style="color: #39FF14;">Dark Bitcoin</h4>
-            <p style="color: white;">Preço: $57,000</p>
-            <a href="file:///C:/Users/jobsj/Downloads/pay.html" class="btn-blue">Comprar</a>
-        </div>
-        <div class="asset-card">
-            <h4 style="color: #39FF14;">Dark Ethereum</h4>
-            <p style="color: white;">Preço: $4,500</p>
-            <a href="file:///C:/Users/jobsj/Downloads/pay.html" class="btn-blue">Comprar</a>
-        </div>
-        <div class="asset-card">
-            <h4 style="color: #39FF14;">Dark Ripple</h4>
-            <p style="color: white;">Preço: $1.20</p>
-            <a href="file:///C:/Users/jobsj/Downloads/pay.html" class="btn-blue">Comprar</a>
-        </div>
-        <div class="asset-card">
-            <h4 style="color: #39FF14;">Dark Litecoin</h4>
-            <p style="color: white;">Preço: $300</p>
-            <a href="file:///C:/Users/jobsj/Downloads/pay.html" class="btn-blue">Comprar</a>
-        </div>
-        <div class="asset-card">
-            <h4 style="color: #39FF14;">Dark Cardano</h4>
-            <p style="color: white;">Preço: $2.50</p>
-            <a href="file:///C:/Users/jobsj/Downloads/pay.html" class="btn-blue">Comprar</a>
-        </div>
-        <div class="asset-card">
-            <h4 style="color: #39FF14;">Dark Dogecoin</h4>
-            <p style="color: white;">Preço: $0.25</p>
-            <a href="file:///C:/Users/jobsj/Downloads/pay.html" class="btn-blue">Comprar</a>
-        </div>
-        <div class="asset-card">
-            <h4 style="color: #39FF14;">Dark Solana</h4>
-            <p style="color: white;">Preço: $150</p>
-            <a href="file:///C:/Users/jobsj/Downloads/pay.html" class="btn-blue">Comprar</a>
-        </div>
-        <div class="asset-card">
-            <h4 style="color: #39FF14;">Dark Polkadot</h4>
-            <p style="color: white;">Preço: $35</p>
-            <a href="file:///C:/Users/jobsj/Downloads/pay.html" class="btn-blue">Comprar</a>
-        </div>
-    </div>
-</div>
-
-
-<script>
-    // Função para atualizar a cotação do dólar
-    function updateExchangeRate() {
-        const exchangeRate = 5.35; // Exemplo de taxa de câmbio
-        document.getElementById('usd-to-brl').textContent = exchangeRate.toFixed(2);
-        
-        // Adiciona a lógica de piscamento baseado na cotação
-        const exchangeRateElement = document.getElementById('usd-to-brl');
-        
-        if (exchangeRate < 5.60) {
-            exchangeRateElement.style.animation = 'blink-green 1s infinite';
-            exchangeRateElement.style.color = '#00ff00'; // Verde
-        } else if (exchangeRate > 5.70) {
-            exchangeRateElement.style.animation = 'blink-yellow 1s infinite';
-            exchangeRateElement.style.color = '#ffff00'; // Amarelo
-        } else {
-            exchangeRateElement.style.animation = 'blink-red 1s infinite';
-            exchangeRateElement.style.color = '#ff0000'; // Vermelho
+        /* Animação de piscamento com base na variação do ativo */
+        @keyframes blink {
+            0% { color: #ff0000; } /* Vermelho para variação negativa */
+            50% { color: #ffff00; } /* Amarelo para variação neutra */
+            100% { color: #00ff00; } /* Verde para variação positiva */
         }
-    }
 
-    // Função para atualizar a variação de preço
-    function updatePriceVariation() {
-        const variations = [
-            { id: 'price-dbt', percentage: (Math.random() * 2 - 1).toFixed(2) }, // Variação aleatória entre -1% e +1%
-            { id: 'price-deth', percentage: (Math.random() * 2 - 1).toFixed(2) },
-            { id: 'price-dripple', percentage: (Math.random() * 2 - 1).toFixed(2) },
-            { id: 'price-dltc', percentage: (Math.random() * 2 - 1).toFixed(2) }
-        ];
+        .blink {
+            animation: blink 1s infinite; /* Piscando a cada 1 segundo */
+            font-weight: bold;
+        }
 
-        variations.forEach(item => {
-            const element = document.getElementById(item.id);
-            element.textContent = `Variação: ${item.percentage}%`;
-            if (item.percentage > 0) {
-                element.classList.remove('blink');
-                element.classList.add('blink-green'); // Verde
-            } else if (item.percentage < 0) {
-                element.classList.remove('blink');
-                element.classList.add('blink-red'); // Vermelho
-            }
-        });
-    }
+        /* Estilos gerais */
+        body {
+            background-color: #121212;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
 
-    // Atualiza a cotação e a variação a cada 5 minutos
-    setInterval(() => {
-        updateExchangeRate();
-        updatePriceVariation();
-    }, 5 * 60 * 1000); // 5 minutos em milissegundos
+        /* Tabela */
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
 
-    updateExchangeRate();
-    updatePriceVariation();
-</script>
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
 
-<style>
-    /* Definindo animações de piscamento para cada cor */
-    @keyframes blink-green {
-        0% { color: #00ff00; }
-        50% { opacity: 0.5; }
-        100% { color: #00ff00; }
-    }
+        th {
+            background-color: #2a2a2a;
+        }
 
-    @keyframes blink-yellow {
-        0% { color: #ffff00; }
-        50% { opacity: 0.5; }
-        100% { color: #ffff00; }
-    }
+        tr:nth-child(even) {
+            background-color: #2c2c2c;
+        }
 
-    @keyframes blink-red {
-        0% { color: #ff0000; }
-        50% { opacity: 0.5; }
-        100% { color: #ff0000; }
-    }
-</style>
+        tr:nth-child(odd) {
+            background-color: #1f1f1f;
+        }
 
+        /* Botões */
+        .btn-blue {
+            background-color: #1A73E8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 5px;
+        }
 
+        .btn-blue:hover {
+            background-color: #165ab6;
+        }
 
-</body></html>
+        /* Container principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Títulos */
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(90deg, #ff7f00, #fdd835);
+            padding: 8px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-links {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        .navbar-links li {
+            margin: 0 8px;
+        }
+
+        .navbar-links a {
+            color: black;
+            padding: 5px 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .navbar-links a:hover {
+            color: #000;
+        }
+
+        /* Ícones sociais */
+        .social-icons {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .social-icons li {
+            margin-left: 10px;
+        }
+
+        .social-icons a {
+            color: black;
+            font-size: 18px;
+        }
+
+        .social-icons a:hover {
+            color: white;
+        }
+
+        /* Layout para matriz 2x2 */
+        .asset-table {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .asset-card {
+            background-color: #2c2c2c;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .asset-card h4 {
+            color: #fdd835;
+        }
+
+        .asset-card p {
+            font-size: 18px;
+        }
+
+        .asset-card .blink {
+            font-size: 24px;
+        }
+
+        /* Estilos para o painel de cotação */
+        .exchange-rate-panel {
+            background-color: #000;
+            color: #4CAF50; /* Fonte verde */
+            padding: 10px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            margin-top: 10px;
+        }
+
+        /* Adiciona um efeito de transição suave para a atualização */
+        .exchange-rate-panel h3 {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Navbar de Câmbio */
+        .exchange-rate-navbar {
+            background-color: #000;
+            padding: 10px;
+            color: white;
+            font-size: 1.2em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            white-space: nowrap;
+            overflow-x: auto;
+            border-bottom: 2px solid #444;
+        }
+
+        /* Itens da Navbar */
+        .exchange-rate-item {
+            padding: 5px 15px;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Animação de piscar */
+        .blink-green {
+            color: rgb(0, 255, 0);
+            animation: blink-green 1s infinite;
+        }
+
+        @keyframes blink-green {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
 </head>
 <body>
-
     <!-- NavBar -->
     <nav class="navbar">
         <ul class="navbar-links">
-            <li><a href="file:///C:/Users/jobsj/Downloads/AKB.HTML" target="_blank">AKB</a></li>
-            <li><a href="file:///C:/Users/jobsj/Downloads/jiufi.html" target="_blank">JIUFI</a></li>
-            <li><a href="file:///C:/Users/jobsj/Downloads/found.html" target="_blank">FOUND</a></li>
-            <li><a href="file:///C:/Users/jobsj/Downloads/EVO.HTML" target="_blank">EVO</a></li>
-            <li><a href="file:///C:/Users/jobsj/Downloads/p3p.html" target="_blank">CDB</a></li>
-            <li><a href="file:///C:/Users/jobsj/Downloads/OZZ.HTML" target="_blank">OZZ</a></li>
-            <li><a href="file:///C:/Users/jobsj/Downloads/ARK.HTML" target="_blank">ARK</a></li>
-            <li><a href="https://docs.google.com/document/d/14k4L8ycI3LfkvBVSqKA20oo6V1wfNofbvb9BezFqMQQ/edit?usp=sharingl" target="_blank">Docs</a></li>
+            <li><a href="https://nscsuport.github.io/boscojones//AKB.HTML" target="_blank">AKB</a></li>
+            <li><a href="https://nscsuport.github.io/boscojones//jiufi.html" target="_blank">JIUFI</a></li>
+            <li><a href="https://nscsuport.github.io/boscojones//found.html" target="_blank">FOUND</a></li>
+            <li><a href="https://nscsuport.github.io/boscojones//EVO.HTML" target="_blank">EVO</a></li>
+            <li><a href="https://nscsuport.github.io/boscojones//p3p.html" target="_blank">CDB</a></li>
+            <li><a href="https://nscsuport.github.io/boscojones//OZZ.HTML" target="_blank">OZZ</a></li>
+            <li><a href="https://nscsuport.github.io/boscojones/ARK.HTML" target="_blank">ARK</a></li>
+            <li><a href="https://docs.google.com/document/d/14k4L8ycI3LfkvBVSqKA20oo6V1wfNofbvb9BezFqMQQ/edit?usp=sharing" target="_blank">Docs</a></li>
         </ul>
         <ul class="social-icons">
             <li><a href="https://www.instagram.com/brncinc" target="_blank"><i class="fab fa-instagram"></i></a></li>
@@ -581,50 +236,71 @@ fetchExchangeRates();
         </ul>
     </nav>
 
- <!-- Navbar de Câmbio -->
-<nav id="exchange-rate-navbar" class="exchange-rate-navbar">
-    <span class="exchange-rate-item">USD: <span id="usd-to-brl" class="blink-green">5.35</span> BRL</span>
-    <span class="exchange-rate-item">EUR: <span id="eur-to-brl" class="blink-green"></span> BRL</span>
-    <span class="exchange-rate-item">GBP: <span id="gbp-to-brl" class="blink-green"></span> BRL</span>
-    <span class="exchange-rate-item">JPY: <span id="jpy-to-brl" class="blink-green"></span> BRL</span>
-    <span class="exchange-rate-item">BTC: <span id="btc-to-brl" class="blink-green"></span> BRL</span>
-    <span class="exchange-rate-item">ETH: <span id="eth-to-brl" class="blink-green"></span> BRL</span>
-</nav>
+    <!-- Navbar de Câmbio -->
+    <nav id="exchange-rate-navbar" class="exchange-rate-navbar">
+        <span class="exchange-rate-item">USD: <span id="usd-to-brl" class="blink-green">5.35</span> BRL</span>
+        <span class="exchange-rate-item">EUR: <span id="eur-to-brl" class="blink-green"></span> BRL</span>
+        <span class="exchange-rate-item">GBP: <span id="gbp-to-brl" class="blink-green"></span> BRL</span>
+        <span class="exchange-rate-item">JPY: <span id="jpy-to-brl" class="blink-green"></span> BRL</span>
+        <span class="exchange-rate-item">BTC: <span id="btc-to-brl" class="blink-green"></span> BRL</span>
+        <span class="exchange-rate-item">ETH: <span id="eth-to-brl" class="blink-green"></span> BRL</span>
+    </nav>
 
-<script>
-async function fetchExchangeRates() {
-    try {
-        const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
-        const data = await response.json();
+    <script>
+        async function fetchExchangeRates() {
+            try {
+                const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+                const data = await response.json();
 
-        // Moedas Fiat
-        document.getElementById("usd-to-brl").textContent = data.rates.BRL.toFixed(2);
-        
-        const eurToBrl = data.rates.BRL / data.rates.EUR;
-        document.getElementById("eur-to-brl").textContent = eurToBrl.toFixed(2);
+                // Moedas Fiat
+                document.getElementById("usd-to-brl").textContent = data.rates.BRL.toFixed(2);
 
-        const gbpToBrl = data.rates.BRL / data.rates.GBP;
-        document.getElementById("gbp-to-brl").textContent = gbpToBrl.toFixed(2);
+                const eurToBrl = data.rates.BRL / data.rates.EUR;
+                document.getElementById("eur-to-brl").textContent = eurToBrl.toFixed(2);
 
-        const jpyToBrl = data.rates.BRL / data.rates.JPY;
-        document.getElementById("jpy-to-brl").textContent = jpyToBrl.toFixed(4);
+                const gbpToBrl = data.rates.BRL / data.rates.GBP;
+                document.getElementById("gbp-to-brl").textContent = gbpToBrl.toFixed(2);
 
-        // Criptomoedas
-        const cryptoResponse = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=brl');
-        const cryptoData = await cryptoResponse.json();
+                const jpyToBrl = data.rates.BRL / data.rates.JPY;
+                document.getElementById("jpy-to-brl").textContent = jpyToBrl.toFixed(2);
 
-        document.getElementById("btc-to-brl").textContent = cryptoData.bitcoin.brl.toFixed(2);
-        document.getElementById("eth-to-brl").textContent = cryptoData.ethereum.brl.toFixed(2);
-        
-    } catch (error) {
-        console.error("Erro ao buscar cotações:", error);
-    }
-}
+                // Criptomoedas
+                document.getElementById("btc-to-brl").textContent = (data.rates.BRL / data.rates.BTC).toFixed(2);
+                document.getElementById("eth-to-brl").textContent = (data.rates.BRL / data.rates.ETH).toFixed(2);
+            } catch (error) {
+                console.error("Erro ao carregar taxas de câmbio", error);
+            }
+        }
 
-// Buscar cotações ao carregar a página
-fetchExchangeRates();
-</script>
+        // Chama a função para carregar as taxas de câmbio
+        fetchExchangeRates();
+    </script>
 
-
-
-</body></html>
+    <!-- Tabela de Ativos -->
+    <div class="container">
+        <h1>BOOKING</h1>
+        <div class="asset-table">
+            <div class="asset-card">
+                <h4>Bitcoin</h4>
+                <p>Variação: <span class="blink">+2.3%</span></p>
+                <button class="btn-blue" onclick="window.location.href = 'formulario.html';">Comprar</button>
+            </div>
+            <div class="asset-card">
+                <h4>Ethereum</h4>
+                <p>Variação: <span class="blink">+5.1%</span></p>
+                <button class="btn-blue" onclick="window.location.href = 'formulario.html';">Comprar</button>
+            </div>
+            <div class="asset-card">
+                <h4>Ripple</h4>
+                <p>Variação: <span class="blink">-1.2%</span></p>
+                <button class="btn-blue" onclick="window.location.href = 'formulario.html';">Comprar</button>
+            </div>
+            <div class="asset-card">
+                <h4>Litecoin</h4>
+                <p>Variação: <span class="blink">+0.8%</span></p>
+                <button class="btn-blue" onclick="window.location.href = 'formulario.html';">Comprar</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
