@@ -2,20 +2,21 @@
 <html lang="pt-br">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-     <link rel="icon" href="logo.ico">
+    <link rel="icon" href="logo.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BOOKING</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <style>
+        /* Animação de piscamento com base na variação do ativo */
         @keyframes blink {
-            0% { color: #ff0000; } /* Red for negative variation */
-            50% { color: #ffff00; } /* Yellow for neutral variation */
-            100% { color: #00ff00; } /* Green for positive variation */
+            0% { color: #ff0000; } /* Vermelho para variação negativa */
+            50% { color: #ffff00; } /* Amarelo para variação neutra */
+            100% { color: #00ff00; } /* Verde para variação positiva */
         }
 
         .blink {
-            animation: blink 1s infinite; /* Blink every 1 second */
+            animation: blink 1s infinite; /* Piscando a cada 1 segundo */
             font-weight: bold;
         }
 
@@ -74,6 +75,7 @@
             text-align: center;
         }
 
+        /* Navbar com fonte preta */
         .navbar {
             background: linear-gradient(90deg, #ff7f00, #fdd835);
             padding: 8px 10px;
@@ -102,7 +104,7 @@
         }
 
         .navbar-links a:hover {
-            color: white;
+            color: #000;
         }
 
         .social-icons {
@@ -153,6 +155,7 @@
         .asset-card .blink {
             font-size: 24px;
         }
+
         /* Estilos para o painel de cotação */
         .exchange-rate-panel {
             background-color: #000;
@@ -243,85 +246,125 @@
     <div id="exchange-rate-panel" class="exchange-rate-panel">
         <h3>Cotação do Dólar: <span id="usd-to-brl"></span> BRL</h3>
     </div>
-    <div class="container">
-
-        <div class="asset-table">
-            <div class="asset-card">
-                <h4>Dark Bitcoin</h4>
-                <p>Preço: $57,000</p>
-                <p class="blink">Variação: +3.5%</p>
-                <a href="pay.html" class="btn-blue">Comprar</a>
-            </div>
-            <div class="asset-card">
-                <h4>Dark Ethereum</h4>
-                <p>Preço: $4,500</p>
-                <p class="blink">Variação: -2.1%</p>
-                <a href="pay.html" class="btn-blue">Comprar</a>
-            </div>
-            <div class="asset-card">
-                <h4>Dark Ripple</h4>
-                <p>Preço: $1.20</p>
-                <p class="blink">Variação: +1.8%</p>
-                <a href="pay.html" class="btn-blue">Comprar</a>
-            </div>
-            <div class="asset-card">
-                <h4>Dark Litecoin</h4>
-                <p>Preço: $300</p>
-                <p class="blink">Variação: -0.5%</p>
-                <a href="pay.html" class="btn-blue">Comprar</a>
-            </div>
-            <div class="asset-card">
-                <h4>Dark Cardano</h4>
-                <p>Preço: $2.50</p>
-                <p class="blink">Variação: +2.3%</p>
-                <a href="pay.html" class="btn-blue">Comprar</a>
-            </div>
-            <div class="asset-card">
-                <h4>Dark Dogecoin</h4>
-                <p>Preço: $0.25</p>
-                <p class="blink">Variação: +4.2%</p>
-                <a href="pay.html" class="btn-blue">Comprar</a>
-            </div>
-            <div class="asset-card">
-                <h4>Dark Solana</h4>
-                <p>Preço: $150</p>
-                <p class="blink">Variação: -1.7%</p>
-                <a href="pay.html" class="btn-blue">Comprar</a>
-            </div>
-            <div class="asset-card">
-                <h4>Dark Polkadot</h4>
-                <p>Preço: $35</p>
-                <p class="blink">Variação: +3.9%</p>
-                <a href="pay.html" class="btn-blue">Comprar</a>
-            </div>
-            <div class="asset-card">
-                <h4>Dark BNB</h4>
-                <p>Preço: $400</p>
-                <p class="blink">Variação: +0.8%</p>
-                <a href="pay.html" class="btn-blue">Comprar</a>
-            </div>
-            <div class="asset-card">
-                <h4>Dark Chainlink</h4>
-                <p>Preço: $30</p>
-                <p class="blink">Variação: -3.1%</p>
-                <a href="pay.html" class="btn-blue">Comprar</a>
-            </div>
+   <div class="container">
+    <div class="asset-table">
+        <div class="asset-card">
+            <h4 style="color: #39FF14;">Dark Bitcoin</h4>
+            <p style="color: white;">Preço: $57,000</p>
+            <a href="pay.html" class="btn-blue">Comprar</a>
+        </div>
+        <div class="asset-card">
+            <h4 style="color: #39FF14;">Dark Ethereum</h4>
+            <p style="color: white;">Preço: $4,500</p>
+            <a href="pay.html" class="btn-blue">Comprar</a>
+        </div>
+        <div class="asset-card">
+            <h4 style="color: #39FF14;">Dark Ripple</h4>
+            <p style="color: white;">Preço: $1.20</p>
+            <a href="pay.html" class="btn-blue">Comprar</a>
+        </div>
+        <div class="asset-card">
+            <h4 style="color: #39FF14;">Dark Litecoin</h4>
+            <p style="color: white;">Preço: $300</p>
+            <a href="pay.html" class="btn-blue">Comprar</a>
+        </div>
+        <div class="asset-card">
+            <h4 style="color: #39FF14;">Dark Cardano</h4>
+            <p style="color: white;">Preço: $2.50</p>
+            <a href="pay.html" class="btn-blue">Comprar</a>
+        </div>
+        <div class="asset-card">
+            <h4 style="color: #39FF14;">Dark Dogecoin</h4>
+            <p style="color: white;">Preço: $0.25</p>
+            <a href="pay.html" class="btn-blue">Comprar</a>
+        </div>
+        <div class="asset-card">
+            <h4 style="color: #39FF14;">Dark Solana</h4>
+            <p style="color: white;">Preço: $150</p>
+            <a href="pay.html" class="btn-blue">Comprar</a>
+        </div>
+        <div class="asset-card">
+            <h4 style="color: #39FF14;">Dark Polkadot</h4>
+            <p style="color: white;">Preço: $35</p>
+            <a href="pay.html" class="btn-blue">Comprar</a>
         </div>
     </div>
+</div>
 
-   <script>
-        // Função para buscar a cotação do dólar em tempo real
-        const fetchExchangeRate = async () => {
-            const apiKey = 'f94c6bb4d02fd29ef8f4492dee2cc59a'; // Sua chave da API Fixer.io
-            const url = `https://api.exchangerate-api.com/v4/latest/USD`; // Endpoint para cotação em tempo real
-            const response = await fetch(url);
-            const data = await response.json();
-            const exchangeRate = data.rates.BRL; // Obtemos a cotação do dólar em BRL
-            document.getElementById('usd-to-brl').textContent = exchangeRate.toFixed(2); // Exibe a cotação
-        };
 
-        // Chama a função ao carregar a página
-        window.onload = fetchExchangeRate;
-    </script>
+<script>
+    // Função para atualizar a cotação do dólar
+    function updateExchangeRate() {
+        const exchangeRate = 5.35; // Exemplo de taxa de câmbio
+        document.getElementById('usd-to-brl').textContent = exchangeRate.toFixed(2);
+        
+        // Adiciona a lógica de piscamento baseado na cotação
+        const exchangeRateElement = document.getElementById('usd-to-brl');
+        
+        if (exchangeRate < 5.60) {
+            exchangeRateElement.style.animation = 'blink-green 1s infinite';
+            exchangeRateElement.style.color = '#00ff00'; // Verde
+        } else if (exchangeRate > 5.70) {
+            exchangeRateElement.style.animation = 'blink-yellow 1s infinite';
+            exchangeRateElement.style.color = '#ffff00'; // Amarelo
+        } else {
+            exchangeRateElement.style.animation = 'blink-red 1s infinite';
+            exchangeRateElement.style.color = '#ff0000'; // Vermelho
+        }
+    }
+
+    // Função para atualizar a variação de preço
+    function updatePriceVariation() {
+        const variations = [
+            { id: 'price-dbt', percentage: (Math.random() * 2 - 1).toFixed(2) }, // Variação aleatória entre -1% e +1%
+            { id: 'price-deth', percentage: (Math.random() * 2 - 1).toFixed(2) },
+            { id: 'price-dripple', percentage: (Math.random() * 2 - 1).toFixed(2) },
+            { id: 'price-dltc', percentage: (Math.random() * 2 - 1).toFixed(2) }
+        ];
+
+        variations.forEach(item => {
+            const element = document.getElementById(item.id);
+            element.textContent = `Variação: ${item.percentage}%`;
+            if (item.percentage > 0) {
+                element.classList.remove('blink');
+                element.classList.add('blink-green'); // Verde
+            } else if (item.percentage < 0) {
+                element.classList.remove('blink');
+                element.classList.add('blink-red'); // Vermelho
+            }
+        });
+    }
+
+    // Atualiza a cotação e a variação a cada 5 minutos
+    setInterval(() => {
+        updateExchangeRate();
+        updatePriceVariation();
+    }, 5 * 60 * 1000); // 5 minutos em milissegundos
+
+    updateExchangeRate();
+    updatePriceVariation();
+</script>
+
+<style>
+    /* Definindo animações de piscamento para cada cor */
+    @keyframes blink-green {
+        0% { color: #00ff00; }
+        50% { opacity: 0.5; }
+        100% { color: #00ff00; }
+    }
+
+    @keyframes blink-yellow {
+        0% { color: #ffff00; }
+        50% { opacity: 0.5; }
+        100% { color: #ffff00; }
+    }
+
+    @keyframes blink-red {
+        0% { color: #ff0000; }
+        50% { opacity: 0.5; }
+        100% { color: #ff0000; }
+    }
+</style>
+
 </body>
 </html>
