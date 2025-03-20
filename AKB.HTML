@@ -7,91 +7,64 @@
   <title>Pagamento AKB - Criptos</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    /* Reset e estilos básicos */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Roboto', Arial, sans-serif;
-      color: #00FF00;
-      background-color: #000000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      padding: 10px;
-      flex-direction: column;
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 20px;
-      color: #00FF00;
-      text-align: center;
-      text-shadow: 0 0 15px #7e00ff, 0 0 25px #ff0000;
-    }
-    .container {
-      width: 100%;
-      max-width: 500px;
-      background-color: rgba(30, 30, 30, 0.9);
-      border-radius: 15px;
-      padding: 30px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(12px);
-    }
-    .form-group { margin-bottom: 15px; }
-    .form-group label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: bold;
-      color: #e0e0e0;
-    }
-    .form-group input, .form-group select {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #3c3c3c;
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-      font-size: 1rem;
-      transition: border-color 0.3s ease;
-    }
-    .form-group input:focus, .form-group select:focus {
-      outline: none;
-      border-color: #4CAF50;
-    }
-    button {
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      color: #fff;
-      border: none;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-      text-align: center;
-      width: 100%;
-      margin-top: 10px;
-    }
-    #generate-code-btn { background-color: #4CAF50; }
-    #generate-code-btn:hover { background-color: #45a049; transform: scale(1.05); }
-    #confirm-btn { background-color: #f44336; }
-    #confirm-btn:hover:not(:disabled) { background-color: #d32f2f; transform: scale(1.05); }
-    footer {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(45deg, #f0f000, #ff4500);
-      color: #000;
-      text-align: center;
-      font-size: 1rem;
-      font-weight: bold;
-      letter-spacing: 2px;
-      text-shadow: 0 0 8px #ff0000;
-      margin-top: 20px;
-      animation: neon 1.5s ease-in-out infinite alternate;
-    }
-    @keyframes neon {
-      0% { text-shadow: 0 0 5px #ff0000; }
-      50% { text-shadow: 0 0 20px #ff4500; }
-      100% { text-shadow: 0 0 5px #ff0000; }
-    }
-  </style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            color: #00FF00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            padding: 10px;
+            background-color: #000000;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #00FF00;
+            text-align: center;
+            text-shadow: 0 0 15px #7e00ff, 0 0 25px #ff0000;
+        }
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: bold; color: #e0e0e0; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 12px; border-radius: 8px;
+            border: 1px solid #3c3c3c; background-color: #1e1e1e;
+            color: #e0e0e0; font-size: 1rem; transition: border-color 0.3s ease;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none; border-color: #4CAF50;
+        }
+        button {
+            padding: 12px; border-radius: 8px; font-weight: bold;
+            cursor: pointer; color: #fff; border: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center; width: 100%; margin-top: 10px;
+        }
+        #generate-code-btn { background-color: #4CAF50; }
+        #generate-code-btn:hover { background-color: #45a049; transform: scale(1.05); }
+        #confirm-btn { background-color: #f44336; }
+        #confirm-btn:hover:not(:disabled) { background-color: #d32f2f; transform: scale(1.05); }
+        footer {
+            width: 100%; padding: 12px;
+            background: linear-gradient(45deg, #f0f000, #ff4500);
+            color: #000; text-align: center;
+            font-size: 1rem; font-weight: bold;
+            letter-spacing: 2px; text-shadow: 0 0 8px #ff0000;
+            margin-top: 20px; animation: neon 1.5s ease-in-out infinite alternate;
+        }
+        @keyframes neon { 0% { text-shadow: 0 0 5px #ff0000; } 50% { text-shadow: 0 0 20px #ff4500; } 100% { text-shadow: 0 0 5px #ff0000; } }
+    </style>
 </head>
 <body>
   <div class="container">
@@ -142,7 +115,7 @@
   <script>
     // Taxa de conversão: valor do dólar em reais
     const darkUSD = 5.5;
-    // Taxas de conversão para cada criptomoeda para determinar o valor em OZZ
+    // Taxas para conversão de cada criptomoeda para determinar o valor em OZZ
     const cryptoRates = {
       "dark-bitcoin": 0.5,
       "dark-ethereum": 1.2,
@@ -168,7 +141,6 @@
     // Gera o código QR e calcula o valor total
     document.getElementById("generate-code-btn").addEventListener("click", function() {
       const amountInBRL = parseFloat(document.getElementById("payment-amount").value);
-      
       if (isNaN(amountInBRL) || amountInBRL <= 0) {
         alert('Por favor, insira um valor válido.');
         return;
@@ -178,7 +150,7 @@
       const selectedCrypto = document.getElementById("crypto-selection").value;
       // Converte o valor de BRL para USD
       const amountInUSD = (amountInBRL / darkUSD).toFixed(2);
-      // Calcula o valor em OZZ com base na taxa da cripto selecionada
+      // Calcula o valor em OZZ com base na taxa da criptomoeda
       const totalToPayOZZ = (amountInUSD * conversionRateToOZZ * cryptoRates[selectedCrypto]).toFixed(2);
 
       // Seleciona o plano AKB escolhido e obtém seu valor em BRL
