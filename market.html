@@ -176,6 +176,10 @@
         </ul>
     </nav>
 
+    <!-- Painel de Câmbio (Dólar) -->
+    <div id="exchange-rate-panel" class="exchange-rate-panel">
+        <h3>Cotação do Dólar: <span id="usd-to-brl"></span> BRL</h3>
+    </div>
     <div class="container">
 
         <div class="asset-table">
@@ -242,16 +246,19 @@
         </div>
     </div>
 
-    <script>
-        // Fetch live USD to BRL exchange rate from Fixer.io
+   <script>
+        // Função para buscar a cotação do dólar em tempo real
         const fetchExchangeRate = async () => {
-            const apiKey = 'f94c6bb4d02fd29ef8f4492dee2cc59a'; // Use your actual API key securely
-            const url = `https://api.exchangerate-api.com/v4/latest/USD`; // This endpoint fetches the latest USD exchange rates
+            const apiKey = 'f94c6bb4d02fd29ef8f4492dee2cc59a'; // Sua chave da API Fixer.io
+            const url = `https://api.exchangerate-api.com/v4/latest/USD`; // Endpoint para cotação em tempo real
             const response = await fetch(url);
             const data = await response.json();
-            const exchangeRate = data.rates.BRL; // Get the BRL rate
-            return exchangeRate;
+            const exchangeRate = data.rates.BRL; // Obtemos a cotação do dólar em BRL
+            document.getElementById('usd-to-brl').textContent = exchangeRate.toFixed(2); // Exibe a cotação
         };
+
+        // Chama a função ao carregar a página
+        window.onload = fetchExchangeRate;
     </script>
 </body>
 </html>
