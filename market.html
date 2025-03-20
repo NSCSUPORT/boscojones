@@ -46,17 +46,13 @@ h2 {
     text-align: center;
 }
 
-/* Container */
-.container {
-    padding: 20px;
-}/* Estilos gerais da navbar */
+/* Navbar */
 .navbar {
     background-color: #333;
     padding: 10px;
     text-align: center;
 }
 
-/* Estilo para os links */
 .navbar-links {
     list-style-type: none;
     margin: 0;
@@ -66,12 +62,10 @@ h2 {
     gap: 20px;
 }
 
-/* Estilo para os itens da lista */
 .navbar-links li {
     display: inline-block;
 }
 
-/* Estilo dos botões */
 .navbar-links a {
     text-decoration: none;
     padding: 10px 20px;
@@ -81,7 +75,7 @@ h2 {
     transition: background-color 0.3s ease;
 }
 
-/* Estilo individual para cada botão */
+/* Estilos dos botões */
 .btn-google-blue {
     background-color: #4285F4;
 }
@@ -98,62 +92,21 @@ h2 {
     background-color: #EA4335;
 }
 
-/* Efeito de hover */
 .navbar-links a:hover {
     opacity: 0.8;
 }
-/* Estilos gerais da navbar */
-.navbar {
-    background-color: #333;
-    padding: 10px;
-    text-align: center;
-}
 
-/* Estilo para os links da navbar */
-.navbar-links {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .navbar-links {
+        flex-direction: column;
+        gap: 10px;
+    }
 
-/* Estilo para os itens da lista */
-.navbar-links li {
-    display: inline-block;
-}
-
-/* Estilo dos botões */
-.navbar-links a {
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    color: white;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
-
-/* Estilo individual para cada botão */
-.btn-google-blue {
-    background-color: #4285F4;
-}
-
-.btn-google-green {
-    background-color: #34A853;
-}
-
-.btn-google-yellow {
-    background-color: #FBBC05;
-}
-
-.btn-google-red {
-    background-color: #EA4335;
-}
-
-/* Efeito de hover */
-.navbar-links a:hover {
-    opacity: 0.8;
+    .navbar-links a {
+        width: 100%;
+        text-align: center;
+    }
 }
 
 /* Estilos para os ícones de redes sociais */
@@ -176,33 +129,7 @@ h2 {
     color: #ddd;
 }
 
-/* Responsividade para telas menores */
-@media (max-width: 768px) {
-    .navbar-links {
-        flex-direction: column;
-    }
-
-    .navbar-links a {
-        width: 100%;
-        text-align: center;
-        margin-bottom: 10px;
-    }
-}
-
-/* Responsividade para telas menores */
-@media (max-width: 768px) {
-    .navbar-links {
-        flex-direction: column;
-    }
-
-    .navbar-links a {
-        width: 100%;
-        text-align: center;
-        margin-bottom: 10px;
-    }
-}
-
-/* Estilo base para os botões */
+/* Botões com cores do Google */
 .btn {
     display: inline-block;
     padding: 12px 24px;
@@ -214,81 +141,51 @@ h2 {
     border: none;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
-    font-family: 'Roboto', sans-serif; /* Fonte estilo Google */
-    text-transform: uppercase; /* Letras maiúsculas para um visual mais impactante */
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
 }
 
-/* Botões com as cores do Google */
 .btn-google-blue, .btn-google-green, .btn-google-red, .btn-google-yellow {
-    background: linear-gradient(45deg, #4285F4, #34A853); /* Degradê azul e verde (cores do Google) */
-    color: white; /* Texto branco */
+    background: linear-gradient(45deg, #4285F4, #34A853); 
+    color: white;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    font-size: 14px; /* Ajuste de fonte para um estilo mais "pixel" */
+    font-size: 14px;
     padding: 14px 28px;
 }
 
-/* Efeito hover - inverte o degradê */
 .btn-google-blue:hover, .btn-google-green:hover, .btn-google-red:hover, .btn-google-yellow:hover {
-    background: linear-gradient(45deg, #FBBC05, #EA4335); /* Degradê amarelo e vermelho do Google */
-    transform: scale(1.05); /* Leve aumento no tamanho */
+    background: linear-gradient(45deg, #FBBC05, #EA4335);
+    transform: scale(1.05);
 }
 
-/* Efeito de clique */
 .btn-google-blue:active, .btn-google-green:active, .btn-google-red:active, .btn-google-yellow:active {
-    background: linear-gradient(45deg, #0F9D58, #DB4437); /* Tons mais escuros */
-    transform: scale(0.98); /* Pequena redução para efeito de clique */
+    background: linear-gradient(45deg, #0F9D58, #DB4437);
+    transform: scale(0.98);
 }
 
-/* Estilos para os botões do WhatsApp */
-.support-whatsapp, .trix-button {
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* WhatsApp */
+/* Estilos do botão WhatsApp */
 .support-whatsapp {
-    background-color: #25D366; /* Cor padrão WhatsApp */
+    background-color: #25D366;
 }
 
 .support-whatsapp:hover {
-    background-color: #1EBE5B; /* Cor mais escura no hover */
+    background-color: #1EBE5B;
 }
 
-/* Botão trix com gradiente */
-.trix-button {
-    background: linear-gradient(to right, #FF3B30, #4CAF50); /* Gradiente com cores vibrantes */
+/* Efeito de tendência */
+.trend-up {
+    color: #4CAF50; 
 }
 
-.trix-button:hover {
-    background: linear-gradient(to right, #D32F2F, #388E3C); /* Gradiente ao passar o mouse */
+.trend-down {
+    color: #f44336; 
 }
 
-/* Botão flutuante do WhatsApp */
-.btn-whatsapp {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    background-color: #25D366; /* Cor verde do WhatsApp */
-    color: white;
-    padding: 12px 24px;
-    border-radius: 50px;
-    font-size: 16px;
-    text-align: center;
-    text-decoration: none;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s;
+.trend-neutral {
+    color: #FFEB3B;
 }
 
-.btn-whatsapp:hover {
-    background-color: #128C7E; /* Cor verde escuro do WhatsApp no hover */
-}
-
-/* Estilos das tabelas */
+/* Estilos de tabela */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -317,60 +214,10 @@ tbody tr:nth-child(even) {
 td {
     font-size: 1em;
     color: #ddd;
-    font-weight: 400;
 }
 
-/* Ícones */
-.icon {
-    width: 20px;
-    height: 20px;
-    margin-right: 8px;
-}
-
-/* Estilos dos botões Comprar */
-.buy-button {
-    background-color: #1DB954; /* Cor verde do Spotify */
-    color: black; /* Texto preto */
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px; /* Deixando igual ao estilo Wallet */
-    font-weight: bold;
-    font-size: 16px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background-color 0.3s, color 0.3s, transform 0.2s;
-}
-
-.buy-button:hover {
-    background-color: #000000; /* Fundo preto ao passar o mouse */
-    color: #1DB954; /* Texto verde ao passar o mouse */
-}
-
-.buy-button:active {
-    background-color: #2e7d32; /* Fundo verde mais escuro ao pressionar */
-    transform: translateY(2px); /* Efeito de pressionamento */
-}
-
-/* Estilos de tendência */
-.trend-up {
-    color: #4CAF50; /* Verde para tendência positiva */
-}
-
-.trend-down {
-    color: #f44336; /* Vermelho para tendência negativa */
-}
-
-.trend-neutral {
-    color: #FFEB3B; /* Amarelo para tendência neutra */
-}
-
-/* Responsividade */
+/* Responsividade adicional */
 @media (max-width: 768px) {
-    body {
-        grid-template-columns: 1fr; /* 1 coluna no celular */
-        padding: 10px;
-    }
-
     table {
         font-size: 0.9em;
     }
@@ -384,6 +231,7 @@ td {
         height: 18px;
     }
 }
+
     </style>
 </head>
 <body>
