@@ -312,50 +312,63 @@
 </nav>
 
     <script>
-        
-    async function fetchExchangeRates() {
-        try {
-            const apiKey = '06b10108781c9dc87d3f5b1a'; // Sua chave de API
-            // Fazendo a solicitação à API para obter as taxas de câmbio
-            const response = await fetch(`https://api.exchangerate-api.com/v4/latest/USD?apikey=${apiKey}`);
-            const data = await response.json();
+async function fetchExchangeRates() {
+    try {
+        const apiKey = '06b10108781c9dc87d3f5b1a'; // Sua chave de API
+        // Fazendo a solicitação à API para obter as taxas de câmbio
+        const response = await fetch(`https://v6.exchangerate-api.com/v6/${apiKey}/latest/USD`);
+        const data = await response.json();
 
-            // Atualizando as cotações na navbar
-            document.getElementById('usd-to-brl').textContent = data.rates.BRL.toFixed(2);
-            document.getElementById('eur-to-brl').textContent = data.rates.EUR.toFixed(2);
-            document.getElementById('gbp-to-brl').textContent = data.rates.GBP.toFixed(2);
-            document.getElementById('jpy-to-brl').textContent = data.rates.JPY.toFixed(2);
+        // Atualizando as cotações na navbar
+        document.getElementById('usd-to-brl').textContent = data.conversion_rates.BRL.toFixed(2);
+        document.getElementById('eur-to-brl').textContent = data.conversion_rates.EUR.toFixed(2);
+        document.getElementById('gbp-to-brl').textContent = data.conversion_rates.GBP.toFixed(2);
+        document.getElementById('jpy-to-brl').textContent = data.conversion_rates.JPY.toFixed(2);
 
-            // Cálculos das criptomoedas com base nas taxas de câmbio e preços fixos
-            const btcValor = data.rates.BRL * 50000;  // Exemplo para BTC: 50,000 USD
-            const ethValor = data.rates.BRL * 3500;   // Exemplo para ETH: 3,500 USD
-            const xrpValor = data.rates.BRL * 1.20;   // Exemplo para XRP: 1.20 USD
-            const ltcValor = data.rates.BRL * 300;    // Exemplo para LTC: 300 USD
-            const adaValor = data.rates.BRL * 2.50;   // Exemplo para ADA: 2.50 USD
-            const dogeValor = data.rates.BRL * 0.25;  // Exemplo para DOGE: 0.25 USD
-            const solValor = data.rates.BRL * 150;    // Exemplo para SOL: 150 USD
-            const dotValor = data.rates.BRL * 35;     // Exemplo para DOT: 35 USD
+        // Preço base em USD
+        const btcBasePrice = 56000;
+        const ethBasePrice = 3500;
+        const xrpBasePrice = 200;
+        const ltcBasePrice = 200;
+        const adaBasePrice = 1.50;
+        const dogeBasePrice = 0.15;
+        const solBasePrice = 100;
+        const dotBasePrice = 25;
 
-            // Atualizando as cotações das criptomoedas
-            document.getElementById('btc-to-brl').textContent = btcValor.toFixed(2);
-            document.getElementById('eth-to-brl').textContent = ethValor.toFixed(2);
-            document.getElementById('xrp-to-brl').textContent = xrpValor.toFixed(2);
-            document.getElementById('ltc-to-brl').textContent = ltcValor.toFixed(2);
-            document.getElementById('ada-to-brl').textContent = adaValor.toFixed(2);
-            document.getElementById('doge-to-brl').textContent = dogeValor.toFixed(2);
-            document.getElementById('sol-to-brl').textContent = solValor.toFixed(2);
-            document.getElementById('dot-to-brl').textContent = dotValor.toFixed(2);
+        // Atualizando os valores de ativos com base nas taxas de câmbio
+        document.getElementById('btc-price').textContent = (btcBasePrice * data.conversion_rates.BRL).toFixed(2);
+        document.getElementById('eth-price').textContent = (ethBasePrice * data.conversion_rates.BRL).toFixed(2);
+        document.getElementById('xrp-price').textContent = (xrpBasePrice * data.conversion_rates.BRL).toFixed(2);
+        document.getElementById('ltc-price').textContent = (ltcBasePrice * data.conversion_rates.BRL).toFixed(2);
+        document.getElementById('ada-price').textContent = (adaBasePrice * data.conversion_rates.BRL).toFixed(2);
+        document.getElementById('doge-price').textContent = (dogeBasePrice * data.conversion_rates.BRL).toFixed(2);
+        document.getElementById('sol-price').textContent = (solBasePrice * data.conversion_rates.BRL).toFixed(2);
+        document.getElementById('dot-price').textContent = (dotBasePrice * data.conversion_rates.BRL).toFixed(2);
 
-        } catch (error) {
-            console.error('Erro ao buscar cotações:', error);
-        }
+        // Adicionando variação (exemplo simples de variação aleatória)
+        setInterval(() => {
+            const randomVariation = (Math.random() * 0.05 - 0.025); // variação de -2,5% a +2,5%
+            document.getElementById('btc-price').textContent = (btcBasePrice * data.conversion_rates.BRL * (1 + randomVariation)).toFixed(2);
+            document.getElementById('eth-price').textContent = (ethBasePrice * data.conversion_rates.BRL * (1 + randomVariation)).toFixed(2);
+            document.getElementById('xrp-price').textContent = (xrpBasePrice * data.conversion_rates.BRL * (1 + randomVariation)).toFixed(2);
+            document.getElementById('ltc-price').textContent = (ltcBasePrice * data.conversion_rates.BRL * (1 + randomVariation)).toFixed(2);
+            document.getElementById('ada-price').textContent = (adaBasePrice * data.conversion_rates.BRL * (1 + randomVariation)).toFixed(2);
+            document.getElementById('doge-price').textContent = (dogeBasePrice * data.conversion_rates.BRL * (1 + randomVariation)).toFixed(2);
+            document.getElementById('sol-price').textContent = (solBasePrice * data.conversion_rates.BRL * (1 + randomVariation)).toFixed(2);
+            document.getElementById('dot-price').textContent = (dotBasePrice * data.conversion_rates.BRL * (1 + randomVariation)).toFixed(2);
+        }, 1000); // Atualiza a cada 1 segundo (1.000 ms)
+
+    } catch (error) {
+        console.error('Erro ao buscar cotações:', error);
     }
+}
 
-    // Atualizando a cada 5 minutos (300000 ms)
-    setInterval(fetchExchangeRates, 300000);
-    
-    // Executa uma vez ao carregar a página
-    fetchExchangeRates();
+// Atualiza a cada 5 minutos (300000 ms)
+setInterval(fetchExchangeRates, 300000);
+
+// Executa uma vez ao carregar a página
+fetchExchangeRates();
+
 </script>
 
     <!-- Tabela de ativos -->
