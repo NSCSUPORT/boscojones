@@ -364,7 +364,7 @@ async function fetchExchangeRates() {
 }
 
 // Atualiza a cada 5 minutos (300000 ms)
-setInterval(fetchExchangeRates, 300000);
+setInterval(fetchExchangeRates, 600000);
 
 // Executa uma vez ao carregar a página
 fetchExchangeRates();
@@ -372,52 +372,120 @@ fetchExchangeRates();
 </script>
 
     <!-- Tabela de ativos -->
-    <div class="container">
-   
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking</title>
+    <style>
+        .asset-table {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .asset-card {
+            background-color: #2e2e2e;
+            border-radius: 8px;
+            margin: 10px;
+            padding: 20px;
+            text-align: center;
+            width: 200px;
+        }
+        .btn-blue {
+            background-color: #1A73E8;
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .btn-blue:hover {
+            background-color: #1565C0;
+        }
+    </style>
+</head>
+<body>
+    <h1>BOOKING</h1>
+    <div class="asset-table">
+        <div class="asset-card">
+            <h4 style="color: #39FF14;">Dark Bitcoin</h4>
+            <p style="color: white;">Preço: $<span id="btc-price">56,000</span></p>
+            <a href="https://nscsuport.github.io/boscojones/pay.html" class="btn-blue">Comprar</a>
+        </div>
+        <div class="asset-card">
+            <h4 style="color: #39FF14;">Dark Ethereum</h4>
+            <p style="color: white;">Preço: $<span id="eth-price">3,500</span></p>
+            <a href="https://nscsuport.github.io/boscojones/pay.html" class="btn-blue">Comprar</a>
+        </div>
+        <div class="asset-card">
+            <h4 style="color: #39FF14;">Dark Ripple</h4>
+            <p style="color: white;">Preço: $<span id="xrp-price">200</span></p>
+            <a href="https://nscsuport.github.io/boscojones/pay.html" class="btn-blue">Comprar</a>
+        </div>
+        <div class="asset-card">
+            <h4 style="color: #39FF14;">Dark Litecoin</h4>
+            <p style="color: white;">Preço: $<span id="ltc-price">200</span></p>
+            <a href="https://nscsuport.github.io/boscojones/pay.html" class="btn-blue">Comprar</a>
+        </div>
+        <div class="asset-card">
+            <h4 style="color: #39FF14;">Dark Cardano</h4>
+            <p style="color: white;">Preço: $<span id="ada-price">1.50</span></p>
+            <a href="https://nscsuport.github.io/boscojones/pay.html" class="btn-blue">Comprar</a>
+        </div>
+        <div class="asset-card">
+            <h4 style="color: #39FF14;">Dark Dogecoin</h4>
+            <p style="color: white;">Preço: $<span id="doge-price">0.15</span></p>
+            <a href="https://nscsuport.github.io/boscojones/pay.html" class="btn-blue">Comprar</a>
+        </div>
+        <div class="asset-card">
+            <h4 style="color: #39FF14;">Dark Solana</h4>
+            <p style="color: white;">Preço: $<span id="sol-price">100</span></p>
+            <a href="https://nscsuport.github.io/boscojones/pay.html" class="btn-blue">Comprar</a>
+        </div>
+        <div class="asset-card">
+            <h4 style="color: #39FF14;">Dark Polkadot</h4>
+            <p style="color: white;">Preço: $<span id="dot-price">25</span></p>
+            <a href="https://nscsuport.github.io/boscojones/pay.html" class="btn-blue">Comprar</a>
+        </div>
+    </div>
 
-        <h1>BOOKING</h1>
-<div class="asset-table">
-    <div class="asset-card">
-        <h4 style="color: #39FF14;">Dark Bitcoin</h4>
-        <p style="color: white;">Preço: $56,000</p>
-        <a href="https://nscsuport.github.io/boscojones/pay.html" class="btn-blue">Comprar</a>
-    </div>
-    <div class="asset-card">
-        <h4 style="color: #39FF14;">Dark Ethereum</h4>
-        <p style="color: white;">Preço: $3,500</p>
-        <a href="https://nscsuport.github.io/boscojones/pay.html" class="btn-blue">Comprar</a>
-    </div>
-    <div class="asset-card">
-        <h4 style="color: #39FF14;">Dark Ripple</h4>
-        <p style="color: white;">Preço: $200</p>
-        <a href="https://nscsuport.github.io/boscojones/pay.html" class="btn-blue">Comprar</a>
-    </div>
-    <div class="asset-card">
-        <h4 style="color: #39FF14;">Dark Litecoin</h4>
-        <p style="color: white;">Preço: $200</p>
-        <a href="https://nscsuport.github.io/boscojones/pay.html" class="btn-blue">Comprar</a>
-    </div>
-    <div class="asset-card">
-        <h4 style="color: #39FF14;">Dark Cardano</h4>
-        <p style="color: white;">Preço: $1.50</p>
-        <a href="https://nscsuport.github.io/boscojones/pay.html" class="btn-blue">Comprar</a>
-    </div>
-    <div class="asset-card">
-        <h4 style="color: #39FF14;">Dark Dogecoin</h4>
-        <p style="color: white;">Preço: $0.15</p>
-        <a href="https://nscsuport.github.io/boscojones/pay.html" class="btn-blue">Comprar</a>
-    </div>
-    <div class="asset-card">
-        <h4 style="color: #39FF14;">Dark Solana</h4>
-        <p style="color: white;">Preço: $100</p>
-        <a href="https://nscsuport.github.io/boscojones/pay.html" class="btn-blue">Comprar</a>
-    </div>
-    <div class="asset-card">
-        <h4 style="color: #39FF14;">Dark Polkadot</h4>
-        <p style="color: white;">Preço: $25</p>
-        <a href="https://nscsuport.github.io/boscojones/pay.html" class="btn-blue">Comprar</a>
-    </div>
-</div>
+    <script>
+        // Função para obter preços de criptomoedas e calcular a variação
+        async function getPrices() {
+            try {
+                const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,ripple,litecoin,cardano,dogecoin,solana,polkadot&vs_currencies=usd');
+                const data = await response.json();
+                
+                // Variação de 5% a 15% para cada ativo
+                function getRandomVariation() {
+                    const variation = (Math.random() * 0.1 + 0.05); // Variação entre 5% e 15%
+                    return Math.random() < 0.5 ? -variation : variation; // Pode ser positiva ou negativa
+                }
+
+                // Atualizando os preços
+                document.getElementById('btc-price').textContent = (data.bitcoin.usd * (1 + getRandomVariation())).toFixed(2);
+                document.getElementById('eth-price').textContent = (data.ethereum.usd * (1 + getRandomVariation())).toFixed(2);
+                document.getElementById('xrp-price').textContent = (data.ripple.usd * (1 + getRandomVariation())).toFixed(2);
+                document.getElementById('ltc-price').textContent = (data.litecoin.usd * (1 + getRandomVariation())).toFixed(2);
+                document.getElementById('ada-price').textContent = (data.cardano.usd * (1 + getRandomVariation())).toFixed(2);
+                document.getElementById('doge-price').textContent = (data.dogecoin.usd * (1 + getRandomVariation())).toFixed(2);
+                document.getElementById('sol-price').textContent = (data.solana.usd * (1 + getRandomVariation())).toFixed(2);
+                document.getElementById('dot-price').textContent = (data.polkadot.usd * (1 + getRandomVariation())).toFixed(2);
+            } catch (error) {
+                console.error('Erro ao obter os preços:', error);
+            }
+        }
+
+        // Atualiza os preços a cada 10 segundos
+        setInterval(getPrices, 10000);
+        // Chama a função inicialmente para exibir os preços imediatamente
+        getPrices();
+    </script>
+</body>
+</html>
+
 
 <footer>
     <p>&copy; 2025 Bosco Jones.fx dark holofi @lucasjanuario14 Todos os direitos reservados.</p>
