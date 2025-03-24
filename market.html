@@ -240,6 +240,42 @@
             text-shadow: 0 0 5px #ff0000;
         }
     }
+        /* Estilo geral da Navbar de Câmbio */
+.exchange-rate-navbar {
+    background-color: #000;
+    color: #fff;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    font-size: 16px;
+}
+
+.exchange-rate-item {
+    margin: 0 15px;
+}
+
+/* Estilo para o texto em verde */
+.blink-green {
+    color: #4CAF50;
+    font-weight: bold;
+    animation: blink 1.5s step-start infinite;
+}
+
+/* Animação de blink */
+@keyframes blink {
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .exchange-rate-navbar {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -262,7 +298,21 @@
             <li><a href="https://twitter.com/lucasjanuario14" target="_blank"><i class="fab fa-twitter"></i></a></li>
         </ul>
     </nav>
-<script>
+    <!-- Navbar de Câmbio -->
+<nav id="exchange-rate-navbar" class="exchange-rate-navbar">
+    <span class="exchange-rate-item">USD: <span id="usd-to-brl" class="blink-green">5.67</span> BRL</span>
+    <span class="exchange-rate-item">EUR: <span id="eur-to-brl" class="blink-green">6.18</span> BRL</span>
+    <span class="exchange-rate-item">GBP: <span id="gbp-to-brl" class="blink-green">7.36</span> BRL</span>
+    <span class="exchange-rate-item">JPY: <span id="jpy-to-brl" class="blink-green">0.04</span> BRL</span>
+    <span class="exchange-rate-item">BTC: <span id="btc-to-brl" class="blink-green">NaN</span> BRL</span>
+    <span class="exchange-rate-item">ETH: <span id="eth-to-brl" class="blink-green">NaN</span> BRL</span>
+    <span class="exchange-rate-item">ADA: <span id="ada-to-brl" class="blink-green">NaN</span> BRL</span>
+    <span class="exchange-rate-item">SOL: <span id="sol-to-brl" class="blink-green">NaN</span> BRL</span>
+    <span class="exchange-rate-item">DOT: <span id="dot-to-brl" class="blink-green">NaN</span> BRL</span>
+</nav>
+
+    <script>
+        
     async function fetchExchangeRates() {
         try {
             const apiKey = '06b10108781c9dc87d3f5b1a'; // Sua chave de API
