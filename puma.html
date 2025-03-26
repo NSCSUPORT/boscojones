@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link rel="icon" href="logo.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Puma Engine</title>
+    <title>Puma Engine - Dark Trade</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -67,8 +67,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>Puma Engine</h1>
-        <form id="investment-form">
+        <h1>Puma Engine - Dark Trade</h1>
+        <form id="dark-trade-form">
             <div class="form-group">
                 <label for="investment-value">Valor do Investimento (PUMA):</label>
                 <input type="number" id="investment-value" required>
@@ -78,110 +78,44 @@
                 <input type="number" id="profit" required>
             </div>
             <div class="form-group">
-                <label for="giminiosidade">Giminiosidade Base (PUMA):</label>
-                <input type="number" id="giminiosidade" required>
+                <label for="daily-limit">Limite Diário de Saque (PUMA):</label>
+                <input type="number" id="daily-limit" required>
             </div>
-            <div class="form-group">
-                <label for="currency">Moeda PUMA:</label>
-                <select id="currency" required>
-                    <!-- Adicionando as Dark Coins -->
-                    <option value="DARK1">DARK1 (Shadow Token)</option>
-                    <option value="DARK2">DARK2 (Oblivion Coin)</option>
-                    <option value="DARK3">DARK3 (Phantom Credit)</option>
-                    <option value="DARK4">DARK4 (Eclipse Asset)</option>
-                    <!-- PoSN-HF -->
-                    <option value="POSN-HF">PoSN-HF (Proof of Stake Hybrid Fund)</option>
-                    <!-- Adicionando criptos -->
-                    <option value="BTC">Bitcoin (BTC)</option>
-                    <option value="ETH">Ethereum (ETH)</option>
-                    <option value="LTC">Litecoin (LTC)</option>
-                    <option value="XRP">Ripple (XRP)</option>
-                    <option value="DOGE">Dogecoin (DOGE)</option>
-                    <option value="ADA">Cardano (ADA)</option>
-                </select>
-            </div>
-            <button type="button" id="generate-code-btn">Criar Ativo PUMA</button>
-            <h3>Ativo Gerado: <span id="generated-asset">Nenhum</span></h3>
+            <button type="button" id="generate-code-btn">Gerar Cotação Máxima</button>
+            <h3>Cotação Máxima: <span id="max-quotation">Nenhuma</span></h3>
         </form>
-        <h3>Total a Pagar (PUMA): <span id="total-to-pay">Nenhum</span></h3>
-        <button type="button" id="confirm-btn" disabled>Confirmar Compra</button>
-        <div id="qrcode-container" style="display: none;">
-            <img id="qr-code-img" style="display: block; margin: 20px auto;">
-        </div>
+        <button type="button" id="confirm-btn" disabled>Confirmar</button>
     </div>
     <footer>
-        <p>&copy; 2025 Puma Engine. Todos os direitos reservados. Lucas Januário USE META MASK </p>
+        <p>&copy; 2025 Puma Engine. Todos os direitos reservados. Lucas Januário USE META MASK</p>
     </footer>
 
-<script>
-    let isConfirmedFirst = false;
-    const conversionRateToPUMA = 10;
-
-    document.getElementById("generate-code-btn").addEventListener("click", function() {
-        const crypto = window.crypto || window.msCrypto;
-        const giminiosidadeBase = document.getElementById("giminiosidade").value;
-        if (!giminiosidadeBase) {
-            alert("Por favor, insira o valor de Giminiosidade.");
-            return;
-        }
-        function generateHash(data) {
-            return crypto.subtle.digest("SHA-256", new TextEncoder().encode(data)).then(hash => {
-                return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
-            });
-        }
-        generateHash(giminiosidadeBase).then(hash => {
-            const asset = {
-                name: "PUMA Asset",
-                type: "PUMA",
-                hash: hash,
-                network: "PUMA USD",
-                features: { feminilidade: true, indexedBy: "pumanetwork" }
-            };
-            document.getElementById("generated-asset").innerText = JSON.stringify(asset, null, 2);
+    <script>
+        let isConfirmedFirst = false;
+        
+        document.getElementById('generate-code-btn').addEventListener('click', function () {
+            var investmentValue = parseFloat(document.getElementById('investment-value').value);
+            var profit = parseFloat(document.getElementById('profit').value);
+            var dailyLimit = parseFloat(document.getElementById('daily-limit').value);
+            
+            if (isNaN(investmentValue) || isNaN(profit) || isNaN(dailyLimit)) {
+                alert('Por favor, preencha todos os campos corretamente!');
+                return;
+            }
+            
+            var maxQuotation = investmentValue * (1 + profit / 100);
+            if (maxQuotation > dailyLimit) {
+                maxQuotation = dailyLimit;
+            }
+            
+            document.getElementById('max-quotation').innerText = maxQuotation.toFixed(2);
+            isConfirmedFirst = true;
+            updateConfirmButtonState();
         });
-    });
 
-    document.getElementById('generate-code-btn').addEventListener('click', function () {
-        var investmentValue = parseFloat(document.getElementById('investment-value').value);
-        var profit = parseFloat(document.getElementById('profit').value);
-        var giminiosidadeBase = parseFloat(document.getElementById('giminiosidade').value);
-        var currency = document.getElementById('currency').value;
-
-        if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidadeBase)) {
-            alert('Por favor, preencha todos os campos corretamente!');
-            return;
+        function updateConfirmButtonState() {
+            document.getElementById("confirm-btn").disabled = !isConfirmedFirst;
         }
-
-        var giminiosidadeMaxima = giminiosidadeBase * 2;
-        var totalProfit = investmentValue * (profit / 100);
-        var totalToPayInUSD = (investmentValue + totalProfit) * (1 + giminiosidadeMaxima / 100);
-
-        var totalToPayInPUMA = totalToPayInUSD * conversionRateToPUMA;
-
-        document.getElementById('total-to-pay').innerText = totalToPayInPUMA.toFixed(2);
-        isConfirmedFirst = true;
-        updateConfirmButtonState();
-    });
-
-    document.getElementById('confirm-btn').addEventListener('click', function () {
-        if (isConfirmedFirst) {
-            var totalToPay = parseFloat(document.getElementById('total-to-pay').innerText);
-            var amountInPUMA = (totalToPay * 10 ** 18).toFixed(0);
-
-            var metamaskUri = `ethereum:?value=${amountInPUMA}&currency=PUMA`;
-
-            var qrCodeImage = document.getElementById("qr-code-img");
-            qrCodeImage.src = "https://api.qrserver.com/v1/create-qr-code/?data=" + encodeURIComponent(metamaskUri);
-            document.getElementById("qrcode-container").style.display = "block";
-        } else {
-            alert('Por favor, complete a geração do ativo PUMA!');
-        }
-    });
-
-    function updateConfirmButtonState() {
-        document.getElementById("confirm-btn").disabled = !isConfirmedFirst;
-    }
-</script>
-
+    </script>
 </body>
 </html>
