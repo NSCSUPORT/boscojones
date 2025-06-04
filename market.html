@@ -144,24 +144,46 @@ tr:nth-child(odd) {
     font-weight: bold;
 }
 
+/* === NAVBAR DE CÂMBIO === */
 .exchange-rate-navbar {
     background-color: #000;
     color: #fff;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    flex-wrap: wrap;
     padding: 10px 0;
     font-size: 16px;
     border-bottom: 2px solid #444;
+    gap: 20px;
     overflow-x: auto;
     white-space: nowrap;
-    gap: 20px;
+    user-select: none;
 }
 
 .exchange-rate-item {
-    margin: 0 15px;
-    padding: 5px 15px;
+    margin: 0 10px;
+    padding: 6px 18px;
     background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 5px;
+    border-radius: 12px;
+    box-shadow: 0 0 8px rgba(0, 255, 127, 0.3);
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor: default;
+}
+
+.exchange-rate-item:hover {
+    background-color: #007a4d;
+    color: #d0ffd6;
+}
+
+/* Aplicar animação de piscar na cotação */
+.blink-green {
+    color: #00ff7f;
+    margin-left: 6px;
+    animation: blinkGreen 1.5s ease-in-out infinite;
+    font-weight: bold;
 }
 
 /* === LAYOUT EM GRADE 2x2 === */
@@ -197,12 +219,6 @@ tr:nth-child(odd) {
     font-weight: bold;
 }
 
-.blink-green {
-    color: #4CAF50;
-    font-weight: bold;
-    animation: blinkGreen 1.5s step-start infinite;
-}
-
 /* === FOOTER === */
 footer {
     width: 100%;
@@ -223,12 +239,14 @@ footer {
     .exchange-rate-navbar {
         flex-direction: column;
         align-items: center;
+        gap: 10px;
     }
 
     .asset-table {
         grid-template-columns: 1fr;
     }
 }
+
 </style>
 
 </head>
@@ -354,14 +372,14 @@ fetchExchangeRates();
         .btn-blue {
             background-color: #1A73E8;
             color: white;
-            padding: 10px;
+          
+        .btn-blue:hover {
+            background-color: #1565C0;
+        }  padding: 10px;
             text-decoration: none;
             border-radius: 5px;
             display: inline-block;
             margin-top: 10px;
-        }
-        .btn-blue:hover {
-            background-color: #1565C0;
         }
     </style>
 </head>
