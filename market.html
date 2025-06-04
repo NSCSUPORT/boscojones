@@ -10,33 +10,31 @@
     <link href="file:///C:/Users/jobsj/Downloads/BOOKING_files/all.min.css" rel="stylesheet">
    
     <style>
-    /* === GLOBAL === */
+  /* === GLOBAL === */
 
 body {
-    background-color: #0a0f1c;
-    color: #f0f0f0;
-    font-family: 'Segoe UI', 'Roboto', monospace;
+    background-color: #f4f4f4;
+    color: #1c1c1c;
+    font-family: 'Segoe UI', 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
 }
 
 h1 {
-    color: #00ff99;
+    color: #002244;
     text-align: center;
     font-weight: 600;
     margin-top: 20px;
-    text-shadow: 0 0 5px #00ff99;
 }
 
 /* === NAVBAR === */
 
 .navbar {
-    background-color: #07101f;
+    background-color: #002244;
     padding: 12px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #00ff99;
 }
 
 .navbar-links,
@@ -54,16 +52,15 @@ h1 {
 
 .navbar-links a,
 .social-icons a {
-    color: #f0f0f0;
+    color: #ffffff;
     text-decoration: none;
     font-weight: 500;
     font-size: 15px;
-    transition: color 0.3s;
 }
 
 .navbar-links a:hover,
 .social-icons a:hover {
-    color: #00bfff;
+    color: #cce4ff;
 }
 
 /* === TABELA DE ATIVOS === */
@@ -72,52 +69,49 @@ table {
     width: 100%;
     margin-top: 20px;
     border-collapse: collapse;
-    background-color: #111827;
-    box-shadow: 0 0 8px rgba(0,255,153,0.2);
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
 
 th, td {
     padding: 12px;
     text-align: left;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid #ccc;
 }
 
 th {
-    background-color: #0d1b2a;
-    color: #00ff99;
+    background-color: #002244;
+    color: #fff;
     font-weight: 600;
-    text-shadow: 0 0 4px #00ff99;
 }
 
 /* === BOTÕES === */
 
 .btn-blue {
-    background-color: #003366;
-    color: #ffffff;
-    border: 1px solid #00bfff;
+    background-color: #004080;
+    color: white;
+    border: none;
     padding: 10px 20px;
     font-size: 14px;
     font-weight: 600;
+    text-transform: uppercase;
     cursor: pointer;
     border-radius: 4px;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 5px #00bfff66;
+    transition: background-color 0.3s;
 }
 
 .btn-blue:hover {
-    background-color: #001f3f;
-    color: #00ff99;
-    box-shadow: 0 0 10px #00ff9966;
+    background-color: #002f5f;
 }
 
 /* === PAINEL DE COTAÇÃO === */
 
 .exchange-rate-panel {
-    background-color: #111;
-    color: #00ff99;
+    background-color: #e9ecef;
+    color: #002244;
     padding: 15px;
     text-align: center;
-    border: 1px solid #00ff99;
+    border: 1px solid #ccc;
     margin-top: 10px;
 }
 
@@ -129,13 +123,13 @@ th {
 /* === NAVBAR DE CÂMBIO === */
 
 .exchange-rate-navbar {
-    background-color: #0d1b2a;
-    color: #f0f0f0;
+    background-color: #ffffff;
+    color: #002244;
     display: flex;
     justify-content: space-around;
     padding: 10px 0;
     font-size: 15px;
-    border-bottom: 1px solid #00ff99;
+    border-bottom: 1px solid #ccc;
     overflow-x: auto;
     white-space: nowrap;
     gap: 20px;
@@ -143,9 +137,9 @@ th {
 
 .exchange-rate-item {
     padding: 6px 16px;
-    background-color: #1a1f2f;
+    background-color: #f8f9fa;
     border-radius: 4px;
-    border: 1px solid #00bfff;
+    border: 1px solid #ddd;
 }
 
 /* === LAYOUT EM GRADE === */
@@ -158,43 +152,39 @@ th {
 }
 
 .asset-card {
-    background-color: #111827;
+    background-color: #ffffff;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 8px rgba(0,255,153,0.15);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     text-align: center;
-    transition: transform 0.3s;
-}
-
-.asset-card:hover {
-    transform: scale(1.02);
 }
 
 .asset-card h4 {
-    color: #00bfff;
+    color: #004080;
     font-size: 18px;
     margin-bottom: 10px;
 }
 
 .asset-card p {
     font-size: 16px;
-    color: #d1d5db;
+    color: #333;
 }
 
 .asset-card .blink {
     font-size: 22px;
-    color: #00ff99;
 }
 
-/* === ANIMAÇÕES === */
+/* === ANIMAÇÕES (SUAVIZADAS) === */
 
-@keyframes glow {
-    0%, 100% { text-shadow: 0 0 5px #00ff99; }
-    50% { text-shadow: 0 0 15px #00ff99; }
+@keyframes blinkOpacity {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
 }
 
 .blink-green {
-    animation: glow 2s infinite;
+    color: #2e7d32;
+    font-weight: bold;
+    animation: blinkOpacity 2s ease-in-out infinite;
 }
 
 /* === FOOTER === */
@@ -202,13 +192,12 @@ th {
 footer {
     width: 100%;
     padding: 16px;
-    background-color: #07101f;
-    color: #f0f0f0;
+    background-color: #002244;
+    color: #ffffff;
     text-align: center;
     font-size: 0.9rem;
     font-weight: 500;
     margin-top: 40px;
-    border-top: 1px solid #00ff99;
 }
 
 /* === RESPONSIVO === */
@@ -223,6 +212,7 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+
 
     </style>
 </head>
