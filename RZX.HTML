@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="logo.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RZX HoloFi Engine - Dark Edition</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            color: #00FF00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            padding: 10px;
+            background-color: #000000;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #00FF00;
+            text-align: center;
+            text-shadow: 0 0 15px #7e00ff, 0 0 25px #ff0000;
+        }
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: bold; color: #e0e0e0; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 12px; border-radius: 8px;
+            border: 1px solid #3c3c3c; background-color: #1e1e1e;
+            color: #e0e0e0; font-size: 1rem; transition: border-color 0.3s ease;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none; border-color: #4CAF50;
+        }
+        button {
+            padding: 12px; border-radius: 8px; font-weight: bold;
+            cursor: pointer; color: #fff; border: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center; width: 100%; margin-top: 10px;
+        }
+        #generate-code-btn { background-color: #4CAF50; }
+        #generate-code-btn:hover { background-color: #45a049; transform: scale(1.05); }
+        #confirm-btn { background-color: #f44336; }
+        #confirm-btn:hover:not(:disabled) { background-color: #d32f2f; transform: scale(1.05); }
+        footer {
+            width: 100%; padding: 12px;
+            background: linear-gradient(45deg, #f0f000, #ff4500);
+            color: #000; text-align: center;
+            font-size: 1rem; font-weight: bold;
+            letter-spacing: 2px; text-shadow: 0 0 8px #ff0000;
+            margin-top: 20px; animation: neon 1.5s ease-in-out infinite alternate;
+        }
+        @keyframes neon {
+            0% { text-shadow: 0 0 5px #ff0000; }
+            50% { text-shadow: 0 0 20px #ff4500; }
+            100% { text-shadow: 0 0 5px #ff0000; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>RZX HoloFi Engine<br><small style="color:#888;">(Dark HoloFi Edition)</small></h1>
+        <form id="investment-form">
+            <div class="form-group">
+                <label for="investment-value">Valor do Investimento (RZX):</label>
+                <input type="number" id="investment-value" required>
+            </div>
+            <div class="form-group">
+                <label for="profit">Lucro Esperado (%):</label>
+                <input type="number" id="profit" required>
+            </div>
+            <div class="form-group">
+                <label for="giminiosidade">Giminiosidade Base (RZX):</label>
+                <input type="number" id="giminiosidade" required>
+            </div>
+            <div class="form-group">
+                <label for="currency">Moeda RZX (Dark HoloFi Lashs):</label>
+                <select id="currency" required>
+                    <option value="DHL1">DHL1 (Dark Lash - Shadow)</option>
+                    <option value="DHL2">DHL2 (Dark Lash - Oblivion)</option>
+                    <option value="DHL3">DHL3 (Dark Lash - Phantom)</option>
+                    <option value="DHL4">DHL4 (Dark Lash - Eclipse)</option>
+                    <option value="POSN-HF">PoSN-HF (Proof of Stake Hybrid Fund)</option>
+                    <option value="BTC">Bitcoin (BTC)</option>
+                    <option value="ETH">Ethereum (ETH)</option>
+                    <option value="LTC">Litecoin (LTC)</option>
+                    <option value="XRP">Ripple (XRP)</option>
+                    <option value="DOGE">Dogecoin (DOGE)</option>
+                    <option value="ADA">Cardano (ADA)</option>
+                </select>
+            </div>
+            <button type="button" id="generate-code-btn">Criar Ativo RZX</button>
+            <h3>Ativo Gerado: <span id="generated-asset">Nenhum</span></h3>
+        </form>
+        <h3>Total a Pagar (RZX): <span id="total-to-pay">Nenhum</span></h3>
+        <button type="button" id="confirm-btn" disabled>Confirmar Compra</button>
+        <div id="qrcode-container" style="display: none;">
+            <img id="qr-code-img" style="display: block; margin: 20px auto;">
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2025 RZX HoloFi (Dark Edition). Todos os direitos reservados. Desenvolvido por Lucas Januário — Dark HoloFi</p>
+    </footer>
+
+<script>
+    let isConfirmedFirst = false;
+    const conversionRateToARK = 10;
+
+    document.getElementById("generate-code-btn").addEventListener("click", function() {
+        const crypto = window.crypto || window.msCrypto;
+        const giminiosidadeBase = document.getElementById("giminiosidade").value;
+        if (!giminiosidadeBase) {
+            alert("Por favor, insira o valor de Giminiosidade.");
+            return;
+        }
+        function generateHash(data) {
+            return crypto.subtle.digest("SHA-256", new TextEncoder().encode(data)).then(hash => {
+                return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+            });
+        }
+        generateHash(giminiosidadeBase).then(hash => {
+            const asset = {
+                name: "RZX Dark Asset",
+                type: "RZX",
+                hash: hash,
+                network: "DHL Lashs",
+                features: { feminilidade: true, indexedBy: "rzxcore" }
+            };
+            document.getElementById("generated-asset").innerText = JSON.stringify(asset, null, 2);
+        });
+    });
+
+    document.getElementById('generate-code-btn').addEventListener('click', function () {
+        var investmentValue = parseFloat(document.getElementById('investment-value').value);
+        var profit = parseFloat(document.getElementById('profit').value);
+        var giminiosidadeBase = parseFloat(document.getElementById('giminiosidade').value);
+        var currency = document.getElementById('currency').value;
+
+        if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidadeBase)) {
+            alert('Por favor, preencha todos os campos corretamente!');
+            return;
+        }
+
+        var giminiosidadeMaxima = giminiosidadeBase * 2;
+        var totalProfit = investmentValue * (profit / 100);
+        var totalToPayInUSD = (investmentValue + totalProfit) * (1 + giminiosidadeMaxima / 100);
+        var totalToPayInARK = totalToPayInUSD * conversionRateToARK;
+
+        document.getElementById('total-to-pay').innerText = totalToPayInARK.toFixed(2);
+        isConfirmedFirst = true;
+        updateConfirmButtonState();
+    });
+
+    document.getElementById('confirm-btn').addEventListener('click', function () {
+        if (isConfirmedFirst) {
+            var totalToPay = parseFloat(document.getElementById('total-to-pay').innerText);
+            var amountInARK = (totalToPay * 10 ** 18).toFixed(0);
+            var metamaskUri = `ethereum:?value=${amountInARK}&currency=RZX`;
+            var qrCodeImage = document.getElementById("qr-code-img");
+            qrCodeImage.src = "https://api.qrserver.com/v1/create-qr-code/?data=" + encodeURIComponent(metamaskUri);
+            document.getElementById("qrcode-container").style.display = "block";
+        } else {
+            alert('Por favor, complete a geração do ativo RZX!');
+        }
+    });
+
+    function updateConfirmButtonState() {
+        document.getElementById("confirm-btn").disabled = !isConfirmedFirst;
+    }
+</script>
+</body>
+</html>
