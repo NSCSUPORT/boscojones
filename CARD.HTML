@@ -166,7 +166,7 @@
   <footer>HoloFi - Tecnologia NFT &amp; Blockchain lucas januario ceo use meta mask !</footer>
 
   <script>
-    const sppxRate = 1.23; // exemplo de taxa para cálculo crédito
+    const sppxRate = 1.23;
     let isReady = false;
 
     document.getElementById("generate-code-btn").addEventListener("click", () => {
@@ -196,12 +196,8 @@
       const jsonStr = JSON.stringify(nftData, null, 2);
       document.getElementById("generated-nft").textContent = jsonStr;
 
-      const imgElem = document.getElementById("nft-img");
-      imgElem.src = "Z.png";
-      imgElem.alt = "Imagem padrão do NFT HoloFi";
-
-      const available = limit * sppxRate;
-      document.getElementById("available-credit").textContent = available.toFixed(2) + " ARK";
+      document.getElementById("nft-img").src = "Z.png";
+      document.getElementById("available-credit").textContent = (limit * sppxRate).toFixed(2) + " ARK";
 
       isReady = true;
       document.getElementById("confirm-btn").disabled = false;
@@ -211,12 +207,13 @@
       if (!isReady) return;
 
       const limit = parseFloat(document.getElementById("limit").value);
-      if (isNaN(limit) || limit <= 0) {
-        alert("Limite inválido para gerar QR.");
-        return;
-      }
+      const tokenType = document.getElementById("token-type").value;
 
-      const qrData = `ark:pay?amount=${(limit * sppxRate).toFixed(2)}&token=ARK`;
+      const ethAddress = "0xYourEthereumAddressHere"; // <-- Substitua pelo endereço real
+      const amount = (limit * sppxRate).toFixed(0); // Em wei, se desejar, multiplique por 10^18
+      const data = "0x"; // Pode incluir dados codificados, se quiser
+
+      const qrData = `ethereum:${ethAddress}?value=${amount}&data=${data}`;
 
       const qrImg = document.getElementById("qr-code-img");
       qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" + encodeURIComponent(qrData);
