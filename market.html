@@ -11,31 +11,31 @@
   <style>
 /* === ANIMAÇÕES === */
 @keyframes blinkColor {
-  0% { color: #ff1744; }   /* Vermelho intenso */
-  50% { color: #ffc107; }  /* Amarelo dourado */
-  100% { color: #00e676; } /* Verde vibrante */
+  0% { color: #ff4c4c; }
+  50% { color: #ffd700; }
+  100% { color: #00e676; }
 }
 
 @keyframes blinkOpacity {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+  50% { opacity: 0.5; }
 }
 
 @keyframes blinkGreen {
-  0% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(1.05); }
-  100% { opacity: 1; transform: scale(1); }
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
 }
 
-@keyframes neonGlow {
-  0% { text-shadow: 0 0 5px #00e676, 0 0 10px #00e676; }
-  50% { text-shadow: 0 0 20px #69f0ae, 0 0 30px #00e676; }
-  100% { text-shadow: 0 0 5px #00e676, 0 0 10px #00e676; }
+@keyframes neon {
+  0% { text-shadow: 0 0 5px #ff0000; }
+  50% { text-shadow: 0 0 20px #ff4500; }
+  100% { text-shadow: 0 0 5px #ff0000; }
 }
 
-/* === BODY DARK MODE === */
+/* === ESTILOS GERAIS === */
 body {
-  background-color: #0a0a0a;
+  background-color: #0d0d0d;
   color: #e0e0e0;
   font-family: 'Arial', sans-serif;
   margin: 0;
@@ -46,37 +46,44 @@ body {
 
 /* === TÍTULOS === */
 h1 {
-  color: #00ff7f;
+  color: #66bb6a;
   text-align: center;
-  font-size: 2.2rem;
+  font-size: 2rem;
   margin: 20px 0;
-  animation: neonGlow 2.5s ease-in-out infinite;
 }
 
 /* === NAVBAR === */
 .navbar {
-  background: linear-gradient(90deg, #111, #222);
-  padding: 14px 24px;
+  background: linear-gradient(90deg, #ff8f00, #fbc02d);
+  padding: 12px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  box-shadow: 0 3px 8px rgba(0, 255, 127, 0.2);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.navbar-links,
+.social-icons {
+  display: flex;
+  list-style: none;
+  gap: 12px;
+  padding: 0;
+  margin: 0;
 }
 
 .navbar-links a,
 .social-icons a {
-  color: #ccc;
+  color: #0d0d0d;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 600;
   font-size: 15px;
-  transition: color 0.3s ease, transform 0.2s ease;
+  transition: color 0.3s;
 }
 
 .navbar-links a:hover,
 .social-icons a:hover {
-  color: #00e676;
-  transform: scale(1.05);
+  color: #ffffff;
 }
 
 /* === TABELA DE ATIVOS === */
@@ -85,101 +92,113 @@ table {
   margin-top: 20px;
   border-collapse: collapse;
   font-size: 15px;
-  background-color: #101010;
-}
-
-th {
-  background-color: #1a1a1a;
-  color: #00ffea;
-}
-
-tr:nth-child(even) {
-  background-color: #121212;
-}
-tr:nth-child(odd) {
-  background-color: #1c1c1c;
 }
 
 th, td {
   padding: 14px;
   text-align: left;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid #444;
+}
+
+th {
+  background-color: #1b1b1b;
+}
+
+tr:nth-child(even) {
+  background-color: #1e1e1e;
+}
+
+tr:nth-child(odd) {
+  background-color: #141414;
 }
 
 /* === BOTÕES === */
 .btn-blue {
-  background-color: #2196f3;
-  color: white;
+  background-color: #1A73E8;
+  color: #fff;
+  border: none;
   padding: 12px 24px;
   font-size: 15px;
-  border-radius: 6px;
-  border: none;
+  font-weight: bold;
   text-transform: uppercase;
   cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 10px #2196f3aa;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .btn-blue:hover {
-  background-color: #1565c0;
+  background-color: #1358c0;
   transform: scale(1.05);
-  box-shadow: 0 0 15px #00bcd4;
+}
+
+/* === CONTAINER === */
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
 }
 
 /* === PAINEL DE COTAÇÃO === */
 .exchange-rate-panel {
-  background-color: #000;
-  color: #00ffea;
-  padding: 14px;
+  background-color: #111;
+  color: #81c784;
+  padding: 16px;
   text-align: center;
-  border-radius: 10px;
   margin-top: 20px;
-  box-shadow: 0 0 12px #00ffc040;
+  border-radius: 10px;
+  box-shadow: 0 0 15px #00ff7f30;
 }
 
-/* === COTAÇÕES DINÂMICAS === */
-.blink-green {
-  color: #00ff7f;
-  font-weight: bold;
-  animation: blinkGreen 2s ease-in-out infinite;
-}
-
-.blink {
-  animation: blinkColor 3s ease-in-out infinite;
+.exchange-rate-panel h3 {
+  font-size: 18px;
   font-weight: bold;
 }
 
 /* === NAVBAR DE CÂMBIO === */
 .exchange-rate-navbar {
-  background-color: #111;
-  color: #fff;
+  background-color: #0a0a0a;
+  color: #e0e0e0;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   padding: 14px;
   font-size: 16px;
   gap: 16px;
-  border-bottom: 2px solid #333;
+  border-bottom: 2px solid #2a2a2a;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 .exchange-rate-item {
-  padding: 8px 20px;
-  background-color: #1b1b1b;
+  padding: 8px 18px;
+  background-color: rgba(255, 255, 255, 0.04);
   border-radius: 10px;
-  color: #00e5ff;
-  transition: background 0.3s ease, transform 0.2s ease;
-  cursor: pointer;
-  box-shadow: 0 0 8px rgba(0, 255, 255, 0.2);
+  box-shadow: 0 0 6px rgba(0, 255, 127, 0.15);
+  font-weight: 600;
+  cursor: default;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .exchange-rate-item:hover {
-  background-color: #004d40;
-  color: #afffff;
-  transform: scale(1.05);
+  background-color: #00965e;
+  color: #d4ffd9;
 }
 
-/* === ASSETS EM GRADE === */
+/* === ANIMAÇÕES DE COTAÇÃO === */
+.blink-green {
+  color: #00ff7f;
+  margin-left: 6px;
+  animation: blinkGreen 1.8s ease-in-out infinite;
+  font-weight: bold;
+}
+
+.blink {
+  animation: blinkColor 2s ease-in-out infinite;
+  font-weight: bold;
+}
+
+/* === LAYOUT EM GRADE 2x2 === */
 .asset-table {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -188,28 +207,29 @@ th, td {
 }
 
 .asset-card {
-  background-color: #1a1a1a;
-  padding: 20px;
-  border-radius: 12px;
+  background-color: #1e1e1e;
+  padding: 22px;
+  border-radius: 14px;
   text-align: center;
-  transition: 0.3s;
-  box-shadow: 0 0 10px rgba(255,255,255,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
 }
 
 .asset-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 0 16px #00e67644;
+  box-shadow: 0 0 18px rgba(0, 255, 127, 0.15);
 }
 
 .asset-card h4 {
-  color: #fdd835;
-  font-size: 1.2rem;
-  margin-bottom: 10px;
+  color: #ffeb3b;
+  font-size: 1.3rem;
+  margin-bottom: 12px;
 }
 
 .asset-card p {
-  font-size: 17px;
-  margin-bottom: 12px;
+  font-size: 16px;
+  color: #cfcfcf;
+  margin-bottom: 10px;
 }
 
 .asset-card .blink {
@@ -220,27 +240,34 @@ th, td {
 footer {
   width: 100%;
   padding: 16px;
-  background: linear-gradient(45deg, #0d0d0d, #111);
-  color: #00ffcc;
+  background: linear-gradient(45deg, #f5f500, #ff4500);
+  color: #000;
   text-align: center;
   font-size: 1rem;
   font-weight: bold;
-  letter-spacing: 1.5px;
-  animation: neonGlow 2s ease-in-out infinite alternate;
-  border-top: 2px solid #222;
-  margin-top: 40px;
-  text-shadow: 0 0 10px #00e5ff, 0 0 5px #00e5ff;
+  letter-spacing: 1.2px;
+  text-shadow: 0 0 6px #ff0000;
+  animation: neon 1.5s ease-in-out infinite alternate;
+  border-top: 2px solid #333;
+  margin-top: 30px;
 }
 
 /* === RESPONSIVIDADE === */
 @media (max-width: 768px) {
-  .exchange-rate-navbar,
+  .exchange-rate-navbar {
+    flex-direction: column;
+    gap: 10px;
+  }
+
   .navbar {
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
+  }
+
+  .asset-table {
+    grid-template-columns: 1fr;
   }
 }
-
 
 </style>
 
