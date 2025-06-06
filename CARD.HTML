@@ -2,251 +2,167 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" href="logo.ico" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cartão NFT HoloFi | SPPX Engine</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Emitir Cartão NFT HoloFi</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Roboto', Arial, sans-serif;
-      color: #00FF00;
-      background-color: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
-      padding: 20px 10px 40px;
+        font-family: 'Roboto', Arial, sans-serif;
+        color: #00FF00;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+        padding: 10px;
+        background-color: #1a1a1a;
     }
     h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-      color: #00FF00;
-      text-align: center;
-      text-shadow:
-        0 0 10px #7e00ff,
-        0 0 20px #7e00ff,
-        0 0 30px #ff0000,
-        0 0 40px #ff0000;
-      font-weight: 900;
-      letter-spacing: 2px;
-    }
-    h2.subtitle {
-      font-size: 1.4rem;
-      margin-bottom: 25px;
-      color: #ff4500;
-      text-align: center;
-      font-weight: 700;
-      text-shadow: 0 0 12px #ff4500;
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: #00FF00;
+        text-align: center;
+        text-shadow: 0 0 15px #7e00ff, 0 0 25px #ff0000;
     }
     .container {
-      width: 100%;
-      max-width: 600px;
-      background-color: rgba(30, 30, 30, 0.95);
-      border-radius: 15px;
-      padding: 30px 35px;
-      box-shadow: 0 8px 35px rgba(0, 255, 0, 0.7);
-      backdrop-filter: blur(15px);
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
+        width: 100%;
+        max-width: 500px;
+        background-color: rgba(30, 30, 30, 0.9);
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(12px);
     }
-    .form-group {
-      margin-bottom: 15px;
+    .form-group { margin-bottom: 15px; }
+    .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: bold;
+        color: #e0e0e0;
     }
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: bold;
-      color: #c0ffc0;
+    .form-group input, .form-group select {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #3c3c3c;
+        background-color: #1e1e1e;
+        color: #e0e0e0;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
     }
-    input,
-    select {
-      width: 100%;
-      padding: 12px 15px;
-      border-radius: 10px;
-      border: 1.5px solid #2a2a2a;
-      background-color: #121212;
-      color: #c0ffc0;
-      font-size: 1.05rem;
-      transition: border-color 0.3s ease;
-    }
-    input:focus,
-    select:focus {
-      outline: none;
-      border-color: #4caf50;
-      box-shadow: 0 0 8px #4caf50;
-      background-color: #1e1e1e;
+    .form-group input:focus, .form-group select:focus {
+        outline: none;
+        border-color: #4CAF50;
     }
     button {
-      padding: 14px;
-      border-radius: 10px;
-      font-weight: 700;
-      cursor: pointer;
-      color: #fff;
-      border: none;
-      width: 100%;
-      margin-top: 10px;
-      transition: background-color 0.3s, transform 0.2s;
-      font-size: 1.1rem;
-      user-select: none;
+        padding: 12px;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        color: #fff;
+        border: none;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        text-align: center;
+        width: 100%;
+        margin-top: 10px;
     }
-    #generate-code-btn {
-      background-color: #4caf50;
-      box-shadow: 0 0 15px #4caf50;
-    }
-    #generate-code-btn:hover {
-      background-color: #45a049;
-      transform: scale(1.07);
-      box-shadow: 0 0 22px #4caf50;
-    }
-    #confirm-btn {
-      background-color: #f44336;
-      box-shadow: 0 0 15px #f44336;
-    }
-    #confirm-btn:hover:not(:disabled) {
-      background-color: #d32f2f;
-      transform: scale(1.07);
-      box-shadow: 0 0 22px #d32f2f;
-    }
-    #confirm-btn:disabled {
-      background-color: #7a1f1f;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
+    #generate-code-btn { background-color: #4CAF50; }
+    #generate-code-btn:hover { background-color: #45a049; transform: scale(1.05); }
+    #confirm-btn { background-color: #f44336; }
+    #confirm-btn:hover:not(:disabled) { background-color: #d32f2f; transform: scale(1.05); }
     footer {
-      margin-top: 30px;
-      padding: 12px;
-      background: linear-gradient(45deg, #f0f000, #ff4500);
-      color: #000;
-      text-align: center;
-      font-size: 1rem;
-      font-weight: bold;
-      text-shadow: 0 0 8px #ff0000;
-      animation: neon 1.5s ease-in-out infinite alternate;
-      width: 100%;
-      max-width: 600px;
-      border-radius: 0 0 15px 15px;
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(45deg, #f0f000, #ff4500);
+        color: #000;
+        text-align: center;
+        font-size: 1rem;
+        font-weight: bold;
+        letter-spacing: 2px;
+        text-shadow: 0 0 8px #ff0000;
+        margin-top: 20px;
+        animation: neon 1.5s ease-in-out infinite alternate;
     }
     @keyframes neon {
-      0% {
-        text-shadow: 0 0 5px #ff0000;
-      }
-      50% {
-        text-shadow: 0 0 20px #ff4500;
-      }
-      100% {
-        text-shadow: 0 0 5px #ff0000;
-      }
-    }
-    pre {
-      color: #00ff00;
-      background: #111;
-      padding: 15px;
-      border-radius: 10px;
-      white-space: pre-wrap;
-      max-height: 240px;
-      overflow-y: auto;
-      margin-top: 15px;
-      box-shadow: 0 0 10px #00ff00aa inset;
-      font-size: 0.9rem;
-      line-height: 1.3;
-    }
-    #nft-img {
-      max-width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 0 20px #00ff00;
-      margin-top: 15px;
-      display: block;
-      object-fit: contain;
-      height: 180px;
-      user-select: none;
-    }
-    #qrcode-container {
-      margin-top: 20px;
-      text-align: center;
-      user-select: none;
+      0% { text-shadow: 0 0 5px #ff0000; }
+      50% { text-shadow: 0 0 20px #ff4500; }
+      100% { text-shadow: 0 0 5px #ff0000; }
     }
     #qr-code-img {
-      width: 180px;
-      height: 180px;
-      box-shadow: 0 0 20px #f44336;
-      border-radius: 14px;
       display: none;
-      margin: 0 auto;
-      user-select: none;
+      margin-top: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #00ff00;
+    }
+    #nft-img {
+      width: 150px;
+      height: 150px;
+      display: block;
+      margin: 0 auto 20px auto;
+      border-radius: 12px;
+      box-shadow: 0 0 25px #7e00ff, 0 0 35px #ff0000;
+      object-fit: contain;
+    }
+    pre#generated-nft {
+      background-color: #121212;
+      color: #00ff00;
+      padding: 15px;
+      border-radius: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 0.9rem;
+      margin-top: 10px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      box-shadow: inset 0 0 15px #00ff00;
     }
     #available-credit {
-      color: #4caf50;
-      font-weight: 700;
-      font-size: 1.2rem;
-      margin-top: 6px;
+      margin-top: 12px;
+      font-weight: bold;
+      font-size: 1.1rem;
       text-align: center;
-      text-shadow: 0 0 10px #4caf50aa;
-      user-select: text;
+      color: #00ff00;
+      text-shadow: 0 0 10px #4caf50;
     }
   </style>
 </head>
 <body>
-  <div class="container" role="main" aria-label="Formulário de emissão de cartão NFT HoloFi">
-    <h1>HOLOFI CARD</h1>
-    <h2 class="subtitle">Cartão NFT HoloFi - Engine SPPX</h2>
-
-    <form id="credit-form" autocomplete="off" aria-describedby="instructions">
-      <div id="instructions" style="display:none;">
-        Preencha todos os campos para emitir seu cartão NFT HoloFi.
-      </div>
-
-      <div class="form-group">
-        <label for="limit">Limite do Cartão (ARK):</label>
-        <input type="number" id="limit" min="0" step="any" aria-required="true" />
-      </div>
-      <div class="form-group">
-        <label for="apr">Taxa de Juros (% ao mês):</label>
-        <input type="number" id="apr" min="0" step="any" aria-required="true" />
-      </div>
-      <div class="form-group">
-        <label for="owner">Titular do Cartão (Wallet ou Nome):</label>
-        <input type="text" id="owner" aria-required="true" />
-      </div>
-      <div class="form-group">
-        <label for="token-type">Tipo de Token:</label>
-        <select id="token-type" aria-required="true">
-          <option value="SPPX-NFT">SPPX-NFT</option>
-          <option value="SPPX-CREDIT">SPPX-CREDIT</option>
-          <option value="ARK-NFT">ARK-NFT</option>
-          <option value="HLP-721">HLP-721 (HoloFi NFT)</option>
-        </select>
-      </div>
-
-      <button type="button" id="generate-code-btn" aria-live="polite">Emitir Cartão NFT</button>
-
-      <h3>Cartão Gerado:</h3>
-      <pre id="generated-nft" aria-live="polite">Nenhum</pre>
-      <img id="nft-img" alt="Prévia do NFT" src="Z.png" />
-    </form>
-
-    <h3>Total Disponível (ARK):</h3>
-    <div id="available-credit">Nenhum</div>
-
-    <button type="button" id="confirm-btn" disabled>Gerar QR Metamask</button>
-
-    <div id="qrcode-container" aria-label="Código QR para pagamento">
-      <img id="qr-code-img" alt="Código QR" />
+  <h1>Emitir Cartão NFT HoloFi</h1>
+  <div class="container">
+    <img id="nft-img" src="Z.png" alt="Imagem padrão do NFT HoloFi" />
+    <div class="form-group">
+      <label for="limit">Limite do cartão (número):</label>
+      <input type="number" id="limit" min="1" step="any" placeholder="Ex: 1000" />
     </div>
+    <div class="form-group">
+      <label for="apr">APR (juros anuais em %):</label>
+      <input type="number" id="apr" min="0" step="any" placeholder="Ex: 12" />
+    </div>
+    <div class="form-group">
+      <label for="owner">Nome do proprietário:</label>
+      <input type="text" id="owner" placeholder="Ex: Lucas Januário" />
+    </div>
+    <div class="form-group">
+      <label for="token-type">Tipo do Token:</label>
+      <select id="token-type">
+        <option value="" disabled selected>Selecione o token</option>
+        <option value="ARK">ARK</option>
+        <option value="HOLOFI">HOLOFI</option>
+        <option value="SPPX">SPPX</option>
+      </select>
+    </div>
+    <button id="generate-code-btn">Emitir Cartão NFT</button>
+    <pre id="generated-nft"></pre>
+    <div id="available-credit"></div>
+    <button id="confirm-btn" disabled>Gerar QR Metamask</button>
+    <img id="qr-code-img" alt="QR Code para Metamask" />
   </div>
 
-  <footer>
-    &copy; 2025 Banco Bosco Jones · Engine HoloFi SPPX · Lucas Januário · USE METAMASK
-  </footer>
+  <footer>HoloFi - Tecnologia NFT &amp; Blockchain</footer>
 
   <script>
+    const sppxRate = 1.23; // exemplo de taxa para cálculo crédito
     let isReady = false;
-    const sppxRate = 10;
 
     document.getElementById("generate-code-btn").addEventListener("click", () => {
       const limit = parseFloat(document.getElementById("limit").value);
@@ -275,16 +191,13 @@
       const jsonStr = JSON.stringify(nftData, null, 2);
       document.getElementById("generated-nft").textContent = jsonStr;
 
-      // Mostrar imagem padrão
       const imgElem = document.getElementById("nft-img");
       imgElem.src = "Z.png";
       imgElem.alt = "Imagem padrão do NFT HoloFi";
 
-      // Mostrar total disponível no formato ARK * sppxRate
       const available = limit * sppxRate;
       document.getElementById("available-credit").textContent = available.toFixed(2) + " ARK";
 
-      // Habilitar botão de confirmar
       isReady = true;
       document.getElementById("confirm-btn").disabled = false;
     });
@@ -292,17 +205,14 @@
     document.getElementById("confirm-btn").addEventListener("click", () => {
       if (!isReady) return;
 
-      // Criar QR code para Metamask com valor do limite em ARK
       const limit = parseFloat(document.getElementById("limit").value);
       if (isNaN(limit) || limit <= 0) {
         alert("Limite inválido para gerar QR.");
         return;
       }
 
-      // Exemplo simples de string QR, substitua pela geração real
       const qrData = `ark:pay?amount=${(limit * sppxRate).toFixed(2)}&token=ARK`;
 
-      // Mostrar QR code com URL simulada (no real deve ser gerado QR code via API ou lib)
       const qrImg = document.getElementById("qr-code-img");
       qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" + encodeURIComponent(qrData);
       qrImg.style.display = "block";
