@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" href="logo.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>HoloFi Card</title>
+  <title>HoloFi Card - Ethereum QR</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -106,6 +106,8 @@
       background: #111; 
       padding: 10px; 
       border-radius: 8px; 
+      max-height: 150px;
+      overflow-y: auto;
     }
     #nft-img {
       width: 150px;
@@ -132,12 +134,16 @@
   </style>
 </head>
 <body>
-  <h1>HoloFi Card</h1>
+  <h1>HoloFi Card - Ethereum QR</h1>
   <div class="container">
     <img id="nft-img" src="Z.png" alt="Imagem padrão do NFT HoloFi" />
     <div class="form-group">
-      <label for="limit">Limite do cartão (número):</label>
-      <input type="number" id="limit" min="1" step="any" placeholder="Ex: 1000" />
+      <label for="eth-address">Endereço Ethereum (0x...):</label>
+      <input type="text" id="eth-address" placeholder="Ex: 0x1234...abcd" />
+    </div>
+    <div class="form-group">
+      <label for="limit">Limite do cartão (ETH):</label>
+      <input type="number" id="limit" min="0.000000000000000001" step="any" placeholder="Ex: 1.5" />
     </div>
     <div class="form-group">
       <label for="apr">APR (juros anuais em %):</label>
@@ -151,7 +157,7 @@
       <label for="token-type">Tipo do Token:</label>
       <select id="token-type">
         <option value="" disabled selected>Selecione o token</option>
-        <option value="ARK">ARK</option>
+        <option value="ETH">ETH</option>
         <option value="HOLOFI">HOLOFI</option>
         <option value="SPPX">SPPX</option>
       </select>
@@ -166,27 +172,35 @@
   <footer>HoloFi - Tecnologia NFT &amp; Blockchain lucas januario ceo use meta mask !</footer>
 
   <script>
-    const sppxRate = 1.23;
+    // Função para converter ETH para wei (inteiro de 18 casas decimais)
+    function ethToWei(eth) {
+      return BigInt(Math.floor(eth * 1e18)).toString();
+    }
+
     let isReady = false;
 
     document.getElementById("generate-code-btn").addEventListener("click", () => {
-      const limit = parseFloat(document.getElementById("limit").value);
+      const ethAddress = document.getElementById("eth-address").value.trim();
+      const limitEth = parseFloat(document.getElementById("limit").value);
       const apr = parseFloat(document.getElementById("apr").value);
       const owner = document.getElementById("owner").value.trim();
       const tokenType = document.getElementById("token-type").value;
 
+      // Validações simples
       if (
-        isNaN(limit) || limit <= 0 ||
+        !ethAddress.match(/^0x[a-fA-F0-9]{40}$/) || 
+        isNaN(limitEth) || limitEth <= 0 ||
         isNaN(apr) || apr < 0 ||
         owner === "" ||
         !tokenType
       ) {
-        alert("Por favor, preencha todos os campos corretamente.");
+        alert("Por favor, preencha todos os campos corretamente. Endereço Ethereum deve começar com 0x e conter 40 caracteres hexadecimais.");
         return;
       }
 
       const nftData = {
-        limit: limit,
+        ethAddress: ethAddress,
+        limitEth: limitEth,
         apr: apr,
         owner: owner,
         tokenType: tokenType,
@@ -196,8 +210,11 @@
       const jsonStr = JSON.stringify(nftData, null, 2);
       document.getElementById("generated-nft").textContent = jsonStr;
 
-      document.getElementById("nft-img").src = "Z.png";
-      document.getElementById("available-credit").textContent = (limit * sppxRate).toFixed(2) + " ARK";
+      const imgElem = document.getElementById("nft-img");
+      imgElem.src = "Z.png";
+      imgElem.alt = "Imagem padrão do NFT HoloFi";
+
+      document.getElementById("available-credit").textContent = limitEth.toFixed(6) + " " + tokenType;
 
       isReady = true;
       document.getElementById("confirm-btn").disabled = false;
@@ -206,14 +223,22 @@
     document.getElementById("confirm-btn").addEventListener("click", () => {
       if (!isReady) return;
 
-      const limit = parseFloat(document.getElementById("limit").value);
-      const tokenType = document.getElementById("token-type").value;
+      const ethAddress = document.getElementById("eth-address").value.trim();
+      const limitEth = parseFloat(document.getElementById("limit").value);
 
-      const ethAddress = "0xYourEthereumAddressHere"; // <-- Substitua pelo endereço real
-      const amount = (limit * sppxRate).toFixed(0); // Em wei, se desejar, multiplique por 10^18
-      const data = "0x"; // Pode incluir dados codificados, se quiser
+      if (
+        !ethAddress.match(/^0x[a-fA-F0-9]{40}$/) || 
+        isNaN(limitEth) || limitEth <= 0
+      ) {
+        alert("Dados inválidos para gerar QR.");
+        return;
+      }
 
-      const qrData = `ethereum:${ethAddress}?value=${amount}&data=${data}`;
+      const valueInWei = ethToWei(limitEth);
+      const data = "0x"; // vazio para agora, pode adicionar dados hex depois
+
+      // Monta URI no formato ethereum:address?value=wei&data=0x
+      const qrData = `ethereum:${ethAddress}?value=${valueInWei}&data=${data}`;
 
       const qrImg = document.getElementById("qr-code-img");
       qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" + encodeURIComponent(qrData);
