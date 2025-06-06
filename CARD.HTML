@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <link rel="icon" href="logo.ico">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <link rel="icon" href="logo.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cartão NFT HoloFi | SPPX Engine</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
     body {
       font-family: 'Roboto', Arial, sans-serif;
       color: #00FF00;
@@ -34,65 +38,127 @@
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
       backdrop-filter: blur(12px);
     }
-    .form-group { margin-bottom: 15px; }
+    .form-group {
+      margin-bottom: 15px;
+    }
     label {
-      display: block; margin-bottom: 6px;
-      font-weight: bold; color: #e0e0e0;
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #e0e0e0;
     }
-    input, select {
-      width: 100%; padding: 12px; border-radius: 8px;
-      border: 1px solid #3c3c3c; background-color: #1e1e1e;
-      color: #e0e0e0; font-size: 1rem;
+    input,
+    select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #3c3c3c;
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+      font-size: 1rem;
     }
-    input:focus, select:focus {
-      outline: none; border-color: #4CAF50;
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #4caf50;
     }
     button {
-      padding: 12px; border-radius: 8px;
-      font-weight: bold; cursor: pointer;
-      color: #fff; border: none; width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #fff;
+      border: none;
+      width: 100%;
       margin-top: 10px;
+      transition: background-color 0.3s, transform 0.3s;
     }
-    #generate-code-btn { background-color: #4CAF50; }
-    #generate-code-btn:hover { background-color: #45a049; transform: scale(1.05); }
-    #confirm-btn { background-color: #f44336; }
-    #confirm-btn:hover:not(:disabled) { background-color: #d32f2f; transform: scale(1.05); }
+    #generate-code-btn {
+      background-color: #4caf50;
+    }
+    #generate-code-btn:hover {
+      background-color: #45a049;
+      transform: scale(1.05);
+    }
+    #confirm-btn {
+      background-color: #f44336;
+    }
+    #confirm-btn:hover:not(:disabled) {
+      background-color: #d32f2f;
+      transform: scale(1.05);
+    }
+    #confirm-btn:disabled {
+      background-color: #7a1f1f;
+      cursor: not-allowed;
+    }
     footer {
-      margin-top: 20px; padding: 12px;
+      margin-top: 20px;
+      padding: 12px;
       background: linear-gradient(45deg, #f0f000, #ff4500);
-      color: #000; text-align: center;
-      font-size: 1rem; font-weight: bold;
+      color: #000;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: bold;
       text-shadow: 0 0 8px #ff0000;
       animation: neon 1.5s ease-in-out infinite alternate;
     }
     @keyframes neon {
-      0% { text-shadow: 0 0 5px #ff0000; }
-      50% { text-shadow: 0 0 20px #ff4500; }
-      100% { text-shadow: 0 0 5px #ff0000; }
+      0% {
+        text-shadow: 0 0 5px #ff0000;
+      }
+      50% {
+        text-shadow: 0 0 20px #ff4500;
+      }
+      100% {
+        text-shadow: 0 0 5px #ff0000;
+      }
     }
     pre {
-      color: #00FF00; background: #111;
-      padding: 10px; border-radius: 8px;
+      color: #00ff00;
+      background: #111;
+      padding: 10px;
+      border-radius: 8px;
       white-space: pre-wrap;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-top: 15px;
+    }
+    #nft-img {
+      max-width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00ff00;
+      margin-top: 15px;
+      display: none;
+    }
+    #qrcode-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+    #qr-code-img {
+      width: 180px;
+      height: 180px;
+      box-shadow: 0 0 12px #f44336;
+      border-radius: 12px;
+      display: none;
+      margin: 0 auto;
     }
   </style>
 </head>
 <body>
-
   <div class="container">
-    <h1>Cartão NFT HoloFi<br>Engine SPPX</h1>
-    <form id="credit-form">
+    <h1>Cartão NFT HoloFi<br />Engine SPPX</h1>
+    <form id="credit-form" autocomplete="off">
       <div class="form-group">
         <label for="limit">Limite do Cartão (ARK):</label>
-        <input type="number" id="limit" required>
+        <input type="number" id="limit" min="0" step="any" required />
       </div>
       <div class="form-group">
         <label for="apr">Taxa de Juros (% ao mês):</label>
-        <input type="number" id="apr" required>
+        <input type="number" id="apr" min="0" step="any" required />
       </div>
       <div class="form-group">
         <label for="owner">Titular do Cartão (Wallet ou Nome):</label>
-        <input type="text" id="owner" required>
+        <input type="text" id="owner" required />
       </div>
       <div class="form-group">
         <label for="token-type">Tipo de Token:</label>
@@ -103,17 +169,23 @@
           <option value="HLP-721">HLP-721 (HoloFi NFT)</option>
         </select>
       </div>
+      <div class="form-group">
+        <label for="image">Imagem do Cartão:</label>
+        <input type="file" id="image" accept="image/*" required />
+      </div>
+
       <button type="button" id="generate-code-btn">Emitir Cartão NFT</button>
 
       <h3>Cartão Gerado:</h3>
       <pre id="generated-nft">Nenhum</pre>
+      <img id="nft-img" alt="Prévia do NFT" />
     </form>
 
     <h3>Total Disponível (ARK): <span id="available-credit">Nenhum</span></h3>
     <button type="button" id="confirm-btn" disabled>Gerar QR Metamask</button>
 
-    <div id="qrcode-container" style="display: none;">
-      <img id="qr-code-img" style="display: block; margin: 20px auto;">
+    <div id="qrcode-container">
+      <img id="qr-code-img" alt="Código QR" />
     </div>
   </div>
 
@@ -125,50 +197,80 @@
     let isReady = false;
     const sppxRate = 10;
 
-    document.getElementById("generate-code-btn").addEventListener("click", async function () {
-      const limit = parseFloat(document.getElementById('limit').value);
-      const apr = parseFloat(document.getElementById('apr').value);
-      const owner = document.getElementById('owner').value;
-      const tokenType = document.getElementById('token-type').value;
+    document.getElementById("generate-code-btn").addEventListener("click", async () => {
+      const limit = parseFloat(document.getElementById("limit").value);
+      const apr = parseFloat(document.getElementById("apr").value);
+      const owner = document.getElementById("owner").value.trim();
+      const tokenType = document.getElementById("token-type").value;
+      const imageInput = document.getElementById("image");
+      const nftImg = document.getElementById("nft-img");
 
-      if (isNaN(limit) || isNaN(apr) || !owner.trim()) {
-        alert("Preencha todos os campos corretamente!");
+      if (isNaN(limit) || isNaN(apr) || !owner || imageInput.files.length === 0) {
+        alert("Preencha todos os campos e envie uma imagem.");
         return;
       }
 
-      const hash = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(owner + limit + apr + tokenType));
-      const cardHash = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+      const file = imageInput.files[0];
+      const reader = new FileReader();
 
-      const nft = {
-        type: tokenType,
-        cardID: cardHash.slice(0, 16).toUpperCase(),
-        owner: owner,
-        creditLimit: limit,
-        interest: apr,
-        issuedBy: "SPPX-HOLOFI",
-        features: ["NFT-CREDIT", "AUTO-PAY", "GIMINIOSIDADE-TRUST"]
+      reader.onload = async function () {
+        const imageData = reader.result;
+
+        // Exibe a imagem
+        nftImg.src = imageData;
+        nftImg.style.display = "block";
+
+        // Gera hash SHA-256
+        const hashBuffer = await crypto.subtle.digest(
+          "SHA-256",
+          new TextEncoder().encode(owner + limit + apr + tokenType)
+        );
+        const cardHash = Array.from(new Uint8Array(hashBuffer))
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join("")
+          .slice(0, 16)
+          .toUpperCase();
+
+        const nft = {
+          type: tokenType,
+          cardID: cardHash,
+          owner: owner,
+          creditLimit: limit,
+          interest: apr,
+          image: "[Imagem anexada]",
+          issuedBy: "SPPX-HOLOFI",
+          features: ["NFT-CREDIT", "AUTO-PAY", "GIMINIOSIDADE-TRUST"],
+        };
+
+        document.getElementById("generated-nft").innerText = JSON.stringify(nft, null, 2);
+        document.getElementById("available-credit").innerText = (limit * sppxRate).toFixed(2) + " ARK";
+        isReady = true;
+        document.getElementById("confirm-btn").disabled = false;
+
+        // Esconde QR code anterior se existir
+        document.getElementById("qr-code-img").style.display = "none";
+        document.getElementById("qrcode-container").style.display = "none";
       };
 
-      document.getElementById("generated-nft").innerText = JSON.stringify(nft, null, 2);
-      document.getElementById("available-credit").innerText = (limit * sppxRate).toFixed(2) + " ARK";
-
-      isReady = true;
-      document.getElementById("confirm-btn").disabled = false;
+      reader.readAsDataURL(file);
     });
 
-    document.getElementById("confirm-btn").addEventListener("click", function () {
-      if (isReady) {
-        const amount = parseFloat(document.getElementById("available-credit").innerText);
-        const amountInARK = (amount * 10 ** 18).toFixed(0);
-        const metamaskUri = `ethereum:?value=${amountInARK}&currency=ARK`;
-
-        document.getElementById("qr-code-img").src = "https://api.qrserver.com/v1/create-qr-code/?data=" + encodeURIComponent(metamaskUri);
-        document.getElementById("qrcode-container").style.display = "block";
-      } else {
+    document.getElementById("confirm-btn").addEventListener("click", () => {
+      if (!isReady) {
         alert("Primeiro gere o cartão NFT.");
+        return;
       }
+
+      const amountText = document.getElementById("available-credit").innerText;
+      const amount = parseFloat(amountText.replace(" ARK", ""));
+      const amountInARK = (amount * 10 ** 18).toFixed(0);
+      const metamaskUri = `ethereum:?value=${amountInARK}&currency=ARK`;
+
+      const qrCodeImg = document.getElementById("qr-code-img");
+      qrCodeImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" + encodeURIComponent(metamaskUri);
+      qrCodeImg.style.display = "block";
+      document.getElementById("qrcode-container").style.display = "block";
     });
   </script>
-
 </body>
 </html>
