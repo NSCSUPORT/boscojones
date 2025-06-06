@@ -106,8 +106,8 @@
       background: #111; 
       padding: 10px; 
       border-radius: 8px; 
-      max-height: 150px;
-      overflow-y: auto;
+      min-height: 150px;
+      overflow-x: auto;
     }
     #nft-img {
       width: 150px;
@@ -130,6 +130,9 @@
       margin-top: 20px;
       border-radius: 12px;
       box-shadow: none;
+      width: 180px;
+      height: 180px;
+      user-select: none;
     }
   </style>
 </head>
@@ -137,13 +140,10 @@
   <h1>HoloFi Card - Ethereum QR</h1>
   <div class="container">
     <img id="nft-img" src="Z.png" alt="Imagem padrão do NFT HoloFi" />
-    <div class="form-group">
-      <label for="eth-address">Endereço Ethereum (0x...):</label>
-      <input type="text" id="eth-address" placeholder="Ex: 0x1234...abcd" />
-    </div>
+    
     <div class="form-group">
       <label for="limit">Limite do cartão (ETH):</label>
-      <input type="number" id="limit" min="0.000000000000000001" step="any" placeholder="Ex: 1.5" />
+      <input type="number" id="limit" min="0" step="0.0001" placeholder="Ex: 1.5" />
     </div>
     <div class="form-group">
       <label for="apr">APR (juros anuais em %):</label>
@@ -154,56 +154,62 @@
       <input type="text" id="owner" placeholder="Ex: Lucas Januário" />
     </div>
     <div class="form-group">
-      <label for="token-type">Tipo do Token:</label>
-      <select id="token-type">
-        <option value="" disabled selected>Selecione o token</option>
-        <option value="ETH">ETH</option>
-        <option value="HOLOFI">HOLOFI</option>
-        <option value="SPPX">SPPX</option>
-      </select>
+      <label for="eth-address">Endereço Ethereum (0x...):</label>
+      <input type="text" id="eth-address" placeholder="Ex: 0x1234...abcd" />
     </div>
     <button id="generate-code-btn">Emitir Cartão NFT</button>
+
     <pre id="generated-nft"></pre>
     <div id="available-credit"></div>
-    <button id="confirm-btn" disabled>Gerar QR Metamask</button>
-    <img id="qr-code-img" alt="QR Code para Metamask" />
+
+    <button id="confirm-btn" disabled>Gerar QR Code Ethereum</button>
+
+    <img id="qr-code-img" alt="QR Code Ethereum" />
   </div>
 
-  <footer>HoloFi - Tecnologia NFT &amp; Blockchain lucas januario ceo use meta mask !</footer>
+  <footer>HoloFi - Tecnologia NFT &amp; Blockchain | Lucas Januário CEO | Use MetaMask!</footer>
 
   <script>
-    // Função para converter ETH para wei (inteiro de 18 casas decimais)
+    // Função para converter ETH para WEI (BigInt)
     function ethToWei(eth) {
+      // Para evitar problema com precisão, converter string para BigInt em wei
+      const parts = eth.toString().split('.');
+      let weiStr = parts[0] + (parts[1] ? parts[1].padEnd(18, '0') : ''.padEnd(18, '0'));
+      // Remove zeros extras do final
+      weiStr = weiStr.replace(/0+$/, '');
+      if (weiStr === '') weiStr = '0';
+      return weiStr;
+    }
+
+    // Ou uma função mais segura usando BigInt:
+    function toWei(eth) {
       return BigInt(Math.floor(eth * 1e18)).toString();
     }
 
     let isReady = false;
 
     document.getElementById("generate-code-btn").addEventListener("click", () => {
-      const ethAddress = document.getElementById("eth-address").value.trim();
       const limitEth = parseFloat(document.getElementById("limit").value);
       const apr = parseFloat(document.getElementById("apr").value);
       const owner = document.getElementById("owner").value.trim();
-      const tokenType = document.getElementById("token-type").value;
+      const ethAddress = document.getElementById("eth-address").value.trim();
 
-      // Validações simples
       if (
-        !ethAddress.match(/^0x[a-fA-F0-9]{40}$/) || 
         isNaN(limitEth) || limitEth <= 0 ||
         isNaN(apr) || apr < 0 ||
         owner === "" ||
-        !tokenType
+        ethAddress === "" ||
+        !ethAddress.match(/^0x[a-fA-F0-9]{40}$/)
       ) {
-        alert("Por favor, preencha todos os campos corretamente. Endereço Ethereum deve começar com 0x e conter 40 caracteres hexadecimais.");
+        alert("Por favor, preencha todos os campos corretamente e insira um endereço Ethereum válido.");
         return;
       }
 
       const nftData = {
+        limitETH: limitEth,
+        aprPercent: apr,
+        ownerName: owner,
         ethAddress: ethAddress,
-        limitEth: limitEth,
-        apr: apr,
-        owner: owner,
-        tokenType: tokenType,
         image: "Z.png"
       };
 
@@ -214,7 +220,7 @@
       imgElem.src = "Z.png";
       imgElem.alt = "Imagem padrão do NFT HoloFi";
 
-      document.getElementById("available-credit").textContent = limitEth.toFixed(6) + " " + tokenType;
+      document.getElementById("available-credit").textContent = `Limite: ${limitEth} ETH`;
 
       isReady = true;
       document.getElementById("confirm-btn").disabled = false;
@@ -223,25 +229,30 @@
     document.getElementById("confirm-btn").addEventListener("click", () => {
       if (!isReady) return;
 
-      const ethAddress = document.getElementById("eth-address").value.trim();
       const limitEth = parseFloat(document.getElementById("limit").value);
+      const ethAddress = document.getElementById("eth-address").value.trim();
 
-      if (
-        !ethAddress.match(/^0x[a-fA-F0-9]{40}$/) || 
-        isNaN(limitEth) || limitEth <= 0
-      ) {
-        alert("Dados inválidos para gerar QR.");
+      if (isNaN(limitEth) || limitEth <= 0) {
+        alert("Limite inválido para gerar QR.");
         return;
       }
 
-      const valueInWei = ethToWei(limitEth);
-      const data = "0x"; // vazio para agora, pode adicionar dados hex depois
+      if (!ethAddress.match(/^0x[a-fA-F0-9]{40}$/)) {
+        alert("Endereço Ethereum inválido.");
+        return;
+      }
 
-      // Monta URI no formato ethereum:address?value=wei&data=0x
-      const qrData = `ethereum:${ethAddress}?value=${valueInWei}&data=${data}`;
+      // Converte ETH para WEI
+      const valueWei = BigInt(Math.floor(limitEth * 1e18)).toString();
+
+      // Gera URI no padrão Ethereum
+      const ethURI = `ethereum:${ethAddress}?value=${valueWei}&data=0x`;
+
+      // Gera QR Code usando API externa do Google Charts
+      const qrCodeUrl = `https://chart.googleapis.com/chart?chs=180x180&cht=qr&chl=${encodeURIComponent(ethURI)}`;
 
       const qrImg = document.getElementById("qr-code-img");
-      qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" + encodeURIComponent(qrData);
+      qrImg.src = qrCodeUrl;
       qrImg.style.display = "block";
     });
   </script>
