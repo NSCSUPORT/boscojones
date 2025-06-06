@@ -222,17 +222,12 @@
           <option value="HLP-721">HLP-721 (HoloFi NFT)</option>
         </select>
       </div>
-      <div class="form-group">
-        <label for="image">Imagem do Cartão (opcional):</label>
-        <input type="file" id="image" accept="image/*" aria-describedby="image-desc" />
-        <small id="image-desc" style="color:#888;">Se não selecionar, usaremos a imagem padrão.</small>
-      </div>
 
       <button type="button" id="generate-code-btn" aria-live="polite">Emitir Cartão NFT</button>
 
       <h3>Cartão Gerado:</h3>
       <pre id="generated-nft" aria-live="polite">Nenhum</pre>
-      <img id="nft-img" alt="Prévia do NFT" />
+      <img id="nft-img" alt="Prévia do NFT" src="Z.png" />
     </form>
 
     <h3>Total Disponível (ARK):</h3>
@@ -253,81 +248,64 @@
     let isReady = false;
     const sppxRate = 10;
 
-    document.getElementById("generate-code-btn").addEventListener("click", async () => {
+    document.getElementById("generate-code-btn").addEventListener("click", () => {
       const limit = parseFloat(document.getElementById("limit").value);
       const apr = parseFloat(document.getElementById("apr").value);
       const owner = document.getElementById("owner").value.trim();
       const tokenType = document.getElementById("token-type").value;
-      const imageInput = document.getElementById("image");
-      const nftImg = document.getElementById("nft-img");
 
-      if (isNaN(limit) || isNaN(apr) || !owner) {
-        alert("Preencha todos os campos obrigatórios.");
+      if (
+        isNaN(limit) || limit <= 0 ||
+        isNaN(apr) || apr < 0 ||
+        owner === "" ||
+        !tokenType
+      ) {
+        alert("Por favor, preencha todos os campos corretamente.");
         return;
       }
 
-      // Se nenhuma imagem foi selecionada, usar a padrão
-      if (imageInput.files.length === 0) {
-        nftImg.src = "Z.PNG";
-        nftImg.style.display = "block";
-      } else {
-        const file = imageInput.files[0];
-        const reader = new FileReader();
+      const nftData = {
+        limit: limit,
+        apr: apr,
+        owner: owner,
+        tokenType: tokenType,
+        image: "Z.png"
+      };
 
-        reader.onload = function () {
-          nftImg.src = reader.result;
-          nftImg.style.display = "block";
-        };
+      const jsonStr = JSON.stringify(nftData, null, 2);
+      document.getElementById("generated-nft").textContent = jsonStr;
 
-        reader.readAsDataURL(file);
-      }
+      // Mostrar imagem padrão
+      const imgElem = document.getElementById("nft-img");
+      imgElem.src = "Z.png";
+      imgElem.alt = "Imagem padrão do NFT HoloFi";
 
-      // Aguarda exibir a imagem para gerar hash (pequena espera para melhor UX)
-      setTimeout(async () => {
-        const hashBuffer = await crypto.subtle.digest(
-          "SHA-256",
-          new TextEncoder().encode(owner + limit + apr + tokenType)
-        );
-        const cardHash = Array.from(new Uint8Array(hashBuffer))
-          .map((b) => b.toString(16).padStart(2, "0"))
-          .join("")
-          .slice(0, 16)
-          .toUpperCase();
+      // Mostrar total disponível no formato ARK * sppxRate
+      const available = limit * sppxRate;
+      document.getElementById("available-credit").textContent = available.toFixed(2) + " ARK";
 
-        const nft = {
-          type: tokenType,
-          cardID: cardHash,
-          owner: owner,
-          creditLimit: limit,
-          interest: apr,
-          image: imageInput.files.length === 0 ? "Imagem padrão Z.PNG" : "[Imagem anexada]",
-          issuedBy: "SPPX-HOLOFI",
-          features: ["NFT-CREDIT", "AUTO-PAY", "GIMINIOSIDADE-TRUST"],
-        };
-
-        document.getElementById("generated-nft").innerText = JSON.stringify(nft, null, 2);
-        document.getElementById("available-credit").innerText = (limit * sppxRate).toFixed(2) + " ARK";
-        isReady = true;
-        document.getElementById("confirm-btn").disabled = false;
-
-        // Esconde QR code anterior se existir
-        document.getElementById("qr-code-img").style.display = "none";
-        document.getElementById("qrcode-container").style.display = "none";
-      }, 200);
+      // Habilitar botão de confirmar
+      isReady = true;
+      document.getElementById("confirm-btn").disabled = false;
     });
 
     document.getElementById("confirm-btn").addEventListener("click", () => {
-      if (!isReady) {
-        alert("Primeiro emita o cartão NFT!");
+      if (!isReady) return;
+
+      // Criar QR code para Metamask com valor do limite em ARK
+      const limit = parseFloat(document.getElementById("limit").value);
+      if (isNaN(limit) || limit <= 0) {
+        alert("Limite inválido para gerar QR.");
         return;
       }
-      // Simulação QR code para carteira Metamask
-      const qrCode = document.getElementById("qr-code-img");
-      qrCode.src = "https://chart.googleapis.com/chart?cht=qr&chs=180x180&chl=metamask:pay?amount=" +
-        encodeURIComponent(document.getElementById("available-credit").innerText) +
-        "&label=" + encodeURIComponent(document.getElementById("owner").value);
-      qrCode.style.display = "block";
-      document.getElementById("qrcode-container").style.display = "block";
+
+      // Exemplo simples de string QR, substitua pela geração real
+      const qrData = `ark:pay?amount=${(limit * sppxRate).toFixed(2)}&token=ARK`;
+
+      // Mostrar QR code com URL simulada (no real deve ser gerado QR code via API ou lib)
+      const qrImg = document.getElementById("qr-code-img");
+      qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" + encodeURIComponent(qrData);
+      qrImg.style.display = "block";
     });
   </script>
 </body>
