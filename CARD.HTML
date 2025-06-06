@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>HoloFi Card - Ethereum QR</title>
   <style>
+    /* (seu CSS permanece igual) */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Roboto', Arial, sans-serif;
@@ -170,25 +171,10 @@
   <footer>HoloFi - Tecnologia NFT &amp; Blockchain | Lucas Januário CEO | Use MetaMask!</footer>
 
   <script>
-    // Função para converter ETH para WEI (BigInt)
-    function ethToWei(eth) {
-      // Para evitar problema com precisão, converter string para BigInt em wei
-      const parts = eth.toString().split('.');
-      let weiStr = parts[0] + (parts[1] ? parts[1].padEnd(18, '0') : ''.padEnd(18, '0'));
-      // Remove zeros extras do final
-      weiStr = weiStr.replace(/0+$/, '');
-      if (weiStr === '') weiStr = '0';
-      return weiStr;
-    }
-
-    // Ou uma função mais segura usando BigInt:
-    function toWei(eth) {
-      return BigInt(Math.floor(eth * 1e18)).toString();
-    }
-
     let isReady = false;
+    let lastQrData = "";
 
-    document.getElementById("generate-code-btn").addEventListener("click", () => {
+    document.getElementById("generate-code-btn").addEventListener("click", async () => {
       const limitEth = parseFloat(document.getElementById("limit").value);
       const apr = parseFloat(document.getElementById("apr").value);
       const owner = document.getElementById("owner").value.trim();
@@ -205,55 +191,50 @@
         return;
       }
 
-      const nftData = {
-        limitETH: limitEth,
-        aprPercent: apr,
-        ownerName: owner,
-        ethAddress: ethAddress,
-        image: "Z.png"
-      };
+      try {
+        const response = await fetch('http://localhost:3000/api/create-card', { // ajuste a URL conforme seu backend
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            limit,
+            apr,
+            owner,
+            tokenType: "HOLOFI"
+          })
+        });
 
-      const jsonStr = JSON.stringify(nftData, null, 2);
-      document.getElementById("generated-nft").textContent = jsonStr;
+        if (!response.ok) {
+          const errorData = await response.json();
+          alert("Erro ao criar cartão: " + (errorData.error || response.statusText));
+          return;
+        }
 
-      const imgElem = document.getElementById("nft-img");
-      imgElem.src = "Z.png";
-      imgElem.alt = "Imagem padrão do NFT HoloFi";
+        const data = await response.json();
 
-      document.getElementById("available-credit").textContent = `Limite: ${limitEth} ETH`;
+        // Mostrar JSON retornado
+        document.getElementById("generated-nft").textContent = JSON.stringify(data, null, 2);
+        document.getElementById("available-credit").textContent = `Limite disponível: ${data.availableCredit} ETH`;
 
-      isReady = true;
-      document.getElementById("confirm-btn").disabled = false;
+        // Guardar qrData do backend para usar no QR Code
+        lastQrData = data.qrData;
+
+        // Ativar botão de gerar QR Code
+        document.getElementById("confirm-btn").disabled = false;
+        isReady = true;
+
+      } catch (error) {
+        alert("Erro ao conectar com o servidor: " + error.message);
+      }
     });
 
     document.getElementById("confirm-btn").addEventListener("click", () => {
-      if (!isReady) return;
-
-      const limitEth = parseFloat(document.getElementById("limit").value);
-      const ethAddress = document.getElementById("eth-address").value.trim();
-
-      if (isNaN(limitEth) || limitEth <= 0) {
-        alert("Limite inválido para gerar QR.");
+      if (!isReady || !lastQrData) {
+        alert("Por favor, emita o cartão NFT primeiro.");
         return;
       }
-
-      if (!ethAddress.match(/^0x[a-fA-F0-9]{40}$/)) {
-        alert("Endereço Ethereum inválido.");
-        return;
-      }
-
-      // Converte ETH para WEI
-      const valueWei = BigInt(Math.floor(limitEth * 1e18)).toString();
-
-      // Gera URI no padrão Ethereum
-      const ethURI = `ethereum:${ethAddress}?value=${valueWei}&data=0x`;
-
-      // Gera QR Code usando API externa do Google Charts
-      const qrCodeUrl = `https://chart.googleapis.com/chart?chs=180x180&cht=qr&chl=${encodeURIComponent(ethURI)}`;
-
-      const qrImg = document.getElementById("qr-code-img");
-      qrImg.src = qrCodeUrl;
-      qrImg.style.display = "block";
+      const qrCodeImg = document.getElementById("qr-code-img");
+      qrCodeImg.src = lastQrData;
+      qrCodeImg.style.display = "block";
     });
   </script>
 </body>
