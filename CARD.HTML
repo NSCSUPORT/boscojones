@@ -3,96 +3,123 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Emitir Cartão NFT HoloFi</title>
+  <title>HoloFi Card</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
         font-family: 'Roboto', Arial, sans-serif;
         color: #00FF00;
+        background-color: #000000; /* fundo preto */
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
         flex-direction: column;
         padding: 10px;
-        background-color: #1a1a1a;
     }
     h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
         margin-bottom: 20px;
-        color: #00FF00;
+        color: #00ff00;
         text-align: center;
-        text-shadow: 0 0 15px #7e00ff, 0 0 25px #ff0000;
-    }
+        text-shadow:
+          0 0 5px #00ff00,
+          0 0 10px #00ff00,
+          0 0 20px #00ff00,
+          0 0 40px #00ff00;
+        font-weight: bold;
+      }
     .container {
         width: 100%;
         max-width: 500px;
-        background-color: rgba(30, 30, 30, 0.9);
+        background-color: rgba(0, 0, 0, 0.85); /* contraste escuro */
         border-radius: 15px;
         padding: 30px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(12px);
+        box-shadow: 0 8px 25px rgba(0, 255, 0, 0.7);
+        backdrop-filter: blur(10px);
     }
     .form-group { margin-bottom: 15px; }
     .form-group label {
         display: block;
         margin-bottom: 6px;
         font-weight: bold;
-        color: #e0e0e0;
+        color: #c0ffc0; /* verde claro para labels */
+        text-shadow: 0 0 5px #00ff00;
     }
     .form-group input, .form-group select {
         width: 100%;
         padding: 12px;
         border-radius: 8px;
-        border: 1px solid #3c3c3c;
-        background-color: #1e1e1e;
-        color: #e0e0e0;
+        border: 1px solid #004d00; /* verde escuro */
+        background-color: #001a00; /* verde muito escuro */
+        color: #b0ffb0;
         font-size: 1rem;
         transition: border-color 0.3s ease;
     }
     .form-group input:focus, .form-group select:focus {
         outline: none;
-        border-color: #4CAF50;
+        border-color: #00ff00;
+        box-shadow: 0 0 10px #00ff00;
+        background-color: #002b00;
+        color: #e0ffe0;
     }
     button {
         padding: 12px;
         border-radius: 8px;
         font-weight: bold;
         cursor: pointer;
-        color: #fff;
+        color: #000;
         border: none;
         transition: background-color 0.3s ease, transform 0.3s ease;
         text-align: center;
         width: 100%;
         margin-top: 10px;
+        box-shadow: 0 0 8px #00ff00;
+        font-size: 1.1rem;
+        font-family: 'Roboto', Arial, sans-serif;
+        text-shadow: 0 0 3px #00ff00;
     }
-    #generate-code-btn { background-color: #4CAF50; }
-    #generate-code-btn:hover { background-color: #45a049; transform: scale(1.05); }
-    #confirm-btn { background-color: #f44336; }
-    #confirm-btn:hover:not(:disabled) { background-color: #d32f2f; transform: scale(1.05); }
+    #generate-code-btn {
+        background-color: #00ff00;
+    }
+    #generate-code-btn:hover {
+        background-color: #00cc00;
+        transform: scale(1.05);
+    }
+    #confirm-btn {
+        background-color: #ff3300;
+        color: #fff;
+        box-shadow: 0 0 8px #ff3300;
+    }
+    #confirm-btn:hover:not(:disabled) {
+        background-color: #cc2900;
+        transform: scale(1.05);
+        box-shadow: 0 0 15px #ff3300;
+    }
     footer {
         width: 100%;
         padding: 12px;
-        background: linear-gradient(45deg, #f0f000, #ff4500);
-        color: #000;
+        background: linear-gradient(45deg, #007700, #003300);
+        color: #00ff00;
         text-align: center;
         font-size: 1rem;
         font-weight: bold;
         letter-spacing: 2px;
-        text-shadow: 0 0 8px #ff0000;
+        text-shadow: 0 0 8px #00ff00;
         margin-top: 20px;
         animation: neon 1.5s ease-in-out infinite alternate;
+        font-family: 'Roboto', Arial, sans-serif;
     }
     @keyframes neon {
-      0% { text-shadow: 0 0 5px #ff0000; }
-      50% { text-shadow: 0 0 20px #ff4500; }
-      100% { text-shadow: 0 0 5px #ff0000; }
+      0% { text-shadow: 0 0 5px #00ff00; }
+      50% { text-shadow: 0 0 20px #00ff00; }
+      100% { text-shadow: 0 0 5px #00ff00; }
     }
     #qr-code-img {
       display: none;
       margin-top: 20px;
       border-radius: 12px;
-      box-shadow: 0 0 15px #00ff00;
+      box-shadow: 0 0 20px #00ff00;
     }
     #nft-img {
       width: 150px;
@@ -100,11 +127,11 @@
       display: block;
       margin: 0 auto 20px auto;
       border-radius: 12px;
-      box-shadow: 0 0 25px #7e00ff, 0 0 35px #ff0000;
+      box-shadow: 0 0 25px #00ff00, 0 0 35px #00cc00;
       object-fit: contain;
     }
     pre#generated-nft {
-      background-color: #121212;
+      background-color: #000000;
       color: #00ff00;
       padding: 15px;
       border-radius: 12px;
@@ -115,6 +142,8 @@
       white-space: pre-wrap;
       word-wrap: break-word;
       box-shadow: inset 0 0 15px #00ff00;
+      font-family: monospace;
+      text-shadow: 0 0 5px #00ff00;
     }
     #available-credit {
       margin-top: 12px;
@@ -122,12 +151,13 @@
       font-size: 1.1rem;
       text-align: center;
       color: #00ff00;
-      text-shadow: 0 0 10px #4caf50;
+      text-shadow: 0 0 15px #00ff00;
+      font-family: 'Roboto', Arial, sans-serif;
     }
   </style>
 </head>
 <body>
-  <h1>Emitir Cartão NFT HoloFi</h1>
+  <h1>HoloFi Card</h1>
   <div class="container">
     <img id="nft-img" src="Z.png" alt="Imagem padrão do NFT HoloFi" />
     <div class="form-group">
