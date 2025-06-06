@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SPPX - FII de Trade Imediato</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #fff;
+      padding: 20px;
+    }
+    .ativo-box {
+      background-color: #111;
+      border: 2px solid #4CAF50;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .ativo-box h2 {
+      color: #4CAF50;
+    }
+    .ativo-box p {
+      margin: 10px 0;
+    }
+    .ativo-box button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .ativo-box button:hover {
+      background-color: #388E3C;
+    }
+  </style>
+</head>
+<body>
+
+<div class="ativo-box">
+  <h2>SPPX - Nature High-Speed FII</h2>
+  <p><strong>Tipo:</strong> FII de câmbio rápido</p>
+  <p><strong>Capital Natural:</strong> High Scale Nature</p>
+  <p><strong>Investimento:</strong> R$ <span id="investimento">10.000</span></p>
+  <p><strong>Lucro Estimado:</strong> R$ <span id="lucro"></span></p>
+  <p><strong>Giminiosidade:</strong> <span id="giminiosidade"></span> (fator de instabilidade natural)</p>
+  <p><strong>Token:</strong> SPPX001H</p>
+  <button onclick="calcularLucro()">Emitir Ativo</button>
+</div>
+
+<script>
+  function calcularLucro() {
+    const investimento = 10000; // Valor inicial
+    const cambioVelocidade = 1.22; // Velocidade de troca natural (alto)
+    const fatorInstabilidade = Math.random() * 0.2 + 0.9; // Entre 0.9 e 1.1
+    const giminiosidade = (fatorInstabilidade * cambioVelocidade).toFixed(2);
+    const lucro = (investimento * giminiosidade).toFixed(2);
+
+    document.getElementById('lucro').textContent = lucro;
+    document.getElementById('giminiosidade').textContent = giminiosidade;
+  }
+</script>
+
+</body>
+</html>
