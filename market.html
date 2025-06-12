@@ -9,7 +9,7 @@
     <title>BOOKING</title>
     <link href="file:///C:/Users/jobsj/Downloads/BOOKING_files/bootstrap.min.css" rel="stylesheet">
     <link href="file:///C:/Users/jobsj/Downloads/BOOKING_files/all.min.css" rel="stylesheet">
-  <style>
+<style>
 /* === ANIMAÇÕES === */
 @keyframes blinkColor {
   0% { color: #ff4c4c; }
@@ -34,7 +34,7 @@
   100% { text-shadow: 0 0 5px #ff0000; }
 }
 
-/* === ESTILOS GERAIS === */
+/* === BASE === */
 body {
   background-color: #0d0d0d;
   color: #e0e0e0;
@@ -65,17 +65,24 @@ h1 {
   gap: 10px;
 }
 
-.navbar-links,
-.social-icons {
+.menu-toggle {
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: none;
+  color: #000;
+  font-weight: bold;
+}
+
+.navbar-links {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.navbar-links a,
-.social-icons a {
+.navbar-links a {
   color: #0d0d0d;
   text-decoration: none;
   font-weight: 600;
@@ -83,8 +90,7 @@ h1 {
   transition: color 0.3s;
 }
 
-.navbar-links a:hover,
-.social-icons a:hover {
+.navbar-links a:hover {
   color: #ffffff;
 }
 
@@ -256,14 +262,20 @@ footer {
 
 /* === RESPONSIVIDADE === */
 @media (max-width: 768px) {
-  .exchange-rate-navbar {
-    flex-direction: column;
-    gap: 10px;
+  .menu-toggle {
+    display: block;
   }
 
-  .navbar {
+  .navbar-links {
+    display: none;
     flex-direction: column;
-    gap: 10px;
+    width: 100%;
+    background-color: #fbc02d;
+    padding: 1rem 0;
+  }
+
+  .navbar-links.show {
+    display: flex;
   }
 
   .asset-table {
@@ -275,39 +287,33 @@ footer {
     padding: 1rem;
   }
 }
-
 </style>
-
 </head>
 
 <body>
-    <!-- NavBar -->
-    <nav class="navbar">
-    <ul class="navbar-links">
-        <li><a href="https://nscsuport.github.io/boscojones//AKB.HTML" target="_blank">AKB</a></li>
-        <li><a href="https://nscsuport.github.io/boscojones//jiufi.html" target="_blank">JIUFI</a></li>
-        <li><a href="https://nscsuport.github.io/boscojones//found.html" target="_blank">FOUND</a></li>
-        <li><a href="https://nscsuport.github.io/boscojones//EVO.HTML" target="_blank">EVO</a></li>
-        <li><a href="https://nscsuport.github.io/boscojones//p3p.html" target="_blank">CDB</a></li>
-        <li><a href="https://nscsuport.github.io/boscojones//OZZ.HTML" target="_blank">OZZ</a></li>
-        <li><a href="https://nscsuport.github.io/boscojones/ARK.HTML" target="_blank">ARK</a></li>
-        <li><a href="https://nscsuport.github.io/boscojones/puma.html" target="_blank">PUMA</a></li>
-        <li><a href="https://nscsuport.github.io/boscojones/gix2.html" target="_blank">GIX2</a></li>
-        <li><a href="https://nscsuport.github.io/boscojones/RZX.HTML" target="_blank">RZX2</a></li>
-        <li><a href="https://nscsuport.github.io/boscojones/ETF.HTML" target="_blank">THF ETF </a></li>
-        <li><a href="https://nscsuport.github.io/boscojones/NIVE2.html" target="_blank">NIVE2</a></li>
-        <li><a href="https://nscsuport.github.io/boscojones/FII.HTML" target="_blank">FII</a></li>
-        <li><a href="https://nscsuport.github.io/boscojones/QSEA.HTML" target="_blank">QSEA</a></li>
-        <li><a href="https://nscsuport.github.io/boscojones/ssqsea.html" target="_blank">SSQSEA</a></li>
-                <li><a href="https://nscsuport.github.io/boscojones/XETH.HTML" target="_blank">XETH</a></li>
-                 <li><a href="https://nscsuport.github.io/boscojones/MARS.HTML" target="_blank">MARS</a></li>
-           <li><a href="https://nscsuport.github.io/boscojones/MOON.HTML" target="_blank">MOON</a></li>
-                   <li><a href="https://nscsuport.github.io/boscojones/D-EURO.HTML" target="_blank">D-EURO</a></li>
-        <li><a href="https://nscsuport.github.io/boscojones/CARD.HTML" target="_blank">CARD</a></li>
-        <li><a href="https://docs.google.com/document/d/14k4L8ycI3LfkvBVSqKA20oo6V1wfNofbvb9BezFqMQQ/edit?usp=sharing" target="_blank">||DOCS||</a></li>
-    <li style="color: black; font-weight: bold; padding-left: 20px;"> Bosco Jones FX </li>
-    </ul>
-
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="menu-toggle" onclick="toggleMenu()" aria-label="Abrir menu">☰</div>
+  <ul class="navbar-links" id="navbarMenu">
+    <li><a href="AKB.HTML" target="_blank">AKB</a></li>
+    <li><a href="jiufi.html" target="_blank">JIUFI</a></li>
+    <li><a href="found.html" target="_blank">FOUND</a></li>
+    <li><a href="EVO.HTML" target="_blank">EVO</a></li>
+    <li><a href="p3p.html" target="_blank">CDB</a></li>
+    <li><a href="OZZ.HTML" target="_blank">OZZ</a></li>
+    <li><a href="ARK.HTML" target="_blank">ARK</a></li>
+    <li><a href="puma.html" target="_blank">PUMA</a></li>
+    <li><a href="gix2.html" target="_blank">GIX2</a></li>
+    <li><a href="RZX.HTML" target="_blank">RZX2</a></li>
+    <li><a href="ETF.HTML" target="_blank">THF ETF</a></li>
+    <li><a href="NIVE2.html" target="_blank">NIVE2</a></li>
+    <li><a href="FII.HTML" target="_blank">FII</a></li>
+    <li><a href="QSEA.HTML" target="_blank">QSEA</a></li>
+    <li><a href="ssqsea.html" target="_blank">SSQSEA</a></li>
+    <li><a href="XETH.HTML" target="_blank">XETH</a></li>
+    <li><a href="MARS.HTML" target="_blank">MARS</a></li>
+    <li><a href="MOON.HTML" target="_blank">MOON</a></li>
+  </ul>
+</nav>
 <!-- Bloco de ícones sociais -->
 <ul class="social-icons">
     <li><a href="https://www.instagram.com/brncinc" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a></li>
@@ -497,6 +503,11 @@ fetchExchangeRates();
 
 
     <script>
+
+          function toggleMenu() {
+    const menu = document.getElementById('navbarMenu');
+    menu.classList.toggle('show');
+  }
         // Função para obter preços de criptomoedas e calcular a variação
         async function getPrices() {
             try {
