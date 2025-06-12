@@ -4,10 +4,8 @@
 <head> 
     <link rel="icon" href="logo.ico">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="icon" href="file:///C:/Users/jobsj/Downloads/logo.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BOOKING</title>
-<style>
 /* === ANIMAÇÕES === */
 @keyframes blinkColor {
   0% { color: #ff4c4c; }
@@ -241,65 +239,33 @@ tr:hover {
 .blink {
   animation: blinkColor 2s ease-in-out infinite;
   font-weight: 700;
+  letter-spacing: 0.045em;
 }
 
-/* === LAYOUT EM GRADE 2x2 === */
-.asset-table {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(201.6px, 1fr)); /* 252px * 0.8 */
-  gap: 14.4px; /* 18px * 0.8 */
-  margin-top: 28.8px; /* 36px * 0.8 */
+.blink-opacity {
+  animation: blinkOpacity 1.8s ease-in-out infinite;
+  font-weight: 700;
+  letter-spacing: 0.045em;
 }
 
-.asset-card {
-  background-color: #1e1e1e;
-  padding: 15.84px; /* 19.8px * 0.8 */
-  border-radius: 10.08px; /* 12.6px * 0.8 */
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 0 7.2px rgba(255, 255, 255, 0.05); /* 9px * 0.8 */
-}
-
-.asset-card:hover,
-.asset-card:focus-within {
-  transform: translateY(-4.32px); /* -5.4px * 0.8 */
-  box-shadow: 0 0 14.4px #00ff7fcc; /* 18px * 0.8 */
-  outline: none;
+.neon {
+  animation: neon 3s ease-in-out infinite;
+  font-weight: 700;
+  letter-spacing: 0.045em;
 }
 
 /* === FOOTER === */
 .footer {
   text-align: center;
   padding: 14.4px; /* 18px * 0.8 */
-  background-color: #111;
-  color: #888;
+  background: linear-gradient(90deg, #ff8f00, #fbc02d);
+  color: #0d0d0d;
   font-size: 10.8px; /* 13.5px * 0.8 */
   margin-top: 43.2px; /* 54px * 0.8 */
   letter-spacing: 0.036em; /* 0.045em * 0.8 */
+  font-weight: 700;
 }
 
-/* === RESPONSIVO === */
-@media (max-width: 768px) {
-  .navbar {
-    padding: 7.2px 10.8px; /* 9px 13.5px * 0.8 */
-  }
-
-  .navbar-links,
-  .social-icons {
-    gap: 9.6px; /* 12px * 0.8 */
-  }
-
-  h1 {
-    font-size: 1.44rem; /* 1.8rem * 0.8 */
-    margin: 1rem 0 0.8rem; /* 1.25rem e 1rem * 0.8 */
-  }
-
-  .btn-blue {
-    padding: 6.48px 13.5px; /* 8.1px 16.875px * 0.8 */
-    font-size: 9.6px; /* 12px * 0.8 */
-  }
-}
-</style>
 
 
 </head>
