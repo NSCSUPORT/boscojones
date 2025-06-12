@@ -6,7 +6,7 @@
   <title>MOON Treasury - HoloFi</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-      * { box-sizing: border-box; margin: 0; padding: 0; }
+     * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
     font-family: 'Roboto', Arial, sans-serif;
     color: #00FF00;
@@ -68,10 +68,15 @@ button {
     margin-top: 10px;
 }
 #generate-code-btn {
-    background-color: #4CAF50;
+    background-color: #ffffff; /* fundo branco */
+    color: #4CAF50; /* texto verde */
+    border: 2px solid #4CAF50;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
 #generate-code-btn:hover {
-    background-color: #45a049;
+    background-color: #4CAF50; /* fundo verde */
+    color: #ffffff; /* texto branco */
     transform: scale(1.05);
 }
 #confirm-btn {
@@ -111,6 +116,7 @@ footer {
     50% { text-shadow: 0 0 20px #ff4500; }
     100% { text-shadow: 0 0 5px #ff0000; }
 }
+
 
     </style>
 </head>
