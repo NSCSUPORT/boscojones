@@ -29,7 +29,7 @@
   50% { text-shadow: 0 0 16px #ff4500; }
 }
 
-/* === RESET E ESTILOS BASE === */
+/* === RESET E BASE === */
 *,
 *::before,
 *::after {
@@ -91,13 +91,13 @@ h1 {
   outline-offset: 1.44px;
 }
 
-.navbar-links a:focus,
-.social-icons a:focus,
 .navbar-links a:hover,
-.social-icons a:hover {
+.social-icons a:hover,
+.navbar-links a:focus,
+.social-icons a:focus {
   color: #ffffff;
-  outline: none;
   text-decoration: underline;
+  outline: none;
 }
 
 /* === TABELA DE ATIVOS === */
@@ -185,7 +185,7 @@ tr:hover {
   margin: 0;
 }
 
-/* === NAVBAR DE CÂMBIO EM MATRIZ 2x3 === */
+/* === NAVBAR DE COTAÇÃO 2x3 === */
 .exchange-rate-navbar {
   display: flex;
   flex-wrap: wrap;
@@ -219,7 +219,7 @@ tr:hover {
   outline: none;
 }
 
-/* === ANIMAÇÕES DE COTAÇÃO === */
+/* === EFEITOS VISUAIS === */
 .blink-green {
   color: #00ff7f;
   margin-left: 4.32px;
@@ -245,7 +245,7 @@ tr:hover {
   letter-spacing: 0.045em;
 }
 
-/* === FOOTER === */
+/* === RODAPÉ === */
 footer {
   width: 100%;
   padding: 16px;
@@ -260,6 +260,7 @@ footer {
   border-top: 2px solid #333;
   margin-top: 30px;
 }
+
 
 </style>
 
