@@ -9,24 +9,19 @@
     <style>
 /* === ANIMAÇÕES === */
 @keyframes blinkColor {
-  0% { color: #ff4c4c; }    /* vermelho */
-  50% { color: #ffd700; }   /* dourado */
-  100% { color: #00e676; }  /* verde */
+  0%   { color: #ff4c4c; }    /* vermelho */
+  50%  { color: #ffd700; }    /* dourado */
+  100% { color: #00e676; }    /* verde */
 }
 
 @keyframes blinkOpacity {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-@keyframes blinkGreen {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  50%      { opacity: 0.5; }
 }
 
 @keyframes neon {
   0%, 100% { text-shadow: 0 0 4px #ff0000; }
-  50% { text-shadow: 0 0 16px #ff4500; }
+  50%      { text-shadow: 0 0 16px #ff4500; }
 }
 
 /* === RESET E ESTILOS BASE === */
@@ -39,7 +34,7 @@
 body {
   background-color: #0d0d0d;
   color: #e0e0e0;
-  font-family: 'Arial', sans-serif;
+  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   font-size: 14.08px; /* 12.8px * 1.1 */
@@ -91,10 +86,10 @@ h1 {
   outline-offset: 1.44px;
 }
 
-.navbar-links a:focus,
-.social-icons a:focus,
 .navbar-links a:hover,
-.social-icons a:hover {
+.social-icons a:hover,
+.navbar-links a:focus,
+.social-icons a:focus {
   color: #ffffff;
   outline: none;
   text-decoration: underline;
@@ -234,7 +229,7 @@ tr:hover {
 .blink-green {
   color: #00ff7f;
   margin-left: 4.32px;
-  animation: blinkGreen 1.8s ease-in-out infinite;
+  animation: blinkOpacity 1.8s ease-in-out infinite;
   font-weight: 700;
 }
 
@@ -271,6 +266,7 @@ footer {
   border-top: 2px solid #333;
   margin-top: 30px;
 }
+
 
 
 </style>
