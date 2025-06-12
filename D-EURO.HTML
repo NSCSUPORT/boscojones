@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="logo.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>D-EURO Credit NFT Engine</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            color: #00FF00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            padding: 10px;
+            background-color: #000000;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #00FF00;
+            text-align: center;
+            text-shadow: 0 0 15px #7e00ff, 0 0 25px #ff0000;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #e0e0e0;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #3c3c3c;
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        button {
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #fff;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center;
+            width: 100%;
+            margin-top: 10px;
+        }
+        #generate-code-btn {
+            background-color: #4CAF50;
+        }
+        #generate-code-btn:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+        #confirm-btn {
+            background-color: #f44336;
+        }
+        #confirm-btn:hover:not(:disabled) {
+            background-color: #d32f2f;
+            transform: scale(1.05);
+        }
+        #generated-asset {
+            white-space: pre-wrap;
+            background: #121212;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            max-height: 250px;
+            overflow-y: auto;
+            color: #66ff66;
+        }
+        footer {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #f0f000, #ff4500);
+            color: #000;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 0 0 8px #ff0000;
+            margin-top: 20px;
+            animation: neon 1.5s ease-in-out infinite alternate;
+        }
+        @keyframes neon {
+            0% { text-shadow: 0 0 5px #ff0000; }
+            50% { text-shadow: 0 0 20px #ff4500; }
+            100% { text-shadow: 0 0 5px #ff0000; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>D-EURO Credit NFT Engine</h1>
+        <form id="investment-form">
+            <div class="form-group">
+                <label for="investment-value">Investment Value (D-EURO):</label>
+                <input type="number" id="investment-value" required min="0" step="0.01" />
+            </div>
+            <div class="form-group">
+                <label for="profit">Expected Profit (%):</label>
+                <input type="number" id="profit" required min="0" step="0.01" />
+            </div>
+            <div class="form-group">
+                <label for="giminiosidade">Base Giminiosidade (D-EURO):</label>
+                <input type="number" id="giminiosidade" required min="0" step="0.01" />
+            </div>
+            <div class="form-group">
+                <label for="credit-title">Select Credit NFT Title (BSE Model):</label>
+                <select id="credit-title" required>
+                    <option value="BSE 2 a 10 anos, valor CHF 1 000">BSE 2 a 10 anos, valor CHF 1 000</option>
+                    <option value="CSBGC3">CSBGC3</option>
+                    <option value="CSIF AAA–AA">CSIF AAA–AA</option>
+                    <option value="UBS ESG">UBS ESG</option>
+                </select>
+            </div>
+            <button type="button" id="generate-code-btn">Create D-EURO Credit NFT</button>
+            <h3>Generated NFT Asset:</h3>
+            <pre id="generated-asset">None</pre>
+        </form>
+        <h3>Total to Pay (D-EURO): <span id="total-to-pay">None</span></h3>
+        <button type="button" id="confirm-btn" disabled>Confirm Purchase</button>
+        <div id="qrcode-container" style="display: none;">
+            <img id="qr-code-img" style="display: block; margin: 20px auto;" alt="QR Code for Metamask" />
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2025 D-EURO Credit NFT Engine. All rights reserved. Lucas Januário USE META MASK</p>
+    </footer>
+
+<script>
+    let isConfirmedFirst = false;
+    const conversionRateToDEURO = 10; // conversion rate to D-EURO token
+
+    document.getElementById("generate-code-btn").addEventListener("click", async function() {
+        const crypto = window.crypto || window.msCrypto;
+
+        const investmentValue = parseFloat(document.getElementById('investment-value').value);
+        const profit = parseFloat(document.getElementById('profit').value);
+        const giminiosidadeBase = parseFloat(document.getElementById('giminiosidade').value);
+        const creditTitle = document.getElementById('credit-title').value;
+
+        if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidadeBase)) {
+            alert('Please, fill all fields correctly!');
+            return;
+        }
+
+        // Calculate giminiosidade max (twice the base)
+        const giminiosidadeMaxima = giminiosidadeBase * 2;
+
+        // Calculate profit amount
+        const totalProfit = investmentValue * (profit / 100);
+
+        // Calculate total to pay with giminiosidade max
+        const totalToPayInBase = (investmentValue + totalProfit) * (1 + giminiosidadeMaxima / 100);
+
+        // Convert to D-EURO token units
+        const totalToPayInDEURO = totalToPayInBase * conversionRateToDEURO;
+
+        // Prepare NFT-like asset info with the credit title embedded
+        const assetData = {
+            name: "D-EURO Credit NFT",
+            creditModel: "BSE 2 a 10 anos",
+            creditTitle: creditTitle,
+            investmentValue: investmentValue.toFixed(2),
+            expectedProfitPercent: profit.toFixed(2),
+            giminiosidadeBase: giminiosidadeBase.toFixed(2),
+            giminiosidadeMaxima: giminiosidadeMaxima.toFixed(2),
+            totalProfit: totalProfit.toFixed(2),
+            totalToPayInBase: totalToPayInBase.toFixed(2),
+            totalToPayInDEURO: totalToPayInDEURO.toFixed(2),
+            tokenName: "D-EURO",
+            network: "D-EURO Mainnet",
+            features: {
+                creditNFT: true,
+                indexedBy: "deuro-network"
+            }
+        };
+
+        // Generate a hash from the JSON string to simulate NFT unique id
+        const encoder = new TextEncoder();
+        const dataStr = JSON.stringify(assetData);
+        const hashBuffer = await crypto.subtle.digest("SHA-256", encoder.encode(dataStr));
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+
+        assetData.assetHash = hashHex;
+
+        // Show generated asset JSON nicely formatted
+        document.getElementById("generated-asset").innerText = JSON.stringify(assetData, null, 2);
+
+        // Show total to pay
+        document.getElementById("total-to-pay").innerText = totalToPayInDEURO.toFixed(2);
+
+        // Enable confirm purchase button
+        isConfirmedFirst = true;
+        updateConfirmButtonState();
+
+        // Hide QR code container if visible
+        document.getElementById("qrcode-container").style.display = "none";
+    });
+
+    document.getElementById('confirm-btn').addEventListener('click', function () {
+        if (!isConfirmedFirst) {
+            alert('Please, complete the NFT asset generation!');
+            return;
+        }
+
+        const totalToPay = parseFloat(document.getElementById('total-to-pay').innerText);
+        if (isNaN(totalToPay)) {
+            alert('Invalid total to pay value!');
+            return;
+        }
+
+        // Convert to smallest unit (like wei in Ethereum)
+        const amountInSmallestUnit = (totalToPay * 10 ** 18).toFixed(0);
+
+        // Construct a MetaMask payment URI (example)
+        const metamaskUri = `ethereum:?value=${amountInSmallestUnit}&currency=D-EURO`;
+
+        // Generate QR code image from API
+        const qrCodeImage = document.getElementById("qr-code-img");
+        qrCodeImage.src = "https://api.qrserver.com/v1/create-qr-code/?data=" + encodeURIComponent(metamaskUri);
+
+        // Show QR code container
+        document.getElementById("qrcode-container").style.display = "block";
+    });
+
+    function updateConfirmButtonState() {
+        document.getElementById("confirm-btn").disabled = !isConfirmedFirst;
+    }
+</script>
+</body>
+</html>
