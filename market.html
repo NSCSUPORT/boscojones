@@ -12,8 +12,8 @@
    ANIMAÇÕES
 ===================================================== */
 @keyframes blinkColor {
-  0%   { color: #ff4c4c; }
-  50%  { color: #ffd700; }
+  0% { color: #ff4c4c; }
+  50% { color: #ffd700; }
   100% { color: #00e676; }
 }
 
@@ -28,8 +28,8 @@
 }
 
 @keyframes neon {
-  0%, 100% { text-shadow: 0 0 4px #ff0000; }
-  50% { text-shadow: 0 0 16px #ff4500; }
+  0%, 100% { text-shadow: 0 0 0.25rem #ff0000; }
+  50% { text-shadow: 0 0 1rem #ff4500; }
 }
 
 /* =====================================================
@@ -41,11 +41,15 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: #0d0d0d;
   color: #e0e0e0;
   font-family: 'Arial', sans-serif;
-  font-size: 14.08px;
+  font-size: 0.88rem;
   line-height: 1.6;
   margin: 0;
   padding: 0;
@@ -60,9 +64,9 @@ h1 {
   color: #66bb6a;
   text-align: center;
   font-size: 1.8rem;
-  margin: 1.44rem 0 1.08rem;
+  margin: 1.5rem 0 1rem;
   font-weight: 700;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.05em;
 }
 
 /* =====================================================
@@ -70,12 +74,12 @@ h1 {
 ===================================================== */
 .navbar {
   background: linear-gradient(90deg, #ff8f00, #fbc02d);
-  padding: 8.64px 14.4px;
+  padding: 0.6rem 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  box-shadow: 0 1.44px 7.2px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0.1rem 0.5rem rgba(0, 0, 0, 0.5);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -85,7 +89,7 @@ h1 {
 .social-icons {
   display: flex;
   list-style: none;
-  gap: 11.52px;
+  gap: 0.8rem;
   padding: 0;
   margin: 0;
 }
@@ -95,16 +99,16 @@ h1 {
   color: #0d0d0d;
   text-decoration: none;
   font-weight: 600;
-  font-size: 10.8px;
+  font-size: 0.75rem;
   transition: color 0.3s ease;
-  outline-offset: 1.44px;
+  outline-offset: 0.1rem;
 }
 
 .navbar-links a:hover,
 .social-icons a:hover,
 .navbar-links a:focus,
 .social-icons a:focus {
-  color: #ffffff;
+  color: #fff;
   text-decoration: underline;
   outline: none;
 }
@@ -114,16 +118,16 @@ h1 {
 ===================================================== */
 table {
   width: 100%;
-  margin-top: 14.4px;
+  margin-top: 1rem;
   border-collapse: collapse;
-  font-size: 10.8px;
-  border-radius: 7.2px;
-  box-shadow: 0 0 10.8px rgba(0, 255, 127, 0.2);
+  font-size: 0.75rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0.75rem rgba(0, 255, 127, 0.2);
   overflow: hidden;
 }
 
 th, td {
-  padding: 10.08px 12.96px;
+  padding: 0.7rem 0.9rem;
   text-align: left;
   border-bottom: 1px solid #444;
 }
@@ -131,7 +135,7 @@ th, td {
 th {
   background-color: #1b1b1b;
   font-weight: 700;
-  letter-spacing: 0.036em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
 }
 
@@ -155,13 +159,13 @@ tr:hover {
   background-color: #1A73E8;
   color: #fff;
   border: none;
-  padding: 8.64px 17.28px;
-  font-size: 10.8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   cursor: pointer;
-  border-radius: 5.76px;
-  box-shadow: 0 2.88px 8.64px rgba(0, 0, 0, 0.6);
+  border-radius: 0.4rem;
+  box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.6);
   transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
 }
 
@@ -169,7 +173,7 @@ tr:hover {
 .btn-blue:focus {
   background-color: #1358c0;
   transform: scale(1.05);
-  box-shadow: 0 4.32px 11.52px rgba(19, 88, 192, 0.7);
+  box-shadow: 0 0.3rem 0.8rem rgba(19, 88, 192, 0.7);
   outline: none;
 }
 
@@ -177,9 +181,9 @@ tr:hover {
    CONTAINER
 ===================================================== */
 .container {
-  max-width: 864px;
+  max-width: 54rem;
   margin: auto;
-  padding: 14.4px;
+  padding: 1rem;
 }
 
 /* =====================================================
@@ -188,17 +192,17 @@ tr:hover {
 .exchange-rate-panel {
   background-color: #111;
   color: #81c784;
-  padding: 11.52px 17.28px;
+  padding: 0.8rem 1.2rem;
   text-align: center;
-  margin-top: 14.4px;
-  border-radius: 7.2px;
-  box-shadow: 0 0 10.8px #00ff7f30;
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0.75rem #00ff7f30;
   font-weight: 600;
-  letter-spacing: 0.036em;
+  letter-spacing: 0.03em;
 }
 
 .exchange-rate-panel h3 {
-  font-size: 12.96px;
+  font-size: 0.9rem;
   margin: 0;
 }
 
@@ -209,22 +213,22 @@ tr:hover {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 11.52px;
+  gap: 0.8rem;
   background-color: #0a0a0a;
   color: #e0e0e0;
-  padding: 10.08px 7.2px;
-  font-size: 11.52px;
-  border-bottom: 1.44px solid #2a2a2a;
+  padding: 0.7rem 0.5rem;
+  font-size: 0.8rem;
+  border-bottom: 0.1rem solid #2a2a2a;
 }
 
 .exchange-rate-item {
-  flex: 1 1 calc(33.333% - 11.52px);
-  max-width: calc(33.333% - 11.52px);
+  flex: 1 1 calc(33.333% - 0.8rem);
+  max-width: calc(33.333% - 0.8rem);
   text-align: center;
-  padding: 5.76px 12.96px;
+  padding: 0.4rem 0.9rem;
   background-color: rgba(255, 255, 255, 0.04);
-  border-radius: 7.2px;
-  box-shadow: 0 0 4.32px rgba(0, 255, 127, 0.15);
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0.3rem rgba(0, 255, 127, 0.15);
   font-weight: 600;
   cursor: default;
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -238,12 +242,19 @@ tr:hover {
   outline: none;
 }
 
+@media (max-width: 768px) {
+  .exchange-rate-item {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
 /* =====================================================
    EFEITOS VISUAIS
 ===================================================== */
 .blink-green {
   color: #00ff7f;
-  margin-left: 4.32px;
+  margin-left: 0.3rem;
   animation: blinkGreen 1.8s ease-in-out infinite;
   font-weight: 700;
 }
@@ -271,18 +282,20 @@ tr:hover {
 ===================================================== */
 footer {
   width: 100%;
-  padding: 16px;
+  padding: 1rem;
   background: linear-gradient(45deg, #f5f500, #ff4500);
   color: #000;
   text-align: center;
   font-size: 1rem;
   font-weight: bold;
-  letter-spacing: 1.2px;
-  text-shadow: 0 0 6px #ff0000;
+  letter-spacing: 0.08rem;
+  text-shadow: 0 0 0.4rem #ff0000;
   animation: neon 1.5s ease-in-out infinite alternate;
   border-top: 2px solid #333;
-  margin-top: 30px;
+  margin-top: 2rem;
+  transition: all 0.3s ease-in-out;
 }
+
 </style>
 
 </style>
