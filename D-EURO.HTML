@@ -130,12 +130,13 @@
                 <input type="number" id="giminiosidade" required min="0" step="0.01" />
             </div>
             <div class="form-group">
-                <label for="credit-title">Select Credit NFT Title (BSE Model):</label>
+                <label for="credit-title">Select Credit NFT Title (Dark-E Fraction):</label>
                 <select id="credit-title" required>
-                    <option value="BSE 2 a 10 anos, valor CHF 1 000">BSE 2 a 10 anos, valor CHF 1 000</option>
-                    <option value="CSBGC3">CSBGC3</option>
-                    <option value="CSIF AAA–AA">CSIF AAA–AA</option>
-                    <option value="UBS ESG">UBS ESG</option>
+                    <option value="Dark-E 1">Dark-E 1</option>
+                    <option value="Dark-E 2">Dark-E 2</option>
+                    <option value="Dark-E 3">Dark-E 3</option>
+                    <option value="Dark-E 4">Dark-E 4</option>
+                    <option value="Dark-E 5">Dark-E 5</option>
                 </select>
             </div>
             <button type="button" id="generate-code-btn">Create D-EURO Credit NFT</button>
@@ -184,7 +185,7 @@
         // Prepare NFT-like asset info with the credit title embedded
         const assetData = {
             name: "D-EURO Credit NFT",
-            creditModel: "BSE 2 a 10 anos",
+            creditModel: "Dark-E Fraction Model",
             creditTitle: creditTitle,
             investmentValue: investmentValue.toFixed(2),
             expectedProfitPercent: profit.toFixed(2),
