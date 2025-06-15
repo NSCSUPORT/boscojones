@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="logo.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>START UP RZX Asset - HoloFi Dark Advanced</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            color: #00FF00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            padding: 10px;
+            background-color: #000000;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #00FF00;
+            text-align: center;
+            text-shadow: 0 0 15px #7e00ff, 0 0 25px #ff0000;
+        }
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: bold; color: #e0e0e0; }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #3c3c3c;
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        button {
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #fff;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center;
+            width: 100%;
+            margin-top: 10px;
+        }
+        #generate-code-btn {
+            background-color: #4CAF50;
+        }
+        #generate-code-btn:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+        #confirm-btn {
+            background-color: #f44336;
+        }
+        #confirm-btn:hover:not(:disabled) {
+            background-color: #d32f2f;
+            transform: scale(1.05);
+        }
+        footer {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #f0f000, #ff4500);
+            color: #000;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 0 0 8px #ff0000;
+            margin-top: 20px;
+            animation: neon 1.5s ease-in-out infinite alternate;
+        }
+        @keyframes neon {
+            0% { text-shadow: 0 0 5px #ff0000; }
+            50% { text-shadow: 0 0 20px #ff4500; }
+            100% { text-shadow: 0 0 5px #ff0000; }
+        }
+        pre {
+            background-color: #111;
+            color: #0f0;
+            padding: 12px;
+            border-radius: 8px;
+            max-height: 150px;
+            overflow-y: auto;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin-top: 10px;
+        }
+        #qrcode-container img {
+            max-width: 200px;
+            border: 2px solid #4CAF50;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>START UP RZX Asset<br /><small style="color:#888;">(HoloFi Dark Advanced)</small></h1>
+        <form id="investment-form" onsubmit="return false;">
+            <div class="form-group">
+                <label for="investment-value">Valor do Investimento (USD):</label>
+                <select id="investment-value" required>
+                    <option value="10">10</option>
+                    <option value="50" selected>50</option>
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                    <option value="500">500</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="profit">Lucro Esperado (%):</label>
+                <input type="number" id="profit" value="18" required min="0" step="0.1" />
+            </div>
+            <div class="form-group">
+                <label for="giminiosidade">Giminiosidade Base (RZX):</label>
+                <input type="number" id="giminiosidade" value="2" required min="0" step="0.1" />
+            </div>
+
+            <button type="button" id="generate-code-btn">Criar START UP</button>
+
+            <h3>Ativo Gerado:</h3>
+            <pre id="generated-asset">Nenhum</pre>
+
+            <h3>Total a Pagar (RZX): <span id="total-to-pay">Nenhum</span></h3>
+            <button type="button" id="confirm-btn" disabled>Confirmar Compra</button>
+
+            <div id="qrcode-container" style="display: none; text-align:center;">
+                <img id="qr-code-img" alt="QR Code para pagamento" />
+            </div>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 RZX HoloFi Dark Engine — START UP. Criado por Lucas Januário para iniciativas com propósito.</p>
+    </footer>
+
+<script>
+    let isConfirmedFirst = false;
+    const conversionRateToARK = 10; // taxa fictícia para conversão em RZX
+
+    async function generateHash(data) {
+        const crypto = window.crypto || window.msCrypto;
+        const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(data));
+        return Array.from(new Uint8Array(buffer))
+            .map(b => b.toString(16).padStart(2, "0"))
+            .join("");
+    }
+
+    document.getElementById("generate-code-btn").addEventListener("click", async () => {
+        const investmentValue = parseFloat(document.getElementById("investment-value").value);
+        const profit = parseFloat(document.getElementById("profit").value);
+        const giminiosidadeBase = parseFloat(document.getElementById("giminiosidade").value);
+
+        if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidadeBase)) {
+            alert("Por favor, preencha todos os campos corretamente!");
+            return;
+        }
+
+        // Calcula giminiosidade máxima (exemplo: base * 2)
+        const giminiosidadeMaxima = giminiosidadeBase * 2;
+
+        // Calcula lucro total
+        const totalProfit = investmentValue * (profit / 100);
+
+        // Total a pagar (investimento + lucro + giminiosidade)
+        const totalToPayInUSD = (investmentValue + totalProfit) * (1 + giminiosidadeMaxima / 100);
+
+        // Converte para RZX
+        const totalToPayInARK = totalToPayInUSD * conversionRateToARK;
+
+        // Gera hash para o ativo
+        const hash = await generateHash(`STARTUP-${investmentValue}-${profit}-${giminiosidadeBase}-${Date.now()}`);
+
+        const asset = {
+            name: "START UP",
+            type: "RZX",
+            network: "DHL4",
+            hash: hash,
+            investmentUSD: investmentValue,
+            expectedProfitPercent: profit,
+            giminiosidadeBase: giminiosidadeBase,
+            giminiosidadeMaxima: giminiosidadeMaxima,
+            totalToPayRZX: totalToPayInARK.toFixed(2),
+            features: {
+                boost: true,
+                sector: "innovation",
+                indexedBy: "holoFiEngine",
+                standard: "Dark HoloFi"
+            },
+            createdAt: new Date().toISOString()
+        };
+
+        // Exibe ativo gerado formatado JSON
+        document.getElementById("generated-asset").textContent = JSON.stringify(asset, null, 2);
+        document.getElementById("total-to-pay").textContent = totalToPayInARK.toFixed(2);
+        isConfirmedFirst = true;
+        updateConfirmButtonState();
+        hideQrCode();
+    });
+
+    document.getElementById("confirm-btn").addEventListener("click", () => {
+        if (!isConfirmedFirst) {
+            alert("Por favor, crie o ativo START UP antes de confirmar a compra!");
+            return;
+        }
+        const totalToPay = parseFloat(document.getElementById("total-to-pay").textContent);
+        if (isNaN(totalToPay) || totalToPay <= 0) {
+            alert("Total a pagar inválido.");
+            return;
+        }
+
+        // Converte para valor em wei (simulação), multiplicando por 10^18
+        const amountInWei = (totalToPay * 1e18).toFixed(0);
+
+        // Monta URI padrão para wallet Ethereum com valor em RZX
+        const metamaskUri = `ethereum:?value=${amountInWei}&currency=RZX`;
+
+        // Gera QR Code com API pública
+        const qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(metamaskUri);
+
+        const qrCodeImage = document.getElementById("qr-code-img");
+        qrCodeImage.src = qrCodeUrl;
+
+        document.getElementById("qrcode-container").style.display = "block";
+    });
+
+    function updateConfirmButtonState() {
+        document.getElementById("confirm-btn").disabled = !isConfirmedFirst;
+    }
+
+    function hideQrCode() {
+        document.getElementById("qrcode-container").style.display = "none";
+        document.getElementById("qr-code-img").src = "";
+    }
+</script>
+</body>
+</html>
