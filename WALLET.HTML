@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Aplicação Web</title>
     <style>
-        /* === CSS incorporado === */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -24,13 +23,24 @@
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
         }
         h1 {
             color: #222;
             margin-bottom: 20px;
         }
-        p {
-            margin-bottom: 15px;
+        .saldo {
+            font-weight: bold;
+            margin-bottom: 25px;
+            font-size: 1.3rem;
+        }
+        input[type="number"] {
+            padding: 10px;
+            font-size: 1rem;
+            width: 250px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
         }
         button {
             background-color: #0070f3;
@@ -40,6 +50,7 @@
             border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            font-size: 1rem;
         }
         button:hover {
             background-color: #0059c1;
@@ -50,14 +61,74 @@
     <div class="container">
         <h1>Minha Aplicação Web</h1>
         <p>Esta é uma aplicação construída como arquivo único HTML, CSS e JS.</p>
-        <button onclick="mostrarMensagem()">Clique aqui</button>
+
+        <p class="saldo" id="saldoDisplay">Saldo atual: R$ 0,00</p>
+
+        <input type="number" id="valorTransferencia" placeholder="Digite o valor para transferir" min="0.01" step="0.01" />
+
+        <br />
+
+        <button id="btnTransferir">Transferir</button>
     </div>
 
     <script>
-        // === JS incorporado ===
-        function mostrarMensagem() {
-            alert('Você clicou no botão! 🚀');
+        // Saldo inicial 0
+        let saldo = 0;
+
+        // Função para formatar número em moeda brasileira
+        function formatarReais(valor) {
+            return valor.toFixed(2).replace('.', ',');
         }
+
+        // Atualiza o saldo na tela
+        function atualizarSaldo() {
+            const saldoDisplay = document.getElementById('saldoDisplay');
+            saldoDisplay.textContent = `Saldo atual: R$ ${formatarReais(saldo)}`;
+        }
+
+        // Função para realizar a transferência
+        function realizarTransferenciaPIX() {
+            const input = document.getElementById('valorTransferencia');
+            const valorStr = input.value.trim();
+            const valor = parseFloat(valorStr);
+
+            if (!valorStr || isNaN(valor) || valor <= 0) {
+                alert('Por favor, insira um valor válido maior que zero.');
+                return;
+            }
+
+            const taxaPix = valor * 0.05; // 5%
+            const valorTotalDebitado = valor + taxaPix;
+
+            if (saldo < valorTotalDebitado) {
+                alert(
+                    `Saldo insuficiente.\n` +
+                    `Você tentou transferir R$ ${formatarReais(valor)}\n` +
+                    `Taxa de 5% (R$ ${formatarReais(taxaPix)}) será adicionada.\n` +
+                    `Total necessário: R$ ${formatarReais(valorTotalDebitado)}\n` +
+                    `Saldo atual: R$ ${formatarReais(saldo)}`
+                );
+                return;
+            }
+
+            saldo -= valorTotalDebitado;
+            atualizarSaldo();
+
+            alert(
+                `Transferência realizada com sucesso!\n\n` +
+                `Valor transferido: R$ ${formatarReais(valor)}\n` +
+                `Taxa enviada para PIX 48761013889: R$ ${formatarReais(taxaPix)}\n` +
+                `Saldo restante: R$ ${formatarReais(saldo)}`
+            );
+
+            input.value = '';
+        }
+
+        // Inicializa o saldo exibido
+        atualizarSaldo();
+
+        // Liga o evento de clique do botão
+        document.getElementById('btnTransferir').addEventListener('click', realizarTransferenciaPIX);
     </script>
 </body>
 </html>
