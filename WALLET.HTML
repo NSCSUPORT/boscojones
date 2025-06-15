@@ -1,240 +1,63 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Wallet Bosco Jones - PIX & Saque</title>
-<style>
-    * {
-        box-sizing: border-box;
-        margin: 0; padding: 0;
-    }
-    body {
-        font-family: 'Roboto', Arial, sans-serif;
-        background-color: #000000;
-        color: #00FF00;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 20px;
-        min-height: 100vh;
-    }
-    h1 {
-        text-align: center;
-        margin-bottom: 20px;
-        text-shadow: 0 0 15px #7e00ff, 0 0 25px #ff0000;
-    }
-    .container {
-        background: rgba(30,30,30,0.9);
-        padding: 25px;
-        border-radius: 15px;
-        width: 100%;
-        max-width: 400px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-        backdrop-filter: blur(12px);
-        margin-bottom: 30px;
-    }
-    label {
-        display: block;
-        font-weight: bold;
-        margin-bottom: 8px;
-        color: #e0e0e0;
-    }
-    input[type=text], input[type=number] {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
-        border-radius: 8px;
-        border: 1px solid #3c3c3c;
-        background-color: #1e1e1e;
-        color: #e0e0e0;
-        font-size: 1rem;
-    }
-    button {
-        width: 100%;
-        padding: 12px;
-        margin-bottom: 15px;
-        border-radius: 8px;
-        border: none;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        color: white;
-        font-size: 1rem;
-    }
-    button:hover {
-        transform: scale(1.05);
-    }
-    #btn-saque {
-        background-color: #f44336;
-    }
-    #btn-saque:hover {
-        background-color: #d32f2f;
-    }
-    #btn-gerar-pix {
-        background-color: #4CAF50;
-    }
-    #btn-gerar-pix:hover {
-        background-color: #45a049;
-    }
-    #btn-pagar-pix {
-        background-color: #1A73E8;
-    }
-    #btn-pagar-pix:hover {
-        background-color: #1669c1;
-    }
-    #saldo {
-        font-size: 1.5rem;
-        margin-bottom: 20px;
-        text-align: center;
-        text-shadow: 0 0 8px #00ff00;
-    }
-    #qrcode img {
-        max-width: 180px;
-        max-height: 180px;
-        display: block;
-        margin: 10px auto;
-    }
-    #mensagem {
-        text-align: center;
-        margin-top: 10px;
-        min-height: 20px;
-        color: #ffea00;
-        font-weight: bold;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplicação Web</title>
+    <style>
+        /* === CSS incorporado === */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            background: white;
+            margin: auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #222;
+            margin-bottom: 20px;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        button {
+            background-color: #0070f3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0059c1;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Minha Aplicação Web</h1>
+        <p>Esta é uma aplicação construída como arquivo único HTML, CSS e JS.</p>
+        <button onclick="mostrarMensagem()">Clique aqui</button>
+    </div>
 
-<h1>Wallet Bosco Jones - PIX & Saque</h1>
-
-<div class="container">
-    <div id="saldo">Saldo: R$ <span id="saldo-valor">1000.00</span></div>
-
-    <!-- Saque -->
-    <label for="valor-saque">Valor para Saque (R$):</label>
-    <input type="number" id="valor-saque" min="1" step="0.01" placeholder="Ex: 100" />
-    <button id="btn-saque">Sacar</button>
-
-    <hr style="border-color: #444; margin: 15px 0;" />
-
-    <!-- Gerar PIX -->
-    <label for="pix-chave">Chave PIX para Receber:</label>
-    <input type="text" id="pix-chave" placeholder="CPF, e-mail, telefone ou EVP" />
-
-    <label for="pix-valor">Valor (R$):</label>
-    <input type="number" id="pix-valor" min="0.01" step="0.01" placeholder="Ex: 150.00" />
-
-    <button id="btn-gerar-pix">Gerar QR Code PIX</button>
-    <div id="qrcode"></div>
-
-    <hr style="border-color: #444; margin: 15px 0;" />
-
-    <!-- Pagar via PIX -->
-    <label for="pix-qr-texto">Digite ou cole o texto do QR Code PIX para pagar:</label>
-    <input type="text" id="pix-qr-texto" placeholder="Ex: chave|valor (simulado)" />
-
-    <button id="btn-pagar-pix">Pagar PIX</button>
-
-    <div id="mensagem"></div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-<script>
-    let saldo = 1000.00;
-
-    const saldoSpan = document.getElementById('saldo-valor');
-    const valorSaqueInput = document.getElementById('valor-saque');
-    const btnSaque = document.getElementById('btn-saque');
-    const pixChaveInput = document.getElementById('pix-chave');
-    const pixValorInput = document.getElementById('pix-valor');
-    const btnGerarPix = document.getElementById('btn-gerar-pix');
-    const qrcodeDiv = document.getElementById('qrcode');
-    const pixQrTextoInput = document.getElementById('pix-qr-texto');
-    const btnPagarPix = document.getElementById('btn-pagar-pix');
-    const mensagemDiv = document.getElementById('mensagem');
-
-    function atualizarSaldo() {
-        saldoSpan.innerText = saldo.toFixed(2);
-    }
-
-    btnSaque.addEventListener('click', () => {
-        const valor = parseFloat(valorSaqueInput.value);
-        if (isNaN(valor) || valor <= 0) {
-            alert('Informe um valor válido para saque.');
-            return;
+    <script>
+        // === JS incorporado ===
+        function mostrarMensagem() {
+            alert('Você clicou no botão! 🚀');
         }
-        if (valor > saldo) {
-            alert('Saldo insuficiente para saque.');
-            return;
-        }
-        saldo -= valor;
-        atualizarSaldo();
-        mensagemDiv.style.color = '#00ff00';
-        mensagemDiv.innerText = `Saque de R$ ${valor.toFixed(2)} realizado com sucesso!`;
-        valorSaqueInput.value = '';
-    });
-
-    btnGerarPix.addEventListener('click', () => {
-        const chave = pixChaveInput.value.trim();
-        const valor = parseFloat(pixValorInput.value);
-        if (!chave) {
-            alert('Informe a chave PIX para receber.');
-            return;
-        }
-        if (isNaN(valor) || valor <= 0) {
-            alert('Informe um valor válido para PIX.');
-            return;
-        }
-        // Para simular, o texto do QR será chave|valor
-        const qrData = `PIX|${chave}|${valor.toFixed(2)}`;
-
-        qrcodeDiv.innerHTML = '';
-        QRCode.toCanvas(qrcodeDiv, qrData, { width: 180 }, function (error) {
-            if (error) {
-                mensagemDiv.style.color = '#ff0000';
-                mensagemDiv.innerText = 'Erro ao gerar QR Code.';
-                console.error(error);
-            } else {
-                mensagemDiv.style.color = '#00ff00';
-                mensagemDiv.innerText = `QR Code PIX gerado para ${valor.toFixed(2)} reais na chave ${chave}.`;
-            }
-        });
-    });
-
-    btnPagarPix.addEventListener('click', () => {
-        const textoQr = pixQrTextoInput.value.trim();
-        if (!textoQr) {
-            alert('Informe o texto do QR Code PIX para pagar.');
-            return;
-        }
-        // Esperamos formato: PIX|chave|valor
-        const partes = textoQr.split('|');
-        if (partes.length !== 3 || partes[0] !== 'PIX') {
-            alert('Texto do QR Code inválido. Use formato: PIX|chave|valor');
-            return;
-        }
-        const valor = parseFloat(partes[2]);
-        if (isNaN(valor) || valor <= 0) {
-            alert('Valor inválido no QR Code.');
-            return;
-        }
-        if (valor > saldo) {
-            alert('Saldo insuficiente para realizar pagamento PIX.');
-            return;
-        }
-        saldo -= valor;
-        atualizarSaldo();
-        mensagemDiv.style.color = '#00ff00';
-        mensagemDiv.innerText = `Pagamento PIX de R$ ${valor.toFixed(2)} realizado para a chave ${partes[1]}.`;
-        pixQrTextoInput.value = '';
-        qrcodeDiv.innerHTML = '';
-        pixChaveInput.value = '';
-        pixValorInput.value = '';
-    });
-
-    atualizarSaldo();
-</script>
-
+    </script>
 </body>
 </html>
