@@ -5,220 +5,76 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bosco Jones Wallet - Login, Registro & Wallet</title>
   <style>
-    /* Reset básico */
     * {
-      margin: 0;
-      padding: 0;
       box-sizing: border-box;
     }
-
     body {
-      background: #0d1117; /* GitHub Dark background */
-      color: #c9d1d9; /* GitHub light gray */
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       margin: 0;
-    }
-
-    .container {
-      background: #161b22; /* GitHub dark panel */
-      border: 1px solid #30363d; /* subtle border */
-      border-radius: 12px;
-      padding: 32px 36px;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 8px 24px rgba(1,4,9,0.9);
-      animation: fadeIn 0.7s ease forwards;
-    }
-
-    h2 {
+      background-color: #0d1117;
       color: #c9d1d9;
-      text-align: center;
-      margin-bottom: 18px;
-      font-weight: 600;
-      font-size: 1.9rem;
+      font-family: 'Segoe UI', sans-serif;
     }
-
+    .container {
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #161b22;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #000;
+    }
+    h2 {
+      text-align: center;
+      color: #58a6ff;
+    }
     label {
       display: block;
       margin-top: 15px;
-      color: #8b949e; /* GitHub label gray */
-      font-weight: 600;
-      font-size: 0.9rem;
     }
-
     input, select {
       width: 100%;
-      padding: 12px 14px;
-      margin-top: 6px;
-      border-radius: 6px;
-      border: 1px solid #30363d;
-      background-color: #0d1117;
-      color: #c9d1d9;
-      font-size: 1rem;
-      transition: border-color 0.25s ease, background-color 0.25s ease;
-      font-weight: 500;
-    }
-
-    input::placeholder {
-      color: #8b949e;
-    }
-
-    input:focus, select:focus {
-      border-color: #58a6ff;
-      outline: none;
-      background-color: #161b22;
-      box-shadow: 0 0 6px #58a6ff;
-      color: #c9d1d9;
-    }
-
-    button {
-      margin-top: 24px;
-      width: 100%;
-      padding: 14px;
-      background-color: #238636; /* GitHub green */
-      color: #f0f6fc;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
       border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 1.1rem;
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 4px 10px rgba(35,134,54,0.7);
+      background-color: #21262d;
+      color: #c9d1d9;
     }
-
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 10px;
+      background-color: #238636;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
     button:hover {
       background-color: #2ea043;
-      box-shadow: 0 6px 14px rgba(46,160,67,0.8);
     }
-
-    a {
-      color: #58a6ff;
-      cursor: pointer;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s ease;
-    }
-
-    a:hover {
-      color: #79c0ff;
-      text-decoration: underline;
-    }
-
-    p.text-center {
-      text-align: center;
-      margin-top: 18px;
-      font-size: 0.9rem;
-    }
-
-    /* Wallet section styling */
     .wallet-header {
       text-align: center;
       margin-bottom: 20px;
     }
-
-    .wallet-header h2 {
-      font-size: 1.6rem;
-      color: #c9d1d9;
-      margin-bottom: 6px;
-    }
-
     .balance, .balance-fiat {
-      font-size: 1.2rem;
+      font-size: 1.2em;
+      margin-top: 10px;
       color: #8b949e;
-      margin-top: 8px;
-      font-weight: 500;
     }
-
-    .transaction-form {
-      margin-top: 20px;
-    }
-
     .history {
       margin-top: 30px;
-      background-color: #010409;
-      padding: 12px 14px;
+      background-color: #0d1117;
+      padding: 10px;
       border: 1px solid #30363d;
       border-radius: 8px;
-      color: #8b949e;
-      max-height: 140px;
-      overflow-y: auto;
-      font-size: 0.9rem;
-      font-family: 'Segoe UI Mono', monospace;
     }
-
-    .history strong {
-      display: block;
-      margin-bottom: 8px;
-      color: #c9d1d9;
-    }
-
     .btn-logout {
-      background-color: #cf222e; /* GitHub red */
+      background-color: #f44336;
       margin-top: 30px;
-      box-shadow: 0 4px 12px rgba(207, 34, 46, 0.7);
-      font-weight: 700;
-      font-size: 1.1rem;
     }
-
     .btn-logout:hover {
-      background-color: #a40e26;
-      box-shadow: 0 6px 16px rgba(164, 14, 38, 0.9);
-    }
-
-    /* Footer styling */
-    footer {
-      position: fixed;
-      bottom: 10px;
-      width: 100%;
-      text-align: center;
-      font-size: 0.85rem;
-      color: #8b949e;
-      font-weight: 600;
-      font-family: 'Segoe UI', sans-serif;
-      user-select: none;
-    }
-
-    footer a {
-      color: #58a6ff;
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-      color: #79c0ff;
-    }
-
-    /* Animação fade-in */
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Media Query */
-    @media (max-width: 480px) {
-      .container {
-        padding: 24px 28px;
-        max-width: 320px;
-      }
-
-      h2 {
-        font-size: 1.5rem;
-      }
-
-      button {
-        font-size: 1rem;
-        padding: 12px;
-      }
+      background-color: #d32f2f;
     }
   </style>
 </head>
@@ -227,30 +83,30 @@
   <!-- LOGIN FORM -->
   <section id="login-section" class="container">
     <h2>Login Bosco Wallet</h2>
-    <form id="login-form" class="login-form" autocomplete="off">
+    <form id="login-form">
       <label for="login-email">Email:</label>
-      <input type="email" id="login-email" required autocomplete="username" />
+      <input type="email" id="login-email" required />
       <label for="login-password">Senha:</label>
-      <input type="password" id="login-password" required autocomplete="current-password" />
+      <input type="password" id="login-password" required />
       <button type="submit">Entrar</button>
     </form>
-    <p class="text-center">
-      <a href="#" id="show-register">Criar uma conta</a>
+    <p style="text-align:center; margin-top:15px;">
+      <a href="#" id="show-register" style="color:#58a6ff;">Criar uma conta</a>
     </p>
   </section>
 
   <!-- REGISTRO FORM -->
   <section id="register-section" class="container" style="display:none;">
     <h2>Registrar</h2>
-    <form id="register-form" class="login-form" autocomplete="off">
+    <form id="register-form">
       <label for="register-email">Email:</label>
-      <input type="email" id="register-email" required autocomplete="email" />
+      <input type="email" id="register-email" required />
       <label for="register-password">Senha:</label>
-      <input type="password" id="register-password" required autocomplete="new-password" />
+      <input type="password" id="register-password" required />
       <button type="submit">Registrar</button>
     </form>
-    <p class="text-center">
-      <a href="#" id="show-login">Já tem conta? Entrar</a>
+    <p style="text-align:center; margin-top:15px;">
+      <a href="#" id="show-login" style="color:#58a6ff;">Já tem conta? Entrar</a>
     </p>
   </section>
 
@@ -382,7 +238,6 @@
         balance += amount;
         updateBalance();
         appendHistory(`+ USD ${amount.toFixed(2)} depositado em ${currency}`);
-        e.target.reset();
       }
     };
 
@@ -395,7 +250,6 @@
         balance -= amount;
         updateBalance();
         appendHistory(`- USD ${amount.toFixed(2)} sacado de ${currency}`);
-        e.target.reset();
       } else {
         alert("Saldo insuficiente.");
       }
@@ -408,10 +262,5 @@
       historyDisplay.appendChild(p);
     }
   </script>
-
-  <footer>
-    © 2025 Bosco Jones Wallet · Desenvolvido com 💻 por HoloFi · 
-    <a href="https://github.com/lucasnascimento" target="_blank" rel="noopener noreferrer">GitHub</a>
-  </footer>
 </body>
 </html>
