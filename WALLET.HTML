@@ -1,173 +1,186 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bit Bosco Wallet - Bosco Jones</title>
-  <style>
-    :root {
-      --bg-default: #000000; /* fundo preto absoluto */
-      --fg-default: 210 20% 90%; /* cinza claro */
-      --card-bg: #161b22; /* GitHub dark card */
-      --card-fg: #c9d1d9;
-      --border-color: #30363d;
-      --primary: #238636; /* verde forte GitHub */
-      --accent: #58a6ff; /* azul GitHub */
-      --destructive: #da3633; /* vermelho GitHub */
-      --footer-gradient-start: #f0f000;
-      --footer-gradient-end: #ff4500;
-    }
-
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
-
-    html, body {
-      margin: 0;
-      height: 100%;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-      background-color: var(--bg-default);
-      color: hsl(var(--fg-default));
-      box-sizing: border-box;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      grid-template-rows: auto auto 60px;
-      gap: 1rem;
-      padding: 1rem;
-      min-height: 100vh;
-    }
-
-    h1, h2, h3, h4, h5, h6 {
-      color: #c9d1d9;
-      margin-bottom: 0.25em;
-    }
-
-    .card {
-      background-color: var(--card-bg);
-      color: var(--card-fg);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 2px 5px rgb(0 0 0 / 0.6);
-      transition: box-shadow 0.3s ease;
-    }
-    .card:hover {
-      box-shadow: 0 5px 15px rgb(0 0 0 / 0.8);
-    }
-
-    .card-header {
-      font-weight: 700;
-      font-size: 1.25rem;
-      margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: var(--primary);
-    }
-
-    .card-content {
-      font-family: monospace;
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      color: var(--card-fg);
-    }
-
-    .button {
-      background-color: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 0.5rem 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      transition: background-color 0.3s ease;
-    }
-    .button:hover {
-      background-color: #2ea043;
-    }
-
-    .button-outline {
-      background: transparent;
-      border: 1.5px solid var(--accent);
-      color: var(--accent);
-    }
-    .button-outline:hover {
-      background-color: var(--accent);
-      color: #000;
-    }
-
-    .section-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1rem;
-    }
-
-    footer {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(45deg, var(--footer-gradient-start), var(--footer-gradient-end));
-      color: #000;
-      text-align: center;
-      font-size: 1rem;
-      font-weight: bold;
-      letter-spacing: 2px;
-      text-shadow: 0 0 8px #ff0000;
-      margin-top: 20px;
-      animation: neon 1.5s ease-in-out infinite alternate;
-      align-self: end;
-      user-select: none;
-    }
-
-    @keyframes neon {
-      0% { text-shadow: 0 0 5px #f0f000, 0 0 10px #ff4500; }
-      50% { text-shadow: 0 0 20px #ff4500, 0 0 30px #f0f000; }
-      100% { text-shadow: 0 0 5px #f0f000, 0 0 10px #ff4500; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bosco Jones Wallet</title>
+<style>
+  /* Reset básico */
+  * {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin: 0; padding: 0;
+    height: 100%;
+    background-color: #0d1117; /* Fundo preto GitHub dark */
+    color: #c9d1d9;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    display: grid;
+    grid-template-rows: 1fr auto;
+    min-height: 100vh;
+  }
+  main {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1rem;
+    padding: 2rem;
+    align-content: start;
+  }
+  .card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 0.6);
+  }
+  h1, h2, h3 {
+    margin-top: 0;
+  }
+  button {
+    background-color: #238636; /* Verde GitHub */
+    border: none;
+    border-radius: 6px;
+    color: white;
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 1rem;
+    width: 100%;
+  }
+  button:hover {
+    background-color: #2ea043;
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #30363d;
+    background-color: #0d1117;
+    color: #c9d1d9;
+    font-size: 1rem;
+  }
+  input[type="text"]::placeholder {
+    color: #8b949e;
+  }
+  /* Footer amarelo neon */
+  footer {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #f0f000, #ff4500);
+    color: #000;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-shadow: 0 0 8px #ff0000;
+    user-select: none;
+    animation: neon 1.5s ease-in-out infinite alternate;
+  }
+  @keyframes neon {
+    0% { text-shadow: 0 0 5px #f0f000, 0 0 10px #ff4500; }
+    50% { text-shadow: 0 0 20px #ff4500, 0 0 30px #f0f000; }
+    100% { text-shadow: 0 0 5px #f0f000, 0 0 10px #ff4500; }
+  }
+  /* Layout da tela de login */
+  #login-screen {
+    max-width: 400px;
+    margin: auto;
+    padding: 2rem;
+    text-align: center;
+  }
+  #login-screen h2 {
+    margin-bottom: 1rem;
+    color: #58a6ff;
+  }
+  /* Balance text */
+  #balance-amount {
+    font-family: monospace;
+    font-size: 3rem;
+    margin: 0.2rem 0;
+    color: #238636;
+  }
+  #balance-fiat {
+    font-size: 1rem;
+    color: #8b949e;
+  }
+</style>
 </head>
 <body>
 
-  <header style="grid-column: 1 / -1; padding-bottom: 1rem;">
-    <h1>Welcome to Bit Bosco Wallet!</h1>
-    <p>Your 8-bit journey into modern finance starts here.</p>
-  </header>
-
-  <section class="card" style="grid-column: span 2;">
-    <div class="card-header">
-      <svg style="width:24px;height:24px;fill:var(--primary);" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1L3 5v14l9 4 9-4V5l-9-4z"/></svg>
-      Current Balance
-    </div>
-    <div class="card-content">
-      B$ 1,337.42<br/>
-      <small style="font-size: 1rem; color: #8b949e;">USD 420.69</small>
-    </div>
-    <button class="button-outline" style="width: fit-content;">
-      View Portfolio
-    </button>
+<main>
+  <!-- Login -->
+  <section id="login-screen">
+    <h2>Login na Bosco Jones Wallet</h2>
+    <form id="login-form">
+      <input type="text" id="username" placeholder="Digite seu nome de usuário" required />
+      <button type="submit">Entrar</button>
+    </form>
   </section>
 
-  <section class="section-grid" style="grid-column: span 2;">
-    <div class="card">
-      <div class="card-header">Quick Actions</div>
-      <button class="button" style="width: 100%;">Receive Crypto</button>
-      <button class="button" style="width: 100%; margin-top: 0.5rem; background-color: var(--accent);">Send PIX / Transfer</button>
+  <!-- Wallet (oculto até login) -->
+  <section id="wallet-screen" style="display:none; grid-column: 1 / -1;">
+    <h1>Bem-vindo, <span id="display-username"></span>!</h1>
+    <p>Sua jornada financeira 8-bit começa aqui.</p>
+
+    <div class="card" style="max-width: 320px;">
+      <h2>Saldo Atual</h2>
+      <p id="balance-amount">B$ 0.00</p>
+      <small id="balance-fiat">USD 0.00</small>
+      <button id="add-funds-btn" title="Adicionar 100 BoscoCoin">Adicionar 100 BoscoCoin</button>
     </div>
-    <div class="card">
-      <div class="card-header">Explore Wallet</div>
-      <button class="button-outline" style="width: 100%;">Transaction History</button>
-      <button class="button-outline" style="width: 100%; margin-top: 0.5rem;">AI Financial Insights</button>
+
+    <div class="card" style="max-width: 320px; margin-top: 1rem;">
+      <h3>Ações Rápidas</h3>
+      <button>Receber Crypto</button>
+      <button style="background-color:#58a6ff; margin-top:0.5rem;">Enviar PIX / Transferência</button>
+    </div>
+
+    <div class="card" style="max-width: 320px; margin-top: 1rem;">
+      <h3>Explorar Carteira</h3>
+      <button style="background-color: transparent; border: 1px solid #58a6ff; color: #58a6ff;">Histórico de Transações</button>
+      <button style="background-color: transparent; border: 1px solid #58a6ff; color: #58a6ff; margin-top: 0.5rem;">Insights Financeiros AI</button>
     </div>
   </section>
+</main>
 
-  <footer>
-    BOSCO JONES © 2025 — MANAGE YOUR ASSETS WITH POWER
-  </footer>
+<footer>
+  BOSCO JONES © 2025 — GERENCIE SEUS ATIVOS COM PODER
+</footer>
+
+<script>
+  const loginForm = document.getElementById("login-form");
+  const loginScreen = document.getElementById("login-screen");
+  const walletScreen = document.getElementById("wallet-screen");
+  const displayUsername = document.getElementById("display-username");
+  const balanceAmount = document.getElementById("balance-amount");
+  const balanceFiat = document.getElementById("balance-fiat");
+  const addFundsBtn = document.getElementById("add-funds-btn");
+
+  let balance = 0;
+
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const username = document.getElementById("username").value.trim();
+    if (!username) return alert("Por favor, digite seu nome de usuário.");
+    displayUsername.textContent = username;
+    balance = 0;
+    updateBalanceUI();
+    loginScreen.style.display = "none";
+    walletScreen.style.display = "grid";
+  });
+
+  function updateBalanceUI() {
+    balanceAmount.textContent = `B$ ${balance.toFixed(2)}`;
+    // Exemplo taxa conversão fixa 1 B$ = 0.314 USD
+    balanceFiat.textContent = `USD ${(balance * 0.314).toFixed(2)}`;
+  }
+
+  addFundsBtn.addEventListener("click", () => {
+    balance += 100;
+    updateBalanceUI();
+  });
+</script>
 
 </body>
 </html>
