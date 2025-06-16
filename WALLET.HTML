@@ -1,264 +1,96 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <link rel="icon" href="logo.ico">
-  <title>Wallet JBX</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JBX500 Wallet - Supabase</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <style>
-    body {
-      background-color: #0d1117;
-      color: #c9d1d9;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-    }
-    .container {
-      max-width: 420px;
-      margin: auto;
-      background-color: #161b22;
-      padding: 24px;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.6);
-    }
-    h1 {
-      color: #58a6ff;
-      text-align: center;
-      margin-bottom: 24px;
-    }
-    label {
-      display: block;
-      margin-top: 16px;
-      font-weight: bold;
-      color: #8ab4f8;
-    }
-    select, input[type="number"], input[type="range"] {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-      background-color: #0d1117;
-      color: #c9d1d9;
-      border: 1px solid #30363d;
-    }
-    select:focus, input:focus {
-      outline: none;
-      border-color: #58a6ff;
-    }
-    input[type="range"]::-webkit-slider-runnable-track {
-      height: 6px;
-      background: #30363d;
-      border-radius: 3px;
-    }
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 20px;
-      height: 20px;
-      background: #4caf50;
-      border-radius: 50%;
-      margin-top: -7px;
-      border: 2px solid #357a38;
-    }
-    input[type="range"]:hover::-webkit-slider-thumb {
-      background: #357a38;
-    }
-    #geminiosidade-placeholder {
-      font-size: 0.85rem;
-      color: #8b949e;
-      margin-top: 2px;
-    }
-    .btn {
-      width: 48%;
-      padding: 12px;
-      margin-top: 24px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      color: white;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    }
-    #btn-deposit {
-      background: linear-gradient(135deg, #4caf50, #81c784);
-      float: left;
-    }
-    #btn-withdraw {
-      background: linear-gradient(135deg, #f44336, #e57373);
-      float: right;
-    }
-    #tax-info {
-      margin-top: 12px;
-      font-size: 0.9rem;
-      color: #adbac7;
-      clear: both;
-    }
-    #qrcode-container {
-      clear: both;
-      text-align: center;
-      margin-top: 28px;
-      background-color: #111;
-      padding: 16px;
-      border-radius: 8px;
-      min-height: 220px;
-      box-shadow: inset 0 0 8px rgba(0,0,0,0.8);
-    }
-    #qrcode-container img {
-      max-width: 180px;
-      max-height: 180px;
-      margin-top: 12px;
-    }
-    #saldo-container {
-      text-align: center;
-      font-size: 1rem;
-      margin-top: 20px;
-      color: #00ff88;
-    }
-    footer {
-      text-align: center;
-      background-color: #111;
-      color: #8b949e;
-      margin-top: 40px;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 0.85rem;
-    }
+    body { background: #0d1117; color: #c9d1d9; font-family: Arial, sans-serif; padding: 20px; }
+    .container { max-width: 480px; margin: auto; background: #161b22; padding: 24px; border-radius: 12px; }
+    h1 { color: #58a6ff; text-align: center; }
+    label, input, select { display: block; width: 100%; margin-top: 12px; font-size: 1rem; }
+    input, select { padding: 10px; background: #0d1117; color: #c9d1d9; border: 1px solid #30363d; border-radius: 6px; }
+    .btn { margin-top: 24px; padding: 12px; font-size: 1rem; width: 48%; border-radius: 8px; border: none; cursor: pointer; }
+    #btn-deposit { background: linear-gradient(135deg, #4caf50, #81c784); color: #fff; float: left; }
+    #btn-withdraw { background: linear-gradient(135deg, #f44336, #e57373); color: #fff; float: right; }
+    #saldo-container { text-align: center; margin-top: 20px; color: #00ff88; font-size: 1.2rem; }
+    #qrcode-container { clear: both; margin-top: 30px; text-align: center; }
   </style>
 </head>
 <body>
   <h1>JBX500 Wallet</h1>
   <div class="container">
-    <form id="wallet-form">
-      <label for="asset-select">Escolha um ativo:</label>
-      <select id="asset-select" required>
-        <option value="">Selecione um ativo</option>
-        <option value="DC-COIN">DC Coin (Trix Z)</option>
-        <option value="DARK1">DARK1 (Shadow Token)</option>
-        <option value="SPPX">SPPX (Simbiótico Premium)</option>
-        <option value="JBX500">JBX500 Asset</option>
-      </select>
+    <label>Ativo:</label>
+    <select id="asset-select">
+      <option value="">Selecione</option>
+      <option value="JBX500">JBX500</option>
+    </select>
 
-      <label for="valor">Valor (R$):</label>
-      <input type="number" id="valor" min="0.01" step="0.01" required placeholder="0.00" />
+    <label>Valor (R$):</label>
+    <input type="number" id="valor" min="1" step="0.01" placeholder="0.00" />
 
-      <label for="geminiosidade">Taxa de Geminiosidade: <span id="geminiosidade-value">0</span>%</label>
-      <input type="range" id="geminiosidade" min="0" max="100" step="1" value="0" />
-      <div id="geminiosidade-placeholder">Ajuste até 100% de Geminiosidade</div>
+    <label>Geminiosidade (%): <span id="gem-value">0</span>%</label>
+    <input type="range" id="gem" min="0" max="10" value="0" />
 
-      <div id="tax-info">
-        Taxa fixa: 5% (R$ <span id="taxa-fixa-valor">0.00</span>)<br />
-        Taxa geminiosidade: R$ <span id="taxa-geminiosidade-valor">0.00</span><br />
-        <strong>Total a pagar: R$ <span id="total-pagar">0.00</span></strong>
-      </div>
+    <button id="btn-deposit" class="btn">Depositar</button>
+    <button id="btn-withdraw" class="btn">Sacar</button>
 
-      <button type="button" id="btn-deposit" class="btn" onclick="gerarPix()">Gerar Pix</button>
-      <button type="button" id="btn-withdraw" class="btn" onclick="fazerSaque()">Sacar</button>
-    </form>
-
-    <div id="saldo-container">Saldo disponível: R$ <span id="saldo">0.00</span></div>
-    <div id="qrcode-container">Nenhum QR Code gerado.</div>
+    <div id="saldo-container">Saldo: R$ <span id="saldo">0.00</span></div>
+    <div id="qrcode-container"></div>
   </div>
-  <footer>HoloFi Symbiotic Dark 💚 © 2025 Bosco Jones Wallet</footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script>
-    let saldo = 0;
+<script>
+const supabase = supabase.createClient(
+  'https://latvlqeqjtlawtzmgzjb.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxhdHZscWVxanRsYXd0em1nempiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAxMDcxNTIsImV4cCI6MjA2NTY4MzE1Mn0.jxtGxvyP9k9NpldwD8KP7km0fOipftHXMic3dqJEIaY'
+);
 
-    const valorInput = document.getElementById("valor");
-    const gemInput = document.getElementById("geminiosidade");
-    const gemValueSpan = document.getElementById("geminiosidade-value");
-    const taxaFixaSpan = document.getElementById("taxa-fixa-valor");
-    const taxaGemSpan = document.getElementById("taxa-geminiosidade-valor");
-    const totalSpan = document.getElementById("total-pagar");
-    const saldoSpan = document.getElementById("saldo");
+let userEmail = "teste@jbwallet.com"; // substitua por auth real se desejar
+let saldoAtual = 0;
 
-    function atualizarTaxas() {
-      const valor = parseFloat(valorInput.value) || 0;
-      const gem = parseFloat(gemInput.value) / 100;
-      const taxaFixa = valor * 0.05;
-      const taxaGem = valor * gem;
-      const total = valor + taxaFixa + taxaGem;
-      taxaFixaSpan.textContent = taxaFixa.toFixed(2);
-      taxaGemSpan.textContent = taxaGem.toFixed(2);
-      totalSpan.textContent = total.toFixed(2);
-    }
+async function carregarSaldo() {
+  const { data, error } = await supabase.from('wallets').select('*').eq('email', userEmail).single();
+  if (data) {
+    saldoAtual = data.saldo || 0;
+    document.getElementById('saldo').innerText = saldoAtual.toFixed(2);
+  } else {
+    await supabase.from('wallets').insert([{ email: userEmail, saldo: 0 }]);
+  }
+}
 
-    function atualizarSaldo(valor) {
-      saldo += valor;
-      saldoSpan.textContent = saldo.toFixed(2);
-    }
+function fibonacci(n) {
+  if (n <= 1) return 1;
+  let a = 1, b = 1;
+  for (let i = 2; i <= n; i++) [a, b] = [b, a + b];
+  return b;
+}
 
-    valorInput.addEventListener("input", atualizarTaxas);
-    gemInput.addEventListener("input", () => {
-      gemValueSpan.textContent = gemInput.value;
-      atualizarTaxas();
-    });
-    atualizarTaxas();
+document.getElementById('gem').addEventListener('input', e => {
+  document.getElementById('gem-value').innerText = e.target.value;
+});
 
-    function gerarPix() {
-      const valor = parseFloat(valorInput.value);
-      if (!valor || valor <= 0) return alert("Digite um valor válido.");
-      const ativo = document.getElementById("asset-select").value;
-      if (!ativo) return alert("Selecione um ativo.");
+document.getElementById('btn-deposit').onclick = async () => {
+  const valor = parseFloat(document.getElementById('valor').value);
+  const gem = parseInt(document.getElementById('gem').value);
+  const fibo = fibonacci(gem);
+  const final = valor * fibo;
+  saldoAtual += final;
+  await supabase.from('wallets').update({ saldo: saldoAtual }).eq('email', userEmail);
+  alert(`Deposito feito com Geminiosidade x${fibo}\nValor creditado: R$ ${final.toFixed(2)}`);
+  document.getElementById('saldo').innerText = saldoAtual.toFixed(2);
+};
 
-      const gem = parseFloat(gemInput.value) / 100;
-      const total = valor * (1 + 0.05 + gem);
+document.getElementById('btn-withdraw').onclick = async () => {
+  const valor = parseFloat(document.getElementById('valor').value);
+  if (valor > saldoAtual) return alert('Saldo insuficiente');
+  saldoAtual -= valor;
+  await supabase.from('wallets').update({ saldo: saldoAtual }).eq('email', userEmail);
+  alert(`Saque de R$ ${valor.toFixed(2)} solicitado com sucesso.\n\n⚠️ Será processado em até 24 horas.`);
+  document.getElementById('saldo').innerText = saldoAtual.toFixed(2);
+};
 
-      const chave = "48761013889";
-      const nome = "Lucas Januário";
-      const cidade = "BRASILIA";
-      const info = `Pagamento JBX500 - Ativo: ${ativo} - Geminiosidade: ${gemInput.value}%`;
-
-      const payload = gerarPayloadPix({ chave, nome, cidade, valor: total.toFixed(2), infoAdicional: info });
-      const container = document.getElementById("qrcode-container");
-      container.innerHTML = `<p><strong>Total: R$ ${total.toFixed(2)}</strong></p>`;
-      new QRCode(container, { text: payload, width: 180, height: 180 });
-
-      atualizarSaldo(valor); // contabiliza o valor base (sem taxa) no saldo
-    }
-
-    function fazerSaque() {
-      const valor = parseFloat(valorInput.value);
-      const ativo = document.getElementById("asset-select").value;
-      if (!valor || valor <= 0) return alert("Digite um valor válido.");
-      if (!ativo) return alert("Selecione um ativo.");
-
-      if (valor > saldo) {
-        alert("Saldo insuficiente para saque.");
-        return;
-      }
-
-      saldo -= valor;
-      saldoSpan.textContent = saldo.toFixed(2);
-
-      alert(`Saque solicitado:\nAtivo: ${ativo}\nValor: R$ ${valor.toFixed(2)}\n\n⚠️ O valor será processado em até 24 horas úteis.`);
-    }
-
-    function gerarPayloadPix({ chave, nome, cidade, valor, infoAdicional }) {
-      function fmt(id, val) {
-        const len = val.length.toString().padStart(2, '0');
-        return id + len + val;
-      }
-      const acc = fmt("00", "BR.GOV.BCB.PIX") + fmt("01", chave);
-      const add = fmt("05", infoAdicional);
-      let p = fmt("00", "01") + fmt("26", acc) + fmt("52", "0000") + fmt("53", "986") +
-        fmt("54", valor) + fmt("58", "BR") + fmt("59", nome) + fmt("60", cidade) +
-        fmt("62", add);
-      p += "6304" + calcularCRC16(p);
-      return p;
-    }
-
-    function calcularCRC16(p) {
-      let poly = 0x1021, res = 0xFFFF;
-      for (let i = 0; i < p.length; i++) {
-        res ^= p.charCodeAt(i) << 8;
-        for (let b = 0; b < 8; b++) {
-          res = ((res << 1) ^ ((res & 0x8000) ? poly : 0)) & 0xFFFF;
-        }
-      }
-      return res.toString(16).toUpperCase().padStart(4, '0');
-    }
-  </script>
+carregarSaldo();
+</script>
 </body>
 </html>
