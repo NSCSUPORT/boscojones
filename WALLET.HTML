@@ -27,7 +27,7 @@
       text-align: center;
     }
 
-    input, button {
+    input, button, select {
       width: 100%;
       padding: 10px;
       margin-top: 10px;
@@ -75,8 +75,36 @@
   <h1>JBX500 Wallet</h1>
 
   <div class="container">
-    <input type="number" id="valor" placeholder="Digite o valor em R$" />
-    <button onclick="gerarPix()">Gerar QR Code Pix</button>
+    <form id="asset-form">
+      <label for="asset-select">Escolha um ativo:</label>
+      <select id="asset-select" required>
+        <option value="">Selecione um ativo</option>
+        <option value="POSN-HF">PoSN-HF (Proof of Stake Hybrid Fund)</option>
+        <option value="BTC">Bitcoin (BTC)</option>
+        <option value="ETH">Ethereum (ETH)</option>
+        <option value="LTC">Litecoin (LTC)</option>
+        <option value="XRP">Ripple (XRP)</option>
+        <option value="DOGE">Dogecoin (DOGE)</option>
+        <option value="ADA">Cardano (ADA)</option>
+        <option value="DHL1">DHL1 (Dark Lash - Shadow)</option>
+        <option value="DHL2">DHL2 (Dark Lash - Oblivion)</option>
+        <option value="DHL3">DHL3 (Dark Lash - Phantom)</option>
+        <option value="DHL4">DHL4 (Dark Lash - Eclipse)</option>
+        <option value="SPPX">SPPX (Simbiótico Premium)</option>
+        <option value="QVAFLES">QVAFLES (SSQAFLE)</option>
+        <option value="XETH">XETH (Cross Ethereum)</option>
+        <option value="D-EURO">D-EURO (Euro Digital)</option>
+        <option value="SSQSEA">SSQSEA (Base de Simbiose)</option>
+        <option value="RZX-STARTUP">START UP RZX</option>
+        <option value="JBX500">JBX500 Asset (HoloFi Symbiotic Dark)</option>
+      </select>
+    </form>
+
+    <form id="deposit-form" class="transaction-form" autocomplete="off">
+      <label for="valor">Depositar valor (R$):</label>
+      <input type="number" id="valor" min="0.01" step="0.01" required placeholder="0.00" />
+      <button type="button" onclick="gerarPix()">Gerar QR Code Pix</button>
+    </form>
 
     <div id="qrcode-container"></div>
   </div>
@@ -96,15 +124,11 @@
         return;
       }
 
-      // Calcula valor com 5% de taxa
       const valorComTaxa = valorDigitado * 1.05;
 
-      // Substitua esta chave pela sua chave Pix real
       const chavePix = "48761013889";
       const nome = "Lucas Januário";
       const cidade = "BRASILIA";
-
-      // Monta o Pix Copia e Cola padrão BR Code
       const payload = gerarPayloadPix({
         chave: chavePix,
         nome: nome,
@@ -129,23 +153,19 @@
         return `${id}${size}${value}`;
       }
 
-      const merchantAccountInfo = format("00", "BR.GOV.BCB.PIX") +
-                                  format("01", chave);
-
+      const merchantAccountInfo = format("00", "BR.GOV.BCB.PIX") + format("01", chave);
       const additionalDataField = format("05", infoAdicional);
 
       let payload = "";
-      payload += format("00", "01"); // Payload Format Indicator
-      payload += format("26", merchantAccountInfo); // Merchant Account Info
-      payload += format("52", "0000"); // Merchant Category Code
-      payload += format("53", "986"); // Moeda BRL
-      payload += format("54", valor); // Valor
-      payload += format("58", "BR"); // País
-      payload += format("59", nome); // Nome do recebedor
-      payload += format("60", cidade); // Cidade
-      payload += format("62", additionalDataField); // Info adicional
-
-      // CRC16
+      payload += format("00", "01");
+      payload += format("26", merchantAccountInfo);
+      payload += format("52", "0000");
+      payload += format("53", "986");
+      payload += format("54", valor);
+      payload += format("58", "BR");
+      payload += format("59", nome);
+      payload += format("60", cidade);
+      payload += format("62", additionalDataField);
       payload += "6304";
       payload += calcularCRC16(payload);
 
