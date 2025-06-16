@@ -3,107 +3,84 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>JBX Wallet</title>
+  <title>JBX Wallet - Pix Oficial com CRC-16</title>
   <link rel="icon" href="logo.ico" />
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <style>
+    /* Mesmos estilos do código anterior, para manter padrão */
+    * { box-sizing: border-box; }
     body {
-      background: #0d1117;
-      color: #e0e0e0;
+      background: #0d1117; color: #e0e0e0;
       font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 16px;
+      margin: 0; padding: 0 12px;
+      display: flex; justify-content: center; min-height: 100vh; align-items: flex-start; padding-top: 30px;
     }
     .container {
-      width: 100%;
-      max-width: 420px;
-      background: #1b1f24;
-      border: 1px solid #2a2f36;
-      border-radius: 12px;
-      padding: 24px;
-      box-sizing: border-box;
+      width: 100%; max-width: 480px;
+      background: #1c1f26; border-radius: 14px; padding: 24px; box-shadow: 0 0 12px #000a;
     }
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #fff;
-      font-size: 1.5rem;
-    }
-    label {
-      font-weight: 600;
-      margin-top: 12px;
-      display: block;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border: 1px solid #444c56;
-      border-radius: 8px;
-      background: #10151b;
-      color: #fff;
-      font-size: 1rem;
+    h1 { text-align: center; margin-bottom: 20px; color: #00ffb2; font-weight: 700; }
+    label { display: block; margin: 12px 0 6px; font-weight: bold; }
+    input[type="number"] {
+      width: 100%; padding: 10px; border: 1px solid #444;
+      border-radius: 8px; background-color: #0f141a; color: #fff; font-size: 1rem;
     }
     .btn {
-      width: 48%;
-      padding: 12px;
-      font-weight: 700;
-      border: none;
-      border-radius: 10px;
-      margin-top: 16px;
-      cursor: pointer;
-      transition: background 0.3s;
+      width: 48%; padding: 12px; margin-top: 16px;
+      border: none; border-radius: 10px; font-weight: bold;
+      cursor: pointer; transition: background 0.3s;
     }
-    #btn-deposit { background: #237a3b; color: #fff; }
-    #btn-deposit:hover { background: #195c2c; }
-    #btn-withdraw { background: #9d2c2c; color: #fff; float: right; }
-    #btn-withdraw:hover { background: #6e1f1f; }
+    #btn-deposit { background-color: #28a745; color: white; }
+    #btn-deposit:hover { background-color: #218838; }
+    #btn-withdraw { background-color: #dc3545; color: white; float: right; }
+    #btn-withdraw:hover { background-color: #c82333; }
     #btn-generate-pix {
-      width: 100%;
-      background: #1d4c8b;
-      color: #fff;
-      margin-top: 24px;
-      padding: 12px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
+      width: 100%; margin-top: 24px; padding: 14px;
+      background-color: #007bff; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer;
     }
-    #btn-generate-pix:hover { background: #163a6a; }
+    #btn-generate-pix:hover { background-color: #0056b3; }
+    #btn-clear-history {
+      width: 100%; margin-top: 12px; padding: 10px;
+      background-color: #666; border: none; border-radius: 10px;
+      color: white; cursor: pointer; font-weight: 600;
+    }
+    #btn-clear-history:hover { background-color: #444; }
+    #saldo-container { text-align: center; margin-top: 20px; font-size: 1.2rem; color: #1efcb8; font-weight: bold; }
     #qrcode-container {
-      margin-top: 20px;
-      padding: 16px;
-      background: #0e1217;
-      border-radius: 12px;
-      text-align: center;
-    }
-    #saldo-container {
-      margin-top: 20px;
-      text-align: center;
-      font-size: 1.2rem;
-      color: #a0d6b4;
-      font-weight: bold;
+      margin-top: 20px; padding: 16px; background-color: #11161c;
+      border-radius: 12px; text-align: center; min-height: 250px;
     }
     pre {
-      background: #0e1217;
-      padding: 10px;
-      border-radius: 8px;
-      overflow-x: auto;
-      color: #d1dbe5;
-      font-size: 0.95rem;
-      user-select: all;
+      background: #00000099; padding: 10px; margin-top: 10px; border-radius: 8px;
+      color: #ffffffd9; font-size: 0.95rem; user-select: all; white-space: pre-wrap; word-break: break-word;
+      max-height: 120px; overflow-y: auto;
     }
-    @media(max-width: 400px) {
+    #history-container {
+      margin-top: 30px; max-height: 280px; overflow-y: auto;
+      background: #10131a; border-radius: 12px; padding: 14px; font-size: 0.95rem;
+    }
+    #history-container h2 {
+      margin-top: 0; font-weight: 700; color: #0ff; text-align: center; margin-bottom: 10px;
+    }
+    .transaction {
+      padding: 6px 8px; border-bottom: 1px solid #222;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .transaction:last-child { border-bottom: none; }
+    .transaction .type { font-weight: 700; text-transform: capitalize; }
+    .transaction.deposit { color: #28a745; }
+    .transaction.withdraw { color: #dc3545; }
+    .transaction.pix { color: #007bff; }
+    .transaction .date { font-size: 0.8rem; color: #aaa; font-style: italic; }
+    @media (max-width: 500px) {
       .btn { width: 100%; margin-top: 10px; float: none; }
+      #btn-withdraw { float: none; }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Carteira JBX1000</h1>
+    <h1>Carteira JBX1000 - Pix Oficial com CRC</h1>
 
     <label for="valor">Valor (R$):</label>
     <input type="number" id="valor" placeholder="0,00" min="1" step="0.01" />
@@ -113,118 +90,237 @@
 
     <button id="btn-generate-pix">Gerar Pix Copia e Cola (5% taxa)</button>
 
-    <div id="saldo-container">Saldo: R$ <span id="saldo">0.00</span></div>
+    <div id="saldo-container">Saldo: <span id="saldo">R$ 0,00</span></div>
 
     <div id="qrcode-container">
       <span>QR Code e Copia e Cola aparecerão aqui</span>
     </div>
+
+    <button id="btn-clear-history">Limpar Histórico</button>
+
+    <div id="history-container">
+      <h2>Histórico de Transações</h2>
+      <div id="history-list">Nenhuma transação registrada.</div>
+    </div>
   </div>
 
-  <script>
-    const STORAGE_KEY = "jbx1000_wallet_saldo";
-    let saldoAtual = parseFloat(localStorage.getItem(STORAGE_KEY)) || 0;
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script>
+  const STORAGE_SALDO_KEY = "jbx1000_wallet_saldo";
+  const STORAGE_HISTORY_KEY = "jbx1000_wallet_historico";
 
-    function atualizarSaldoNaTela() {
-      document.getElementById("saldo").innerText = saldoAtual.toFixed(2);
+  let saldoAtual = parseFloat(localStorage.getItem(STORAGE_SALDO_KEY)) || 0;
+  let historico = JSON.parse(localStorage.getItem(STORAGE_HISTORY_KEY)) || [];
+
+  const formatarReal = valor => valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+  function atualizarSaldoNaTela() {
+    document.getElementById("saldo").innerText = formatarReal(saldoAtual);
+  }
+
+  function validarValor() {
+    const valorInput = document.getElementById("valor").value.replace(',', '.');
+    const valor = parseFloat(valorInput);
+    if (isNaN(valor) || valor <= 0) {
+      alert("Digite um valor válido maior que 0.");
+      return null;
     }
+    return valor;
+  }
 
-    function validarValor() {
-      const val = parseFloat(document.getElementById('valor').value.replace(',', '.'));
-      if (isNaN(val) || val <= 0) {
-        alert("Informe um valor válido.");
-        return null;
+  function limparInput() {
+    document.getElementById("valor").value = '';
+  }
+
+  function limparQRCode() {
+    document.getElementById("qrcode-container").innerHTML = `<span>QR Code e Copia e Cola aparecerão aqui</span>`;
+  }
+
+  function adicionarHistorico(tipo, valor) {
+    const dataAtual = new Date();
+    historico.unshift({
+      tipo,
+      valor,
+      data: dataAtual.toISOString()
+    });
+    if (historico.length > 100) historico.pop();
+    localStorage.setItem(STORAGE_HISTORY_KEY, JSON.stringify(historico));
+    renderizarHistorico();
+  }
+
+  function renderizarHistorico() {
+    const historyList = document.getElementById("history-list");
+    if (!historico.length) {
+      historyList.innerHTML = "Nenhuma transação registrada.";
+      return;
+    }
+    historyList.innerHTML = "";
+    historico.forEach(tx => {
+      const div = document.createElement("div");
+      div.className = `transaction ${tx.tipo === "depósito" ? "deposit" : tx.tipo === "saque" ? "withdraw" : "pix"}`;
+      const date = new Date(tx.data);
+      div.innerHTML = `
+        <span class="type">${tx.tipo}</span> - 
+        <span class="value">${formatarReal(tx.valor)}</span>
+        <span class="date">(${date.toLocaleString("pt-BR")})</span>
+      `;
+      historyList.appendChild(div);
+    });
+  }
+
+  function aplicarGeminiosidade(valor) {
+    return valor * 89;
+  }
+
+  // Função para calcular o CRC16 CCITT (0xFFFF init) usado no Pix
+  function crc16(payload) {
+    let crc = 0xFFFF;
+    for (let i = 0; i < payload.length; i++) {
+      crc ^= payload.charCodeAt(i) << 8;
+      for (let j = 0; j < 8; j++) {
+        if ((crc & 0x8000) !== 0) {
+          crc = (crc << 1) ^ 0x1021;
+        } else {
+          crc <<= 1;
+        }
+        crc &= 0xFFFF; // garante 16 bits
       }
-      return val;
+    }
+    return crc.toString(16).toUpperCase().padStart(4, '0');
+  }
+
+  // Função para montar o campo PIX no padrão oficial
+  // Campos:
+  // 00 - Payload Format Indicator: "01"
+  // 26 - Merchant Account Information (chave Pix)
+  // 52 - Merchant Category Code (0000 = unknown)
+  // 53 - Transaction Currency (986 = BRL)
+  // 54 - Transaction Amount (opcional)
+  // 58 - Country Code (BR)
+  // 59 - Merchant Name (max 25)
+  // 60 - Merchant City (max 15)
+  // 62 - Additional Data Field Template (ex. TXID)
+  // 63 - CRC16 (calculado)
+  function montarPayloadPix({chave, nome, cidade, valor, txid}) {
+    function montarCampo(id, valor) {
+      const tamanho = valor.length.toString().padStart(2, '0');
+      return `${id}${tamanho}${valor}`;
     }
 
-    function limparInputs() {
-      document.getElementById('valor').value = '';
+    let payload = '';
+    payload += montarCampo('00', '01'); // Payload Format Indicator
+    payload += montarCampo('26', montarCampo('00', 'BR.GOV.BCB.PIX') + montarCampo('01', chave)); // Merchant Account Information
+    payload += montarCampo('52', '0000'); // Merchant Category Code
+    payload += montarCampo('53', '986'); // Currency BRL
+    if (valor) {
+      const valorFixado = Number(valor).toFixed(2);
+      payload += montarCampo('54', valorFixado); // Amount
+    }
+    payload += montarCampo('58', 'BR'); // Country Code
+    payload += montarCampo('59', nome.substring(0, 25)); // Merchant Name max 25 chars
+    payload += montarCampo('60', cidade.substring(0, 15)); // Merchant City max 15 chars
+    if (txid) {
+      payload += montarCampo('62', montarCampo('05', txid)); // Additional Data Field Template - TXID
+    }
+    payload += '6304'; // CRC16 placeholder
+
+    // Calcula CRC16 e adiciona ao final
+    const crc = crc16(payload);
+    return payload + crc;
+  }
+
+  document.getElementById("btn-deposit").onclick = () => {
+    const valor = validarValor();
+    if (valor === null) return;
+
+    const creditado = aplicarGeminiosidade(valor);
+    saldoAtual += creditado;
+    localStorage.setItem(STORAGE_SALDO_KEY, saldoAtual.toFixed(2));
+
+    adicionarHistorico("depósito", creditado);
+    atualizarSaldoNaTela();
+    alert(`Depósito realizado com Geminiosidade (x89)\nValor creditado: ${formatarReal(creditado)}`);
+    limparInput();
+    limparQRCode();
+  };
+
+  document.getElementById("btn-withdraw").onclick = () => {
+    const valor = validarValor();
+    if (valor === null) return;
+
+    if (valor > saldoAtual) {
+      alert("Saldo insuficiente.");
+      return;
     }
 
-    function limparQRCode() {
-      document.getElementById('qrcode-container').innerHTML = `<span>QR Code e Copia e Cola aparecerão aqui</span>`;
-    }
+    saldoAtual -= valor;
+    localStorage.setItem(STORAGE_SALDO_KEY, saldoAtual.toFixed(2));
+    adicionarHistorico("saque", valor);
+    atualizarSaldoNaTela();
+    alert(`Saque realizado: ${formatarReal(valor)}`);
+    limparInput();
+    limparQRCode();
+  };
 
-    document.getElementById('btn-deposit').onclick = () => {
-      const valor = validarValor();
-      if (valor === null) return;
+  document.getElementById("btn-generate-pix").onclick = () => {
+    const valor = validarValor();
+    if (valor === null) return;
 
-      const fatorGem = 89;
-      const valorFinal = valor * fatorGem;
+    const chavePix = "48761013889";
+    const nome = "JBX Wallet";
+    const cidade = "SAO PAULO";
+    const txid = "TXID123"; // pode ser randomizado se quiser
 
-      saldoAtual += valorFinal;
-      localStorage.setItem(STORAGE_KEY, saldoAtual.toFixed(2));
+    const taxa = 1.05;
+    const valorComTaxa = (valor * taxa).toFixed(2);
 
-      alert(`Depósito com Geminiosidade x${fatorGem}\nTotal creditado: R$ ${valorFinal.toFixed(2)}`);
-      atualizarSaldoNaTela();
-      limparInputs();
-      limparQRCode();
-    };
+    // Monta payload oficial
+    const payload = montarPayloadPix({
+      chave: chavePix,
+      nome,
+      cidade,
+      valor: valorComTaxa,
+      txid
+    });
 
-    document.getElementById('btn-withdraw').onclick = () => {
-      const valor = validarValor();
-      if (valor === null) return;
+    const container = document.getElementById("qrcode-container");
+    container.innerHTML = "";
 
-      if (valor > saldoAtual) {
-        alert("Saldo insuficiente.");
+    QRCode.toCanvas(payload, { width: 200 }, (err, canvas) => {
+      if (err) {
+        alert("Erro ao gerar QR Code");
+        limparQRCode();
         return;
       }
+      container.appendChild(canvas);
+      const pre = document.createElement("pre");
+      pre.innerText = payload;
+      container.appendChild(pre);
+    });
 
-      saldoAtual -= valor;
-      localStorage.setItem(STORAGE_KEY, saldoAtual.toFixed(2));
+    const creditado = aplicarGeminiosidade(valor);
+    saldoAtual += creditado;
+    localStorage.setItem(STORAGE_SALDO_KEY, saldoAtual.toFixed(2));
 
-      alert(`Saque de R$ ${valor.toFixed(2)} realizado com sucesso.`);
-      atualizarSaldoNaTela();
-      limparInputs();
-      limparQRCode();
-    };
-
-    document.getElementById('btn-generate-pix').onclick = () => {
-      const valor = validarValor();
-      if (valor === null) return;
-
-      const taxa = 1.05;
-      const valorComTaxa = (valor * taxa).toFixed(2);
-      const chavePix = "48761013889";
-      const nome = "JBX Wallet";
-      const cidade = "SAO PAULO";
-      const txid = "TXID123";
-
-      // Payload Pix Copia e Cola (simplificado)
-      const payload = `
-000201
-26580014BR.GOV.BCB.PIX0139487610138895204000053039865405${valorComTaxa}
-5802BR5912${nome}6009${cidade}62070503${txid}6304
-      `.replace(/\n/g, '').replace(/ +/g, '');
-
-      // Mostrar QR e Copia e Cola
-      const container = document.getElementById('qrcode-container');
-      container.innerHTML = '';
-      QRCode.toCanvas(payload, { width: 200 }, (err, canvas) => {
-        if (err) {
-          alert('Erro ao gerar QR Code');
-          limparQRCode();
-          return;
-        }
-        container.appendChild(canvas);
-
-        const pre = document.createElement('pre');
-        pre.innerText = payload;
-        container.appendChild(pre);
-      });
-
-      // Atualiza saldo com Geminiosidade
-      const fatorGem = 89;
-      const valorFinal = valor * fatorGem;
-      saldoAtual += valorFinal;
-      localStorage.setItem(STORAGE_KEY, saldoAtual.toFixed(2));
-      atualizarSaldoNaTela();
-
-      alert(`Pix gerado com Geminiosidade x${fatorGem}\nSaldo creditado: R$ ${valorFinal.toFixed(2)}`);
-    };
-
+    adicionarHistorico("pix", creditado);
     atualizarSaldoNaTela();
-    limparQRCode();
-  </script>
+    alert(`Pix gerado com Geminiosidade x89\nValor creditado: ${formatarReal(creditado)}`);
+    limparInput();
+  };
+
+  document.getElementById("btn-clear-history").onclick = () => {
+    if (confirm("Tem certeza que deseja limpar o histórico de transações?")) {
+      historico = [];
+      localStorage.setItem(STORAGE_HISTORY_KEY, JSON.stringify(historico));
+      renderizarHistorico();
+    }
+  };
+
+  // Inicialização
+  atualizarSaldoNaTela();
+  limparQRCode();
+  renderizarHistorico();
+</script>
+
 </body>
 </html>
