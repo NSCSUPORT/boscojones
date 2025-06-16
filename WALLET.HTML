@@ -7,195 +7,217 @@
   <style>
     /* Reset básico */
     * {
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
     }
 
     body {
-      margin: 0;
-      background-color: #0d1117; /* GitHub Dark background */
-      color: #c9d1d9; /* texto claro padrão GitHub */
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      min-height: 100vh;
+      background: #0d1117; /* GitHub Dark background */
+      color: #c9d1d9; /* GitHub light gray */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
     }
 
     .container {
-      max-width: 480px;
-      margin: 3rem auto;
-      padding: 2rem 2.5rem;
-      background-color: #161b22; /* painel escuro GitHub */
+      background: #161b22; /* GitHub dark panel */
+      border: 1px solid #30363d; /* subtle border */
       border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(1, 4, 9, 0.6);
-      transition: box-shadow 0.3s ease;
-    }
-    .container:hover {
-      box-shadow: 0 12px 30px rgba(1, 4, 9, 0.9);
+      padding: 32px 36px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 8px 24px rgba(1,4,9,0.9);
+      animation: fadeIn 0.7s ease forwards;
     }
 
     h2 {
-      margin-bottom: 1.5rem;
       color: #c9d1d9;
-      font-weight: 600;
-      font-size: 1.8rem;
       text-align: center;
+      margin-bottom: 18px;
+      font-weight: 600;
+      font-size: 1.9rem;
     }
 
     label {
       display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      color: #8b949e;
+      margin-top: 15px;
+      color: #8b949e; /* GitHub label gray */
+      font-weight: 600;
+      font-size: 0.9rem;
     }
 
     input, select {
       width: 100%;
-      padding: 0.6rem 1rem;
-      margin-bottom: 1.3rem;
-      background-color: #0d1117;
-      border: 1.5px solid #30363d;
+      padding: 12px 14px;
+      margin-top: 6px;
       border-radius: 6px;
+      border: 1px solid #30363d;
+      background-color: #0d1117;
       color: #c9d1d9;
       font-size: 1rem;
-      transition: border-color 0.3s ease;
+      transition: border-color 0.25s ease, background-color 0.25s ease;
+      font-weight: 500;
     }
 
     input::placeholder {
-      color: #484f58;
+      color: #8b949e;
     }
 
     input:focus, select:focus {
       border-color: #58a6ff;
       outline: none;
-      box-shadow: 0 0 8px #58a6ff44;
       background-color: #161b22;
+      box-shadow: 0 0 6px #58a6ff;
+      color: #c9d1d9;
     }
 
     button {
+      margin-top: 24px;
       width: 100%;
-      padding: 0.75rem 1rem;
-      background-color: #238636; /* verde GitHub padrão */
+      padding: 14px;
+      background-color: #238636; /* GitHub green */
+      color: #f0f6fc;
       border: none;
       border-radius: 8px;
-      color: white;
-      font-weight: 600;
-      font-size: 1.1rem;
       cursor: pointer;
-      transition: background-color 0.25s ease;
-      box-shadow: 0 4px 10px rgba(35, 134, 54, 0.6);
-    }
-    button:hover {
-      background-color: #2ea043;
-      box-shadow: 0 6px 14px rgba(46, 160, 67, 0.75);
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 10px rgba(35,134,54,0.7);
     }
 
+    button:hover {
+      background-color: #2ea043;
+      box-shadow: 0 6px 14px rgba(46,160,67,0.8);
+    }
+
+    a {
+      color: #58a6ff;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: #79c0ff;
+      text-decoration: underline;
+    }
+
+    p.text-center {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 0.9rem;
+    }
+
+    /* Wallet section styling */
     .wallet-header {
       text-align: center;
-      margin-bottom: 1.8rem;
+      margin-bottom: 20px;
     }
 
     .wallet-header h2 {
       font-size: 1.6rem;
-      font-weight: 700;
-      color: #58a6ff;
-      margin-bottom: 0.2rem;
+      color: #c9d1d9;
+      margin-bottom: 6px;
     }
 
     .balance, .balance-fiat {
       font-size: 1.2rem;
       color: #8b949e;
+      margin-top: 8px;
       font-weight: 500;
     }
 
+    .transaction-form {
+      margin-top: 20px;
+    }
+
     .history {
-      margin-top: 2rem;
-      background-color: #0d1117;
-      padding: 1rem 1.2rem;
+      margin-top: 30px;
+      background-color: #010409;
+      padding: 12px 14px;
       border: 1px solid #30363d;
       border-radius: 8px;
       color: #8b949e;
-      max-height: 180px;
+      max-height: 140px;
       overflow-y: auto;
-      font-size: 0.95rem;
-      line-height: 1.4;
+      font-size: 0.9rem;
+      font-family: 'Segoe UI Mono', monospace;
     }
 
     .history strong {
       display: block;
-      margin-bottom: 0.8rem;
-      color: #58a6ff;
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
-
-    .history p {
-      margin: 0.4rem 0;
-      padding-left: 0.5rem;
-      border-left: 3px solid #30363d;
+      margin-bottom: 8px;
       color: #c9d1d9;
     }
 
     .btn-logout {
-      background-color: #bf4b4b;
-      margin-top: 2.5rem;
-      box-shadow: 0 4px 12px rgba(191, 75, 75, 0.7);
-      font-weight: 600;
+      background-color: #cf222e; /* GitHub red */
+      margin-top: 30px;
+      box-shadow: 0 4px 12px rgba(207, 34, 46, 0.7);
+      font-weight: 700;
+      font-size: 1.1rem;
     }
+
     .btn-logout:hover {
-      background-color: #d15757;
-      box-shadow: 0 6px 14px rgba(209, 87, 87, 0.85);
+      background-color: #a40e26;
+      box-shadow: 0 6px 16px rgba(164, 14, 38, 0.9);
     }
 
-    a {
-      color: #58a6ff;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s ease;
-    }
-    a:hover {
-      color: #1f6feb;
-      text-decoration: underline;
-    }
-
-    /* Links "Criar conta" e "Já tem conta?" centralizados */
-    p.link-switch {
-      text-align: center;
-      margin-top: 1.3rem;
-      font-size: 0.9rem;
-      user-select: none;
-    }
-
-    /* Footer simples no estilo GitHub dark */
+    /* Footer styling */
     footer {
+      position: fixed;
+      bottom: 10px;
       width: 100%;
-      padding: 1rem 0;
-      background-color: #161b22;
-      color: #8b949e;
       text-align: center;
-      font-size: 0.9rem;
-      border-top: 1px solid #30363d;
+      font-size: 0.85rem;
+      color: #8b949e;
+      font-weight: 600;
+      font-family: 'Segoe UI', sans-serif;
       user-select: none;
     }
+
     footer a {
       color: #58a6ff;
-      font-weight: 600;
-    }
-    footer a:hover {
-      color: #1f6feb;
-      text-decoration: underline;
+      text-decoration: none;
     }
 
-    /* Responsividade */
-    @media (max-width: 520px) {
-      .container {
-        margin: 2rem 1rem;
-        padding: 1.5rem 1.5rem;
+    footer a:hover {
+      text-decoration: underline;
+      color: #79c0ff;
+    }
+
+    /* Animação fade-in */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
       }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Media Query */
+    @media (max-width: 480px) {
+      .container {
+        padding: 24px 28px;
+        max-width: 320px;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
       button {
         font-size: 1rem;
+        padding: 12px;
       }
     }
   </style>
@@ -205,14 +227,14 @@
   <!-- LOGIN FORM -->
   <section id="login-section" class="container">
     <h2>Login Bosco Wallet</h2>
-    <form id="login-form" autocomplete="off">
+    <form id="login-form" class="login-form" autocomplete="off">
       <label for="login-email">Email:</label>
-      <input type="email" id="login-email" required placeholder="seuemail@exemplo.com" />
+      <input type="email" id="login-email" required autocomplete="username" />
       <label for="login-password">Senha:</label>
-      <input type="password" id="login-password" required placeholder="••••••••" />
+      <input type="password" id="login-password" required autocomplete="current-password" />
       <button type="submit">Entrar</button>
     </form>
-    <p class="link-switch">
+    <p class="text-center">
       <a href="#" id="show-register">Criar uma conta</a>
     </p>
   </section>
@@ -220,14 +242,14 @@
   <!-- REGISTRO FORM -->
   <section id="register-section" class="container" style="display:none;">
     <h2>Registrar</h2>
-    <form id="register-form" autocomplete="off">
+    <form id="register-form" class="login-form" autocomplete="off">
       <label for="register-email">Email:</label>
-      <input type="email" id="register-email" required placeholder="seuemail@exemplo.com" />
+      <input type="email" id="register-email" required autocomplete="email" />
       <label for="register-password">Senha:</label>
-      <input type="password" id="register-password" required placeholder="••••••••" />
+      <input type="password" id="register-password" required autocomplete="new-password" />
       <button type="submit">Registrar</button>
     </form>
-    <p class="link-switch">
+    <p class="text-center">
       <a href="#" id="show-login">Já tem conta? Entrar</a>
     </p>
   </section>
@@ -276,15 +298,15 @@
     </form>
 
     <!-- Formulários -->
-    <form id="deposit-form" class="transaction-form" autocomplete="off">
+    <form id="deposit-form" class="transaction-form">
       <label for="deposit-amount">Depositar valor (USD):</label>
-      <input type="number" id="deposit-amount" min="0.01" step="0.01" required placeholder="0.00" />
+      <input type="number" id="deposit-amount" min="0.01" step="0.01" required />
       <button type="submit">Depositar</button>
     </form>
 
-    <form id="withdraw-form" class="transaction-form" autocomplete="off">
+    <form id="withdraw-form" class="transaction-form">
       <label for="withdraw-amount">Sacar valor (USD):</label>
-      <input type="number" id="withdraw-amount" min="0.01" step="0.01" required placeholder="0.00" />
+      <input type="number" id="withdraw-amount" min="0.01" step="0.01" required />
       <button type="submit">Sacar</button>
     </form>
 
@@ -311,13 +333,11 @@
     let balance = 0;
 
     // Navegação entre login e registro
-    document.getElementById('show-register').onclick = (e) => {
-      e.preventDefault();
+    document.getElementById('show-register').onclick = () => {
       loginSection.style.display = 'none';
       registerSection.style.display = 'block';
     };
-    document.getElementById('show-login').onclick = (e) => {
-      e.preventDefault();
+    document.getElementById('show-login').onclick = () => {
       registerSection.style.display = 'none';
       loginSection.style.display = 'block';
     };
@@ -337,7 +357,6 @@
       userDisplay.innerText = email;
       loginSection.style.display = 'none';
       walletSection.style.display = 'block';
-      updateBalance();
     };
 
     // Logout
@@ -387,7 +406,6 @@
       const p = document.createElement('p');
       p.innerText = text;
       historyDisplay.appendChild(p);
-      historyDisplay.scrollTop = historyDisplay.scrollHeight;
     }
   </script>
 
