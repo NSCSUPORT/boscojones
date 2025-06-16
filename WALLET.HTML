@@ -55,6 +55,8 @@
 
     input[type="range"] {
       cursor: pointer;
+      margin-top: 4px;
+      margin-bottom: 0;
     }
 
     /* Range slider styles */
@@ -76,6 +78,34 @@
     }
     input[type="range"]:hover::-webkit-slider-thumb {
       background: #357a38;
+    }
+
+    /* Firefox */
+    input[type="range"]::-moz-range-track {
+      height: 6px;
+      background: #58a6ff;
+      border-radius: 3px;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      background: #4caf50;
+      border-radius: 50%;
+      border: 2px solid #357a38;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    input[type="range"]:hover::-moz-range-thumb {
+      background: #357a38;
+    }
+
+    /* Placeholder text under slider */
+    #geminiosidade-placeholder {
+      font-size: 0.85rem;
+      color: #8b949e;
+      margin-top: 2px;
+      font-style: italic;
+      user-select: none;
     }
 
     button {
@@ -188,6 +218,7 @@
         value="0"
         oninput="atualizarTaxaGeminiosidade(this.value)"
       />
+      <div id="geminiosidade-placeholder">Ajuste a taxa adicional de Geminiosidade que será aplicada ao pagamento.</div>
 
       <div id="tax-info">
         Taxa fixa: 5% (R$ <span id="taxa-fixa-valor">0.00</span>)<br />
@@ -204,12 +235,10 @@
 
   <footer>
    HoloFi Symbiotic Dark 💚 © 2025 Bosco Jones Wallet<br />
-
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    // Atualiza os valores das taxas no texto sempre que o usuário mexe no range ou no valor
     const valorInput = document.getElementById('valor');
     const geminiosidadeInput = document.getElementById('geminiosidade');
     const taxaFixaValorSpan = document.getElementById('taxa-fixa-valor');
@@ -248,7 +277,6 @@
     valorInput.addEventListener('input', atualizarTaxas);
     geminiosidadeInput.addEventListener('input', atualizarTaxas);
 
-    // Chamar para inicializar
     atualizarTaxas();
 
     function gerarPix() {
