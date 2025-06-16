@@ -109,6 +109,12 @@
       max-height: 180px;
       margin-top: 12px;
     }
+    #saldo-container {
+      text-align: center;
+      font-size: 1rem;
+      margin-top: 20px;
+      color: #00ff88;
+    }
     footer {
       text-align: center;
       background-color: #111;
@@ -129,16 +135,6 @@
         <option value="">Selecione um ativo</option>
         <option value="DC-COIN">DC Coin (Trix Z)</option>
         <option value="DARK1">DARK1 (Shadow Token)</option>
-        <option value="DARK2">DARK2 (Oblivion Coin)</option>
-        <option value="DARK3">DARK3 (Phantom Credit)</option>
-        <option value="DARK4">DARK4 (Eclipse Asset)</option>
-        <option value="POSN-HF">PoSN-HF (Proof of Stake Hybrid Fund)</option>
-        <option value="BTC">Bitcoin (BTC)</option>
-        <option value="ETH">Ethereum (ETH)</option>
-        <option value="XRP">Ripple (XRP)</option>
-        <option value="DOGE">Dogecoin (DOGE)</option>
-        <option value="DHL1">DHL1 (Dark Lash - Shadow)</option>
-        <option value="DHL2">DHL2 (Dark Lash - Oblivion)</option>
         <option value="SPPX">SPPX (Simbiótico Premium)</option>
         <option value="JBX500">JBX500 Asset</option>
       </select>
@@ -160,18 +156,22 @@
       <button type="button" id="btn-withdraw" class="btn" onclick="fazerSaque()">Sacar</button>
     </form>
 
+    <div id="saldo-container">Saldo disponível: R$ <span id="saldo">0.00</span></div>
     <div id="qrcode-container">Nenhum QR Code gerado.</div>
   </div>
   <footer>HoloFi Symbiotic Dark 💚 © 2025 Bosco Jones Wallet</footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
+    let saldo = 0;
+
     const valorInput = document.getElementById("valor");
     const gemInput = document.getElementById("geminiosidade");
     const gemValueSpan = document.getElementById("geminiosidade-value");
     const taxaFixaSpan = document.getElementById("taxa-fixa-valor");
     const taxaGemSpan = document.getElementById("taxa-geminiosidade-valor");
     const totalSpan = document.getElementById("total-pagar");
+    const saldoSpan = document.getElementById("saldo");
 
     function atualizarTaxas() {
       const valor = parseFloat(valorInput.value) || 0;
@@ -182,6 +182,11 @@
       taxaFixaSpan.textContent = taxaFixa.toFixed(2);
       taxaGemSpan.textContent = taxaGem.toFixed(2);
       totalSpan.textContent = total.toFixed(2);
+    }
+
+    function atualizarSaldo(valor) {
+      saldo += valor;
+      saldoSpan.textContent = saldo.toFixed(2);
     }
 
     valorInput.addEventListener("input", atualizarTaxas);
@@ -199,6 +204,7 @@
 
       const gem = parseFloat(gemInput.value) / 100;
       const total = valor * (1 + 0.05 + gem);
+
       const chave = "48761013889";
       const nome = "Lucas Januário";
       const cidade = "BRASILIA";
@@ -208,6 +214,8 @@
       const container = document.getElementById("qrcode-container");
       container.innerHTML = `<p><strong>Total: R$ ${total.toFixed(2)}</strong></p>`;
       new QRCode(container, { text: payload, width: 180, height: 180 });
+
+      atualizarSaldo(valor); // contabiliza o valor base (sem taxa) no saldo
     }
 
     function fazerSaque() {
@@ -215,7 +223,16 @@
       const ativo = document.getElementById("asset-select").value;
       if (!valor || valor <= 0) return alert("Digite um valor válido.");
       if (!ativo) return alert("Selecione um ativo.");
-      alert(`Saque simulado:\nAtivo: ${ativo}\nValor: R$ ${valor.toFixed(2)}`);
+
+      if (valor > saldo) {
+        alert("Saldo insuficiente para saque.");
+        return;
+      }
+
+      saldo -= valor;
+      saldoSpan.textContent = saldo.toFixed(2);
+
+      alert(`Saque solicitado:\nAtivo: ${ativo}\nValor: R$ ${valor.toFixed(2)}\n\n⚠️ O valor será processado em até 24 horas úteis.`);
     }
 
     function gerarPayloadPix({ chave, nome, cidade, valor, infoAdicional }) {
