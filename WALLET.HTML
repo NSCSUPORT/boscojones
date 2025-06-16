@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+
+ <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -6,18 +7,330 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bosco Jones Wallet - Login, Registro & Wallet</title>
   <style>
-    /* seu CSS permanece o mesmo, para brevidade omito aqui */
+    /* Reset básico */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background-color: #0d1117;
+      color: #c9d1d9;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji';
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 3rem auto;
+      padding: 2rem 2.5rem;
+      background-color: #161b22;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(1, 4, 9, 0.6);
+      transition: box-shadow 0.3s ease;
+    }
+    .container:hover {
+      box-shadow: 0 12px 30px rgba(1, 4, 9, 0.9);
+    }
+
+    h2 {
+      margin-bottom: 1.5rem;
+      color: #c9d1d9;
+      font-weight: 600;
+      font-size: 1.8rem;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #8b949e;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 0.6rem 1rem;
+      margin-bottom: 1.3rem;
+      background-color: #0d1117;
+      border: 1.5px solid #30363d;
+      border-radius: 6px;
+      color: #c9d1d9;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    input::placeholder {
+      color: #484f58;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #58a6ff;
+      outline: none;
+      box-shadow: 0 0 8px #58a6ff44;
+      background-color: #161b22;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background-color: #238636;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.25s ease;
+      box-shadow: 0 4px 10px rgba(35, 134, 54, 0.6);
+    }
+    button:hover {
+      background-color: #2ea043;
+      box-shadow: 0 6px 14px rgba(46, 160, 67, 0.75);
+    }
+
+    .wallet-header {
+      text-align: center;
+      margin-bottom: 1.8rem;
+    }
+
+    .wallet-header h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #58a6ff;
+      margin-bottom: 0.2rem;
+    }
+
+    .balance,
+    .balance-fiat {
+      font-size: 1.2rem;
+      color: #8b949e;
+      font-weight: 500;
+    }
+
+    .history {
+      margin-top: 2rem;
+      background-color: #0d1117;
+      padding: 1rem 1.2rem;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      color: #8b949e;
+      max-height: 180px;
+      overflow-y: auto;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .history strong {
+      display: block;
+      margin-bottom: 0.8rem;
+      color: #58a6ff;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .history p {
+      margin: 0.4rem 0;
+      padding-left: 0.5rem;
+      border-left: 3px solid #30363d;
+      color: #c9d1d9;
+      word-wrap: break-word;
+    }
+
+    .btn-logout {
+      background-color: #bf4b4b;
+      margin-top: 2.5rem;
+      box-shadow: 0 4px 12px rgba(191, 75, 75, 0.7);
+      font-weight: 600;
+    }
+    .btn-logout:hover {
+      background-color: #d15757;
+      box-shadow: 0 6px 14px rgba(209, 87, 87, 0.85);
+    }
+
+    a {
+      color: #58a6ff;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    a:hover {
+      color: #1f6feb;
+      text-decoration: underline;
+    }
+
+    /* Links "Criar conta" e "Já tem conta?" centralizados */
+    p.link-switch {
+      text-align: center;
+      margin-top: 1.3rem;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+
+    /* Mensagem de erro */
+    .error-message {
+      color: #f44336;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      min-height: 1.2em;
+    }
+
+    footer {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(45deg, #f0f000, #ff4500);
+      color: #000;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-shadow: 0 0 8px #ff0000;
+      margin-top: 20px;
+      animation: neon 1.5s ease-in-out infinite alternate;
+    }
+
+    /* Animação neon */
+    @keyframes neon {
+      from {
+        text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 40px #ff4500,
+          0 0 80px #ff4500;
+      }
+      to {
+        text-shadow: 0 0 10px #ff4500, 0 0 20px #ff4500, 0 0 30px #ff0000, 0 0 50px #ff0000,
+          0 0 100px #ff0000;
+      }
+    }
+
+    /* PIX Payment Section */
+    #pix-payment-section {
+      max-width: 480px;
+      margin: 2rem auto 4rem;
+      padding: 2rem 2.5rem;
+      background-color: #161b22;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(1, 4, 9, 0.6);
+    }
+
+    #pix-payment-section h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #c9d1d9;
+      font-weight: 600;
+      font-size: 1.6rem;
+    }
+
+    #pix-payment-section label {
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #8b949e;
+      display: block;
+    }
+
+    #pix-payment-section input {
+      width: 100%;
+      padding: 0.6rem 1rem;
+      margin-bottom: 1.3rem;
+      background-color: #0d1117;
+      border: 1.5px solid #30363d;
+      border-radius: 6px;
+      color: #c9d1d9;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    #pix-payment-section input:focus {
+      border-color: #58a6ff;
+      outline: none;
+      box-shadow: 0 0 8px #58a6ff44;
+      background-color: #161b22;
+    }
+
+    #pix-payment-section button {
+      background-color: #238636;
+      box-shadow: 0 4px 10px rgba(35, 134, 54, 0.6);
+      cursor: pointer;
+    }
+
+    #pix-qrcodes {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 1rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .qrcode-box {
+      background-color: #0d1117;
+      border: 1.5px solid #30363d;
+      border-radius: 8px;
+      padding: 1rem;
+      width: 45%;
+      min-width: 180px;
+      text-align: center;
+      color: #c9d1d9;
+      user-select: none;
+    }
+
+    .qrcode-box h3 {
+      margin-bottom: 0.8rem;
+      color: #58a6ff;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .qrcode-box canvas {
+      margin: 0 auto;
+    }
+
+    @media (max-width: 600px) {
+      #pix-qrcodes {
+        flex-direction: column;
+      }
+      .qrcode-box {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
   <!-- LOGIN FORM -->
   <section id="login-section" class="container">
-    <!-- ... seu formulário login ... -->
+    <h2>Login Bosco Wallet</h2>
+    <form id="login-form" autocomplete="off">
+      <label for="login-email">Email:</label>
+      <input type="email" id="login-email" required placeholder="seuemail@exemplo.com" />
+      <label for="login-password">Senha:</label>
+      <input type="password" id="login-password" required placeholder="••••••••" />
+      <div class="error-message" id="login-error"></div>
+      <button type="submit">Entrar</button>
+    </form>
+    <p class="link-switch">
+      <a href="#" id="show-register">Criar uma conta</a>
+    </p>
   </section>
 
   <!-- REGISTRO FORM -->
   <section id="register-section" class="container" style="display:none;">
-    <!-- ... seu formulário registro ... -->
+    <h2>Registrar</h2>
+    <form id="register-form" autocomplete="off">
+      <label for="register-email">Email:</label>
+      <input type="email" id="register-email" required placeholder="seuemail@exemplo.com" />
+      <label for="register-password">Senha:</label>
+      <input type="password" id="register-password" required placeholder="••••••••" />
+      <div class="error-message" id="register-error"></div>
+      <button type="submit">Registrar</button>
+    </form>
+    <p class="link-switch">
+      <a href="#" id="show-login">Já tem conta? Entrar</a>
+    </p>
   </section>
 
   <!-- WALLET -->
@@ -29,44 +342,47 @@
     </div>
 
     <!-- Seletor de ativo -->
-    <form class="transaction-form">
+    <form class="transaction-form" id="asset-form">
       <label for="currency">Selecionar Ativo:</label>
       <select id="currency" required>
-        <!-- suas opções -->
+        <!-- GIX2 Assets -->
+        <option value="DC-COIN">DC Coin (Trix Z)</option>
+        <option value="DARK1">DARK1 (Shadow Token)</option>
+        <option value="DARK2">DARK2 (Oblivion Coin)</option>
+        <option value="DARK3">DARK3 (Phantom Credit)</option>
+        <option value="DARK4">DARK4 (Eclipse Asset)</option>
+        <option value="POSN-HF">PoSN-HF (Proof of Stake Hybrid Fund)</option>
+        <option value="BTC">Bitcoin (BTC)</option>
+        <option value="ETH">Ethereum (ETH)</option>
+        <option value="LTC">Litecoin (LTC)</option>
+        <option value="XRP">Ripple (XRP)</option>
+        <option value="DOGE">Dogecoin (DOGE)</option>
+        <option value="ADA">Cardano (ADA)</option>
+
+        <!-- RZX (Dark HoloFi Lashs) -->
+        <option value="DHL1">DHL1 (Dark Lash - Shadow)</option>
+        <option value="DHL2">DHL2 (Dark Lash - Oblivion)</option>
+        <option value="DHL3">DHL3 (Dark Lash - Phantom)</option>
+        <option value="DHL4">DHL4 (Dark Lash - Eclipse)</option>
+
+        <!-- HoloFi e Simbióticos -->
+        <option value="SPPX">SPPX (Simbiótico Premium)</option>
+        <option value="QVAFLES">QVAFLES (SSQAFLE)</option>
+        <option value="XETH">XETH (Cross Ethereum)</option>
+        <option value="D-EURO">D-EURO (Euro Digital)</option>
+        <option value="SSQSEA">SSQSEA (Base de Simbiose)</option>
+        <option value="RZX-STARTUP">START UP RZX</option>
+        <option value="JBX500">JBX500 Asset (HoloFi Symbiotic Dark)</option>
       </select>
     </form>
 
-    <!-- Formulário de Depósito -->
+    <!-- Formulários -->
     <form id="deposit-form" class="transaction-form" autocomplete="off">
       <label for="deposit-amount">Depositar valor (USD):</label>
       <input type="number" id="deposit-amount" min="0.01" step="0.01" required placeholder="0.00" />
       <button type="submit">Depositar</button>
     </form>
 
-    <!-- PIX PAYMENT SECTION -->
-    <section id="pix-payment-section" class="container" style="display:none;">
-      <h2>Pagamento via PIX</h2>
-      <form id="pix-form" autocomplete="off">
-        <label for="pix-amount">Informe o valor para pagamento (R$):</label>
-        <input type="number" id="pix-amount" min="0.01" step="0.01" required placeholder="0.00" />
-        <button type="submit">Gerar QR Codes PIX</button>
-      </form>
-
-      <div id="pix-qrcodes" style="display:none;">
-        <div class="qrcode-box">
-          <h3>Pagamento Principal</h3>
-          <div id="qrcode-main"></div>
-          <p id="pix-main-amount"></p>
-        </div>
-        <div class="qrcode-box">
-          <h3>Pagamento 5% taxa para 48761013889</h3>
-          <div id="qrcode-tax"></div>
-          <p id="pix-tax-amount"></p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Formulário de Saque -->
     <form id="withdraw-form" class="transaction-form" autocomplete="off">
       <label for="withdraw-amount">Sacar valor (USD):</label>
       <input type="number" id="withdraw-amount" min="0.01" step="0.01" required placeholder="0.00" />
@@ -82,65 +398,332 @@
     <button id="logout-btn" class="btn-logout">Sair</button>
   </section>
 
+  <!-- PIX PAYMENT SECTION -->
+  <section id="pix-payment-section" class="container" style="display:none;">
+    <h2>Pagamento via PIX</h2>
+    <form id="pix-form" autocomplete="off">
+      <label for="pix-amount">Informe o valor para pagamento (R$):</label>
+      <input type="number" id="pix-amount" min="0.01" step="0.01" required placeholder="0.00" />
+      <button type="submit">Gerar QR Codes PIX</button>
+    </form>
+
+    <div id="pix-qrcodes" style="display:none;">
+      <div class="qrcode-box">
+        <h3>Pagamento Principal</h3>
+        <div id="qrcode-main"></div>
+        <p id="pix-main-amount"></p>
+      </div>
+      <div class="qrcode-box">
+  
+        <div id="qrcode-tax"></div>
+        <p id="pix-tax-amount"></p>
+      </div>
+    </div>
+  </section>
+
   <footer>
     © 2025 Bosco Jones Wallet · Desenvolvido por lucas januario ·
   </footer>
 
   <!-- Biblioteca QRCode.js -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
-  <script>
-    // Exemplo simples para gerar QR codes PIX
 
+  <script>
+    // Elementos principais
+    const loginSection = document.getElementById('login-section');
+    const registerSection = document.getElementById('register-section');
+    const walletSection = document.getElementById('wallet-section');
+    const pixPaymentSection = document.getElementById('pix-payment-section');
+
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const depositForm = document.getElementById('deposit-form');
+    const withdrawForm = document.getElementById('withdraw-form');
     const pixForm = document.getElementById('pix-form');
-    const pixQrcodes = document.getElementById('pix-qrcodes');
+
+    const loginError = document.getElementById('login-error');
+    const registerError = document.getElementById('register-error');
+
+    const userDisplay = document.getElementById('user-display');
+    const balanceDisplay = document.getElementById('balance');
+    const balanceFiatDisplay = document.getElementById('balance-fiat');
+    const transactionHistory = document.getElementById('transaction-history');
+
+    const logoutBtn = document.getElementById('logout-btn');
+
+    const showRegisterLink = document.getElementById('show-register');
+    const showLoginLink = document.getElementById('show-login');
+
+    const currencySelect = document.getElementById('currency');
+
+    const pixAmountInput = document.getElementById('pix-amount');
+    const pixQRCodesDiv = document.getElementById('pix-qrcodes');
     const qrcodeMainDiv = document.getElementById('qrcode-main');
     const qrcodeTaxDiv = document.getElementById('qrcode-tax');
-    const pixMainAmount = document.getElementById('pix-main-amount');
-    const pixTaxAmount = document.getElementById('pix-tax-amount');
+    const pixMainAmountP = document.getElementById('pix-main-amount');
+    const pixTaxAmountP = document.getElementById('pix-tax-amount');
 
-    pixForm.addEventListener('submit', (e) => {
+    // Simples "banco" local com usuários e saldos
+    let users = JSON.parse(localStorage.getItem('bjw-users')) || {};
+    let currentUser = localStorage.getItem('bjw-currentUser') || null;
+
+    // Função para salvar usuários no localStorage
+    function saveUsers() {
+      localStorage.setItem('bjw-users', JSON.stringify(users));
+    }
+
+    // Função para mostrar mensagens de erro e limpar depois de 3s
+    function showError(element, message) {
+      element.textContent = message;
+      setTimeout(() => {
+        element.textContent = '';
+      }, 4000);
+    }
+
+    // Mostrar seções
+    function showSection(section) {
+      loginSection.style.display = 'none';
+      registerSection.style.display = 'none';
+      walletSection.style.display = 'none';
+      pixPaymentSection.style.display = 'none';
+
+      section.style.display = 'block';
+    }
+
+    // Atualizar saldo e histórico na UI
+    function updateWalletUI() {
+      if (!currentUser || !users[currentUser]) return;
+
+      const userData = users[currentUser];
+      userDisplay.textContent = currentUser;
+
+      // Atualizar saldo total no ativo selecionado
+      const ativo = currencySelect.value || 'DC-COIN';
+      const saldo = userData.balances[ativo] || 0;
+      balanceDisplay.textContent = ativo + ' ' + saldo.toFixed(2);
+
+      // Exemplo simples: saldo em USD para mostrar (assumindo 1:1)
+      balanceFiatDisplay.textContent = 'USD ' + saldo.toFixed(2);
+
+      // Histórico
+      const hist = userData.history || [];
+      if (hist.length === 0) {
+        transactionHistory.innerHTML = '<strong>Histórico de transações:</strong><p>Nenhuma transação ainda.</p>';
+      } else {
+        let html = '<strong>Histórico de transações:</strong>';
+        for (let i = hist.length - 1; i >= 0; i--) {
+          const tx = hist[i];
+          html += `<p><strong>${tx.date}</strong> - ${tx.type} - ${tx.currency} ${tx.amount.toFixed(2)}</p>`;
+        }
+        transactionHistory.innerHTML = html;
+      }
+    }
+
+    // Inicialização do usuário, carrega dados, vai para wallet
+    function initUser(email) {
+      currentUser = email;
+      localStorage.setItem('bjw-currentUser', currentUser);
+      if (!users[email]) {
+        users[email] = { balances: {}, history: [] };
+        saveUsers();
+      }
+      updateWalletUI();
+      showSection(walletSection);
+      pixPaymentSection.style.display = 'block';
+    }
+
+    // Logout
+    logoutBtn.onclick = () => {
+      currentUser = null;
+      localStorage.removeItem('bjw-currentUser');
+      showSection(loginSection);
+    };
+
+    // Trocar para registro
+    showRegisterLink.onclick = (e) => {
       e.preventDefault();
-      const amount = parseFloat(document.getElementById('pix-amount').value);
-      if (isNaN(amount) || amount <= 0) {
-        alert('Informe um valor válido para pagamento.');
+      showSection(registerSection);
+    };
+
+    // Trocar para login
+    showLoginLink.onclick = (e) => {
+      e.preventDefault();
+      showSection(loginSection);
+    };
+
+    // LOGIN FORM
+    loginForm.onsubmit = (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim().toLowerCase();
+      const password = document.getElementById('login-password').value;
+
+      if (!email || !password) {
+        showError(loginError, 'Preencha email e senha');
         return;
       }
 
-      // Valores PIX
-      const taxAmount = +(amount * 0.05).toFixed(2);
-      const mainAmount = +(amount - taxAmount).toFixed(2);
+      // Simples: verificar se usuário existe e senha bate
+      if (!users[email]) {
+        showError(loginError, 'Usuário não encontrado');
+        return;
+      }
+      if (users[email].password !== password) {
+        showError(loginError, 'Senha incorreta');
+        return;
+      }
 
-      // Aqui você deve montar os dados PIX (string) para os QR Codes
-      // Exemplo simples: gerar um texto para representar o pagamento
-      // Substitua pelas strings PIX reais no formato esperado pelo banco
+      initUser(email);
 
-      const pixKeyMain = 'your-pix-key-main@exemplo.com';  // altere para chave real
-      const pixKeyTax = '48761013889'; // chave pix para taxa 5%
+      // Limpar formulário
+      loginForm.reset();
+    };
 
-      // Montar strings de pagamento PIX (simplificado)
-      const pixPayloadMain = `PIX|CHAVE:${pixKeyMain}|VALOR:${mainAmount}`;
-      const pixPayloadTax = `PIX|CHAVE:${pixKeyTax}|VALOR:${taxAmount}`;
+    // REGISTRO FORM
+    registerForm.onsubmit = (e) => {
+      e.preventDefault();
+      const email = document.getElementById('register-email').value.trim().toLowerCase();
+      const password = document.getElementById('register-password').value;
 
-      // Limpar qrcodes anteriores
+      if (!email || !password) {
+        showError(registerError, 'Preencha email e senha');
+        return;
+      }
+
+      // Validação senha forte: min 8 caracteres, 1 letra, 1 número, 1 caract especial
+      const strongPass = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&^()_\-+=])[A-Za-z\d@$!%*#?&^()_\-+=]{8,}$/;
+      if (!strongPass.test(password)) {
+        showError(registerError, 'Senha fraca. Use 8+ caracteres, incluindo letra, número e caractere especial.');
+        return;
+      }
+
+      if (users[email]) {
+        showError(registerError, 'Usuário já registrado');
+        return;
+      }
+
+      // Criar usuário com saldo 0 e salvar senha (atenção: senha não criptografada, apenas para demonstração)
+      users[email] = { password, balances: {}, history: [] };
+      saveUsers();
+
+      alert('Registrado com sucesso! Faça login agora.');
+      showSection(loginSection);
+      registerForm.reset();
+    };
+
+    // Atualizar saldo ao trocar ativo selecionado
+    currencySelect.onchange = updateWalletUI;
+
+    // DEPOSITAR
+    depositForm.onsubmit = (e) => {
+      e.preventDefault();
+      if (!currentUser) return;
+
+      const amount = parseFloat(document.getElementById('deposit-amount').value);
+      if (isNaN(amount) || amount <= 0) {
+        alert('Informe um valor válido para depósito');
+        return;
+      }
+
+      const ativo = currencySelect.value;
+      users[currentUser].balances[ativo] = (users[currentUser].balances[ativo] || 0) + amount;
+      users[currentUser].history.push({
+        date: new Date().toLocaleString(),
+        type: 'Depósito',
+        amount,
+        currency: ativo,
+      });
+      saveUsers();
+
+      updateWalletUI();
+      depositForm.reset();
+      alert(`Depósito de ${ativo} ${amount.toFixed(2)} realizado com sucesso!`);
+    };
+
+    // SACAR
+    withdrawForm.onsubmit = (e) => {
+      e.preventDefault();
+      if (!currentUser) return;
+
+      const amount = parseFloat(document.getElementById('withdraw-amount').value);
+      if (isNaN(amount) || amount <= 0) {
+        alert('Informe um valor válido para saque');
+        return;
+      }
+
+      const ativo = currencySelect.value;
+      const saldoAtual = users[currentUser].balances[ativo] || 0;
+      if (amount > saldoAtual) {
+        alert('Saldo insuficiente');
+        return;
+      }
+
+      users[currentUser].balances[ativo] = saldoAtual - amount;
+      users[currentUser].history.push({
+        date: new Date().toLocaleString(),
+        type: 'Saque',
+        amount,
+        currency: ativo,
+      });
+      saveUsers();
+
+      updateWalletUI();
+      withdrawForm.reset();
+      alert(`Saque de ${ativo} ${amount.toFixed(2)} realizado com sucesso!`);
+    };
+
+    // Gerar QR Code PIX (simulado)
+    function gerarPixCode(valor, chave) {
+      // Esse é um exemplo simples: no mundo real, você teria que usar o padrão PIX oficial para gerar o payload.
+      // Aqui é uma string simples com valor e chave para demonstração.
+      return `pix://${chave}?valor=${valor.toFixed(2)}`;
+    }
+
+    pixForm.onsubmit = (e) => {
+      e.preventDefault();
+      const valor = parseFloat(pixAmountInput.value);
+      if (isNaN(valor) || valor <= 0) {
+        alert('Informe um valor válido para pagamento PIX');
+        return;
+      }
+
+      // Valores para pagamento principal e taxa de 5%
+      const valorPrincipal = valor;
+      const valorTaxa = valor * 0.05;
+
+      // Chaves PIX - a chave principal pode ser um email ou CPF, e a taxa o número solicitado
+     
+      const chaveTaxa = '48761013889';
+
+      // Gerar strings QRCode
+      const payloadPrincipal = gerarPixCode(valorPrincipal, chavePrincipal);
+      const payloadTaxa = gerarPixCode(valorTaxa, chaveTaxa);
+
+      pixQRCodesDiv.style.display = 'flex';
+
+      // Limpar antes de gerar
       qrcodeMainDiv.innerHTML = '';
       qrcodeTaxDiv.innerHTML = '';
 
-      // Gerar QR codes
-      QRCode.toCanvas(qrcodeMainDiv, pixPayloadMain, { width: 180 }, (error) => {
+      // Gerar QR Codes
+      QRCode.toCanvas(qrcodeMainDiv, payloadPrincipal, { width: 180, margin: 1 }, (error) => {
         if (error) console.error(error);
       });
-      QRCode.toCanvas(qrcodeTaxDiv, pixPayloadTax, { width: 180 }, (error) => {
+      QRCode.toCanvas(qrcodeTaxDiv, payloadTaxa, { width: 180, margin: 1 }, (error) => {
         if (error) console.error(error);
       });
 
-      // Exibir valores
-      pixMainAmount.textContent = `R$ ${mainAmount.toFixed(2)}`;
-      pixTaxAmount.textContent = `R$ ${taxAmount.toFixed(2)}`;
+      pixMainAmountP.textContent = `R$ ${valorPrincipal.toFixed(2)}`;
+      pixTaxAmountP.textContent = `R$ ${valorTaxa.toFixed(2)}`;
+    };
 
-      // Exibir área dos QR Codes
-      pixQrcodes.style.display = 'flex';
-      document.getElementById('pix-payment-section').style.display = 'block';
-    });
+    // Ao carregar, verifica se tem usuário logado e mostra wallet ou login
+    window.onload = () => {
+      if (currentUser && users[currentUser]) {
+        initUser(currentUser);
+      } else {
+        showSection(loginSection);
+      }
+    };
   </script>
 </body>
 </html>
