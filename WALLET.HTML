@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Wallet Pix JBX500</title>
+  <title>Wallet JBX </title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
@@ -25,48 +25,122 @@
     h1 {
       color: #58a6ff;
       text-align: center;
+      margin-bottom: 20px;
     }
 
-    input, button, select {
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #8ab4f8;
+    }
+
+    select, input[type="number"], input[type="range"] {
       width: 100%;
       padding: 10px;
-      margin-top: 10px;
+      margin-top: 6px;
       border: none;
       border-radius: 5px;
       font-size: 1rem;
+      background-color: #0d1117;
+      color: #c9d1d9;
+      border: 1px solid #30363d;
+      -webkit-appearance: none;
+      appearance: none;
     }
 
-    button {
-      background-color: #4caf50;
-      color: white;
+    input::placeholder {
+      color: #8b949e;
+    }
+
+    input[type="range"] {
       cursor: pointer;
     }
 
-    button:hover {
+    /* Range slider styles */
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 6px;
+      background: #58a6ff;
+      border-radius: 3px;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      background: #4caf50;
+      border-radius: 50%;
+      margin-top: -6px;
+      cursor: pointer;
+      border: 2px solid #357a38;
+      transition: background 0.3s ease;
+    }
+    input[type="range"]:hover::-webkit-slider-thumb {
+      background: #357a38;
+    }
+
+    button {
+      width: 48%;
+      padding: 10px;
+      margin-top: 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+
+    #btn-deposit {
+      background-color: #4caf50;
+      float: left;
+    }
+
+    #btn-deposit:hover {
       background-color: #357a38;
     }
 
+    #btn-withdraw {
+      background-color: #f44336;
+      float: right;
+    }
+
+    #btn-withdraw:hover {
+      background-color: #d32f2f;
+    }
+
+    #tax-info, #geminiosidade-info {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #adbac7;
+      clear: both;
+    }
+
     #qrcode-container {
+      clear: both;
       text-align: center;
-      margin-top: 15px;
+      margin-top: 25px;
       background-color: #111;
       padding: 10px;
       border-radius: 8px;
+      min-height: 200px;
+      color: #c9d1d9;
     }
 
     #qrcode-container img {
       max-width: 150px;
       max-height: 150px;
+      margin-top: 10px;
     }
 
     footer {
       text-align: center;
       background-color: #111;
       color: #fff;
-      margin-top: 30px;
+      margin-top: 40px;
       padding: 10px;
       border-radius: 8px;
       font-size: 0.9rem;
+      user-select: none;
     }
   </style>
 </head>
@@ -101,50 +175,143 @@
     </form>
 
     <form id="deposit-form" class="transaction-form" autocomplete="off">
-      <label for="valor">Depositar valor (R$):</label>
+      <label for="valor">Valor (R$):</label>
       <input type="number" id="valor" min="0.01" step="0.01" required placeholder="0.00" />
-      <button type="button" onclick="gerarPix()">Gerar QR Code Pix</button>
+
+      <label for="geminiosidade">Taxa de Geminiosidade (%): <span id="geminiosidade-value">0.0</span>%</label>
+      <input
+        type="range"
+        id="geminiosidade"
+        min="0"
+        max="10"
+        step="0.1"
+        value="0"
+        oninput="atualizarTaxaGeminiosidade(this.value)"
+      />
+
+      <div id="tax-info">
+        Taxa fixa: 5% (R$ <span id="taxa-fixa-valor">0.00</span>)<br />
+        Taxa geminiosidade: R$ <span id="taxa-geminiosidade-valor">0.00</span><br />
+        <strong>Total a pagar: R$ <span id="total-pagar">0.00</span></strong>
+      </div>
+
+      <button type="button" id="btn-deposit" onclick="gerarPix()">Gerar QR Code Pix (Depósito)</button>
+      <button type="button" id="btn-withdraw" onclick="fazerSaque()">Sacar</button>
     </form>
 
-    <div id="qrcode-container"></div>
+    <div id="qrcode-container">Nenhum QR Code gerado.</div>
   </div>
 
   <footer>
-    © 2025 Bosco Jones Wallet<br />
-    Pix com taxa de 5% embutida<br />
-    HoloFi Symbiotic Dark 💚
+   HoloFi Symbiotic Dark 💚 © 2025 Bosco Jones Wallet<br />
+
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    function gerarPix() {
-      const valorDigitado = parseFloat(document.getElementById("valor").value);
-      if (isNaN(valorDigitado) || valorDigitado <= 0) {
-        alert("Digite um valor válido.");
+    // Atualiza os valores das taxas no texto sempre que o usuário mexe no range ou no valor
+    const valorInput = document.getElementById('valor');
+    const geminiosidadeInput = document.getElementById('geminiosidade');
+    const taxaFixaValorSpan = document.getElementById('taxa-fixa-valor');
+    const taxaGeminiosidadeValorSpan = document.getElementById('taxa-geminiosidade-valor');
+    const totalPagarSpan = document.getElementById('total-pagar');
+    const geminiosidadeValueSpan = document.getElementById('geminiosidade-value');
+
+    function atualizarTaxas() {
+      const valor = parseFloat(valorInput.value);
+      const geminiosidadePercent = parseFloat(geminiosidadeInput.value);
+
+      if (isNaN(valor) || valor <= 0) {
+        taxaFixaValorSpan.textContent = "0.00";
+        taxaGeminiosidadeValorSpan.textContent = "0.00";
+        totalPagarSpan.textContent = "0.00";
         return;
       }
 
-      const valorComTaxa = valorDigitado * 1.05;
+      const taxaFixa = 0.05;
+      const taxaGeminiosidade = geminiosidadePercent / 100;
+
+      const valorTaxaFixa = valor * taxaFixa;
+      const valorTaxaGeminiosidade = valor * taxaGeminiosidade;
+      const total = valor + valorTaxaFixa + valorTaxaGeminiosidade;
+
+      taxaFixaValorSpan.textContent = valorTaxaFixa.toFixed(2);
+      taxaGeminiosidadeValorSpan.textContent = valorTaxaGeminiosidade.toFixed(2);
+      totalPagarSpan.textContent = total.toFixed(2);
+    }
+
+    function atualizarTaxaGeminiosidade(valor) {
+      geminiosidadeValueSpan.textContent = parseFloat(valor).toFixed(1);
+      atualizarTaxas();
+    }
+
+    valorInput.addEventListener('input', atualizarTaxas);
+    geminiosidadeInput.addEventListener('input', atualizarTaxas);
+
+    // Chamar para inicializar
+    atualizarTaxas();
+
+    function gerarPix() {
+      const valorDigitado = parseFloat(valorInput.value);
+      if (isNaN(valorDigitado) || valorDigitado <= 0) {
+        alert("Digite um valor válido maior que zero.");
+        return;
+      }
+
+      const assetSelecionado = document.getElementById("asset-select").value;
+      if (!assetSelecionado) {
+        alert("Selecione um ativo antes de gerar o Pix.");
+        return;
+      }
+
+      const taxaFixa = 0.05;
+      const taxaGeminiosidadePercent = parseFloat(geminiosidadeInput.value);
+      const taxaGeminiosidade = taxaGeminiosidadePercent / 100;
+
+      const valorComTaxas = valorDigitado * (1 + taxaFixa + taxaGeminiosidade);
 
       const chavePix = "48761013889";
       const nome = "Lucas Januário";
       const cidade = "BRASILIA";
+      const infoAdicional = `Pagamento JBX500 - Ativo: ${assetSelecionado} - Geminiosidade: ${taxaGeminiosidadePercent.toFixed(1)}%`;
+
       const payload = gerarPayloadPix({
         chave: chavePix,
         nome: nome,
         cidade: cidade,
-        valor: valorComTaxa.toFixed(2),
-        infoAdicional: "Pagamento JBX500"
+        valor: valorComTaxas.toFixed(2),
+        infoAdicional: infoAdicional
       });
 
       const container = document.getElementById("qrcode-container");
-      container.innerHTML = "";
+      container.innerHTML = `
+        <p>Valor original: R$ ${valorDigitado.toFixed(2)}</p>
+        <p>Taxa fixa (5%): R$ ${(valorDigitado * taxaFixa).toFixed(2)}</p>
+        <p>Taxa Geminiosidade (${taxaGeminiosidadePercent.toFixed(1)}%): R$ ${(valorDigitado * taxaGeminiosidade).toFixed(2)}</p>
+        <p><strong>Total a pagar: R$ ${valorComTaxas.toFixed(2)}</strong></p>
+      `;
 
       new QRCode(container, {
         text: payload,
         width: 150,
         height: 150
       });
+    }
+
+    function fazerSaque() {
+      const valorSaque = parseFloat(valorInput.value);
+      if (isNaN(valorSaque) || valorSaque <= 0) {
+        alert("Digite um valor válido para saque maior que zero.");
+        return;
+      }
+
+      const assetSelecionado = document.getElementById("asset-select").value;
+      if (!assetSelecionado) {
+        alert("Selecione um ativo antes de sacar.");
+        return;
+      }
+
+      alert(`Solicitação de saque:\nAtivo: ${assetSelecionado}\nValor: R$ ${valorSaque.toFixed(2)}\n\nOperação simulada com sucesso.`);
     }
 
     function gerarPayloadPix({chave, nome, cidade, valor, infoAdicional}) {
