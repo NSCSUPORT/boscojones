@@ -1,120 +1,117 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <link rel="icon" href="logo.ico">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bosco Jones Wallet</title>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Banco Bosco Jones - Pagamento Pix</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
   <style>
-    /* (ESTILO DARK MODE GITHUB + FORMULÁRIO DE TRANSAÇÃO) */
-    * { box-sizing: border-box; }
     body {
       margin: 0;
-      background-color: #0d1117;
-      color: #c9d1d9;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-      min-height: 100vh;
+      background: url('https://i.imgur.com/7lKqK3e.png') no-repeat center center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      color: #ffffff;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      height: 100vh;
     }
-    .container {
-      max-width: 400px;
-      background: #161b22;
+
+    .card {
+      background-color: rgba(0, 0, 0, 0.85);
       padding: 2rem;
       border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      text-align: center;
+      box-shadow: 0 0 15px #00ff00;
     }
-    h2 { text-align: center; color: #58a6ff; }
-    label { color: #8b949e; font-weight: bold; margin-top: 1rem; display: block; }
-    input {
-      width: 100%; padding: 10px; margin: 8px 0;
-      background: #0d1117; border: 1px solid #30363d; border-radius: 6px;
-      color: #fff;
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
     }
+
     button {
-      width: 100%; padding: 10px; margin-top: 1rem;
-      background-color: #238636; border: none;
-      border-radius: 6px; color: white;
+      background-color: #00c853;
+      color: white;
       font-weight: bold;
       cursor: pointer;
     }
-    button:hover { background-color: #2ea043; }
-    #qrcode { text-align: center; margin-top: 1rem; }
-    footer {
-      margin-top: 2rem;
-      text-align: center;
-      color: #ff4500;
-      font-weight: bold;
+
+    button:hover {
+      background-color: #009624;
+    }
+
+    #qrcode {
+      margin-top: 20px;
+    }
+
+    h1 {
+      color: #00ff00;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Wallet Bosco Jones</h2>
 
-    <label>Email</label>
-    <input type="email" id="email" placeholder="usuario@email.com">
-
-    <label>Senha</label>
-    <input type="password" id="senha" placeholder="Senha">
-
-    <button onclick="registrar()">Registrar</button>
-    <button onclick="entrar()">Entrar</button>
-
-    <label>Valor (R$)</label>
-    <input type="number" id="valor" placeholder="100">
-    <button onclick="gerarQRCode()">Gerar QR Code Pix +5%</button>
-
+  <div class="card">
+    <h1>Banco Bosco Jones</h1>
+    <p>Informe o valor para gerar o pagamento com taxa de 5% embutida</p>
+    <input type="number" id="valor" placeholder="Digite o valor em R$" />
+    <button onclick="gerarPix()">Gerar QR Code Pix</button>
     <div id="qrcode"></div>
-    <p id="mensagem"></p>
   </div>
 
-  <footer>&copy; 2025 Bosco Jones | PIX automático 5% incluso</footer>
-
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDzfZvQi-oaOUWPgSOu8BtTINa_LO2ZoLc",
-      authDomain: "bosco-jones-wallet.firebaseapp.com",
-      projectId: "bosco-jones-wallet",
-      storageBucket: "bosco-jones-wallet.appspot.com",
-      messagingSenderId: "1829673164",
-      appId: "1:1829673164:web:37c947c8aafe1af72a8a69",
-      measurementId: "G-6SZH0MHRGE"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+    function gerarPayloadPix(chave, valor, nome = "Bosco Jones Bank", cidade = "SP") {
+      valor = parseFloat(valor).toFixed(2);
+      const payload =
+        `00020126360014BR.GOV.BCB.PIX0111${chave}520400005303986540${valor.length === 4 ? valor : '0' + valor.length}${valor}5802BR5913${nome}6006${cidade}62100506PixQR`;
 
-    function registrar() {
-      const email = document.getElementById("email").value;
-      const senha = document.getElementById("senha").value;
-      auth.createUserWithEmailAndPassword(email, senha)
-        .then(() => alert("Usuário registrado com sucesso!"))
-        .catch(e => alert("Erro: " + e.message));
+      const crc16 = (str) => {
+        let polinomio = 0x1021;
+        let resultado = 0xFFFF;
+        for (let i = 0; i < str.length; i++) {
+          resultado ^= (str.charCodeAt(i) << 8);
+          for (let j = 0; j < 8; j++) {
+            if ((resultado & 0x8000) !== 0) {
+              resultado = (resultado << 1) ^ polinomio;
+            } else {
+              resultado <<= 1;
+            }
+            resultado &= 0xFFFF;
+          }
+        }
+        return resultado.toString(16).toUpperCase().padStart(4, '0');
+      };
+
+      const payloadFinal = payload + "6304" + crc16(payload);
+      return payloadFinal;
     }
 
-    function entrar() {
-      const email = document.getElementById("email").value;
-      const senha = document.getElementById("senha").value;
-      auth.signInWithEmailAndPassword(email, senha)
-        .then(() => alert("Login realizado!"))
-        .catch(e => alert("Erro: " + e.message));
-    }
+    function gerarPix() {
+      const valorInput = parseFloat(document.getElementById("valor").value);
+      const chavePix = "48761013889";
 
-    function gerarQRCode() {
-      const valor = parseFloat(document.getElementById("valor").value);
-      const chavePix = "48761013889"; // Chave Pix destino
-      const valorFinal = valor * 1.05;
-      const payload = `00020126410014BR.GOV.BCB.PIX0111${chavePix}5204000053039865802BR5925BOSCO JONES TEC LTDA6009SAO PAULO62290525VALOR+5%R$${valorFinal.toFixed(2)}6304`;
-      document.getElementById("mensagem").innerText = `Total com 5% incluso: R$ ${valorFinal.toFixed(2)}`;
-      QRCode.toCanvas(document.getElementById('qrcode'), payload, function (error) {
-        if (error) console.error(error);
+      if (isNaN(valorInput) || valorInput <= 0) {
+        alert("Digite um valor válido.");
+        return;
+      }
+
+      // Aplica 5% sobre o valor (ex: se digitar R$100, o QR terá R$105)
+      const valorComTaxa = (valorInput * 1.05).toFixed(2);
+
+      const payload = gerarPayloadPix(chavePix, valorComTaxa);
+
+      QRCode.toCanvas(document.getElementById("qrcode"), payload, { width: 256 }, err => {
+        if (err) console.error("Erro ao gerar QR Code:", err);
       });
     }
   </script>
+
 </body>
 </html>
