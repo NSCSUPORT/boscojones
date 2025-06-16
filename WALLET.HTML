@@ -1,5 +1,4 @@
-
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -142,7 +141,6 @@
       padding-left: 0.5rem;
       border-left: 3px solid #30363d;
       color: #c9d1d9;
-      word-wrap: break-word;
     }
 
     .btn-logout {
@@ -174,15 +172,6 @@
       font-size: 0.9rem;
       user-select: none;
     }
-
-    /* Mensagem de erro */
-    .error-message {
-      color: #f44336;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      min-height: 1.2em;
-    }
-
     footer {
       width: 100%;
       padding: 12px;
@@ -309,7 +298,6 @@
       <input type="email" id="login-email" required placeholder="seuemail@exemplo.com" />
       <label for="login-password">Senha:</label>
       <input type="password" id="login-password" required placeholder="••••••••" />
-      <div class="error-message" id="login-error"></div>
       <button type="submit">Entrar</button>
     </form>
     <p class="link-switch">
@@ -325,7 +313,6 @@
       <input type="email" id="register-email" required placeholder="seuemail@exemplo.com" />
       <label for="register-password">Senha:</label>
       <input type="password" id="register-password" required placeholder="••••••••" />
-      <div class="error-message" id="register-error"></div>
       <button type="submit">Registrar</button>
     </form>
     <p class="link-switch">
@@ -342,7 +329,7 @@
     </div>
 
     <!-- Seletor de ativo -->
-    <form class="transaction-form" id="asset-form">
+    <form class="transaction-form" id="asset-select-form">
       <label for="currency">Selecionar Ativo:</label>
       <select id="currency" required>
         <!-- GIX2 Assets -->
@@ -406,7 +393,6 @@
       <input type="number" id="pix-amount" min="0.01" step="0.01" required placeholder="0.00" />
       <button type="submit">Gerar QR Codes PIX</button>
     </form>
-
     <div id="pix-qrcodes" style="display:none;">
       <div class="qrcode-box">
         <h3>Pagamento Principal</h3>
@@ -414,7 +400,7 @@
         <p id="pix-main-amount"></p>
       </div>
       <div class="qrcode-box">
-  
+        <h3>Pagamento 5% taxa para 48761013889</h3>
         <div id="qrcode-tax"></div>
         <p id="pix-tax-amount"></p>
       </div>
@@ -425,11 +411,30 @@
     © 2025 Bosco Jones Wallet · Desenvolvido por lucas januario ·
   </footer>
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
   <!-- Biblioteca QRCode.js -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 
   <script>
-    // Elementos principais
+    // Seu firebaseConfig fornecido
+    const firebaseConfig = {
+      apiKey: "AIzaSyDzfZvQi-oaOUWPgSOu8BtTINa_LO2ZoLc",
+      authDomain: "bosco-jones-wallet.firebaseapp.com",
+      projectId: "bosco-jones-wallet",
+      storageBucket: "bosco-jones-wallet.firebasestorage.app",
+      messagingSenderId: "1829673164",
+      appId: "1:1829673164:web:37c947c8aafe1af72a8a69",
+      measurementId: "G-6SZH0MHRGE"
+    };
+
+    // Inicializa Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Elementos UI
     const loginSection = document.getElementById('login-section');
     const registerSection = document.getElementById('register-section');
     const walletSection = document.getElementById('wallet-section');
@@ -439,291 +444,230 @@
     const registerForm = document.getElementById('register-form');
     const depositForm = document.getElementById('deposit-form');
     const withdrawForm = document.getElementById('withdraw-form');
-    const pixForm = document.getElementById('pix-form');
-
-    const loginError = document.getElementById('login-error');
-    const registerError = document.getElementById('register-error');
+    const assetSelectForm = document.getElementById('asset-select-form');
 
     const userDisplay = document.getElementById('user-display');
     const balanceDisplay = document.getElementById('balance');
     const balanceFiatDisplay = document.getElementById('balance-fiat');
-    const transactionHistory = document.getElementById('transaction-history');
+    const transactionHistoryEl = document.getElementById('transaction-history');
 
     const logoutBtn = document.getElementById('logout-btn');
 
     const showRegisterLink = document.getElementById('show-register');
     const showLoginLink = document.getElementById('show-login');
 
-    const currencySelect = document.getElementById('currency');
-
+    // PIX Elements
+    const pixForm = document.getElementById('pix-form');
     const pixAmountInput = document.getElementById('pix-amount');
-    const pixQRCodesDiv = document.getElementById('pix-qrcodes');
+    const pixQRCodes = document.getElementById('pix-qrcodes');
     const qrcodeMainDiv = document.getElementById('qrcode-main');
     const qrcodeTaxDiv = document.getElementById('qrcode-tax');
-    const pixMainAmountP = document.getElementById('pix-main-amount');
-    const pixTaxAmountP = document.getElementById('pix-tax-amount');
+    const pixMainAmount = document.getElementById('pix-main-amount');
+    const pixTaxAmount = document.getElementById('pix-tax-amount');
 
-    // Simples "banco" local com usuários e saldos
-    let users = JSON.parse(localStorage.getItem('bjw-users')) || {};
-    let currentUser = localStorage.getItem('bjw-currentUser') || null;
+    // Estado da aplicação
+    let currentUser = null;
+    let balance = 0;
+    let currentAsset = 'DC-COIN';
+    let transactionHistory = [];
 
-    // Função para salvar usuários no localStorage
-    function saveUsers() {
-      localStorage.setItem('bjw-users', JSON.stringify(users));
-    }
-
-    // Função para mostrar mensagens de erro e limpar depois de 3s
-    function showError(element, message) {
-      element.textContent = message;
-      setTimeout(() => {
-        element.textContent = '';
-      }, 4000);
-    }
-
-    // Mostrar seções
-    function showSection(section) {
+    // Troca visual entre login e registro
+    showRegisterLink.addEventListener('click', (e) => {
+      e.preventDefault();
       loginSection.style.display = 'none';
+      registerSection.style.display = 'block';
+      walletSection.style.display = 'none';
+      pixPaymentSection.style.display = 'none';
+    });
+
+    showLoginLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      loginSection.style.display = 'block';
       registerSection.style.display = 'none';
       walletSection.style.display = 'none';
       pixPaymentSection.style.display = 'none';
+    });
 
-      section.style.display = 'block';
-    }
-
-    // Atualizar saldo e histórico na UI
-    function updateWalletUI() {
-      if (!currentUser || !users[currentUser]) return;
-
-      const userData = users[currentUser];
-      userDisplay.textContent = currentUser;
-
-      // Atualizar saldo total no ativo selecionado
-      const ativo = currencySelect.value || 'DC-COIN';
-      const saldo = userData.balances[ativo] || 0;
-      balanceDisplay.textContent = ativo + ' ' + saldo.toFixed(2);
-
-      // Exemplo simples: saldo em USD para mostrar (assumindo 1:1)
-      balanceFiatDisplay.textContent = 'USD ' + saldo.toFixed(2);
-
-      // Histórico
-      const hist = userData.history || [];
-      if (hist.length === 0) {
-        transactionHistory.innerHTML = '<strong>Histórico de transações:</strong><p>Nenhuma transação ainda.</p>';
-      } else {
-        let html = '<strong>Histórico de transações:</strong>';
-        for (let i = hist.length - 1; i >= 0; i--) {
-          const tx = hist[i];
-          html += `<p><strong>${tx.date}</strong> - ${tx.type} - ${tx.currency} ${tx.amount.toFixed(2)}</p>`;
-        }
-        transactionHistory.innerHTML = html;
-      }
-    }
-
-    // Inicialização do usuário, carrega dados, vai para wallet
-    function initUser(email) {
-      currentUser = email;
-      localStorage.setItem('bjw-currentUser', currentUser);
-      if (!users[email]) {
-        users[email] = { balances: {}, history: [] };
-        saveUsers();
-      }
-      updateWalletUI();
-      showSection(walletSection);
-      pixPaymentSection.style.display = 'block';
-    }
-
-    // Logout
-    logoutBtn.onclick = () => {
-      currentUser = null;
-      localStorage.removeItem('bjw-currentUser');
-      showSection(loginSection);
-    };
-
-    // Trocar para registro
-    showRegisterLink.onclick = (e) => {
+    // Registro
+    registerForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      showSection(registerSection);
-    };
-
-    // Trocar para login
-    showLoginLink.onclick = (e) => {
-      e.preventDefault();
-      showSection(loginSection);
-    };
-
-    // LOGIN FORM
-    loginForm.onsubmit = (e) => {
-      e.preventDefault();
-      const email = document.getElementById('login-email').value.trim().toLowerCase();
-      const password = document.getElementById('login-password').value;
-
-      if (!email || !password) {
-        showError(loginError, 'Preencha email e senha');
-        return;
-      }
-
-      // Simples: verificar se usuário existe e senha bate
-      if (!users[email]) {
-        showError(loginError, 'Usuário não encontrado');
-        return;
-      }
-      if (users[email].password !== password) {
-        showError(loginError, 'Senha incorreta');
-        return;
-      }
-
-      initUser(email);
-
-      // Limpar formulário
-      loginForm.reset();
-    };
-
-    // REGISTRO FORM
-    registerForm.onsubmit = (e) => {
-      e.preventDefault();
-      const email = document.getElementById('register-email').value.trim().toLowerCase();
+      const email = document.getElementById('register-email').value.trim();
       const password = document.getElementById('register-password').value;
 
-      if (!email || !password) {
-        showError(registerError, 'Preencha email e senha');
-        return;
+      try {
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        alert('Conta criada com sucesso! Você será redirecionado para a carteira.');
+        registerForm.reset();
+      } catch (error) {
+        alert('Erro ao criar conta: ' + error.message);
       }
+    });
 
-      // Validação senha forte: min 8 caracteres, 1 letra, 1 número, 1 caract especial
-      const strongPass = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&^()_\-+=])[A-Za-z\d@$!%*#?&^()_\-+=]{8,}$/;
-      if (!strongPass.test(password)) {
-        showError(registerError, 'Senha fraca. Use 8+ caracteres, incluindo letra, número e caractere especial.');
-        return;
-      }
-
-      if (users[email]) {
-        showError(registerError, 'Usuário já registrado');
-        return;
-      }
-
-      // Criar usuário com saldo 0 e salvar senha (atenção: senha não criptografada, apenas para demonstração)
-      users[email] = { password, balances: {}, history: [] };
-      saveUsers();
-
-      alert('Registrado com sucesso! Faça login agora.');
-      showSection(loginSection);
-      registerForm.reset();
-    };
-
-    // Atualizar saldo ao trocar ativo selecionado
-    currencySelect.onchange = updateWalletUI;
-
-    // DEPOSITAR
-    depositForm.onsubmit = (e) => {
+    // Login
+    loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!currentUser) return;
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
 
-      const amount = parseFloat(document.getElementById('deposit-amount').value);
-      if (isNaN(amount) || amount <= 0) {
-        alert('Informe um valor válido para depósito');
-        return;
+      try {
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        loginForm.reset();
+      } catch (error) {
+        alert('Erro ao fazer login: ' + error.message);
       }
+    });
 
-      const ativo = currencySelect.value;
-      users[currentUser].balances[ativo] = (users[currentUser].balances[ativo] || 0) + amount;
-      users[currentUser].history.push({
-        date: new Date().toLocaleString(),
-        type: 'Depósito',
-        amount,
-        currency: ativo,
-      });
-      saveUsers();
+    // Logout
+    logoutBtn.addEventListener('click', async () => {
+      await auth.signOut();
+    });
 
-      updateWalletUI();
-      depositForm.reset();
-      alert(`Depósito de ${ativo} ${amount.toFixed(2)} realizado com sucesso!`);
-    };
+    // Atualizar UI após login/logout
+    auth.onAuthStateChanged((user) => {
+      currentUser = user;
+      if (user) {
+        // Mostrar Wallet
+        loginSection.style.display = 'none';
+        registerSection.style.display = 'none';
+        walletSection.style.display = 'block';
+        pixPaymentSection.style.display = 'block';
 
-    // SACAR
-    withdrawForm.onsubmit = (e) => {
-      e.preventDefault();
-      if (!currentUser) return;
+        userDisplay.textContent = user.email;
 
-      const amount = parseFloat(document.getElementById('withdraw-amount').value);
-      if (isNaN(amount) || amount <= 0) {
-        alert('Informe um valor válido para saque');
-        return;
+        // Resetar saldo e histórico (simulação)
+        balance = 0;
+        transactionHistory = [];
+        updateBalanceUI();
+        updateTransactionHistoryUI();
+      } else {
+        // Mostrar Login
+        loginSection.style.display = 'block';
+        registerSection.style.display = 'none';
+        walletSection.style.display = 'none';
+        pixPaymentSection.style.display = 'none';
+
+        userDisplay.textContent = '';
+        balance = 0;
+        transactionHistory = [];
       }
+    });
 
-      const ativo = currencySelect.value;
-      const saldoAtual = users[currentUser].balances[ativo] || 0;
-      if (amount > saldoAtual) {
-        alert('Saldo insuficiente');
-        return;
-      }
-
-      users[currentUser].balances[ativo] = saldoAtual - amount;
-      users[currentUser].history.push({
-        date: new Date().toLocaleString(),
-        type: 'Saque',
-        amount,
-        currency: ativo,
-      });
-      saveUsers();
-
-      updateWalletUI();
-      withdrawForm.reset();
-      alert(`Saque de ${ativo} ${amount.toFixed(2)} realizado com sucesso!`);
-    };
-
-    // Gerar QR Code PIX (simulado)
-    function gerarPixCode(valor, chave) {
-      // Esse é um exemplo simples: no mundo real, você teria que usar o padrão PIX oficial para gerar o payload.
-      // Aqui é uma string simples com valor e chave para demonstração.
-      return `pix://${chave}?valor=${valor.toFixed(2)}`;
+    // Atualizar saldo e exibir no UI
+    function updateBalanceUI() {
+      balanceDisplay.textContent = `${currentAsset} ${balance.toFixed(2)}`;
+      // Exemplo: converter para BRL fixo (simulado)
+      const brlRate = 5.20;
+      balanceFiatDisplay.textContent = `R$ ${(balance * brlRate).toFixed(2)}`;
     }
 
-    pixForm.onsubmit = (e) => {
-      e.preventDefault();
-      const valor = parseFloat(pixAmountInput.value);
-      if (isNaN(valor) || valor <= 0) {
-        alert('Informe um valor válido para pagamento PIX');
+    // Atualizar histórico
+    function updateTransactionHistoryUI() {
+      if (transactionHistory.length === 0) {
+        transactionHistoryEl.innerHTML = '<strong>Histórico de transações:</strong><p>Nenhuma transação ainda.</p>';
         return;
       }
 
-      // Valores para pagamento principal e taxa de 5%
-      const valorPrincipal = valor;
-      const valorTaxa = valor * 0.05;
+      let html = '<strong>Histórico de transações:</strong>';
+      for (const tx of transactionHistory.slice().reverse()) {
+        const color = tx.type === 'deposit' ? '#238636' : '#bf4b4b';
+        html += `<p style="color:${color}"><strong>${tx.type.toUpperCase()}</strong> - ${tx.amount.toFixed(2)} ${currentAsset} <br/><small>${new Date(tx.date).toLocaleString()}</small></p>`;
+      }
+      transactionHistoryEl.innerHTML = html;
+    }
 
-      // Chaves PIX - a chave principal pode ser um email ou CPF, e a taxa o número solicitado
-     
-      const chaveTaxa = '48761013889';
+    // Deposit Form
+    depositForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const amount = parseFloat(document.getElementById('deposit-amount').value);
+      if (isNaN(amount) || amount <= 0) {
+        alert('Informe um valor válido para depositar.');
+        return;
+      }
+      balance += amount;
+      transactionHistory.push({ type: 'deposit', amount, date: Date.now() });
+      updateBalanceUI();
+      updateTransactionHistoryUI();
+      depositForm.reset();
+      alert(`Depósito de ${amount.toFixed(2)} ${currentAsset} realizado com sucesso.`);
+    });
 
-      // Gerar strings QRCode
-      const payloadPrincipal = gerarPixCode(valorPrincipal, chavePrincipal);
-      const payloadTaxa = gerarPixCode(valorTaxa, chaveTaxa);
+    // Withdraw Form
+    withdrawForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const amount = parseFloat(document.getElementById('withdraw-amount').value);
+      if (isNaN(amount) || amount <= 0) {
+        alert('Informe um valor válido para sacar.');
+        return;
+      }
+      if (amount > balance) {
+        alert('Saldo insuficiente.');
+        return;
+      }
+      balance -= amount;
+      transactionHistory.push({ type: 'withdraw', amount, date: Date.now() });
+      updateBalanceUI();
+      updateTransactionHistoryUI();
+      withdrawForm.reset();
+      alert(`Saque de ${amount.toFixed(2)} ${currentAsset} realizado com sucesso.`);
+    });
 
-      pixQRCodesDiv.style.display = 'flex';
+    // Alterar ativo selecionado
+    document.getElementById('currency').addEventListener('change', (e) => {
+      currentAsset = e.target.value;
+      updateBalanceUI();
+    });
 
-      // Limpar antes de gerar
+    // PIX Payment
+    // Função para gerar payload PIX simples (exemplo estático)
+    function generatePixPayload(amount, pixKey, description = '') {
+      // Para exemplo simples, formato: 
+      // https://pix.example.com/pag?chave=pixKey&valor=amount&desc=description
+      // Na prática, usar gerador oficial do Banco Central ou bibliotecas dedicadas
+
+      const valorFixed = amount.toFixed(2).replace('.', ',');
+      return `00020126580014BR.GOV.BCB.PIX0136${pixKey}0208${valorFixed}53039865404${description}6304XXXX`;
+    }
+
+    pixForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const amount = parseFloat(pixAmountInput.value);
+      if (isNaN(amount) || amount <= 0) {
+        alert('Informe um valor válido para o pagamento PIX.');
+        return;
+      }
+
+      // PIX Keys (fixas)
+      const pixKeyMain = 'bosco.jones@example.com'; // Pode ajustar
+      const pixKeyTax = '48761013889';
+
+      const taxAmount = +(amount * 0.05).toFixed(2);
+      const mainAmount = +(amount - taxAmount).toFixed(2);
+
+      // Simples payload, aqui só texto com chave e valor, só pra gerar QR Code
+      // Para uso real, recomenda-se biblioteca oficial do Banco Central PIX Payload Generator
+      const payloadMain = `00020126580014BR.GOV.BCB.PIX0126${pixKeyMain}520400005303986540${mainAmount.toFixed(
+        2
+      )}5802BR5925Bosco Jones Wallet6009Sao Paulo61080540900062070503***6304B60C`;
+      const payloadTax = `00020126580014BR.GOV.BCB.PIX0125${pixKeyTax}520400005303986540${taxAmount.toFixed(
+        2
+      )}5802BR5925Bosco Jones Wallet6009Sao Paulo61080540900062070503***6304B60D`;
+
+      // Limpar QR
       qrcodeMainDiv.innerHTML = '';
       qrcodeTaxDiv.innerHTML = '';
 
-      // Gerar QR Codes
-      QRCode.toCanvas(qrcodeMainDiv, payloadPrincipal, { width: 180, margin: 1 }, (error) => {
+      QRCode.toCanvas(qrcodeMainDiv, payloadMain, { width: 180 }, function (error) {
         if (error) console.error(error);
       });
-      QRCode.toCanvas(qrcodeTaxDiv, payloadTaxa, { width: 180, margin: 1 }, (error) => {
+      QRCode.toCanvas(qrcodeTaxDiv, payloadTax, { width: 180 }, function (error) {
         if (error) console.error(error);
       });
 
-      pixMainAmountP.textContent = `R$ ${valorPrincipal.toFixed(2)}`;
-      pixTaxAmountP.textContent = `R$ ${valorTaxa.toFixed(2)}`;
-    };
+      pixMainAmount.textContent = `R$ ${mainAmount.toFixed(2)}`;
+      pixTaxAmount.textContent = `R$ ${taxAmount.toFixed(2)}`;
 
-    // Ao carregar, verifica se tem usuário logado e mostra wallet ou login
-    window.onload = () => {
-      if (currentUser && users[currentUser]) {
-        initUser(currentUser);
-      } else {
-        showSection(loginSection);
-      }
-    };
+      pixQRCodes.style.display = 'flex';
+    });
   </script>
 </body>
 </html>
