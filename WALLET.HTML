@@ -3,371 +3,404 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Carteira Simples - Tudo em 1</title>
+<title>Bosco Jones Wallet - Login, Registro & Wallet</title>
 <style>
   * {
     box-sizing: border-box;
   }
   body {
-    background: #121212;
-    color: #eee;
-    font-family: Arial, sans-serif;
     margin: 0;
-    padding: 20px;
+    background-color: #0d1117;
+    color: #c9d1d9;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
   }
-  h1 {
-    margin-bottom: 10px;
+  main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .container {
-    background: #222;
-    padding: 20px;
-    border-radius: 8px;
-    width: 320px;
+    background: #161b22;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 360px;
+    box-shadow: 0 0 15px #238636cc;
   }
-  label {
-    display: block;
-    margin-top: 10px;
-  }
-  input[type="text"], input[type="password"], input[type="number"] {
+  input[type="text"],
+  input[type="password"],
+  input[type="number"] {
     width: 100%;
-    padding: 8px;
-    margin-top: 4px;
-    border-radius: 4px;
-    border: none;
+    padding: 0.8rem;
+    margin: 0.6rem 0;
+    border-radius: 6px;
+    border: 1px solid #30363d;
+    background: #0d1117;
+    color: #c9d1d9;
     font-size: 1rem;
+    outline-offset: 2px;
+  }
+  input[type="text"]:focus,
+  input[type="password"]:focus,
+  input[type="number"]:focus {
+    border-color: #238636;
+    outline: none;
   }
   button {
-    margin-top: 15px;
-    padding: 10px;
     width: 100%;
-    font-weight: bold;
-    font-size: 1rem;
+    padding: 0.8rem;
+    margin-top: 1rem;
     border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #4caf50;
+    border-radius: 6px;
+    background: #238636;
     color: white;
-    transition: background-color 0.3s;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
   }
   button:hover {
-    background-color: #45a049;
+    background: #2ea043;
   }
-  .btn-danger {
-    background-color: #f44336;
-  }
-  .btn-danger:hover {
-    background-color: #d32f2f;
-  }
-  .hidden {
-    display: none;
-  }
-  .nav-buttons {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-  }
-  .nav-buttons button {
-    width: 48%;
-    background-color: #1a73e8;
-  }
-  .nav-buttons button:hover {
-    background-color: #155ab6;
-  }
-  .error {
-    background: #f44336;
-    padding: 8px;
-    margin-top: 10px;
-    border-radius: 4px;
-    color: white;
-    font-weight: bold;
+  h2 {
+    margin-bottom: 1rem;
+    font-weight: 700;
     text-align: center;
   }
-  .success {
-    background: #4caf50;
-    padding: 8px;
-    margin-top: 10px;
-    border-radius: 4px;
-    color: white;
-    font-weight: bold;
+  #message, #message-register {
+    margin-top: 1rem;
     text-align: center;
+    font-weight: 600;
+  }
+  .wallet-header {
+    text-align: center;
+    margin-bottom: 1rem;
   }
   .balance {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin: 15px 0;
-    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #58a6ff;
+    margin-bottom: 0.3rem;
+    font-family: 'Courier New', Courier, monospace;
   }
-  table {
-    width: 100%;
-    margin-top: 15px;
-    border-collapse: collapse;
+  .balance-fiat {
+    font-size: 1.2rem;
+    color: #8b949e;
+    font-family: 'Courier New', Courier, monospace;
+    margin-bottom: 1.5rem;
+  }
+  .btn-logout {
+    background: #da3633;
+    margin-top: 1rem;
+  }
+  .btn-logout:hover {
+    background: #f85149;
+  }
+  form.transaction-form {
+    margin-top: 1rem;
+  }
+  form.transaction-form label {
+    display: block;
+    margin-top: 0.6rem;
+    font-weight: 600;
+  }
+  form.transaction-form input[type="number"] {
+    margin-top: 0.3rem;
+  }
+  .history {
+    margin-top: 1.5rem;
+    max-height: 150px;
+    overflow-y: auto;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    padding: 0.8rem;
+    border-radius: 6px;
     font-size: 0.9rem;
+    color: #8b949e;
   }
-  th, td {
-    padding: 8px;
-    border-bottom: 1px solid #444;
-    text-align: left;
+  .history p {
+    margin: 0.2rem 0;
   }
-  th {
-    background-color: #333;
+  footer {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #f0f000, #ff4500);
+    color: #000;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-shadow: 0 0 8px #ff0000;
+    margin-top: auto;
+    animation: neon 1.5s ease-in-out infinite alternate;
+  }
+  @keyframes neon {
+    0% {
+      text-shadow: 0 0 5px #f0f000, 0 0 10px #ff4500;
+    }
+    50% {
+      text-shadow: 0 0 20px #ff4500, 0 0 30px #f0f000;
+    }
+    100% {
+      text-shadow: 0 0 5px #f0f000, 0 0 10px #ff4500;
+    }
   }
 </style>
 </head>
 <body>
 
-<h1>Carteira Simples</h1>
+<main>
+  <!-- Login form -->
+  <section id="login-section" class="container">
+    <h2>Login Bosco Jones Wallet</h2>
+    <form id="login-form">
+      <input type="text" id="username" placeholder="Usuário" required autocomplete="username" />
+      <input type="password" id="password" placeholder="Senha" required autocomplete="current-password" />
+      <button type="submit">Entrar</button>
+    </form>
+    <p style="text-align:center; margin-top:0.5rem;">
+      Não tem conta? <a href="#" id="show-register" style="color:#58a6ff; cursor:pointer;">Registrar</a>
+    </p>
+    <div id="message"></div>
+  </section>
 
-<div class="container">
+  <!-- Register form -->
+  <section id="register-section" class="container" style="display:none;">
+    <h2>Registrar Conta</h2>
+    <form id="register-form">
+      <input type="text" id="reg-username" placeholder="Usuário" required autocomplete="username" />
+      <input type="password" id="reg-password" placeholder="Senha" required autocomplete="new-password" />
+      <button type="submit">Registrar</button>
+    </form>
+    <p style="text-align:center; margin-top:0.5rem;">
+      Já tem conta? <a href="#" id="show-login" style="color:#58a6ff; cursor:pointer;">Entrar</a>
+    </p>
+    <div id="message-register"></div>
+  </section>
 
-  <div class="nav-buttons">
-    <button id="btn-show-login">Login</button>
-    <button id="btn-show-register">Registrar</button>
-  </div>
+  <!-- Wallet dashboard -->
+  <section id="wallet-section" class="container" style="display:none;">
+    <div class="wallet-header">
+      <h2>Bem-vindo, <span id="user-display"></span>!</h2>
+      <div class="balance" id="balance">B$ 0.00</div>
+      <div class="balance-fiat" id="balance-fiat">USD 0.00</div>
+    </div>
 
-  <!-- Formulário Registrar -->
-  <form id="form-register">
-    <label for="reg-username">Usuário:</label>
-    <input type="text" id="reg-username" required />
-
-    <label for="reg-password">Senha:</label>
-    <input type="password" id="reg-password" required />
-
-    <button type="submit">Registrar</button>
-  </form>
-
-  <!-- Formulário Login -->
-  <form id="form-login" class="hidden">
-    <label for="login-username">Usuário:</label>
-    <input type="text" id="login-username" required />
-
-    <label for="login-password">Senha:</label>
-    <input type="password" id="login-password" required />
-
-    <button type="submit">Login</button>
-  </form>
-
-  <!-- Área após login -->
-  <div id="wallet-section" class="hidden">
-    <div class="balance">Saldo: R$ <span id="balance-value">0.00</span></div>
-
-    <form id="form-deposit">
-      <label for="deposit-amount">Depositar valor (R$):</label>
-      <input type="number" id="deposit-amount" min="0.01" step="0.01" required />
+    <form id="deposit-form" class="transaction-form">
+      <label for="deposit-amount">Depositar valor (B$):</label>
+      <input type="number" id="deposit-amount" min="0.01" step="0.01" placeholder="Ex: 100.00" required />
       <button type="submit">Depositar</button>
     </form>
 
-    <form id="form-withdraw">
-      <label for="withdraw-amount">Sacar valor (R$):</label>
-      <input type="number" id="withdraw-amount" min="0.01" step="0.01" required />
-      <button type="submit" class="btn-danger">Sacar</button>
+    <form id="withdraw-form" class="transaction-form">
+      <label for="withdraw-amount">Sacar valor (B$):</label>
+      <input type="number" id="withdraw-amount" min="0.01" step="0.01" placeholder="Ex: 50.00" required />
+      <button type="submit">Sacar</button>
     </form>
 
-    <button id="btn-logout" class="btn-danger" style="margin-top:20px;">Sair</button>
+    <div class="history" id="transaction-history">
+      <strong>Histórico de transações:</strong>
+      <p>Nenhuma transação ainda.</p>
+    </div>
 
-    <h3>Histórico de Transações</h3>
-    <table id="transactions-table">
-      <thead>
-        <tr>
-          <th>Data/Hora</th>
-          <th>Tipo</th>
-          <th>Valor (R$)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Transações aparecerão aqui -->
-      </tbody>
-    </table>
-  </div>
+    <button id="logout-btn" class="btn-logout">Sair</button>
+  </section>
+</main>
 
-  <div id="message" class="hidden"></div>
-
-</div>
+<footer>
+  BOSCO JONES WALLET
+</footer>
 
 <script>
-  // Referências
-  const btnShowLogin = document.getElementById('btn-show-login');
-  const btnShowRegister = document.getElementById('btn-show-register');
-  const formRegister = document.getElementById('form-register');
-  const formLogin = document.getElementById('form-login');
+  // Funções para manipular usuários e dados no localStorage
+  function getUsers() {
+    return JSON.parse(localStorage.getItem('users') || '[]');
+  }
+  function saveUsers(users) {
+    localStorage.setItem('users', JSON.stringify(users));
+  }
+  function getUserData(username) {
+    return JSON.parse(localStorage.getItem('wallet-' + username) || '{"balance":0,"transactions":[]}');
+  }
+  function saveUserData(username, data) {
+    localStorage.setItem('wallet-' + username, JSON.stringify(data));
+  }
+
+  // Elementos da página
+  const loginSection = document.getElementById('login-section');
+  const registerSection = document.getElementById('register-section');
   const walletSection = document.getElementById('wallet-section');
-  const balanceValue = document.getElementById('balance-value');
-  const formDeposit = document.getElementById('form-deposit');
-  const formWithdraw = document.getElementById('form-withdraw');
-  const transactionsTableBody = document.querySelector('#transactions-table tbody');
-  const btnLogout = document.getElementById('btn-logout');
-  const messageBox = document.getElementById('message');
 
-  // Estado usuário logado
+  const loginForm = document.getElementById('login-form');
+  const registerForm = document.getElementById('register-form');
+  const message = document.getElementById('message');
+  const messageRegister = document.getElementById('message-register');
+
+  const userDisplay = document.getElementById('user-display');
+  const balance = document.getElementById('balance');
+  const balanceFiat = document.getElementById('balance-fiat');
+
+  const depositForm = document.getElementById('deposit-form');
+  const withdrawForm = document.getElementById('withdraw-form');
+  const transactionHistory = document.getElementById('transaction-history');
+
+  const logoutBtn = document.getElementById('logout-btn');
+
+  const showRegisterLink = document.getElementById('show-register');
+  const showLoginLink = document.getElementById('show-login');
+
   let currentUser = null;
+  let currentBalance = 0.0;
+  let transactionLog = [];
 
-  // Mostrar mensagem
-  function showMessage(text, type = 'error') {
-    messageBox.textContent = text;
-    messageBox.className = type === 'error' ? 'error' : 'success';
-    messageBox.classList.remove('hidden');
-    setTimeout(() => {
-      messageBox.classList.add('hidden');
-      messageBox.textContent = '';
-    }, 4000);
-  }
-
-  // Alterna entre formularios de login e registro
-  btnShowLogin.onclick = () => {
-    formRegister.classList.add('hidden');
-    formLogin.classList.remove('hidden');
-    walletSection.classList.add('hidden');
-    messageBox.classList.add('hidden');
+  // Navegação entre telas
+  showRegisterLink.onclick = e => {
+    e.preventDefault();
+    message.textContent = '';
+    messageRegister.textContent = '';
+    loginSection.style.display = 'none';
+    registerSection.style.display = 'block';
   };
-  btnShowRegister.onclick = () => {
-    formLogin.classList.add('hidden');
-    formRegister.classList.remove('hidden');
-    walletSection.classList.add('hidden');
-    messageBox.classList.add('hidden');
+  showLoginLink.onclick = e => {
+    e.preventDefault();
+    message.textContent = '';
+    messageRegister.textContent = '';
+    registerSection.style.display = 'none';
+    loginSection.style.display = 'block';
   };
 
-  // Salvar usuário no localStorage
-  function saveUser(user) {
-    localStorage.setItem('user_' + user.username, JSON.stringify(user));
-  }
-  // Buscar usuário
-  function getUser(username) {
-    const userJSON = localStorage.getItem('user_' + username);
-    if (!userJSON) return null;
-    return JSON.parse(userJSON);
-  }
-
-  // Atualizar saldo na interface
+  // Atualiza saldo na tela
   function updateBalance() {
-    if (!currentUser) return;
-    balanceValue.textContent = currentUser.balance.toFixed(2);
+    balance.textContent = \`B$ \${currentBalance.toFixed(2)}\`;
+    const usd = currentBalance * 0.5;
+    balanceFiat.textContent = \`USD \${usd.toFixed(2)}\`;
   }
 
-  // Atualizar histórico na interface
-  function updateTransactionHistory() {
-    if (!currentUser) return;
-    transactionsTableBody.innerHTML = '';
-    currentUser.transactions.forEach(tx => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${new Date(tx.date).toLocaleString()}</td>
-        <td>${tx.type}</td>
-        <td>R$ ${tx.amount.toFixed(2)}</td>
-      `;
-      transactionsTableBody.appendChild(tr);
-    });
+  // Atualiza histórico na tela
+  function updateHistory() {
+    if(transactionLog.length === 0){
+      transactionHistory.innerHTML = '<strong>Histórico de transações:</strong><p>Nenhuma transação ainda.</p>';
+      return;
+    }
+    let html = '<strong>Histórico de transações:</strong>';
+    for(let i = transactionLog.length - 1; i >= 0; i--){
+      const t = transactionLog[i];
+      html += \`<p>[\${t.date}] - <strong>\${t.type}</strong>: B$ \${t.amount.toFixed(2)}</p>\`;
+    }
+    transactionHistory.innerHTML = html;
   }
 
   // Login
-  formLogin.addEventListener('submit', e => {
+  loginForm.addEventListener('submit', e => {
     e.preventDefault();
-    const username = document.getElementById('login-username').value.trim();
-    const password = document.getElementById('login-password').value.trim();
-    const user = getUser(username);
-    if (!user || user.password !== password) {
-      showMessage('Usuário ou senha inválidos.');
+    message.textContent = '';
+    const username = loginForm.username.value.trim();
+    const password = loginForm.password.value.trim();
+    const users = getUsers();
+    const user = users.find(u => u.username === username && u.password === password);
+    if (!user) {
+      message.style.color = 'red';
+      message.textContent = 'Usuário ou senha inválidos.';
       return;
     }
-    currentUser = user;
-    formLogin.reset();
-    showWallet();
-    showMessage('Login realizado com sucesso!', 'success');
-  });
-
-  // Registrar
-  formRegister.addEventListener('submit', e => {
-    e.preventDefault();
-    const username = document.getElementById('reg-username').value.trim();
-    const password = document.getElementById('reg-password').value.trim();
-    if (getUser(username)) {
-      showMessage('Usuário já existe.');
-      return;
-    }
-    if (username === '' || password === '') {
-      showMessage('Preencha todos os campos.');
-      return;
-    }
-    const newUser = {
-      username,
-      password,
-      balance: 0,
-      transactions: []
-    };
-    saveUser(newUser);
-    showMessage('Usuário registrado com sucesso! Agora faça login.', 'success');
-    formRegister.reset();
-    formRegister.classList.add('hidden');
-    formLogin.classList.remove('hidden');
-  });
-
-  // Exibe a área da carteira
-  function showWallet() {
-    formLogin.classList.add('hidden');
-    formRegister.classList.add('hidden');
-    walletSection.classList.remove('hidden');
+    currentUser = user.username;
+    const userData = getUserData(currentUser);
+    currentBalance = userData.balance;
+    transactionLog = userData.transactions;
+    userDisplay.textContent = currentUser;
     updateBalance();
-    updateTransactionHistory();
-  }
+    updateHistory();
+    loginSection.style.display = 'none';
+    walletSection.style.display = 'block';
+    loginForm.reset();
+  });
 
-  // Deposit
-  formDeposit.addEventListener('submit', e => {
+  // Registro
+  registerForm.addEventListener('submit', e => {
+    e.preventDefault();
+    messageRegister.textContent = '';
+    const username = registerForm['reg-username'].value.trim();
+    const password = registerForm['reg-password'].value.trim();
+    if (username.length < 3) {
+      messageRegister.style.color = 'red';
+      messageRegister.textContent = 'Usuário deve ter pelo menos 3 caracteres.';
+      return;
+    }
+    if (password.length < 4) {
+      messageRegister.style.color = 'red';
+      messageRegister.textContent = 'Senha deve ter pelo menos 4 caracteres.';
+      return;
+    }
+    let users = getUsers();
+    if(users.find(u => u.username === username)){
+      messageRegister.style.color = 'red';
+      messageRegister.textContent = 'Usuário já existe.';
+      return;
+    }
+    users.push({username, password});
+    saveUsers(users);
+    messageRegister.style.color = 'green';
+    messageRegister.textContent = 'Conta criada com sucesso! Faça login.';
+    registerForm.reset();
+  });
+
+  // Depositar
+  depositForm.addEventListener('submit', e => {
     e.preventDefault();
     const amount = parseFloat(document.getElementById('deposit-amount').value);
-    if (isNaN(amount) || amount <= 0) {
-      showMessage('Valor inválido para depósito.');
+    if(isNaN(amount) || amount <= 0){
+      alert('Insira um valor válido para depósito.');
       return;
     }
-    currentUser.balance += amount;
-    currentUser.transactions.unshift({
+    currentBalance += amount;
+    transactionLog.push({
       type: 'Depósito',
-      amount,
-      date: Date.now()
+      amount: amount,
+      date: new Date().toLocaleString()
     });
-    saveUser(currentUser);
     updateBalance();
-    updateTransactionHistory();
-    formDeposit.reset();
-    showMessage('Depósito realizado com sucesso!', 'success');
+    updateHistory();
+    saveUserData(currentUser, {balance: currentBalance, transactions: transactionLog});
+    depositForm.reset();
   });
 
-  // Withdraw
-  formWithdraw.addEventListener('submit', e => {
+  // Sacar
+  withdrawForm.addEventListener('submit', e => {
     e.preventDefault();
     const amount = parseFloat(document.getElementById('withdraw-amount').value);
-    if (isNaN(amount) || amount <= 0) {
-      showMessage('Valor inválido para saque.');
+    if(isNaN(amount) || amount <= 0){
+      alert('Insira um valor válido para saque.');
       return;
     }
-    if (amount > currentUser.balance) {
-      showMessage('Saldo insuficiente para saque.');
+    if(amount > currentBalance){
+      alert('Saldo insuficiente para saque.');
       return;
     }
-    currentUser.balance -= amount;
-    currentUser.transactions.unshift({
+    currentBalance -= amount;
+    transactionLog.push({
       type: 'Saque',
-      amount,
-      date: Date.now()
+      amount: amount,
+      date: new Date().toLocaleString()
     });
-    saveUser(currentUser);
     updateBalance();
-    updateTransactionHistory();
-    formWithdraw.reset();
-    showMessage('Saque realizado com sucesso!', 'success');
+    updateHistory();
+    saveUserData(currentUser, {balance: currentBalance, transactions: transactionLog});
+    withdrawForm.reset();
   });
 
   // Logout
-  btnLogout.addEventListener('click', () => {
+  logoutBtn.addEventListener('click', () => {
+    loginSection.style.display = 'block';
+    walletSection.style.display = 'none';
     currentUser = null;
-    walletSection.classList.add('hidden');
-    formLogin.classList.remove('hidden');
-    showMessage('Você saiu.');
+    currentBalance = 0.0;
+    transactionLog = [];
+    loginForm.reset();
+    message.textContent = '';
   });
-
-  // Início: mostra login
-  btnShowLogin.click();
 </script>
 
 </body>
