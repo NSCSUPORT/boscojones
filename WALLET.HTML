@@ -2,351 +2,229 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" href="logo.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>JBX Wallet - Dark HoloFi Engine</title>
-
+  <title>JBX Wallet</title>
+  <link rel="icon" href="logo.ico" />
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-
   <style>
-    /* Dark, sóbrio, sem neon */
     body {
-      background: linear-gradient(135deg, #0a0f14 0%, #121b27 100%);
-      color: #e0e0e0; /* fonte branca fosca */
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      padding: 16px 12px;
+      background: #0d1117;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      min-height: 100vh;
+      padding: 16px;
     }
     .container {
       width: 100%;
-      max-width: 440px;
-      background: #1a2638; /* tom escuro, sem brilho */
-      padding: 24px 20px;
-      border-radius: 16px;
-      box-shadow: 0 0 10px #000000cc; /* sombra suave e escura */
-      border: 1px solid #2a3a55;
+      max-width: 420px;
+      background: #1b1f24;
+      border: 1px solid #2a2f36;
+      border-radius: 12px;
+      padding: 24px;
       box-sizing: border-box;
     }
     h1 {
-      color: #ffffff;
       text-align: center;
-      margin-bottom: 24px;
-      font-weight: 700;
-      letter-spacing: 1.2px;
-      font-size: 1.6rem;
-      user-select: none;
+      margin-bottom: 20px;
+      color: #fff;
+      font-size: 1.5rem;
     }
     label {
-      display: block;
-      font-size: 1rem;
       font-weight: 600;
-      margin-top: 14px;
-      margin-bottom: 6px;
-      color: #cfd8e6;
-      user-select: none;
+      margin-top: 12px;
+      display: block;
     }
-    input, select {
+    input {
       width: 100%;
-      padding: 10px 12px;
-      font-size: 1rem;
-      font-weight: 500;
-      border-radius: 8px;
-      border: 1px solid #2a3a55;
-      background: #122034;
-      color: #e0e0e0;
-      box-sizing: border-box;
-      transition: background-color 0.3s ease, border-color 0.3s ease;
-    }
-    input::placeholder {
-      color: #6f7e91;
-    }
-    input:focus, select:focus {
-      outline: none;
-      border-color: #5599dd;
-      background: #1c3a6b; /* tom escuro azul */
-      color: #ffffff;
-    }
-    input[type="range"] {
-      -webkit-appearance: none;
-      width: 100%;
-      height: 6px;
-      border-radius: 8px;
-      background: #2a3a55;
-      cursor: pointer;
+      padding: 10px;
       margin-top: 6px;
-    }
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #5599dd;
-      cursor: pointer;
-      margin-top: -6px;
-      transition: background-color 0.3s ease;
-    }
-    input[type="range"]:hover::-webkit-slider-thumb {
-      background: #3377bb;
-    }
-    /* Firefox */
-    input[type="range"]::-moz-range-thumb {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #5599dd;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    input[type="range"]:hover::-moz-range-thumb {
-      background: #3377bb;
-    }
-    #gem-value {
-      display: inline-block;
-      margin-left: 8px;
-      font-weight: 700;
-      color: #a0d6b4;
-      user-select: none;
-    }
-    /* Botões */
-    .btn {
-      margin-top: 20px;
-      padding: 12px;
+      border: 1px solid #444c56;
+      border-radius: 8px;
+      background: #10151b;
+      color: #fff;
       font-size: 1rem;
+    }
+    .btn {
       width: 48%;
-      border-radius: 12px;
+      padding: 12px;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      margin-top: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    #btn-deposit { background: #237a3b; color: #fff; }
+    #btn-deposit:hover { background: #195c2c; }
+    #btn-withdraw { background: #9d2c2c; color: #fff; float: right; }
+    #btn-withdraw:hover { background: #6e1f1f; }
+    #btn-generate-pix {
+      width: 100%;
+      background: #1d4c8b;
+      color: #fff;
+      margin-top: 24px;
+      padding: 12px;
+      border-radius: 10px;
       border: none;
       cursor: pointer;
-      font-weight: 700;
-      box-shadow: none; /* sem brilho */
-      transition: background-color 0.3s ease;
-      color: #f0f0f0;
-      user-select: none;
-      box-sizing: border-box;
-      letter-spacing: 0.04em;
     }
-    #btn-deposit {
-      background: #007e33; /* verde escuro */
-      float: left;
-    }
-    #btn-deposit:hover {
-      background: #005522;
-    }
-    #btn-withdraw {
-      background: #cc0000; /* vermelho escuro */
-      float: right;
-    }
-    #btn-withdraw:hover {
-      background: #880000;
-    }
-    #btn-generate-pix {
-      clear: both;
-      margin-top: 28px;
-      background: #155ab6; /* azul escuro */
-      color: #f0f0f0;
-      width: 100%;
+    #btn-generate-pix:hover { background: #163a6a; }
+    #qrcode-container {
+      margin-top: 20px;
+      padding: 16px;
+      background: #0e1217;
       border-radius: 12px;
-      font-weight: 700;
-      box-shadow: none;
-      transition: background-color 0.3s ease;
-      user-select: none;
-      letter-spacing: 0.04em;
-    }
-    #btn-generate-pix:hover {
-      background: #0f3f7a;
+      text-align: center;
     }
     #saldo-container {
+      margin-top: 20px;
       text-align: center;
-      margin-top: 36px;
-      color: #a0d6b4; /* verde fosco */
-      font-size: 1.3rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      clear: both;
-      user-select: none;
+      font-size: 1.2rem;
+      color: #a0d6b4;
+      font-weight: bold;
     }
-    #qrcode-container {
-      margin-top: 28px;
-      text-align: center;
-      background: #122034;
-      padding: 16px;
-      border-radius: 16px;
-      box-shadow: inset 0 0 8px #00000088; /* sombra interna sutil */
-      user-select: none;
-      min-height: 240px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    pre {
+      background: #0e1217;
+      padding: 10px;
+      border-radius: 8px;
+      overflow-x: auto;
+      color: #d1dbe5;
+      font-size: 0.95rem;
+      user-select: all;
     }
-    #asset-select {
-      cursor: not-allowed;
-      background: #122034;
-      border-color: #336699;
-      color: #778fbb;
-    }
-    /* Limpeza dos floats */
-    .clearfix::after {
-      content: "";
-      display: table;
-      clear: both;
-    }
-    /* Responsividade para telas pequenas */
-    @media (max-width: 400px) {
-      .btn {
-        width: 100%;
-        margin-top: 14px;
-        float: none !important;
-      }
-      #btn-generate-pix {
-        margin-top: 20px;
-      }
+    @media(max-width: 400px) {
+      .btn { width: 100%; margin-top: 10px; float: none; }
     }
   </style>
 </head>
 <body>
-
-  <div class="container" role="main" aria-label="Carteira JBX1000">
-    <h1>JBX1000 Wallet</h1>
-
-    <label for="asset-select">Ativo:</label>
-    <select id="asset-select" disabled aria-disabled="true">
-      <option value="JBX1000" selected>JBX1000</option>
-    </select>
+  <div class="container">
+    <h1>Carteira JBX1000</h1>
 
     <label for="valor">Valor (R$):</label>
-    <input
-      type="number"
-      id="valor"
-      min="1"
-      step="0.01"
-      placeholder="0,00"
-      aria-describedby="valor-help"
-      inputmode="decimal"
-      autocomplete="off"
-    />
-    <small id="valor-help" style="color:#778fbb; user-select:none;">Informe o valor para depósito, saque ou geração de PIX.</small>
+    <input type="number" id="valor" placeholder="0,00" min="1" step="0.01" />
 
-    <label for="gem">Geminiosidade (%): <span id="gem-value">0</span>%</label>
-    <input type="range" id="gem" min="0" max="10" value="0" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" aria-label="Geminiosidade" />
+    <button id="btn-deposit" class="btn">Depositar</button>
+    <button id="btn-withdraw" class="btn">Sacar</button>
 
-    <div class="clearfix">
-      <button id="btn-deposit" class="btn" type="button" aria-label="Depositar valor">Depositar</button>
-      <button id="btn-withdraw" class="btn" type="button" aria-label="Sacar valor">Sacar</button>
-    </div>
+    <button id="btn-generate-pix">Gerar Pix Copia e Cola (5% taxa)</button>
 
-    <button id="btn-generate-pix" type="button" aria-label="Gerar QR Code para pagamento Pix com 5% de taxa">Gerar QR Code Pix (5% taxa)</button>
+    <div id="saldo-container">Saldo: R$ <span id="saldo">0.00</span></div>
 
-    <div id="saldo-container" aria-live="polite" aria-atomic="true">Saldo: R$ <span id="saldo">0.00</span></div>
-
-    <div id="qrcode-container" aria-label="QR Code para pagamento Pix">
-      <span style="color:#778fbb; user-select:none;">QR Code aparecerá aqui após gerar o Pix.</span>
+    <div id="qrcode-container">
+      <span>QR Code e Copia e Cola aparecerão aqui</span>
     </div>
   </div>
 
-<script>
-  const STORAGE_KEY = 'jbx1000_wallet_saldo';
-  let saldoAtual = parseFloat(localStorage.getItem(STORAGE_KEY)) || 0;
+  <script>
+    const STORAGE_KEY = "jbx1000_wallet_saldo";
+    let saldoAtual = parseFloat(localStorage.getItem(STORAGE_KEY)) || 0;
 
-  function atualizarSaldoNaTela() {
-    document.getElementById('saldo').innerText = saldoAtual.toFixed(2);
-  }
-
-  document.getElementById('gem').addEventListener('input', e => {
-    document.getElementById('gem-value').innerText = e.target.value;
-  });
-
-  function fibonacci(n) {
-    if (n <= 1) return 1;
-    let a = 1, b = 1;
-    for (let i = 2; i <= n; i++) [a, b] = [b, a + b];
-    return b;
-  }
-
-  function validarValor() {
-    const val = parseFloat(document.getElementById('valor').value.replace(',', '.'));
-    if (isNaN(val) || val <= 0) {
-      alert('Informe um valor válido maior que zero.');
-      return null;
-    }
-    return val;
-  }
-
-  function limparValorInput() {
-    document.getElementById('valor').value = '';
-  }
-
-  function limparQRCode() {
-    const qrDiv = document.getElementById('qrcode-container');
-    qrDiv.innerHTML = '<span style="color:#778fbb; user-select:none;">QR Code aparecerá aqui após gerar o Pix.</span>';
-  }
-
-  document.getElementById('btn-deposit').onclick = () => {
-    const valor = validarValor();
-    if (valor === null) return;
-
-    const gem = parseInt(document.getElementById('gem').value);
-    const fibo = fibonacci(gem);
-    const valorFinal = valor * fibo;
-
-    saldoAtual += valorFinal;
-    localStorage.setItem(STORAGE_KEY, saldoAtual.toFixed(2));
-
-    alert(`Depósito realizado com Geminiosidade x${fibo}\nValor creditado: R$ ${valorFinal.toFixed(2)}`);
-    atualizarSaldoNaTela();
-    limparValorInput();
-    limparQRCode();
-  };
-
-  document.getElementById('btn-withdraw').onclick = () => {
-    const valor = validarValor();
-    if (valor === null) return;
-
-    if (valor > saldoAtual) {
-      alert('Saldo insuficiente para saque.');
-      return;
+    function atualizarSaldoNaTela() {
+      document.getElementById("saldo").innerText = saldoAtual.toFixed(2);
     }
 
-    saldoAtual -= valor;
-    localStorage.setItem(STORAGE_KEY, saldoAtual.toFixed(2));
-
-    alert(`Saque de R$ ${valor.toFixed(2)} solicitado com sucesso.\n⚠️ Processamento em até 24 horas.`);
-    atualizarSaldoNaTela();
-    limparValorInput();
-    limparQRCode();
-  };
-
-  document.getElementById('btn-generate-pix').onclick = () => {
-    const valor = validarValor();
-    if (valor === null) return;
-
-    const valorComTaxa = (valor * 1.05).toFixed(2);
-
-    const chavePix = "48761013889"; // seu Pix
-    const nomeRecebedor = "JBX Wallet";
-    const cidade = "SAO PAULO";
-    const identificador = "PIXJBX1000";
-
-    // Gerar texto padrão PIX QR Code no formato básico
-    // Para fins simples, uso pix:<chave>?amount=<valor>
-    // Para produção, ideal usar payload completo do PIX Copia e Cola
-    const pixPayload = `pix:${chavePix}?amount=${valorComTaxa}`;
-
-    QRCode.toCanvas(document.getElementById('qrcode-container'), pixPayload, { width: 220 }, function (error) {
-      if (error) {
-        alert('Erro ao gerar QR Code: ' + error);
-        limparQRCode();
-      } else {
-        alert(`QR Code gerado para pagamento de R$ ${valorComTaxa} (valor + 5% taxa). Use seu app Pix para pagar.`);
+    function validarValor() {
+      const val = parseFloat(document.getElementById('valor').value.replace(',', '.'));
+      if (isNaN(val) || val <= 0) {
+        alert("Informe um valor válido.");
+        return null;
       }
-    });
-  };
+      return val;
+    }
 
-  atualizarSaldoNaTela();
-  limparQRCode();
-</script>
+    function limparInputs() {
+      document.getElementById('valor').value = '';
+    }
 
+    function limparQRCode() {
+      document.getElementById('qrcode-container').innerHTML = `<span>QR Code e Copia e Cola aparecerão aqui</span>`;
+    }
+
+    document.getElementById('btn-deposit').onclick = () => {
+      const valor = validarValor();
+      if (valor === null) return;
+
+      const fatorGem = 89;
+      const valorFinal = valor * fatorGem;
+
+      saldoAtual += valorFinal;
+      localStorage.setItem(STORAGE_KEY, saldoAtual.toFixed(2));
+
+      alert(`Depósito com Geminiosidade x${fatorGem}\nTotal creditado: R$ ${valorFinal.toFixed(2)}`);
+      atualizarSaldoNaTela();
+      limparInputs();
+      limparQRCode();
+    };
+
+    document.getElementById('btn-withdraw').onclick = () => {
+      const valor = validarValor();
+      if (valor === null) return;
+
+      if (valor > saldoAtual) {
+        alert("Saldo insuficiente.");
+        return;
+      }
+
+      saldoAtual -= valor;
+      localStorage.setItem(STORAGE_KEY, saldoAtual.toFixed(2));
+
+      alert(`Saque de R$ ${valor.toFixed(2)} realizado com sucesso.`);
+      atualizarSaldoNaTela();
+      limparInputs();
+      limparQRCode();
+    };
+
+    document.getElementById('btn-generate-pix').onclick = () => {
+      const valor = validarValor();
+      if (valor === null) return;
+
+      const taxa = 1.05;
+      const valorComTaxa = (valor * taxa).toFixed(2);
+      const chavePix = "48761013889";
+      const nome = "JBX Wallet";
+      const cidade = "SAO PAULO";
+      const txid = "TXID123";
+
+      // Payload Pix Copia e Cola (simplificado)
+      const payload = `
+000201
+26580014BR.GOV.BCB.PIX0139487610138895204000053039865405${valorComTaxa}
+5802BR5912${nome}6009${cidade}62070503${txid}6304
+      `.replace(/\n/g, '').replace(/ +/g, '');
+
+      // Mostrar QR e Copia e Cola
+      const container = document.getElementById('qrcode-container');
+      container.innerHTML = '';
+      QRCode.toCanvas(payload, { width: 200 }, (err, canvas) => {
+        if (err) {
+          alert('Erro ao gerar QR Code');
+          limparQRCode();
+          return;
+        }
+        container.appendChild(canvas);
+
+        const pre = document.createElement('pre');
+        pre.innerText = payload;
+        container.appendChild(pre);
+      });
+
+      // Atualiza saldo com Geminiosidade
+      const fatorGem = 89;
+      const valorFinal = valor * fatorGem;
+      saldoAtual += valorFinal;
+      localStorage.setItem(STORAGE_KEY, saldoAtual.toFixed(2));
+      atualizarSaldoNaTela();
+
+      alert(`Pix gerado com Geminiosidade x${fatorGem}\nSaldo creditado: R$ ${valorFinal.toFixed(2)}`);
+    };
+
+    atualizarSaldoNaTela();
+    limparQRCode();
+  </script>
 </body>
 </html>
