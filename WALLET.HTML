@@ -1,12 +1,12 @@
 
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-
-  <link rel="icon" href="logo.ico">
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bosco Jones Wallet - PIX com Taxa</title>
+  <meta charset="UTF-8" /> 
+<link rel="icon" href="logo.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bosco Jones Wallet - Registro, Login e PIX</title>
   <style>
     body {
       margin: 0;
@@ -15,19 +15,29 @@
       font-family: Arial, sans-serif;
       padding: 20px;
     }
-    h1, h2 {
+
+    h1, h2, h3 {
       color: #00ff00;
     }
-    .transaction-form {
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
       background-color: #161b22;
       padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 20px;
+      border-radius: 10px;
+      display: none;
     }
+
+    .container.active {
+      display: block;
+    }
+
     label {
       display: block;
       margin-top: 10px;
     }
+
     input {
       width: 100%;
       padding: 10px;
@@ -37,6 +47,7 @@
       background-color: #0d1117;
       color: #c9d1d9;
     }
+
     button {
       margin-top: 15px;
       padding: 10px 15px;
@@ -46,23 +57,29 @@
       border-radius: 6px;
       cursor: pointer;
     }
+
     button:hover {
       background-color: #388e3c;
     }
-    #pix-qrcode, #tax-qrcode {
-      text-align: center;
-      margin-top: 20px;
+
+    .link-btn {
+      margin-top: 10px;
+      background-color: #1a73e8;
     }
+
     img.qr {
       margin: 10px;
       border: 2px solid #333;
       border-radius: 10px;
     }
+
     .history {
       background-color: #1c2128;
       padding: 15px;
       border-radius: 8px;
+      margin-top: 20px;
     }
+
     .history p {
       margin: 5px 0;
     }
@@ -70,26 +87,99 @@
 </head>
 <body>
 
-  <h1>Carteira Bosco Jones</h1>
-  <p>Transações com envio automático de 5% para PIX: <strong>48761013889</strong></p>
+  <!-- Registro -->
+  <div class="container active" id="register">
+    <h1>Registrar-se</h1>
+    <label>Nome:</label>
+    <input type="text" id="reg-name" required />
+    <label>Email (será sua chave de login):</label>
+    <input type="email" id="reg-email" required />
+    <label>Senha:</label>
+    <input type="password" id="reg-password" required />
+    <button onclick="register()">Criar Conta</button>
+    <button class="link-btn" onclick="switchToLogin()">Já tenho conta</button>
+  </div>
 
-  <form id="pix-form" class="transaction-form" autocomplete="off">
-    <label for="pix-amount">Valor da Transação (R$):</label>
-    <input type="number" id="pix-amount" min="0.01" step="0.01" required placeholder="Ex: 200.00" />
+  <!-- Login -->
+  <div class="container" id="login">
+    <h1>Login</h1>
+    <label>Email:</label>
+    <input type="email" id="login-email" required />
+    <label>Senha:</label>
+    <input type="password" id="login-password" required />
+    <button onclick="login()">Entrar</button>
+    <button class="link-btn" onclick="switchToRegister()">Criar nova conta</button>
+  </div>
 
-    <label for="pix-desc">Descrição:</label>
-    <input type="text" id="pix-desc" placeholder="Ex: Compra de plano" />
+  <!-- Carteira -->
+  <div class="container" id="wallet">
+    <h1>Carteira Bosco Jones</h1>
+    <p>Transações com envio automático de 5% para PIX: <strong>48761013889</strong></p>
 
-    <button type="button" onclick="generatePix()">Gerar QR Code PIX</button>
-  </form>
+    <form id="pix-form">
+      <label>Valor da Transação (R$):</label>
+      <input type="number" id="pix-amount" min="0.01" step="0.01" required />
+      <label>Descrição:</label>
+      <input type="text" id="pix-desc" />
+      <button type="button" onclick="generatePix()">Gerar QR Code PIX</button>
+    </form>
 
-  <div id="pix-qrcode"></div>
-  <div id="tax-qrcode"></div>
+    <div id="pix-qrcode"></div>
+    <div id="tax-qrcode"></div>
 
-  <h2>Histórico de Transações</h2>
-  <div class="history" id="history"></div>
+    <h2>Histórico de Transações</h2>
+    <div class="history" id="history"></div>
+  </div>
 
   <script>
+    function switchToLogin() {
+      document.getElementById('register').classList.remove('active');
+      document.getElementById('login').classList.add('active');
+    }
+
+    function switchToRegister() {
+      document.getElementById('login').classList.remove('active');
+      document.getElementById('register').classList.add('active');
+    }
+
+    function register() {
+      const name = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim().toLowerCase();
+      const password = document.getElementById('reg-password').value;
+
+      if (!name || !email || !password) {
+        alert("Preencha todos os campos.");
+        return;
+      }
+
+      let users = JSON.parse(localStorage.getItem('users') || '{}');
+
+      if (users[email]) {
+        alert("Este e-mail já está registrado.");
+        return;
+      }
+
+      users[email] = { name, password };
+      localStorage.setItem('users', JSON.stringify(users));
+      alert("Conta criada com sucesso! Faça login.");
+      switchToLogin();
+    }
+
+    function login() {
+      const email = document.getElementById('login-email').value.trim().toLowerCase();
+      const password = document.getElementById('login-password').value;
+
+      let users = JSON.parse(localStorage.getItem('users') || '{}');
+
+      if (!users[email] || users[email].password !== password) {
+        alert("Email ou senha inválidos.");
+        return;
+      }
+
+      document.getElementById('login').classList.remove('active');
+      document.getElementById('wallet').classList.add('active');
+    }
+
     function appendHistory(text) {
       const history = document.getElementById('history');
       const entry = document.createElement('p');
@@ -100,22 +190,20 @@
     function generatePix() {
       const amount = parseFloat(document.getElementById('pix-amount').value);
       const description = document.getElementById('pix-desc').value || "Pagamento PIX";
-      const chavePix = "suachave@pix.com"; // Substitua pela sua chave real
+      const chavePix = "suachave@pix.com"; // Chave principal
       const chaveTaxa = "48761013889";
 
       if (!amount || isNaN(amount)) {
-        alert("Informe um valor válido para a transação.");
+        alert("Informe um valor válido.");
         return;
       }
 
       const taxAmount = (amount * 0.05).toFixed(2);
       const mainAmount = (amount - taxAmount).toFixed(2);
 
-      // Criação do payload (simples, sem CRC)
       const mainPayload = `00020126580014BR.GOV.BCB.PIX0136${chavePix}520400005303986540${mainAmount}5802BR5913BOSCO JONES6009SAO PAULO62140510TXID12346304`;
       const taxPayload = `00020126580014BR.GOV.BCB.PIX013648761013889520400005303986540${taxAmount}5802BR5910PIX TAXA6009SAO PAULO62140510TXIDTAXA6304`;
 
-      // Mostra QR Code do pagamento principal
       const pixQR = document.getElementById('pix-qrcode');
       pixQR.innerHTML = "<h3>Pagamento Principal:</h3>";
       const img1 = document.createElement('img');
@@ -123,16 +211,14 @@
       img1.className = "qr";
       pixQR.appendChild(img1);
 
-      // Mostra QR Code da taxa de 5%
       const taxQR = document.getElementById('tax-qrcode');
-      taxQR.innerHTML = "<h3>Taxa Automática (5%):</h3>";
+      taxQR.innerHTML = "<h3>Taxa (5%):</h3>";
       const img2 = document.createElement('img');
       img2.src = `https://chart.googleapis.com/chart?cht=qr&chl=${encodeURIComponent(taxPayload)}&chs=200x200&chld=M|0`;
       img2.className = "qr";
       taxQR.appendChild(img2);
 
-      // Histórico
-      appendHistory(`Transação de R$ ${mainAmount} enviada com taxa de R$ ${taxAmount} para ${chaveTaxa}.`);
+      appendHistory(`Transação de R$ ${mainAmount} + taxa de R$ ${taxAmount} gerada.`);
     }
   </script>
 
