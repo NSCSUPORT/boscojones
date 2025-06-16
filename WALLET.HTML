@@ -1,125 +1,294 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wallet Dashboard - Bosco Jones FX</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Transaction History Wallet</title>
   <style>
+    /* Reset básico */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
     body {
-      margin: 0;
+      background-color: #121212;
+      color: #e0e0e0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #0a0a0a;
-      color: #ffffff;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      margin: 20px;
+      line-height: 1.5;
     }
-    header, footer {
-      padding: 1rem;
-      text-align: center;
-      background: #111;
-    }
-    header h1 {
+    h1 {
+      font-weight: 700;
       font-size: 2rem;
-      margin: 0;
-      color: #00ffcc;
+      color: #4ade80; /* verde claro */
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 0;
     }
-    main {
-      flex: 1;
-      padding: 2rem;
-      max-width: 800px;
+    p.description {
+      color: #999;
+      margin-top: 4px;
+      margin-bottom: 20px;
+      font-size: 1rem;
+    }
+
+    /* Ícones simples usando SVG inline */
+    .icon {
+      width: 28px;
+      height: 28px;
+      fill: #4ade80; /* verde */
+    }
+    .icon.sent {
+      fill: #ef4444; /* vermelho */
+    }
+    .icon.received {
+      fill: #4ade80; /* verde */
+    }
+    .icon.history {
+      fill: #888;
+    }
+
+    /* Card container */
+    .card {
+      background-color: #1f1f1f;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.8);
+      padding: 20px;
+      max-width: 900px;
       margin: auto;
     }
-    .card {
-      background: #1a1a1a;
-      border-radius: 0.5rem;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      border: 1px solid #333;
+    .card-header {
+      margin-bottom: 12px;
     }
-    .card h2 {
-      margin: 0 0 1rem;
-      color: #00ffff;
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #4ade80;
+      margin-bottom: 4px;
     }
-    .btn {
-      background-color: #00ffcc;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 5px;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s;
+    .card-description {
+      color: #aaa;
+      font-size: 0.95rem;
     }
-    .btn:hover {
-      background-color: #00ccaa;
+
+    /* Tabela */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-family: monospace, monospace;
     }
-    .insight-block {
-      margin-top: 1rem;
-      padding: 1rem;
-      background: #141414;
-      border-left: 4px solid #00ccff;
+    thead tr {
+      border-bottom: 2px solid #4ade80;
     }
-    .muted {
-      color: #888;
-      text-align: center;
-      margin-top: 2rem;
+    thead th {
+      text-align: left;
+      padding: 10px 12px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #a3f7bf;
+      user-select: none;
     }
-    footer {
-      font-size: 0.875rem;
+    thead th.amount {
+      text-align: right;
+      width: 130px;
+    }
+    thead th.type {
+      width: 60px;
+    }
+    tbody tr {
+      border-bottom: 1px solid #333;
+      transition: background-color 0.2s ease;
+    }
+    tbody tr:hover {
+      background-color: #2c2c2c;
+    }
+    tbody td {
+      padding: 10px 12px;
+      vertical-align: middle;
+      font-size: 0.9rem;
+      word-wrap: break-word;
+    }
+    tbody td.amount {
+      text-align: right;
+      font-family: monospace;
+      font-weight: 600;
+    }
+    tbody td.amount.sent {
+      color: #ef4444;
+    }
+    tbody td.amount.received {
+      color: #4ade80;
+    }
+    tbody td.date {
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: #bbb;
+    }
+    tbody td.date .time {
+      display: block;
+      font-size: 0.7rem;
       color: #666;
+    }
+    tbody td.status {
+      text-transform: capitalize;
+      font-weight: 600;
+      padding-left: 10px;
+    }
+
+    /* Badge de status */
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      user-select: none;
+    }
+    .badge.completed {
+      background-color: #4ade80;
+      color: #03350a;
+    }
+    .badge.pending {
+      background-color: #fbbf24; /* amarelo */
+      color: #4a3c00;
+    }
+    .badge.failed {
+      background-color: #ef4444;
+      color: #500000;
+    }
+    .badge.unknown {
+      background-color: #666;
+      color: #ccc;
+    }
+
+    /* Texto alternativo para vazio */
+    .no-transactions {
+      text-align: center;
+      padding: 40px 0;
+      color: #777;
+      font-style: italic;
     }
   </style>
 </head>
 <body>
+
   <header>
-    <h1>AI Financial Insights</h1>
-    <p>Powered by Bosco Jones FX + HoloFi</p>
+    <h1>
+      <!-- Ícone de histórico -->
+      <svg class="icon history" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M13 3a9 9 0 1 0 8.484 6.484l-1.683 1.683A7 7 0 1 1 20 12h-3v4l5 3 5-3v-4h-3a9 9 0 0 0-4-9Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      </svg>
+      Transaction History
+    </h1>
+    <p class="description">Review all your past financial activities in one place.</p>
   </header>
-  <main>
-    <div class="card">
-      <h2>Financial Analysis</h2>
-      <p>Click the button below to get AI-powered insights based on your (mock) transaction history.</p>
-      <button class="btn" onclick="generateInsights()">Get AI Insights</button>
+
+  <section class="card">
+    <div class="card-header">
+      <div class="card-title">All Transactions</div>
+      <div class="card-description">A detailed log of your ins and outs.</div>
     </div>
 
-    <div id="insights"></div>
+    <table>
+      <thead>
+        <tr>
+          <th class="type">Type</th>
+          <th>Date</th>
+          <th>Description</th>
+          <th class="amount">Amount</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
 
-    <div id="empty" class="muted">
-      <p>Your insights will appear here once generated.</p>
-    </div>
-  </main>
-  <footer>
-    © 2025 Bosco Jones FX — Powered by HoloFi
-  </footer>
+        <!-- Linha 1 -->
+        <tr>
+          <td>
+            <!-- Sent Icon (vermelho) -->
+            <svg class="icon sent" viewBox="0 0 24 24" aria-hidden="true" focusable="false" title="Sent">
+              <path d="M17 13v-2H7v-3l-5 4 5 4v-3h10z" fill="currentColor" />
+            </svg>
+          </td>
+          <td class="date">2024-07-28 <span class="time">10:30 AM</span></td>
+          <td>Pizza Place</td>
+          <td class="amount sent">-25.50 B$</td>
+          <td><span class="badge completed">completed</span></td>
+        </tr>
 
-  <script>
-    const insightsEl = document.getElementById("insights");
-    const emptyEl = document.getElementById("empty");
+        <!-- Linha 2 -->
+        <tr>
+          <td>
+            <!-- Received Icon (verde) -->
+            <svg class="icon received" viewBox="0 0 24 24" aria-hidden="true" focusable="false" title="Received">
+              <path d="M7 11v2h10v3l5-4-5-4v3H7z" fill="currentColor" />
+            </svg>
+          </td>
+          <td class="date">2024-07-27 <span class="time">02:15 PM</span></td>
+          <td>Salary Deposit</td>
+          <td class="amount received">+1200.00 B$</td>
+          <td><span class="badge completed">completed</span></td>
+        </tr>
 
-    function generateInsights() {
-      emptyEl.style.display = "none";
-      insightsEl.innerHTML = `
-        <div class="card">
-          <h2>📊 Spending Habits</h2>
-          <div class="insight-block">
-            You spend a lot on subscriptions and entertainment. Consider reducing redundancy.
-          </div>
-        </div>
-        <div class="card">
-          <h2>✨ Potential Savings</h2>
-          <div class="insight-block">
-            Cancel one of your streaming services and limit dining out to save ~R$250/month.
-          </div>
-        </div>
-        <div class="card">
-          <h2>⚠️ Fraud Detection</h2>
-          <div class="insight-block">
-            An unusual online transaction on 2024-07-20 may be fraudulent. Please verify.
-          </div>
-        </div>
-      `;
-    }
-  </script>
+        <!-- Linha 3 -->
+        <tr>
+          <td>
+            <!-- Sent PIX Icon (vermelho) -->
+            <svg class="icon sent" viewBox="0 0 24 24" aria-hidden="true" focusable="false" title="PIX Out">
+              <path d="M17 13v-2H7v-3l-5 4 5 4v-3h10z" fill="currentColor" />
+            </svg>
+          </td>
+          <td class="date">2024-07-26 <span class="time">09:00 AM</span></td>
+          <td>PIX to John Doe</td>
+          <td class="amount sent">-50.00 BRL</td>
+          <td><span class="badge completed">completed</span></td>
+        </tr>
+
+        <!-- Linha 4 -->
+        <tr>
+          <td>
+            <!-- Sent Icon (vermelho) -->
+            <svg class="icon sent" viewBox="0 0 24 24" aria-hidden="true" focusable="false" title="Sent">
+              <path d="M17 13v-2H7v-3l-5 4 5 4v-3h10z" fill="currentColor" />
+            </svg>
+          </td>
+          <td class="date">2024-07-25 <span class="time">05:45 PM</span></td>
+          <td>Game Purchase "Pixel Adventure"</td>
+          <td class="amount sent">-15.99 B$</td>
+          <td><span class="badge completed">completed</span></td>
+        </tr>
+
+        <!-- Linha 5 -->
+        <tr>
+          <td>
+            <!-- Received PIX Icon (verde) -->
+            <svg class="icon received" viewBox="0 0 24 24" aria-hidden="true" focusable="false" title="PIX In">
+              <path d="M7 11v2h10v3l5-4-5-4v3H7z" fill="currentColor" />
+            </svg>
+          </td>
+          <td class="date">2024-07-24 <span class="time">11:00 AM</span></td>
+          <td>PIX from Jane Smith</td>
+          <td class="amount received">+75.00 BRL</td>
+          <td><span class="badge pending">pending</span></td>
+        </tr>
+
+        <!-- Linha 6 -->
+        <tr>
+          <td>
+            <!-- Sent Icon (vermelho) -->
+            <svg class="icon sent" viewBox="0 0 24 24" aria-hidden="true" focusable="false" title="Sent">
+              <path d="M17 13v-2H7v-3l-5 4 5 4v-3h10z" fill="currentColor" />
+            </svg>
+          </td>
+          <td class="date">2024-07-23 <span class="time">07:20 PM</span></td>
+          <td>Online Subscription</td>
+          <td class="amount sent">-9.99 B$</td>
+          <td><span class="badge failed">failed</span></td>
+        </tr>
+
+      </tbody>
+    </table>
+  </section>
+
 </body>
 </html>
