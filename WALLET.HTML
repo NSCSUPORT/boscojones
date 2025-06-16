@@ -3,292 +3,235 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Transaction History Wallet</title>
+  <title>Wallet Bosco Jones - Bit Bosco</title>
   <style>
-    /* Reset básico */
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
     body {
-      background-color: #121212;
-      color: #e0e0e0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 20px;
-      line-height: 1.5;
+      margin: 0; padding: 20px;
+      background-color: #000;
+      color: #00ff00;
+      font-family: 'Press Start 2P', cursive, monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
     }
     h1 {
-      font-weight: 700;
-      font-size: 2rem;
-      color: #4ade80; /* verde claro */
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 0;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
     }
-    p.description {
-      color: #999;
-      margin-top: 4px;
-      margin-bottom: 20px;
-      font-size: 1rem;
-    }
-
-    /* Ícones simples usando SVG inline */
-    .icon {
-      width: 28px;
-      height: 28px;
-      fill: #4ade80; /* verde */
-    }
-    .icon.sent {
-      fill: #ef4444; /* vermelho */
-    }
-    .icon.received {
-      fill: #4ade80; /* verde */
-    }
-    .icon.history {
-      fill: #888;
-    }
-
-    /* Card container */
     .card {
-      background-color: #1f1f1f;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.8);
+      background: #111;
+      border: 2px solid #00ff00;
+      border-radius: 10px;
       padding: 20px;
-      max-width: 900px;
-      margin: auto;
+      width: 320px;
+      margin: 10px 0;
+      box-shadow: 0 0 15px #00ff00aa;
     }
-    .card-header {
-      margin-bottom: 12px;
-    }
-    .card-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #4ade80;
-      margin-bottom: 4px;
-    }
-    .card-description {
-      color: #aaa;
-      font-size: 0.95rem;
-    }
-
-    /* Tabela */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-      font-family: monospace, monospace;
-    }
-    thead tr {
-      border-bottom: 2px solid #4ade80;
-    }
-    thead th {
-      text-align: left;
-      padding: 10px 12px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      color: #a3f7bf;
-      user-select: none;
-    }
-    thead th.amount {
-      text-align: right;
-      width: 130px;
-    }
-    thead th.type {
-      width: 60px;
-    }
-    tbody tr {
-      border-bottom: 1px solid #333;
-      transition: background-color 0.2s ease;
-    }
-    tbody tr:hover {
-      background-color: #2c2c2c;
-    }
-    tbody td {
-      padding: 10px 12px;
-      vertical-align: middle;
-      font-size: 0.9rem;
-      word-wrap: break-word;
-    }
-    tbody td.amount {
-      text-align: right;
-      font-family: monospace;
-      font-weight: 600;
-    }
-    tbody td.amount.sent {
-      color: #ef4444;
-    }
-    tbody td.amount.received {
-      color: #4ade80;
-    }
-    tbody td.date {
-      font-family: monospace;
-      font-size: 0.85rem;
-      color: #bbb;
-    }
-    tbody td.date .time {
-      display: block;
-      font-size: 0.7rem;
-      color: #666;
-    }
-    tbody td.status {
-      text-transform: capitalize;
-      font-weight: 600;
-      padding-left: 10px;
-    }
-
-    /* Badge de status */
-    .badge {
-      display: inline-block;
-      padding: 3px 8px;
-      border-radius: 12px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      user-select: none;
-    }
-    .badge.completed {
-      background-color: #4ade80;
-      color: #03350a;
-    }
-    .badge.pending {
-      background-color: #fbbf24; /* amarelo */
-      color: #4a3c00;
-    }
-    .badge.failed {
-      background-color: #ef4444;
-      color: #500000;
-    }
-    .badge.unknown {
-      background-color: #666;
-      color: #ccc;
-    }
-
-    /* Texto alternativo para vazio */
-    .no-transactions {
+    .balance {
+      font-size: 2.4rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+      letter-spacing: 2px;
       text-align: center;
-      padding: 40px 0;
-      color: #777;
-      font-style: italic;
+    }
+    .fiat {
+      text-align: center;
+      font-size: 1rem;
+      color: #66ff66;
+      margin-bottom: 20px;
+    }
+    label {
+      font-size: 0.75rem;
+      display: block;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      font-family: monospace;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+    }
+    input {
+      background: #222;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+    }
+    button {
+      background: #00ff00;
+      color: #000;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #33ff33;
+    }
+    .tx-history {
+      max-height: 150px;
+      overflow-y: auto;
+      font-size: 0.75rem;
+      border-top: 1px solid #00ff00;
+      padding-top: 10px;
+    }
+    .tx {
+      border-bottom: 1px dotted #00ff00;
+      padding: 6px 0;
+    }
+    .tx span {
+      display: inline-block;
+      width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: top;
+    }
+    .tx-type-send {
+      color: #ff4444;
+    }
+    .tx-type-receive {
+      color: #44ff44;
+    }
+    .qr-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    /* Responsive */
+    @media (max-width: 400px) {
+      .card {
+        width: 95vw;
+      }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>
-      <!-- Ícone de histórico -->
-      <svg class="icon history" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path d="M13 3a9 9 0 1 0 8.484 6.484l-1.683 1.683A7 7 0 1 1 20 12h-3v4l5 3 5-3v-4h-3a9 9 0 0 0-4-9Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-      </svg>
-      Transaction History
-    </h1>
-    <p class="description">Review all your past financial activities in one place.</p>
-  </header>
+  <h1>Bit Bosco Wallet</h1>
 
-  <section class="card">
-    <div class="card-header">
-      <div class="card-title">All Transactions</div>
-      <div class="card-description">A detailed log of your ins and outs.</div>
+  <div class="card" id="balanceCard">
+    <div class="balance" id="balanceDisplay">B$ 1,337.42</div>
+    <div class="fiat" id="fiatDisplay">≈ USD 420.69</div>
+  </div>
+
+  <div class="card">
+    <form id="sendForm">
+      <label for="sendAddress">Enviar para endereço</label>
+      <input type="text" id="sendAddress" placeholder="Endereço Bosco Jones" required />
+      
+      <label for="sendAmount">Quantidade (B$)</label>
+      <input type="number" id="sendAmount" placeholder="Ex: 50" min="0.01" step="0.01" required />
+      
+      <button type="submit">Enviar BoscoCoin</button>
+    </form>
+  </div>
+
+  <div class="card" id="receiveCard">
+    <label>Seu endereço para receber</label>
+    <div class="qr-container" id="qrCode"></div>
+    <input type="text" id="receiveAddress" readonly />
+  </div>
+
+  <div class="card">
+    <h2>Histórico de Transações</h2>
+    <div class="tx-history" id="txHistory">
+      <!-- Transações aparecem aqui -->
     </div>
+  </div>
 
-    <table>
-      <thead>
-        <tr>
-          <th class="type">Type</th>
-          <th>Date</th>
-          <th>Description</th>
-          <th class="amount">Amount</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script>
+  // Estado inicial
+  let balance = 1337.42;
+  const exchangeRate = 0.314; // 1 BoscoCoin = 0.314 USD (exemplo)
+  const address = "BOSCOJONES1234567890ABCDEF";
 
-        <!-- Linha 1 -->
-        <tr>
-          <td>
-            <!-- Sent Icon (vermelho) -->
-            <svg class="icon sent" viewBox="0 0 24 24" aria-hidden="true" focusable="false" title="Sent">
-              <path d="M17 13v-2H7v-3l-5 4 5 4v-3h10z" fill="currentColor" />
-            </svg>
-          </td>
-          <td class="date">2024-07-28 <span class="time">10:30 AM</span></td>
-          <td>Pizza Place</td>
-          <td class="amount sent">-25.50 B$</td>
-          <td><span class="badge completed">completed</span></td>
-        </tr>
+  // Histórico simulado
+  let transactions = [
+    { type: 'receive', amount: 500, from: 'AMIGO12345', date: new Date(Date.now() - 86400000) }, // ontem
+    { type: 'send', amount: 100, to: 'LOJA98765', date: new Date(Date.now() - 43200000) } // 12h atrás
+  ];
 
-        <!-- Linha 2 -->
-        <tr>
-          <td>
-            <!-- Received Icon (verde) -->
-            <svg class="icon received" viewBox="0 0 24 24" aria-hidden="true" focusable="false" title="Received">
-              <path d="M7 11v2h10v3l5-4-5-4v3H7z" fill="currentColor" />
-            </svg>
-          </td>
-          <td class="date">2024-07-27 <span class="time">02:15 PM</span></td>
-          <td>Salary Deposit</td>
-          <td class="amount received">+1200.00 B$</td>
-          <td><span class="badge completed">completed</span></td>
-        </tr>
+  // Elementos DOM
+  const balanceDisplay = document.getElementById('balanceDisplay');
+  const fiatDisplay = document.getElementById('fiatDisplay');
+  const receiveAddressInput = document.getElementById('receiveAddress');
+  const txHistoryDiv = document.getElementById('txHistory');
+  const sendForm = document.getElementById('sendForm');
+  const qrCodeContainer = document.getElementById('qrCode');
 
-        <!-- Linha 3 -->
-        <tr>
-          <td>
-            <!-- Sent PIX Icon (vermelho) -->
-            <svg class="icon sent" viewBox="0 0 24 24" aria-hidden="true" focusable="false" title="PIX Out">
-              <path d="M17 13v-2H7v-3l-5 4 5 4v-3h10z" fill="currentColor" />
-            </svg>
-          </td>
-          <td class="date">2024-07-26 <span class="time">09:00 AM</span></td>
-          <td>PIX to John Doe</td>
-          <td class="amount sent">-50.00 BRL</td>
-          <td><span class="badge completed">completed</span></td>
-        </tr>
+  // Funções
+  function updateBalance() {
+    balanceDisplay.textContent = `B$ ${balance.toFixed(2)}`;
+    fiatDisplay.textContent = `≈ USD ${(balance * exchangeRate).toFixed(2)}`;
+  }
 
-        <!-- Linha 4 -->
-        <tr>
-          <td>
-            <!-- Sent Icon (vermelho) -->
-            <svg class="icon sent" viewBox="0 0 24 24" aria-hidden="true" focusable="false" title="Sent">
-              <path d="M17 13v-2H7v-3l-5 4 5 4v-3h10z" fill="currentColor" />
-            </svg>
-          </td>
-          <td class="date">2024-07-25 <span class="time">05:45 PM</span></td>
-          <td>Game Purchase "Pixel Adventure"</td>
-          <td class="amount sent">-15.99 B$</td>
-          <td><span class="badge completed">completed</span></td>
-        </tr>
+  function renderTransactions() {
+    txHistoryDiv.innerHTML = '';
+    transactions.slice().reverse().forEach(tx => {
+      const div = document.createElement('div');
+      div.classList.add('tx');
+      div.classList.add(tx.type === 'send' ? 'tx-type-send' : 'tx-type-receive');
 
-        <!-- Linha 5 -->
-        <tr>
-          <td>
-            <!-- Received PIX Icon (verde) -->
-            <svg class="icon received" viewBox="0 0 24 24" aria-hidden="true" focusable="false" title="PIX In">
-              <path d="M7 11v2h10v3l5-4-5-4v3H7z" fill="currentColor" />
-            </svg>
-          </td>
-          <td class="date">2024-07-24 <span class="time">11:00 AM</span></td>
-          <td>PIX from Jane Smith</td>
-          <td class="amount received">+75.00 BRL</td>
-          <td><span class="badge pending">pending</span></td>
-        </tr>
+      const dateStr = tx.date.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
 
-        <!-- Linha 6 -->
-        <tr>
-          <td>
-            <!-- Sent Icon (vermelho) -->
-            <svg class="icon sent" viewBox="0 0 24 24" aria-hidden="true" focusable="false" title="Sent">
-              <path d="M17 13v-2H7v-3l-5 4 5 4v-3h10z" fill="currentColor" />
-            </svg>
-          </td>
-          <td class="date">2024-07-23 <span class="time">07:20 PM</span></td>
-          <td>Online Subscription</td>
-          <td class="amount sent">-9.99 B$</td>
-          <td><span class="badge failed">failed</span></td>
-        </tr>
+      if(tx.type === 'send') {
+        div.innerHTML = `<span>Enviado</span> <span>${tx.amount.toFixed(2)} B$</span> <span>Para: ${tx.to}</span> <span>${dateStr}</span>`;
+      } else {
+        div.innerHTML = `<span>Recebido</span> <span>${tx.amount.toFixed(2)} B$</span> <span>De: ${tx.from}</span> <span>${dateStr}</span>`;
+      }
 
-      </tbody>
-    </table>
-  </section>
+      txHistoryDiv.appendChild(div);
+    });
+  }
+
+  function generateQRCode() {
+    qrCodeContainer.innerHTML = '';
+    QRCode.toCanvas(address, { width: 150, color: { dark: '#00ff00', light: '#0000' } }, function (error, canvas) {
+      if (error) console.error(error);
+      else qrCodeContainer.appendChild(canvas);
+    });
+  }
+
+  // Setup inicial
+  receiveAddressInput.value = address;
+  updateBalance();
+  renderTransactions();
+  generateQRCode();
+
+  // Envio (simulado)
+  sendForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const toAddress = document.getElementById('sendAddress').value.trim();
+    const amount = parseFloat(document.getElementById('sendAmount').value);
+
+    if (!toAddress) {
+      alert('Informe um endereço válido.');
+      return;
+    }
+    if (amount <= 0 || amount > balance) {
+      alert('Saldo insuficiente ou valor inválido.');
+      return;
+    }
+
+    // Atualizar saldo e histórico
+    balance -= amount;
+    transactions.push({ type: 'send', amount, to: toAddress, date: new Date() });
+    updateBalance();
+    renderTransactions();
+
+    // Limpar formulário
+    sendForm.reset();
+    alert(`Enviado ${amount.toFixed(2)} B$ para ${toAddress} com sucesso!`);
+  });
+</script>
 
 </body>
 </html>
