@@ -5,126 +5,197 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bosco Jones Wallet - Login, Registro & Wallet</title>
   <style>
+    /* Reset básico */
     * {
       box-sizing: border-box;
     }
+
     body {
       margin: 0;
-      background-color: #000000; /* fundo preto */
-      color: #a8ff60; /* verde claro */
-      font-family: 'Segoe UI', sans-serif;
-    }
-    .container {
-      max-width: 500px;
-      margin: 40px auto;
-      padding: 20px;
-      background-color: #021100; /* verde escuro quase preto */
-      border-radius: 10px;
-      box-shadow: 0 0 15px #0f0; /* sombra verde */
-    }
-    h2 {
-      text-align: center;
-      color: #7fff00; /* verde limão */
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-      color: #a8ff60;
-    }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 5px;
-      border: 1px solid #4caf50;
-      background-color: #002200;
-      color: #a8ff60;
-      font-weight: bold;
-      transition: border-color 0.3s ease;
-    }
-    input:focus, select:focus {
-      border-color: #7fff00;
-      outline: none;
-      background-color: #003300;
-    }
-    button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 10px;
-      background-color: #238636; /* verde padrão */
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
-      box-shadow: 0 0 8px #32cd32;
-    }
-    button:hover {
-      background-color: #2ea043; /* verde hover */
-      box-shadow: 0 0 12px #7fff00;
-    }
-    .wallet-header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .balance, .balance-fiat {
-      font-size: 1.2em;
-      margin-top: 10px;
-      color: #90ee90; /* verde claro */
-    }
-    .history {
-      margin-top: 30px;
-      background-color: #001a00;
-      padding: 10px;
-      border: 1px solid #004d00;
-      border-radius: 8px;
-      color: #a8ff60;
-      max-height: 150px;
-      overflow-y: auto;
-    }
-    .btn-logout {
-      background-color: #b22222; /* vermelho escuro */
-      margin-top: 30px;
-      box-shadow: 0 0 10px #b22222;
-    }
-    .btn-logout:hover {
-      background-color: #8b1a1a;
-      box-shadow: 0 0 15px #ff0000;
+      background-color: #0d1117; /* GitHub Dark background */
+      color: #c9d1d9; /* texto claro padrão GitHub */
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
-    /* FOOTER NEON STYLE */
+    .container {
+      max-width: 480px;
+      margin: 3rem auto;
+      padding: 2rem 2.5rem;
+      background-color: #161b22; /* painel escuro GitHub */
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(1, 4, 9, 0.6);
+      transition: box-shadow 0.3s ease;
+    }
+    .container:hover {
+      box-shadow: 0 12px 30px rgba(1, 4, 9, 0.9);
+    }
+
+    h2 {
+      margin-bottom: 1.5rem;
+      color: #c9d1d9;
+      font-weight: 600;
+      font-size: 1.8rem;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #8b949e;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.6rem 1rem;
+      margin-bottom: 1.3rem;
+      background-color: #0d1117;
+      border: 1.5px solid #30363d;
+      border-radius: 6px;
+      color: #c9d1d9;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    input::placeholder {
+      color: #484f58;
+    }
+
+    input:focus, select:focus {
+      border-color: #58a6ff;
+      outline: none;
+      box-shadow: 0 0 8px #58a6ff44;
+      background-color: #161b22;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background-color: #238636; /* verde GitHub padrão */
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.25s ease;
+      box-shadow: 0 4px 10px rgba(35, 134, 54, 0.6);
+    }
+    button:hover {
+      background-color: #2ea043;
+      box-shadow: 0 6px 14px rgba(46, 160, 67, 0.75);
+    }
+
+    .wallet-header {
+      text-align: center;
+      margin-bottom: 1.8rem;
+    }
+
+    .wallet-header h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #58a6ff;
+      margin-bottom: 0.2rem;
+    }
+
+    .balance, .balance-fiat {
+      font-size: 1.2rem;
+      color: #8b949e;
+      font-weight: 500;
+    }
+
+    .history {
+      margin-top: 2rem;
+      background-color: #0d1117;
+      padding: 1rem 1.2rem;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      color: #8b949e;
+      max-height: 180px;
+      overflow-y: auto;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .history strong {
+      display: block;
+      margin-bottom: 0.8rem;
+      color: #58a6ff;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .history p {
+      margin: 0.4rem 0;
+      padding-left: 0.5rem;
+      border-left: 3px solid #30363d;
+      color: #c9d1d9;
+    }
+
+    .btn-logout {
+      background-color: #bf4b4b;
+      margin-top: 2.5rem;
+      box-shadow: 0 4px 12px rgba(191, 75, 75, 0.7);
+      font-weight: 600;
+    }
+    .btn-logout:hover {
+      background-color: #d15757;
+      box-shadow: 0 6px 14px rgba(209, 87, 87, 0.85);
+    }
+
+    a {
+      color: #58a6ff;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    a:hover {
+      color: #1f6feb;
+      text-decoration: underline;
+    }
+
+    /* Links "Criar conta" e "Já tem conta?" centralizados */
+    p.link-switch {
+      text-align: center;
+      margin-top: 1.3rem;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+
+    /* Footer simples no estilo GitHub dark */
     footer {
       width: 100%;
-      padding: 1rem;
-      background: linear-gradient(45deg, #f5f500, #ff4500);
-      color: #000;
+      padding: 1rem 0;
+      background-color: #161b22;
+      color: #8b949e;
       text-align: center;
-      font-size: 1rem;
-      font-weight: bold;
-      letter-spacing: 0.08rem;
-      text-shadow: 0 0 0.4rem #ff0000;
-      animation: neon 1.5s ease-in-out infinite alternate;
-      border-top: 2px solid #333;
-      margin-top: 2rem;
-      transition: all 0.3s ease-in-out;
+      font-size: 0.9rem;
+      border-top: 1px solid #30363d;
+      user-select: none;
     }
-    @keyframes neon {
-      from {
-        text-shadow:
-          0 0 5px #ff4500,
-          0 0 10px #ff4500,
-          0 0 20px #ff4500,
-          0 0 40px #ff4500,
-          0 0 80px #ff4500;
+    footer a {
+      color: #58a6ff;
+      font-weight: 600;
+    }
+    footer a:hover {
+      color: #1f6feb;
+      text-decoration: underline;
+    }
+
+    /* Responsividade */
+    @media (max-width: 520px) {
+      .container {
+        margin: 2rem 1rem;
+        padding: 1.5rem 1.5rem;
       }
-      to {
-        text-shadow:
-          0 0 10px #f5f500,
-          0 0 20px #f5f500,
-          0 0 30px #f5f500,
-          0 0 50px #f5f500,
-          0 0 100px #f5f500;
+      button {
+        font-size: 1rem;
       }
     }
   </style>
@@ -134,30 +205,30 @@
   <!-- LOGIN FORM -->
   <section id="login-section" class="container">
     <h2>Login Bosco Wallet</h2>
-    <form id="login-form">
+    <form id="login-form" autocomplete="off">
       <label for="login-email">Email:</label>
-      <input type="email" id="login-email" required />
+      <input type="email" id="login-email" required placeholder="seuemail@exemplo.com" />
       <label for="login-password">Senha:</label>
-      <input type="password" id="login-password" required />
+      <input type="password" id="login-password" required placeholder="••••••••" />
       <button type="submit">Entrar</button>
     </form>
-    <p style="text-align:center; margin-top:15px;">
-      <a href="#" id="show-register" style="color:#7fff00;">Criar uma conta</a>
+    <p class="link-switch">
+      <a href="#" id="show-register">Criar uma conta</a>
     </p>
   </section>
 
   <!-- REGISTRO FORM -->
   <section id="register-section" class="container" style="display:none;">
     <h2>Registrar</h2>
-    <form id="register-form">
+    <form id="register-form" autocomplete="off">
       <label for="register-email">Email:</label>
-      <input type="email" id="register-email" required />
+      <input type="email" id="register-email" required placeholder="seuemail@exemplo.com" />
       <label for="register-password">Senha:</label>
-      <input type="password" id="register-password" required />
+      <input type="password" id="register-password" required placeholder="••••••••" />
       <button type="submit">Registrar</button>
     </form>
-    <p style="text-align:center; margin-top:15px;">
-      <a href="#" id="show-login" style="color:#7fff00;">Já tem conta? Entrar</a>
+    <p class="link-switch">
+      <a href="#" id="show-login">Já tem conta? Entrar</a>
     </p>
   </section>
 
@@ -205,15 +276,15 @@
     </form>
 
     <!-- Formulários -->
-    <form id="deposit-form" class="transaction-form">
+    <form id="deposit-form" class="transaction-form" autocomplete="off">
       <label for="deposit-amount">Depositar valor (USD):</label>
-      <input type="number" id="deposit-amount" min="0.01" step="0.01" required />
+      <input type="number" id="deposit-amount" min="0.01" step="0.01" required placeholder="0.00" />
       <button type="submit">Depositar</button>
     </form>
 
-    <form id="withdraw-form" class="transaction-form">
+    <form id="withdraw-form" class="transaction-form" autocomplete="off">
       <label for="withdraw-amount">Sacar valor (USD):</label>
-      <input type="number" id="withdraw-amount" min="0.01" step="0.01" required />
+      <input type="number" id="withdraw-amount" min="0.01" step="0.01" required placeholder="0.00" />
       <button type="submit">Sacar</button>
     </form>
 
@@ -240,11 +311,13 @@
     let balance = 0;
 
     // Navegação entre login e registro
-    document.getElementById('show-register').onclick = () => {
+    document.getElementById('show-register').onclick = (e) => {
+      e.preventDefault();
       loginSection.style.display = 'none';
       registerSection.style.display = 'block';
     };
-    document.getElementById('show-login').onclick = () => {
+    document.getElementById('show-login').onclick = (e) => {
+      e.preventDefault();
       registerSection.style.display = 'none';
       loginSection.style.display = 'block';
     };
@@ -264,6 +337,7 @@
       userDisplay.innerText = email;
       loginSection.style.display = 'none';
       walletSection.style.display = 'block';
+      updateBalance();
     };
 
     // Logout
@@ -289,6 +363,7 @@
         balance += amount;
         updateBalance();
         appendHistory(`+ USD ${amount.toFixed(2)} depositado em ${currency}`);
+        e.target.reset();
       }
     };
 
@@ -301,6 +376,7 @@
         balance -= amount;
         updateBalance();
         appendHistory(`- USD ${amount.toFixed(2)} sacado de ${currency}`);
+        e.target.reset();
       } else {
         alert("Saldo insuficiente.");
       }
@@ -311,12 +387,13 @@
       const p = document.createElement('p');
       p.innerText = text;
       historyDisplay.appendChild(p);
+      historyDisplay.scrollTop = historyDisplay.scrollHeight;
     }
   </script>
 
   <footer>
     © 2025 Bosco Jones Wallet · Desenvolvido com 💻 por HoloFi · 
-    <a href="https://github.com/lucasnascimento" target="_blank" style="color:#000; text-decoration:none;">GitHub</a>
+    <a href="https://github.com/lucasnascimento" target="_blank" rel="noopener noreferrer">GitHub</a>
   </footer>
 </body>
 </html>
