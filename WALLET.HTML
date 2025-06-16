@@ -2,10 +2,9 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />    
-<link rel="icon" href="logo.ico">
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>JBX1000  CRC-16</title>
   <link rel="icon" href="logo.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JBX1000 CRC-16</title>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <style>
     * { box-sizing: border-box; }
@@ -61,11 +60,15 @@
     #qrcode-container {
       margin-top: 18px; padding: 14px; background-color: #11161c;
       border-radius: 10px; text-align: center; min-height: 220px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: #666;
+      word-break: break-word;
     }
     pre {
       background: #000000cc; padding: 8px; margin-top: 8px; border-radius: 6px;
-      color: #ffffffcc; font-size: 0.85rem; user-select: all; white-space: pre-wrap; word-break: break-word;
+      color: #00ffb2; font-size: 0.85rem; user-select: all; white-space: pre-wrap; word-break: break-word;
       max-height: 100px; overflow-y: auto;
+      width: 100%;
     }
     #history-container {
       margin-top: 28px; max-height: 220px; overflow-y: auto;
@@ -80,11 +83,11 @@
       display: flex; justify-content: space-between; align-items: center;
     }
     .transaction:last-child { border-bottom: none; }
-    .transaction .type { font-weight: 700; text-transform: capitalize; font-size: 0.85rem; }
+    .transaction .type { font-weight: 700; text-transform: capitalize; font-size: 0.85rem; flex: 1; }
     .transaction.deposit { color: #28a745; }
     .transaction.withdraw { color: #dc3545; }
     .transaction.pix { color: #007bff; }
-    .transaction .date { font-size: 0.7rem; color: #aaa; font-style: italic; }
+    .transaction .date { font-size: 0.7rem; color: #aaa; font-style: italic; flex: 1.5; text-align: right; }
     @media (max-width: 420px) {
       .btn { width: 100%; margin-top: 8px; float: none; }
       #btn-withdraw { float: none; }
@@ -97,7 +100,7 @@
   <div class="container">
     <h1>Carteira JBX1000 CRC</h1>
     <label for="valor">Valor (R$):</label>
-    <input type="number" id="valor" placeholder="0,00" min="1" step="0.01" />
+    <input type="number" id="valor" placeholder="0,00" min="0.01" step="0.01" />
     <button id="btn-deposit" class="btn">Depositar</button>
     <button id="btn-withdraw" class="btn">Sacar</button>
     <button id="btn-generate-pix">Gerar Pix Copia e Cola (5% taxa)</button>
@@ -109,10 +112,9 @@
       <div id="history-list">Nenhuma transação registrada.</div>
     </div>
   </div>
-<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
 <script>
 (() => {
-  // Select elements
   const valorInput = document.getElementById("valor");
   const btnDeposit = document.getElementById("btn-deposit");
   const btnWithdraw = document.getElementById("btn-withdraw");
@@ -122,30 +124,28 @@
   const qrcodeContainer = document.getElementById("qrcode-container");
   const historyList = document.getElementById("history-list");
 
-  // Keys for localStorage
   const STORAGE_SALDO = "jbx1000_saldo";
   const STORAGE_HISTORY = "jbx1000_history";
 
-  // Inicializa saldo e histórico
+  // Inicializa saldo e histórico do localStorage
   let saldo = parseFloat(localStorage.getItem(STORAGE_SALDO)) || 0;
   let history = JSON.parse(localStorage.getItem(STORAGE_HISTORY)) || [];
 
-  // Atualiza saldo na tela
+  // Atualiza saldo no HTML
   function atualizarSaldo() {
     saldoSpan.textContent = `R$ ${saldo.toFixed(2).replace('.', ',')}`;
   }
 
-  // Atualiza histórico na tela
+  // Atualiza histórico no HTML
   function atualizarHistorico() {
     if (history.length === 0) {
-      historyList.innerHTML = "Nenhuma transação registrada.";
+      historyList.textContent = "Nenhuma transação registrada.";
       return;
     }
-    historyList.innerHTML = ""; // limpa
+    historyList.innerHTML = "";
     history.forEach(tx => {
       const div = document.createElement("div");
-      div.classList.add("transaction");
-      div.classList.add(tx.type);
+      div.className = `transaction ${tx.type}`;
       div.innerHTML = `
         <div class="type">${tx.type}</div>
         <div>R$ ${tx.amount.toFixed(2).replace('.', ',')}</div>
@@ -155,26 +155,25 @@
     });
   }
 
-  // Salva estado no localStorage
+  // Salva saldo e histórico no localStorage
   function salvarEstado() {
     localStorage.setItem(STORAGE_SALDO, saldo.toFixed(2));
     localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
   }
 
-  // Função para adicionar transação no histórico
+  // Adiciona transação no histórico
   function addTransacao(type, amount) {
     history.unshift({
       type,
       amount,
       date: new Date().toISOString()
     });
-    if(history.length > 50) history.pop(); // limita a 50 transações
+    if (history.length > 50) history.pop();
     salvarEstado();
     atualizarHistorico();
   }
 
-  // CRC-16 (CCITT-FALSE) implementação para usar no Pix
-  // Polinômio: 0x1021, init: 0xFFFF
+  // CRC-16 CCITT-FALSE para Pix
   function crc16ccitt(str) {
     let crc = 0xFFFF;
     for (let i = 0; i < str.length; i++) {
@@ -188,58 +187,48 @@
     return crc.toString(16).toUpperCase().padStart(4, '0');
   }
 
-  // Formata valor para Pix (no formato centavos sem vírgula)
+  // Formata valor para Pix (em centavos, sem vírgula)
   function formatPixValue(val) {
-    return (val * 100).toFixed(0);
+    return Math.round(val * 100).toString();
   }
 
-  // Gera payload Pix para código QR e copia e cola
-  // Fonte simplificada para Pix Copia e Cola
-  function gerarPayloadPix(valorComTaxa) {
-    // Valores fixos do payload Pix básico
-    // Chave pix (numero do seu pix): 48761013889
-    // Nome do recebedor: "Lucas Januário"
-    // Cidade: "SAO PAULO"
-    // Txid: uso fixed "JBX1000"
-    // Não usa valor dinâmico, então adiciono valor recebido
+  // Cria campo do payload Pix
+  function campo(id, valor) {
+    const len = valor.length.toString().padStart(2, '0');
+    return id + len + valor;
+  }
 
-    function campo(id, valor) {
-      const len = valor.length.toString().padStart(2, '0');
-      return id + len + valor;
-    }
-
+  // Gera payload Pix para QR Code e copia e cola
+  function gerarPayloadPix(valorEmCentavos) {
     const chavePix = "48761013889";
     const nome = "Lucas Januário".toUpperCase();
     const cidade = "SAO PAULO".toUpperCase();
     const txid = "JBX1000";
 
-    // Montar o payload
     let payload = "";
-
-    // Payload Format Indicator - 00
+    // Payload Format Indicator
     payload += campo("00", "01");
-    // Merchant Account Information - 26
-    let merchantAccountInfo = "";
-    merchantAccountInfo += campo("00", "br.gov.bcb.pix");  // GUI
-    merchantAccountInfo += campo("01", chavePix);          // Chave Pix
-    payload += campo("26", merchantAccountInfo);
-    // Merchant Category Code - 52 - 0000 = sem categoria especifica
+    // Merchant Account Information
+    let merchantInfo = "";
+    merchantInfo += campo("00", "br.gov.bcb.pix");
+    merchantInfo += campo("01", chavePix);
+    payload += campo("26", merchantInfo);
+    // Merchant Category Code
     payload += campo("52", "0000");
-    // Transaction Currency - 53 - 986 = BRL
+    // Transaction Currency (BRL)
     payload += campo("53", "986");
-    // Transaction Amount - 54
-    payload += campo("54", valorComTaxa);
-    // Country Code - 58
+    // Transaction Amount
+    payload += campo("54", valorEmCentavos ? (parseFloat(valorEmCentavos)/100).toFixed(2) : "");
+    // Country Code
     payload += campo("58", "BR");
-    // Merchant Name - 59 (até 25 caracteres)
+    // Merchant Name
     payload += campo("59", nome.substring(0,25));
-    // Merchant City - 60 (até 15 caracteres)
+    // Merchant City
     payload += campo("60", cidade.substring(0,15));
-    // Additional Data Field Template - 62
-    let additionalData = campo("05", txid);
-    payload += campo("62", additionalData);
-
-    // CRC (com o campo 63 e 4 digitos)
+    // Additional Data Field Template
+    let addData = campo("05", txid);
+    payload += campo("62", addData);
+    // CRC16 Checksum
     let payloadCrc = payload + "6304";
     let crc = crc16ccitt(payloadCrc);
     payload += campo("63", crc);
@@ -247,12 +236,12 @@
     return payload;
   }
 
-  // Função para limpar QR e texto Pix
+  // Limpa container do Pix
   function limparPix() {
     qrcodeContainer.innerHTML = "<span>QR Code e Copia e Cola aparecerão aqui</span>";
   }
 
-  // Função para atualizar o QR Code e copia e cola Pix
+  // Gera QR Code e copia e cola Pix
   function gerarPix() {
     limparPix();
 
@@ -261,19 +250,21 @@
       return;
     }
 
-    // Valor com taxa 5%
-    const valorComTaxa = (saldo * 1.05).toFixed(2).replace('.', ','); // para exibir
-    const valorPixCents = formatPixValue(saldo * 1.05);
+    // Valor + 5% taxa
+    const valorComTaxa = saldo * 1.05;
 
-    // Gerar payload Pix para o valor com taxa
+    // valor em centavos (string)
+    const valorPixCents = formatPixValue(valorComTaxa);
+
+    // Gera payload
     const payload = gerarPayloadPix(valorPixCents);
 
-    // Mostrar texto copia e cola
+    // Mostra payload texto
     const pre = document.createElement("pre");
     pre.textContent = payload;
     qrcodeContainer.appendChild(pre);
 
-    // Gerar QR Code com payload
+    // Gera QR Code no canvas
     QRCode.toCanvas(payload, { width: 200, color: {dark: '#00ffb2', light: '#11161c'} }, (error, canvas) => {
       if (error) {
         console.error(error);
@@ -284,9 +275,9 @@
     });
   }
 
-  // Eventos botões depositar e sacar
+  // Evento Deposit
   btnDeposit.addEventListener("click", () => {
-    const valor = parseFloat(valorInput.value.replace(',', '.'));
+    let valor = parseFloat(valorInput.value.replace(',', '.'));
     if (isNaN(valor) || valor <= 0) {
       alert("Informe um valor válido para depósito.");
       return;
@@ -298,8 +289,9 @@
     limparPix();
   });
 
+  // Evento Withdraw
   btnWithdraw.addEventListener("click", () => {
-    const valor = parseFloat(valorInput.value.replace(',', '.'));
+    let valor = parseFloat(valorInput.value.replace(',', '.'));
     if (isNaN(valor) || valor <= 0) {
       alert("Informe um valor válido para saque.");
       return;
@@ -315,10 +307,12 @@
     limparPix();
   });
 
+  // Evento gerar Pix
   btnGeneratePix.addEventListener("click", () => {
     gerarPix();
   });
 
+  // Evento limpar histórico
   btnClearHistory.addEventListener("click", () => {
     if (confirm("Tem certeza que deseja limpar o histórico de transações?")) {
       history = [];
@@ -328,12 +322,11 @@
     }
   });
 
-  // Inicializa interface
+  // Inicializa UI
   atualizarSaldo();
   atualizarHistorico();
   limparPix();
 })();
-
 </script>
 </body>
 </html>
