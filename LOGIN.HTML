@@ -61,16 +61,23 @@
     }
 
     footer {
-      white-space: pre-wrap;
-      word-break: break-word;
-      color: #fff;
-      background-color: #111;
-      padding: 10px;
-      border-radius: 8px;
-      margin-top: 30px;
-      font-size: 0.9rem;
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(45deg, #f0f000, #ff4500);
+      color: #000;
       text-align: center;
-      max-width: 300px;
+      font-size: 1rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-shadow: 0 0 8px #ff0000;
+      margin-top: 20px;
+      animation: neon 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes neon {
+      0% { text-shadow: 0 0 5px #ff0000; }
+      50% { text-shadow: 0 0 20px #ff4500; }
+      100% { text-shadow: 0 0 5px #ff0000; }
     }
   </style>
 </head>
@@ -86,9 +93,7 @@
   <div id="authMessage" class="message"></div>
 
   <footer>
-    © 2025 Bosco Jones Wallet<br />
-    Desenvolvido  por Lucas Januário<br />
-    HoloFi Quantum
+    © 2025 Bosco Jones Wallet — Desenvolvido por Lucas Januário — HoloFi Quantum
   </footer>
 
   <!-- Firebase SDK -->
