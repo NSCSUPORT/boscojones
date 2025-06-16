@@ -14,54 +14,108 @@
       background: linear-gradient(135deg, #0a0f14 0%, #121b27 100%);
       color: #e0e0e0; /* fonte branca fosca */
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      padding: 20px;
+      padding: 16px 12px;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .container {
-      max-width: 480px;
-      margin: auto;
+      width: 100%;
+      max-width: 440px;
       background: #1a2638; /* tom escuro, sem brilho */
-      padding: 32px;
+      padding: 24px 20px;
       border-radius: 16px;
-      box-shadow: 0 0 10px #00000088; /* sombra suave e escura */
+      box-shadow: 0 0 10px #000000cc; /* sombra suave e escura */
       border: 1px solid #2a3a55;
+      box-sizing: border-box;
     }
     h1 {
       color: #ffffff;
       text-align: center;
-      margin-bottom: 32px;
+      margin-bottom: 24px;
       font-weight: 700;
-      letter-spacing: 1.5px;
-      /* removido text-shadow */
+      letter-spacing: 1.2px;
+      font-size: 1.6rem;
+      user-select: none;
     }
-    label, input, select {
+    label {
       display: block;
-      width: 100%;
-      margin-top: 14px;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 600;
-      color: #e0e0e0;
-      /* removido text-shadow */
+      margin-top: 14px;
+      margin-bottom: 6px;
+      color: #cfd8e6;
+      user-select: none;
     }
     input, select {
-      padding: 12px;
-      background: #122034; /* fundo escuro */
-      border: 1px solid #2a3a55;
-      border-radius: 8px;
-      color: #e0e0e0;
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 1rem;
       font-weight: 500;
-      transition: border-color 0.3s ease, background-color 0.3s ease;
+      border-radius: 8px;
+      border: 1px solid #2a3a55;
+      background: #122034;
+      color: #e0e0e0;
+      box-sizing: border-box;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+    input::placeholder {
+      color: #6f7e91;
     }
     input:focus, select:focus {
       outline: none;
       border-color: #5599dd;
       background: #1c3a6b; /* tom escuro azul */
       color: #ffffff;
-      box-shadow: none; /* sem brilho */
     }
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 8px;
+      background: #2a3a55;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #5599dd;
+      cursor: pointer;
+      margin-top: -6px;
+      transition: background-color 0.3s ease;
+    }
+    input[type="range"]:hover::-webkit-slider-thumb {
+      background: #3377bb;
+    }
+    /* Firefox */
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #5599dd;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    input[type="range"]:hover::-moz-range-thumb {
+      background: #3377bb;
+    }
+    #gem-value {
+      display: inline-block;
+      margin-left: 8px;
+      font-weight: 700;
+      color: #a0d6b4;
+      user-select: none;
+    }
+    /* Botões */
     .btn {
-      margin-top: 28px;
-      padding: 14px;
-      font-size: 1.1rem;
+      margin-top: 20px;
+      padding: 12px;
+      font-size: 1rem;
       width: 48%;
       border-radius: 12px;
       border: none;
@@ -70,6 +124,9 @@
       box-shadow: none; /* sem brilho */
       transition: background-color 0.3s ease;
       color: #f0f0f0;
+      user-select: none;
+      box-sizing: border-box;
+      letter-spacing: 0.04em;
     }
     #btn-deposit {
       background: #007e33; /* verde escuro */
@@ -86,7 +143,8 @@
       background: #880000;
     }
     #btn-generate-pix {
-      margin-top: 32px;
+      clear: both;
+      margin-top: 28px;
       background: #155ab6; /* azul escuro */
       color: #f0f0f0;
       width: 100%;
@@ -94,29 +152,34 @@
       font-weight: 700;
       box-shadow: none;
       transition: background-color 0.3s ease;
-      clear: both;
+      user-select: none;
+      letter-spacing: 0.04em;
     }
     #btn-generate-pix:hover {
       background: #0f3f7a;
     }
     #saldo-container {
       text-align: center;
-      margin-top: 40px;
+      margin-top: 36px;
       color: #a0d6b4; /* verde fosco */
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       font-weight: 700;
       letter-spacing: 1px;
       clear: both;
-      /* removido text-shadow */
+      user-select: none;
     }
     #qrcode-container {
-      margin-top: 32px;
+      margin-top: 28px;
       text-align: center;
       background: #122034;
-      padding: 20px;
+      padding: 16px;
       border-radius: 16px;
-      box-shadow: inset 0 0 6px #00000066; /* sombra interna sutil */
+      box-shadow: inset 0 0 8px #00000088; /* sombra interna sutil */
       user-select: none;
+      min-height: 240px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     #asset-select {
       cursor: not-allowed;
@@ -124,34 +187,65 @@
       border-color: #336699;
       color: #778fbb;
     }
+    /* Limpeza dos floats */
+    .clearfix::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+    /* Responsividade para telas pequenas */
+    @media (max-width: 400px) {
+      .btn {
+        width: 100%;
+        margin-top: 14px;
+        float: none !important;
+      }
+      #btn-generate-pix {
+        margin-top: 20px;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <h1>JBX1000 Wallet</h1>
+  <div class="container" role="main" aria-label="Carteira JBX1000">
+    <h1>JBX1000 Wallet</h1>
 
-  <div class="container">
-    <label>Ativo:</label>
-    <select id="asset-select" disabled>
+    <label for="asset-select">Ativo:</label>
+    <select id="asset-select" disabled aria-disabled="true">
       <option value="JBX1000" selected>JBX1000</option>
     </select>
 
-    <label>Valor (R$):</label>
-    <input type="number" id="valor" min="1" step="0.01" placeholder="0.00" />
+    <label for="valor">Valor (R$):</label>
+    <input
+      type="number"
+      id="valor"
+      min="1"
+      step="0.01"
+      placeholder="0,00"
+      aria-describedby="valor-help"
+      inputmode="decimal"
+      autocomplete="off"
+    />
+    <small id="valor-help" style="color:#778fbb; user-select:none;">Informe o valor para depósito, saque ou geração de PIX.</small>
 
-    <label>Geminiosidade (%): <span id="gem-value">0</span>%</label>
-    <input type="range" id="gem" min="0" max="10" value="0" />
+    <label for="gem">Geminiosidade (%): <span id="gem-value">0</span>%</label>
+    <input type="range" id="gem" min="0" max="10" value="0" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" aria-label="Geminiosidade" />
 
-    <button id="btn-deposit" class="btn">Depositar</button>
-    <button id="btn-withdraw" class="btn">Sacar</button>
+    <div class="clearfix">
+      <button id="btn-deposit" class="btn" type="button" aria-label="Depositar valor">Depositar</button>
+      <button id="btn-withdraw" class="btn" type="button" aria-label="Sacar valor">Sacar</button>
+    </div>
 
-    <button id="btn-generate-pix">Gerar QR Code Pix (5% taxa)</button>
+    <button id="btn-generate-pix" type="button" aria-label="Gerar QR Code para pagamento Pix com 5% de taxa">Gerar QR Code Pix (5% taxa)</button>
 
-    <div id="saldo-container">Saldo: R$ <span id="saldo">0.00</span></div>
-    <div id="qrcode-container"></div>
+    <div id="saldo-container" aria-live="polite" aria-atomic="true">Saldo: R$ <span id="saldo">0.00</span></div>
+
+    <div id="qrcode-container" aria-label="QR Code para pagamento Pix">
+      <span style="color:#778fbb; user-select:none;">QR Code aparecerá aqui após gerar o Pix.</span>
+    </div>
   </div>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <script>
   const STORAGE_KEY = 'jbx1000_wallet_saldo';
   let saldoAtual = parseFloat(localStorage.getItem(STORAGE_KEY)) || 0;
@@ -172,7 +266,7 @@
   }
 
   function validarValor() {
-    const val = parseFloat(document.getElementById('valor').value);
+    const val = parseFloat(document.getElementById('valor').value.replace(',', '.'));
     if (isNaN(val) || val <= 0) {
       alert('Informe um valor válido maior que zero.');
       return null;
@@ -185,7 +279,8 @@
   }
 
   function limparQRCode() {
-    document.getElementById('qrcode-container').innerHTML = '';
+    const qrDiv = document.getElementById('qrcode-container');
+    qrDiv.innerHTML = '<span style="color:#778fbb; user-select:none;">QR Code aparecerá aqui após gerar o Pix.</span>';
   }
 
   document.getElementById('btn-deposit').onclick = () => {
@@ -234,12 +329,23 @@
     const cidade = "SAO PAULO";
     const identificador = "PIXJBX1000";
 
-    QRCode.toCanvas(document.getElementById('qrcode-container'), `pix:${chavePix}?amount=${valorComTaxa}`, { width: 220 }, function (error) {
-      if (error) alert('Erro ao gerar QR Code: ' + error);
+    // Gerar texto padrão PIX QR Code no formato básico
+    // Para fins simples, uso pix:<chave>?amount=<valor>
+    // Para produção, ideal usar payload completo do PIX Copia e Cola
+    const pixPayload = `pix:${chavePix}?amount=${valorComTaxa}`;
+
+    QRCode.toCanvas(document.getElementById('qrcode-container'), pixPayload, { width: 220 }, function (error) {
+      if (error) {
+        alert('Erro ao gerar QR Code: ' + error);
+        limparQRCode();
+      } else {
+        alert(`QR Code gerado para pagamento de R$ ${valorComTaxa} (valor + 5% taxa). Use seu app Pix para pagar.`);
+      }
     });
   };
 
   atualizarSaldoNaTela();
+  limparQRCode();
 </script>
 
 </body>
