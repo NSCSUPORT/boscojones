@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login - Bosco Jones Wallet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="logo.ico" />
+  <style>
+    body {
+      background-color: #0d1117;
+      color: #c9d1d9;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      color: #58a6ff;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    input, button {
+      width: 100%;
+      max-width: 300px;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 1rem;
+      border-radius: 4px;
+      border: none;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #357a38;
+    }
+
+    .message {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 4px;
+      background-color: #222;
+      color: #0f0;
+      text-align: center;
+      max-width: 300px;
+    }
+
+    .error {
+      background-color: #800000;
+      color: #f88;
+    }
+
+    footer {
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #fff;
+      background-color: #111;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 30px;
+      font-size: 0.9rem;
+      text-align: center;
+      max-width: 300px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Entrar na Wallet</h1>
+
+  <input type="email" id="email" placeholder="Email" />
+  <input type="password" id="password" placeholder="Senha" />
+  <button id="btnLogin">Entrar</button>
+  <button id="btnRegister">Registrar</button>
+
+  <div id="authMessage" class="message"></div>
+
+  <footer>
+    © 2025 Bosco Jones Wallet<br />
+    Desenvolvido  por Lucas Januário<br />
+    HoloFi Quantum
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDzfZvQi-oaOUWPgSOu8BtTINa_LO2ZoLc",
+      authDomain: "bosco-jones-wallet.firebaseapp.com",
+      projectId: "bosco-jones-wallet",
+      storageBucket: "bosco-jones-wallet.firebasestorage.app",
+      messagingSenderId: "1829673164",
+      appId: "1:1829673164:web:37c947c8aafe1af72a8a69",
+      measurementId: "G-6SZH0MHRGE"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const authMessage = document.getElementById('authMessage');
+    const btnLogin = document.getElementById('btnLogin');
+    const btnRegister = document.getElementById('btnRegister');
+
+    function showMessage(msg, isError = false) {
+      authMessage.textContent = msg;
+      authMessage.className = isError ? "message error" : "message";
+    }
+
+    btnLogin.onclick = async () => {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+      if (!email || !password) {
+        showMessage("Preencha todos os campos.", true);
+        return;
+      }
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+        showMessage("Login realizado com sucesso!");
+        setTimeout(() => window.location.href = "wallet.html", 1000);
+      } catch (e) {
+        showMessage("Erro ao entrar: " + e.message, true);
+      }
+    };
+
+    btnRegister.onclick = async () => {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+      if (!email || !password) {
+        showMessage("Preencha todos os campos.", true);
+        return;
+      }
+      try {
+        await auth.createUserWithEmailAndPassword(email, password);
+        showMessage("Registro realizado com sucesso!");
+        setTimeout(() => window.location.href = "wallet.html", 1000);
+      } catch (e) {
+        showMessage("Erro ao registrar: " + e.message, true);
+      }
+    };
+  </script>
+</body>
+</html>
