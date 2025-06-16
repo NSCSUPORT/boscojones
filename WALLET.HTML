@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <link rel="icon" href="logo.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JBX Wallet</title>
 
-  <link rel="icon" href="logo.ico">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>JBX Wallet </title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
   <style>
     body { background: #0d1117; color: #c9d1d9; font-family: Arial, sans-serif; padding: 20px; }
     .container { max-width: 480px; margin: auto; background: #161b22; padding: 24px; border-radius: 12px; }
-    h1 { color: #58a6ff; text-align: center; }
+    h1 { color: #58a6ff; text-align: center; margin-bottom: 24px; }
     label, input, select { display: block; width: 100%; margin-top: 12px; font-size: 1rem; }
     input, select { padding: 10px; background: #0d1117; color: #c9d1d9; border: 1px solid #30363d; border-radius: 6px; }
     .btn { margin-top: 24px; padding: 12px; font-size: 1rem; width: 48%; border-radius: 8px; border: none; cursor: pointer; }
     #btn-deposit { background: linear-gradient(135deg, #4caf50, #81c784); color: #fff; float: left; }
     #btn-withdraw { background: linear-gradient(135deg, #f44336, #e57373); color: #fff; float: right; }
-    #saldo-container { text-align: center; margin-top: 20px; color: #00ff88; font-size: 1.2rem; }
-    #qrcode-container { clear: both; margin-top: 30px; text-align: center; }
+    #saldo-container { text-align: center; margin-top: 20px; color: #00ff88; font-size: 1.2rem; clear: both; }
+    #qrcode-container { margin-top: 30px; text-align: center; }
+    #btn-generate-pix { margin-top: 12px; background: #1A73E8; color: white; width: 100%; }
   </style>
 </head>
 <body>
@@ -38,61 +41,157 @@
     <button id="btn-deposit" class="btn">Depositar</button>
     <button id="btn-withdraw" class="btn">Sacar</button>
 
+    <button id="btn-generate-pix">Gerar QR Code Pix (5% taxa)</button>
+
     <div id="saldo-container">Saldo: R$ <span id="saldo">0.00</span></div>
     <div id="qrcode-container"></div>
   </div>
 
 <script>
-const supabase = supabase.createClient(
-  'https://latvlqeqjtlawtzmgzjb.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxhdHZscWVxanRsYXd0em1nempiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAxMDcxNTIsImV4cCI6MjA2NTY4MzE1Mn0.jxtGxvyP9k9NpldwD8KP7km0fOipftHXMic3dqJEIaY'
-);
+  // Inicializa supabase corretamente
+  const supabaseUrl = 'https://latvlqeqjtlawtzmgzjb.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxhdHZscWVxanRsYXd0em1nempiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAxMDcxNTIsImV4cCI6MjA2NTY4MzE1Mn0.jxtGxvyP9k9NpldwD8KP7km0fOipftHXMic3dqJEIaY';
+  const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-let userEmail = "teste@jbwallet.com"; // substitua por auth real se desejar
-let saldoAtual = 0;
+  let userEmail = "teste@jbwallet.com"; // Troque para email real autenticado
+  let saldoAtual = 0;
 
-async function carregarSaldo() {
-  const { data, error } = await supabase.from('wallets').select('*').eq('email', userEmail).single();
-  if (data) {
-    saldoAtual = data.saldo || 0;
-    document.getElementById('saldo').innerText = saldoAtual.toFixed(2);
-  } else {
-    await supabase.from('wallets').insert([{ email: userEmail, saldo: 0 }]);
+  // Atualiza o texto da Geminiosidade
+  document.getElementById('gem').addEventListener('input', e => {
+    document.getElementById('gem-value').innerText = e.target.value;
+  });
+
+  // Função Fibonacci para Geminiosidade
+  function fibonacci(n) {
+    if (n <= 1) return 1;
+    let a = 1, b = 1;
+    for (let i = 2; i <= n; i++) [a, b] = [b, a + b];
+    return b;
   }
-}
 
-function fibonacci(n) {
-  if (n <= 1) return 1;
-  let a = 1, b = 1;
-  for (let i = 2; i <= n; i++) [a, b] = [b, a + b];
-  return b;
-}
+  // Carrega saldo ou cria registro caso não exista
+  async function carregarSaldo() {
+    const { data, error } = await supabase.from('wallets').select('*').eq('email', userEmail).single();
+    if (error && error.code === 'PGRST116') {
+      // Registro não encontrado, cria
+      await supabase.from('wallets').insert([{ email: userEmail, saldo: 0 }]);
+      saldoAtual = 0;
+    } else if (data) {
+      saldoAtual = data.saldo || 0;
+    }
+    atualizarSaldoNaTela();
+  }
 
-document.getElementById('gem').addEventListener('input', e => {
-  document.getElementById('gem-value').innerText = e.target.value;
-});
+  // Atualiza display saldo
+  function atualizarSaldoNaTela() {
+    document.getElementById('saldo').innerText = saldoAtual.toFixed(2);
+  }
 
-document.getElementById('btn-deposit').onclick = async () => {
-  const valor = parseFloat(document.getElementById('valor').value);
-  const gem = parseInt(document.getElementById('gem').value);
-  const fibo = fibonacci(gem);
-  const final = valor * fibo;
-  saldoAtual += final;
-  await supabase.from('wallets').update({ saldo: saldoAtual }).eq('email', userEmail);
-  alert(`Deposito feito com Geminiosidade x${fibo}\nValor creditado: R$ ${final.toFixed(2)}`);
-  document.getElementById('saldo').innerText = saldoAtual.toFixed(2);
-};
+  // Validação simples valor positivo
+  function validarValor() {
+    const val = parseFloat(document.getElementById('valor').value);
+    if (isNaN(val) || val <= 0) {
+      alert('Informe um valor válido maior que zero.');
+      return null;
+    }
+    return val;
+  }
 
-document.getElementById('btn-withdraw').onclick = async () => {
-  const valor = parseFloat(document.getElementById('valor').value);
-  if (valor > saldoAtual) return alert('Saldo insuficiente');
-  saldoAtual -= valor;
-  await supabase.from('wallets').update({ saldo: saldoAtual }).eq('email', userEmail);
-  alert(`Saque de R$ ${valor.toFixed(2)} solicitado com sucesso.\n\n⚠️ Será processado em até 24 horas.`);
-  document.getElementById('saldo').innerText = saldoAtual.toFixed(2);
-};
+  // Depositar com multiplicador Fibonacci da Geminiosidade
+  document.getElementById('btn-deposit').onclick = async () => {
+    const valor = validarValor();
+    if (valor === null) return;
 
-carregarSaldo();
+    const gem = parseInt(document.getElementById('gem').value);
+    const fibo = fibonacci(gem);
+    const valorFinal = valor * fibo;
+
+    saldoAtual += valorFinal;
+    const { error } = await supabase.from('wallets').update({ saldo: saldoAtual }).eq('email', userEmail);
+    if (error) {
+      alert('Erro ao atualizar saldo: ' + error.message);
+      return;
+    }
+    alert(`Depósito realizado com Geminiosidade x${fibo}\nValor creditado: R$ ${valorFinal.toFixed(2)}`);
+    atualizarSaldoNaTela();
+    limparValorInput();
+    limparQRCode();
+  };
+
+  // Sacar valor
+  document.getElementById('btn-withdraw').onclick = async () => {
+    const valor = validarValor();
+    if (valor === null) return;
+
+    if (valor > saldoAtual) {
+      alert('Saldo insuficiente para saque.');
+      return;
+    }
+
+    saldoAtual -= valor;
+    const { error } = await supabase.from('wallets').update({ saldo: saldoAtual }).eq('email', userEmail);
+    if (error) {
+      alert('Erro ao atualizar saldo: ' + error.message);
+      return;
+    }
+    alert(`Saque de R$ ${valor.toFixed(2)} solicitado com sucesso.\n⚠️ Processamento em até 24 horas.`);
+    atualizarSaldoNaTela();
+    limparValorInput();
+    limparQRCode();
+  };
+
+  // Limpa o input valor
+  function limparValorInput() {
+    document.getElementById('valor').value = '';
+  }
+
+  // Limpa QR Code
+  function limparQRCode() {
+    document.getElementById('qrcode-container').innerHTML = '';
+  }
+
+  // Gerar QR Code Pix com taxa 5%
+  document.getElementById('btn-generate-pix').onclick = () => {
+    const valor = validarValor();
+    if (valor === null) return;
+
+    const valorComTaxa = (valor * 1.05).toFixed(2);
+
+    // Dados básicos para o Pix (copie seu QR Pix ou adapte para seu formato)
+    // Exemplo simples com Pix Copia e Cola, substitua conforme necessidade:
+    const chavePix = "48761013889"; // seu Pix
+    const nomeRecebedor = "JBX Wallet";
+    const cidade = "SAO PAULO";
+    const identificador = "PIXJBX500";
+
+    // Formato simples do Pix Copia e Cola:
+    // Apenas um exemplo simplificado, para produção use gerador oficial do Banco Central
+    const payloadPix = `
+000201
+26580014BR.GOV.BCB.PIX
+01
+12${chavePix.length}${chavePix}
+0208${nomeRecebedor.length}${nomeRecebedor}
+0306${cidade.length}${cidade}
+52040000
+5303986
+540${valorComTaxa.length}${valorComTaxa}
+5802BR
+5908${nomeRecebedor}
+6008${cidade}
+62070503${identificador}
+6304`;
+
+    // Para QRCode gerar hash CRC16 no final
+    // Aqui só geramos o QR code com valor para teste
+    QRCode.toCanvas(document.getElementById('qrcode-container'), `pix:${chavePix}?amount=${valorComTaxa}`, { width: 200 }, function (error) {
+      if (error) alert('Erro ao gerar QR Code: ' + error);
+    });
+  };
+
+  // Inicializa saldo ao abrir página
+  carregarSaldo();
 </script>
+
 </body>
 </html>
