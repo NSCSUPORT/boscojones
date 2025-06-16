@@ -6,7 +6,6 @@
   <title>Wallet JBX</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    /* Global Dark HoloFi Theme */
     body {
       background-color: #0d1117;
       color: #c9d1d9;
@@ -21,10 +20,6 @@
       padding: 24px;
       border-radius: 12px;
       box-shadow: 0 4px 16px rgba(0,0,0,0.6);
-      transition: transform 0.3s;
-    }
-    .container:hover {
-      transform: translateY(-4px);
     }
     h1 {
       color: #58a6ff;
@@ -47,17 +42,11 @@
       background-color: #0d1117;
       color: #c9d1d9;
       border: 1px solid #30363d;
-      appearance: none;
-      transition: border-color 0.3s;
     }
-    select:focus, input[type="number"]:focus, input[type="range"]:focus {
+    select:focus, input:focus {
       outline: none;
       border-color: #58a6ff;
     }
-    input::placeholder {
-      color: #8b949e;
-    }
-    /* Dark Geminiosidade Slider */
     input[type="range"]::-webkit-slider-runnable-track {
       height: 6px;
       background: #30363d;
@@ -70,40 +59,16 @@
       background: #4caf50;
       border-radius: 50%;
       margin-top: -7px;
-      cursor: pointer;
       border: 2px solid #357a38;
-      transition: background 0.3s, transform 0.2s;
     }
     input[type="range"]:hover::-webkit-slider-thumb {
       background: #357a38;
-      transform: scale(1.1);
-    }
-    input[type="range"]::-moz-range-track {
-      height: 6px;
-      background: #30363d;
-      border-radius: 3px;
-    }
-    input[type="range"]::-moz-range-thumb {
-      width: 20px;
-      height: 20px;
-      background: #4caf50;
-      border-radius: 50%;
-      border: 2px solid #357a38;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-    }
-    input[type="range"]:hover::-moz-range-thumb {
-      background: #357a38;
-      transform: scale(1.1);
     }
     #geminiosidade-placeholder {
       font-size: 0.85rem;
       color: #8b949e;
       margin-top: 2px;
-      font-style: italic;
-      user-select: none;
     }
-    /* Buttons Dynamic Styles */
     .btn {
       width: 48%;
       padding: 12px;
@@ -114,10 +79,6 @@
       cursor: pointer;
       color: white;
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-      transition: background 0.3s, transform 0.2s;
-    }
-    .btn:hover {
-      transform: translateY(-2px);
     }
     #btn-deposit {
       background: linear-gradient(135deg, #4caf50, #81c784);
@@ -127,14 +88,12 @@
       background: linear-gradient(135deg, #f44336, #e57373);
       float: right;
     }
-    /* Info Sections */
-    #tax-info, #geminiosidade-info {
+    #tax-info {
       margin-top: 12px;
       font-size: 0.9rem;
       color: #adbac7;
       clear: both;
     }
-    /* QR Code Display */
     #qrcode-container {
       clear: both;
       text-align: center;
@@ -143,7 +102,6 @@
       padding: 16px;
       border-radius: 8px;
       min-height: 220px;
-      color: #c9d1d9;
       box-shadow: inset 0 0 8px rgba(0,0,0,0.8);
     }
     #qrcode-container img {
@@ -159,157 +117,130 @@
       padding: 12px;
       border-radius: 8px;
       font-size: 0.85rem;
-      user-select: none;
     }
   </style>
 </head>
 <body>
   <h1>JBX500 Wallet</h1>
   <div class="container">
-    <form id="asset-form">
+    <form id="wallet-form">
       <label for="asset-select">Escolha um ativo:</label>
       <select id="asset-select" required>
-      <select id="asset-select" required>
-  <option value="">Selecione um ativo</option>
+        <option value="">Selecione um ativo</option>
+        <option value="DC-COIN">DC Coin (Trix Z)</option>
+        <option value="DARK1">DARK1 (Shadow Token)</option>
+        <option value="DARK2">DARK2 (Oblivion Coin)</option>
+        <option value="DARK3">DARK3 (Phantom Credit)</option>
+        <option value="DARK4">DARK4 (Eclipse Asset)</option>
+        <option value="POSN-HF">PoSN-HF (Proof of Stake Hybrid Fund)</option>
+        <option value="BTC">Bitcoin (BTC)</option>
+        <option value="ETH">Ethereum (ETH)</option>
+        <option value="XRP">Ripple (XRP)</option>
+        <option value="DOGE">Dogecoin (DOGE)</option>
+        <option value="DHL1">DHL1 (Dark Lash - Shadow)</option>
+        <option value="DHL2">DHL2 (Dark Lash - Oblivion)</option>
+        <option value="SPPX">SPPX (Simbiótico Premium)</option>
+        <option value="JBX500">JBX500 Asset</option>
+      </select>
 
-  <option value="DC-COIN">DC Coin (Trix Z)</option>
-  <option value="DARK1">DARK1 (Shadow Token)</option>
-  <option value="DARK2">DARK2 (Oblivion Coin)</option>
-  <option value="DARK3">DARK3 (Phantom Credit)</option>
-  <option value="DARK4">DARK4 (Eclipse Asset)</option>
-
-  <option value="POSN-HF">PoSN-HF (Proof of Stake Hybrid Fund)</option>
-  <option value="BTC">Bitcoin (BTC)</option>
-  <option value="ETH">Ethereum (ETH)</option>
-  <option value="LTC">Litecoin (LTC)</option>
-  <option value="XRP">Ripple (XRP)</option>
-  <option value="DOGE">Dogecoin (DOGE)</option>
-  <option value="ADA">Cardano (ADA)</option>
-
-  <!-- RZX (Dark HoloFi Lashs) -->
-  <option value="DHL1">DHL1 (Dark Lash - Shadow)</option>
-  <option value="DHL2">DHL2 (Dark Lash - Oblivion)</option>
-  <option value="DHL3">DHL3 (Dark Lash - Phantom)</option>
-  <option value="DHL4">DHL4 (Dark Lash - Eclipse)</option>
-
-  <!-- HoloFi e Simbióticos -->
-  <option value="SPPX">SPPX (Simbiótico Premium)</option>
-  <option value="QVAFLES">QVAFLES (SSQAFLE)</option>
-  <option value="XETH">XETH (Cross Ethereum)</option>
-  <option value="D-EURO">D-EURO (Euro Digital)</option>
-  <option value="SSQSEA">SSQSEA (Base de Simbiose)</option>
-  <option value="RZX-STARTUP">START UP RZX</option>
-  <option value="JBX500">JBX500 Asset (HoloFi Symbiotic Dark)</option>
-</select>
-
-    </form>
-    <form id="deposit-form" class="transaction-form" autocomplete="off">
       <label for="valor">Valor (R$):</label>
       <input type="number" id="valor" min="0.01" step="0.01" required placeholder="0.00" />
-      <label for="geminiosidade">Taxa de Geminiosidade (%): <span id="geminiosidade-value">0</span>%</label>
-      <input
-        type="range"
-        id="geminiosidade"
-        min="0"
-        max="100"
-        step="1"
-        value="0"
-        oninput="atualizarTaxaGeminiosidade(this.value)"
-      />
+
+      <label for="geminiosidade">Taxa de Geminiosidade: <span id="geminiosidade-value">0</span>%</label>
+      <input type="range" id="geminiosidade" min="0" max="100" step="1" value="0" />
       <div id="geminiosidade-placeholder">Ajuste até 100% de Geminiosidade</div>
+
       <div id="tax-info">
         Taxa fixa: 5% (R$ <span id="taxa-fixa-valor">0.00</span>)<br />
         Taxa geminiosidade: R$ <span id="taxa-geminiosidade-valor">0.00</span><br />
         <strong>Total a pagar: R$ <span id="total-pagar">0.00</span></strong>
       </div>
-      <button type="button" id="btn-deposit" class="btn" onclick="gerarPix()">Gerar QR Code Pix (Depósito)</button>
+
+      <button type="button" id="btn-deposit" class="btn" onclick="gerarPix()">Gerar Pix</button>
       <button type="button" id="btn-withdraw" class="btn" onclick="fazerSaque()">Sacar</button>
     </form>
+
     <div id="qrcode-container">Nenhum QR Code gerado.</div>
   </div>
-  <footer>
-   HoloFi Symbiotic Dark 💚 © 2025 Bosco Jones Wallet<br />
-  </footer>
+  <footer>HoloFi Symbiotic Dark 💚 © 2025 Bosco Jones Wallet</footer>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    const valorInput = document.getElementById('valor');
-    const geminiosidadeInput = document.getElementById('geminiosidade');
-    const taxaFixaValorSpan = document.getElementById('taxa-fixa-valor');
-    const taxaGeminiosidadeValorSpan = document.getElementById('taxa-geminiosidade-valor');
-    const totalPagarSpan = document.getElementById('total-pagar');
-    const geminiosidadeValueSpan = document.getElementById('geminiosidade-value');
+    const valorInput = document.getElementById("valor");
+    const gemInput = document.getElementById("geminiosidade");
+    const gemValueSpan = document.getElementById("geminiosidade-value");
+    const taxaFixaSpan = document.getElementById("taxa-fixa-valor");
+    const taxaGemSpan = document.getElementById("taxa-geminiosidade-valor");
+    const totalSpan = document.getElementById("total-pagar");
 
     function atualizarTaxas() {
       const valor = parseFloat(valorInput.value) || 0;
-      const gemPercent = parseFloat(geminiosidadeInput.value) / 100;
-      const taxaFixa = 0.05;
-      const valorTaxaFixa = valor * taxaFixa;
-      const valorTaxaGem = valor * gemPercent;
-      const total = valor + valorTaxaFixa + valorTaxaGem;
-      taxaFixaValorSpan.textContent = valorTaxaFixa.toFixed(2);
-      taxaGeminiosidadeValorSpan.textContent = valorTaxaGem.toFixed(2);
-      totalPagarSpan.textContent = total.toFixed(2);
+      const gem = parseFloat(gemInput.value) / 100;
+      const taxaFixa = valor * 0.05;
+      const taxaGem = valor * gem;
+      const total = valor + taxaFixa + taxaGem;
+      taxaFixaSpan.textContent = taxaFixa.toFixed(2);
+      taxaGemSpan.textContent = taxaGem.toFixed(2);
+      totalSpan.textContent = total.toFixed(2);
     }
 
-    function atualizarTaxaGeminiosidade(valor) {
-      const pct = parseInt(valor);
-      geminiosidadeValueSpan.textContent = pct;
+    valorInput.addEventListener("input", atualizarTaxas);
+    gemInput.addEventListener("input", () => {
+      gemValueSpan.textContent = gemInput.value;
       atualizarTaxas();
-      // Dark Geminiosidade effect: dynamic track fill
-      const fill = pct;
-      geminiosidadeInput.style.background = `linear-gradient(90deg, #4caf50 ${fill}%, #30363d ${fill}%)`;
-    }
-
-    valorInput.addEventListener('input', atualizarTaxas);
-    geminiosidadeInput.addEventListener('input', atualizarTaxas);
-    atualizarTaxaGeminiosidade(0);
+    });
+    atualizarTaxas();
 
     function gerarPix() {
-      const valorDigitado = parseFloat(valorInput.value);
-      if (!valorDigitado || valorDigitado <= 0) return alert("Digite um valor válido maior que zero.");
+      const valor = parseFloat(valorInput.value);
+      if (!valor || valor <= 0) return alert("Digite um valor válido.");
       const ativo = document.getElementById("asset-select").value;
-      if (!ativo) return alert("Selecione um ativo antes de gerar o Pix.");
-      const taxaFixa = 0.05;
-      const gemPercent = parseFloat(geminiosidadeInput.value) / 100;
-      const total = valorDigitado * (1 + taxaFixa + gemPercent);
+      if (!ativo) return alert("Selecione um ativo.");
+
+      const gem = parseFloat(gemInput.value) / 100;
+      const total = valor * (1 + 0.05 + gem);
       const chave = "48761013889";
       const nome = "Lucas Januário";
       const cidade = "BRASILIA";
-      const info = `Pagamento JBX500 - Ativo: ${ativo} - Geminiosidade: ${parseInt(geminiosidadeInput.value)}%`;
-      const payload = gerarPayloadPix({chave, nome, cidade, valor: total.toFixed(2), infoAdicional: info});
+      const info = `Pagamento JBX500 - Ativo: ${ativo} - Geminiosidade: ${gemInput.value}%`;
+
+      const payload = gerarPayloadPix({ chave, nome, cidade, valor: total.toFixed(2), infoAdicional: info });
       const container = document.getElementById("qrcode-container");
-      container.innerHTML = `
-        <p>Valor original: R$ ${valorDigitado.toFixed(2)}</p>
-        <p>Taxa fixa (5%): R$ ${(valorDigitado * taxaFixa).toFixed(2)}</p>
-        <p>Taxa Geminiosidade (${parseInt(geminiosidadeInput.value)}%): R$ ${(valorDigitado * gemPercent).toFixed(2)}</p>
-        <p><strong>Total a pagar: R$ ${total.toFixed(2)}</strong></p>
-      `;
+      container.innerHTML = `<p><strong>Total: R$ ${total.toFixed(2)}</strong></p>`;
       new QRCode(container, { text: payload, width: 180, height: 180 });
     }
 
     function fazerSaque() {
-      const valorSaque = parseFloat(valorInput.value);
-      if (!valorSaque || valorSaque <= 0) return alert("Digite um valor válido para saque maior que zero.");
+      const valor = parseFloat(valorInput.value);
       const ativo = document.getElementById("asset-select").value;
-      if (!ativo) return alert("Selecione um ativo antes de sacar.");
-      alert(`Solicitação de saque:\nAtivo: ${ativo}\nValor: R$ ${valorSaque.toFixed(2)}\n\nOperação simulada com sucesso.`);
+      if (!valor || valor <= 0) return alert("Digite um valor válido.");
+      if (!ativo) return alert("Selecione um ativo.");
+      alert(`Saque simulado:\nAtivo: ${ativo}\nValor: R$ ${valor.toFixed(2)}`);
     }
 
-    function gerarPayloadPix({chave, nome, cidade, valor, infoAdicional}) {
-      function fmt(id,value){const s=value.length.toString().padStart(2,'0');return id+s+value;}
-      const acc=fmt("00","BR.GOV.BCB.PIX")+fmt("01",chave);
-      const add=fmt("05",infoAdicional);
-      let p=""; p+=fmt("00","01"); p+=fmt("26",acc);
-      p+=fmt("52","0000"); p+=fmt("53","986"); p+=fmt("54",valor);
-      p+=fmt("58","BR"); p+=fmt("59",nome); p+=fmt("60",cidade);
-      p+=fmt("62",add);
-      p+="6304"+calcularCRC16(p);
+    function gerarPayloadPix({ chave, nome, cidade, valor, infoAdicional }) {
+      function fmt(id, val) {
+        const len = val.length.toString().padStart(2, '0');
+        return id + len + val;
+      }
+      const acc = fmt("00", "BR.GOV.BCB.PIX") + fmt("01", chave);
+      const add = fmt("05", infoAdicional);
+      let p = fmt("00", "01") + fmt("26", acc) + fmt("52", "0000") + fmt("53", "986") +
+        fmt("54", valor) + fmt("58", "BR") + fmt("59", nome) + fmt("60", cidade) +
+        fmt("62", add);
+      p += "6304" + calcularCRC16(p);
       return p;
     }
-    function calcularCRC16(p){let poly=0x1021,res=0xFFFF;
-      for(let i=0;i<p.length;i++){res^=p.charCodeAt(i)<<8;
-      for(let b=0;b<8;b++){if((res<<1)&0x10000)res=((res<<1)^poly)&0xFFFF;else res=(res<<1)&0xFFFF;}}
-      return res.toString(16).toUpperCase().padStart(4,'0');
+
+    function calcularCRC16(p) {
+      let poly = 0x1021, res = 0xFFFF;
+      for (let i = 0; i < p.length; i++) {
+        res ^= p.charCodeAt(i) << 8;
+        for (let b = 0; b < 8; b++) {
+          res = ((res << 1) ^ ((res & 0x8000) ? poly : 0)) & 0xFFFF;
+        }
+      }
+      return res.toString(16).toUpperCase().padStart(4, '0');
     }
   </script>
 </body>
