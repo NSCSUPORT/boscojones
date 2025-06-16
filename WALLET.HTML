@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Wallet Bosco Jones - Bit Bosco</title>
+  <title>Wallet Bosco Jones - Layout Matrix</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @tailwind base;
@@ -12,63 +12,73 @@
 
     body {
       font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      height: 100vh;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-rows: auto auto;
+      gap: 1rem;
+      background-color: hsl(var(--background));
+      color: hsl(var(--foreground));
+      padding: 1rem;
+      box-sizing: border-box;
     }
 
-    @layer base {
-      :root {
-        --background: 0 0% 13%; /* Dark Charcoal */
-        --foreground: 0 0% 95%; /* Off-white */
-
-        --card: 0 0% 10%;
-        --card-foreground: 0 0% 95%;
-
-        --primary: 160 100% 75%; /* Aqua Green */
-        --primary-foreground: 0 0% 10%;
-
-        --destructive: 0 60% 50%;
-        --destructive-foreground: 0 0% 95%;
-
-        --border: 0 0% 20%;
-        --input: 0 0% 18%;
-        --ring: 160 100% 75%;
-        --radius: 0.5rem;
-      }
+    :root {
+      --background: 0 0% 5%;    /* Preto quase absoluto */
+      --foreground: 0 0% 85%;  /* Cinza claro */
+      --card: 0 0% 12%;        /* Cinza escuro para card */
+      --card-foreground: 0 0% 85%;
+      --primary: 210 15% 70%;  /* Azul acinzentado */
+      --primary-foreground: 0 0% 10%;
+      --secondary: 0 0% 25%;
+      --secondary-foreground: 0 0% 65%;
+      --destructive: 0 60% 55%; /* Vermelho forte para alertas */
+      --destructive-foreground: 0 0% 90%;
+      --border: 0 0% 18%;
+      --input: 0 0% 18%;
+      --ring: 210 15% 60%;
+      --radius: 0.5rem;
     }
 
-    @layer base {
-      * {
-        border-color: hsl(var(--border));
-      }
-      body {
-        background-color: hsl(var(--background));
-        color: hsl(var(--foreground));
-      }
+    * {
+      border-color: hsl(var(--border));
     }
 
     .card {
       background-color: hsl(var(--card));
       color: hsl(var(--card-foreground));
-      border: 2px solid hsl(var(--border));
+      border: 1.5px solid hsl(var(--border));
       border-radius: var(--radius);
-      box-shadow: 0 0 15px hsl(var(--primary) / 0.4);
       padding: 1.25rem;
-      margin: 0.5rem auto;
-      width: 320px;
-      max-width: 95vw;
+      box-shadow: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    h1.title {
+      grid-column: 1 / -1;
+      font-weight: 900;
+      font-size: 2rem;
+      letter-spacing: 0.15em;
+      color: hsl(var(--primary));
+      text-align: center;
+      margin: 0 0 1rem 0;
     }
 
     .balance {
       font-size: 2rem;
       font-weight: 700;
       letter-spacing: 0.15em;
-      text-align: center;
       margin-bottom: 0.5rem;
+      text-align: center;
     }
 
     .fiat {
       text-align: center;
       font-size: 1rem;
-      color: hsl(var(--primary));
+      color: hsl(var(--secondary-foreground));
       margin-bottom: 1rem;
       font-weight: 600;
     }
@@ -95,6 +105,7 @@
       transition: outline-color 0.2s ease;
       color: hsl(var(--card-foreground));
       background-color: hsl(var(--input));
+      margin-bottom: 0.75rem;
     }
 
     input:focus {
@@ -109,7 +120,7 @@
       font-weight: 700;
       cursor: pointer;
       border: none;
-      margin-top: 0.25rem;
+      margin-top: 0;
       transition: background-color 0.3s ease;
     }
 
@@ -120,12 +131,12 @@
     }
 
     .tx-history {
-      max-height: 150px;
+      max-height: 180px;
       overflow-y: auto;
       font-size: 0.75rem;
       border-top: 1px solid hsl(var(--border));
       padding-top: 0.75rem;
-      color: hsl(var(--primary));
+      color: hsl(var(--secondary-foreground));
       font-family: monospace, monospace;
     }
 
@@ -152,7 +163,7 @@
     }
 
     .tx-type-receive {
-      color: hsl(var(--accent, 120 61% 50%));
+      color: hsl(var(--primary));
       font-weight: 700;
     }
 
@@ -165,7 +176,7 @@
 </head>
 <body>
 
-  <h1 class="text-center font-bold text-xl mb-4">Bit Bosco Wallet</h1>
+  <h1 class="title">Bit Bosco Wallet</h1>
 
   <section class="card" id="balanceCard" role="region" aria-label="Saldo da carteira">
     <div class="balance" id="balanceDisplay">B$ 1,337.42</div>
@@ -191,7 +202,7 @@
   </section>
 
   <section class="card" role="region" aria-label="Histórico de Transações">
-    <h2 class="font-semibold text-lg mb-2">Histórico de Transações</h2>
+    <h2 class="font-semibold text-lg mb-2" style="color:hsl(var(--primary));">Histórico de Transações</h2>
     <div class="tx-history" id="txHistory" tabindex="0" aria-live="polite" aria-atomic="true">
       <!-- Transações aparecerão aqui -->
     </div>
@@ -204,8 +215,8 @@
   const address = "BOSCOJONES1234567890ABCDEF";
 
   let transactions = [
-    { type: 'receive', amount: 500, from: 'AMIGO12345', date: new Date(Date.now() - 86400000) }, // ontem
-    { type: 'send', amount: 100, to: 'LOJA98765', date: new Date(Date.now() - 43200000) } // 12h atrás
+    { type: 'receive', amount: 500, from: 'AMIGO12345', date: new Date(Date.now() - 86400000) },
+    { type: 'send', amount: 100, to: 'LOJA98765', date: new Date(Date.now() - 43200000) }
   ];
 
   const balanceDisplay = document.getElementById('balanceDisplay');
