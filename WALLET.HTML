@@ -3,67 +3,142 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Bosco Jones Wallet</title>
+<title>Bosco Jones Wallet - Login & Wallet</title>
 <style>
-  /* Reset básico */
+  /* Reset básico e fontes */
   * {
     box-sizing: border-box;
   }
-  body, html {
-    margin: 0; padding: 0;
-    height: 100%;
-    background-color: #0d1117; /* Fundo preto GitHub dark */
+  body {
+    margin: 0;
+    background-color: #0d1117; /* preto estilo GitHub */
     color: #c9d1d9;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-    display: grid;
-    grid-template-rows: 1fr auto;
-    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
   main {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 1rem;
-    padding: 2rem;
-    align-content: start;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
-  .card {
+
+  /* Container dos formulários e wallet */
+  .container {
     background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 8px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 5px rgb(0 0 0 / 0.6);
+    padding: 2rem;
+    border-radius: 10px;
+    width: 360px;
+    box-shadow: 0 0 15px #238636cc;
   }
-  h1, h2, h3 {
-    margin-top: 0;
-  }
-  button {
-    background-color: #238636; /* Verde GitHub */
-    border: none;
-    border-radius: 6px;
-    color: white;
-    padding: 0.6rem 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 1rem;
+
+  /* Inputs e botão */
+  input[type="text"],
+  input[type="password"],
+  input[type="number"] {
     width: 100%;
-  }
-  button:hover {
-    background-color: #2ea043;
-  }
-  input[type="text"] {
-    width: 100%;
-    padding: 0.6rem;
+    padding: 0.8rem;
+    margin: 0.6rem 0;
     border-radius: 6px;
     border: 1px solid #30363d;
-    background-color: #0d1117;
+    background: #0d1117;
     color: #c9d1d9;
     font-size: 1rem;
+    outline-offset: 2px;
   }
-  input[type="text"]::placeholder {
+  input[type="text"]:focus,
+  input[type="password"]:focus,
+  input[type="number"]:focus {
+    border-color: #238636;
+    outline: none;
+  }
+
+  button {
+    width: 100%;
+    padding: 0.8rem;
+    margin-top: 1rem;
+    border: none;
+    border-radius: 6px;
+    background: #238636;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  button:hover {
+    background: #2ea043;
+  }
+
+  h2 {
+    margin-bottom: 1rem;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  #message {
+    margin-top: 1rem;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  /* Wallet styles */
+  .wallet-header {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .balance {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #58a6ff;
+    margin-bottom: 0.3rem;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  .balance-fiat {
+    font-size: 1.2rem;
+    color: #8b949e;
+    font-family: 'Courier New', Courier, monospace;
+    margin-bottom: 1.5rem;
+  }
+  .btn-logout {
+    background: #da3633;
+    margin-top: 1rem;
+  }
+  .btn-logout:hover {
+    background: #f85149;
+  }
+
+  /* Formulário de transações */
+  form.transaction-form {
+    margin-top: 1rem;
+  }
+  form.transaction-form label {
+    display: block;
+    margin-top: 0.6rem;
+    font-weight: 600;
+  }
+  form.transaction-form input[type="number"] {
+    margin-top: 0.3rem;
+  }
+
+  /* Histórico */
+  .history {
+    margin-top: 1.5rem;
+    max-height: 150px;
+    overflow-y: auto;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    padding: 0.8rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
     color: #8b949e;
   }
-  /* Footer amarelo neon */
+  .history p {
+    margin: 0.2rem 0;
+  }
+
   footer {
     width: 100%;
     padding: 12px;
@@ -74,111 +149,195 @@
     font-weight: bold;
     letter-spacing: 2px;
     text-shadow: 0 0 8px #ff0000;
-    user-select: none;
+    margin-top: auto;
     animation: neon 1.5s ease-in-out infinite alternate;
   }
   @keyframes neon {
-    0% { text-shadow: 0 0 5px #f0f000, 0 0 10px #ff4500; }
-    50% { text-shadow: 0 0 20px #ff4500, 0 0 30px #f0f000; }
-    100% { text-shadow: 0 0 5px #f0f000, 0 0 10px #ff4500; }
-  }
-  /* Layout da tela de login */
-  #login-screen {
-    max-width: 400px;
-    margin: auto;
-    padding: 2rem;
-    text-align: center;
-  }
-  #login-screen h2 {
-    margin-bottom: 1rem;
-    color: #58a6ff;
-  }
-  /* Balance text */
-  #balance-amount {
-    font-family: monospace;
-    font-size: 3rem;
-    margin: 0.2rem 0;
-    color: #238636;
-  }
-  #balance-fiat {
-    font-size: 1rem;
-    color: #8b949e;
+    0% {
+      text-shadow: 0 0 5px #f0f000, 0 0 10px #ff4500;
+    }
+    50% {
+      text-shadow: 0 0 20px #ff4500, 0 0 30px #f0f000;
+    }
+    100% {
+      text-shadow: 0 0 5px #f0f000, 0 0 10px #ff4500;
+    }
   }
 </style>
 </head>
 <body>
 
 <main>
-  <!-- Login -->
-  <section id="login-screen">
-    <h2>Login na Bosco Jones Wallet</h2>
+  <!-- Login form -->
+  <section id="login-section" class="container">
+    <h2>Login Bosco Jones Wallet</h2>
     <form id="login-form">
-      <input type="text" id="username" placeholder="Digite seu nome de usuário" required />
+      <input type="text" id="username" placeholder="Usuário" required autocomplete="username" />
+      <input type="password" id="password" placeholder="Senha" required autocomplete="current-password" />
       <button type="submit">Entrar</button>
     </form>
+    <div id="message"></div>
   </section>
 
-  <!-- Wallet (oculto até login) -->
-  <section id="wallet-screen" style="display:none; grid-column: 1 / -1;">
-    <h1>Bem-vindo, <span id="display-username"></span>!</h1>
-    <p>Sua jornada financeira 8-bit começa aqui.</p>
-
-    <div class="card" style="max-width: 320px;">
-      <h2>Saldo Atual</h2>
-      <p id="balance-amount">B$ 0.00</p>
-      <small id="balance-fiat">USD 0.00</small>
-      <button id="add-funds-btn" title="Adicionar 100 BoscoCoin">Adicionar 100 BoscoCoin</button>
+  <!-- Wallet dashboard, hidden initially -->
+  <section id="wallet-section" class="container" style="display:none;">
+    <div class="wallet-header">
+      <h2>Bem-vindo, <span id="user-display"></span>!</h2>
+      <div class="balance" id="balance">B$ 0.00</div>
+      <div class="balance-fiat" id="balance-fiat">USD 0.00</div>
     </div>
 
-    <div class="card" style="max-width: 320px; margin-top: 1rem;">
-      <h3>Ações Rápidas</h3>
-      <button>Receber Crypto</button>
-      <button style="background-color:#58a6ff; margin-top:0.5rem;">Enviar PIX / Transferência</button>
+    <form id="deposit-form" class="transaction-form">
+      <label for="deposit-amount">Depositar valor (B$):</label>
+      <input type="number" id="deposit-amount" min="0.01" step="0.01" placeholder="Ex: 100.00" required />
+      <button type="submit">Depositar</button>
+    </form>
+
+    <form id="withdraw-form" class="transaction-form">
+      <label for="withdraw-amount">Sacar valor (B$):</label>
+      <input type="number" id="withdraw-amount" min="0.01" step="0.01" placeholder="Ex: 50.00" required />
+      <button type="submit">Sacar</button>
+    </form>
+
+    <div class="history" id="transaction-history">
+      <strong>Histórico de transações:</strong>
+      <p>Nenhuma transação ainda.</p>
     </div>
 
-    <div class="card" style="max-width: 320px; margin-top: 1rem;">
-      <h3>Explorar Carteira</h3>
-      <button style="background-color: transparent; border: 1px solid #58a6ff; color: #58a6ff;">Histórico de Transações</button>
-      <button style="background-color: transparent; border: 1px solid #58a6ff; color: #58a6ff; margin-top: 0.5rem;">Insights Financeiros AI</button>
-    </div>
+    <button id="logout-btn" class="btn-logout">Sair</button>
   </section>
 </main>
 
 <footer>
-  BOSCO JONES © 2025 — GERENCIE SEUS ATIVOS COM PODER
+  BOSCO JONES WALLET
 </footer>
 
 <script>
-  const loginForm = document.getElementById("login-form");
-  const loginScreen = document.getElementById("login-screen");
-  const walletScreen = document.getElementById("wallet-screen");
-  const displayUsername = document.getElementById("display-username");
-  const balanceAmount = document.getElementById("balance-amount");
-  const balanceFiat = document.getElementById("balance-fiat");
-  const addFundsBtn = document.getElementById("add-funds-btn");
+  // Usuário/senha fixos simulando DB
+  const validUsers = [
+    { username: 'lucas', password: '123456' },
+    { username: 'admin', password: 'admin' }
+  ];
 
-  let balance = 0;
+  const loginSection = document.getElementById('login-section');
+  const walletSection = document.getElementById('wallet-section');
+  const loginForm = document.getElementById('login-form');
+  const message = document.getElementById('message');
+  const userDisplay = document.getElementById('user-display');
+  const balance = document.getElementById('balance');
+  const balanceFiat = document.getElementById('balance-fiat');
+  const logoutBtn = document.getElementById('logout-btn');
 
-  loginForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const username = document.getElementById("username").value.trim();
-    if (!username) return alert("Por favor, digite seu nome de usuário.");
-    displayUsername.textContent = username;
-    balance = 0;
-    updateBalanceUI();
-    loginScreen.style.display = "none";
-    walletScreen.style.display = "grid";
-  });
+  const depositForm = document.getElementById('deposit-form');
+  const withdrawForm = document.getElementById('withdraw-form');
+  const transactionHistory = document.getElementById('transaction-history');
 
-  function updateBalanceUI() {
-    balanceAmount.textContent = `B$ ${balance.toFixed(2)}`;
-    // Exemplo taxa conversão fixa 1 B$ = 0.314 USD
-    balanceFiat.textContent = `USD ${(balance * 0.314).toFixed(2)}`;
+  let currentUser = null;
+  let currentBalance = 0.0;
+  let transactionLog = [];
+
+  // Função para atualizar o saldo na tela
+  function updateBalance() {
+    balance.textContent = `B$ ${currentBalance.toFixed(2)}`;
+    // Simulando taxa de câmbio fixa: 1 B$ = 0.5 USD
+    const usd = currentBalance * 0.5;
+    balanceFiat.textContent = `USD ${usd.toFixed(2)}`;
   }
 
-  addFundsBtn.addEventListener("click", () => {
-    balance += 100;
-    updateBalanceUI();
+  // Atualiza histórico na tela
+  function updateHistory() {
+    if(transactionLog.length === 0){
+      transactionHistory.innerHTML = '<strong>Histórico de transações:</strong><p>Nenhuma transação ainda.</p>';
+      return;
+    }
+    let html = '<strong>Histórico de transações:</strong>';
+    for(let i = transactionLog.length - 1; i >= 0; i--){
+      const t = transactionLog[i];
+      html += `<p>[${t.date}] - <strong>${t.type}</strong>: B$ ${t.amount.toFixed(2)}</p>`;
+    }
+    transactionHistory.innerHTML = html;
+  }
+
+  loginForm.addEventListener('submit', e => {
+    e.preventDefault();
+    message.textContent = '';
+    const username = loginForm.username.value.trim();
+    const password = loginForm.password.value.trim();
+
+    const user = validUsers.find(u => u.username === username && u.password === password);
+    if (!user) {
+      message.style.color = 'red';
+      message.textContent = 'Usuário ou senha inválidos.';
+      return;
+    }
+
+    currentUser = user.username;
+    currentBalance = 0.0;
+    transactionLog = [];
+
+    userDisplay.textContent = currentUser;
+    updateBalance();
+    updateHistory();
+
+    loginSection.style.display = 'none';
+    walletSection.style.display = 'block';
+
+    // limpa formulários e mensagens
+    loginForm.reset();
+    message.textContent = '';
+    depositForm.reset();
+    withdrawForm.reset();
+  });
+
+  logoutBtn.addEventListener('click', () => {
+    // Voltar para tela de login
+    loginSection.style.display = 'block';
+    walletSection.style.display = 'none';
+    currentUser = null;
+    currentBalance = 0.0;
+    transactionLog = [];
+    loginForm.reset();
+    message.textContent = '';
+  });
+
+  depositForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const amount = parseFloat(document.getElementById('deposit-amount').value);
+    if(isNaN(amount) || amount <= 0){
+      alert('Insira um valor válido para depósito.');
+      return;
+    }
+    currentBalance += amount;
+    transactionLog.push({
+      type: 'Depósito',
+      amount: amount,
+      date: new Date().toLocaleString()
+    });
+    updateBalance();
+    updateHistory();
+    depositForm.reset();
+  });
+
+  withdrawForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const amount = parseFloat(document.getElementById('withdraw-amount').value);
+    if(isNaN(amount) || amount <= 0){
+      alert('Insira um valor válido para saque.');
+      return;
+    }
+    if(amount > currentBalance){
+      alert('Saldo insuficiente para saque.');
+      return;
+    }
+    currentBalance -= amount;
+    transactionLog.push({
+      type: 'Saque',
+      amount: amount,
+      date: new Date().toLocaleString()
+    });
+    updateBalance();
+    updateHistory();
+    withdrawForm.reset();
   });
 </script>
 
