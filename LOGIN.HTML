@@ -6,61 +6,98 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" href="logo.ico" />
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
+      margin: 0;
+      padding: 0;
       background-color: #0d1117;
       color: #c9d1d9;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 2rem;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       height: 100vh;
+    }
+
+    .container {
+      background-color: #161b22;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,255,100,0.1);
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
     }
 
     h1 {
       color: #58a6ff;
-      margin-bottom: 1rem;
-      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      text-shadow: 0 0 4px #58a6ff66;
     }
 
-    input, button {
+    .input-group {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+
+    .input-group input {
       width: 100%;
-      max-width: 300px;
-      padding: 10px;
-      margin-top: 10px;
+      padding: 12px 14px 12px 38px;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      background-color: #0d1117;
+      color: #c9d1d9;
       font-size: 1rem;
-      border-radius: 4px;
-      border: none;
+    }
+
+    .input-group i {
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%);
+      color: #8b949e;
     }
 
     button {
-      background-color: #4caf50;
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #4caf50, #2e7d32);
       color: white;
+      font-weight: bold;
       cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 4px 10px rgba(76, 175, 80, 0.2);
     }
 
     button:hover {
-      background-color: #357a38;
+      background: linear-gradient(90deg, #388e3c, #1b5e20);
     }
 
     .message {
-      margin-top: 10px;
+      margin-top: 1rem;
       padding: 10px;
       border-radius: 4px;
-      background-color: #222;
-      color: #0f0;
-      text-align: center;
-      max-width: 300px;
+      background-color: #1c1f26;
+      color: #00ff99;
+      font-size: 0.9rem;
     }
 
     .error {
-      background-color: #800000;
-      color: #f88;
+      background-color: #8b0000;
+      color: #ffcccc;
     }
 
     footer {
+      position: fixed;
+      bottom: 0;
       width: 100%;
       padding: 12px;
       background: linear-gradient(45deg, #f0f000, #ff4500);
@@ -70,7 +107,6 @@
       font-weight: bold;
       letter-spacing: 2px;
       text-shadow: 0 0 8px #ff0000;
-      margin-top: 20px;
       animation: neon 1.5s ease-in-out infinite alternate;
     }
 
@@ -80,17 +116,28 @@
       100% { text-shadow: 0 0 5px #ff0000; }
     }
   </style>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-  <h1> BOSCO JONES WALLET </h1>
+  <div class="container">
+    <h1>BOSCO JONES WALLET</h1>
 
-  <input type="email" id="email" placeholder="Email" />
-  <input type="password" id="password" placeholder="Senha" />
-  <button id="btnLogin">Entrar</button>
-  <button id="btnRegister">Registrar</button>
+    <div class="input-group">
+      <i class="fas fa-envelope"></i>
+      <input type="email" id="email" placeholder="Email" />
+    </div>
 
-  <div id="authMessage" class="message"></div>
+    <div class="input-group">
+      <i class="fas fa-lock"></i>
+      <input type="password" id="password" placeholder="Senha" />
+    </div>
+
+    <button id="btnLogin">Entrar</button>
+    <button id="btnRegister" style="background: linear-gradient(90deg, #1a73e8, #1251a3);">Registrar</button>
+
+    <div id="authMessage" class="message"></div>
+  </div>
 
   <footer>
     © 2025 Bosco Jones Wallet — Desenvolvido por Lucas Januário — HoloFi Quantum
@@ -101,7 +148,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
   <script>
-    // Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyDzfZvQi-oaOUWPgSOu8BtTINa_LO2ZoLc",
       authDomain: "bosco-jones-wallet.firebaseapp.com",
