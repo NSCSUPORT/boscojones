@@ -10,48 +10,59 @@
     }
     body {
       margin: 0;
-      background-color: #0d1117;
-      color: #c9d1d9;
+      background-color: #000000; /* fundo preto */
+      color: #a8ff60; /* verde claro */
       font-family: 'Segoe UI', sans-serif;
     }
     .container {
       max-width: 500px;
       margin: 40px auto;
       padding: 20px;
-      background-color: #161b22;
+      background-color: #021100; /* verde escuro quase preto */
       border-radius: 10px;
-      box-shadow: 0 0 10px #000;
+      box-shadow: 0 0 15px #0f0; /* sombra verde */
     }
     h2 {
       text-align: center;
-      color: #58a6ff;
+      color: #7fff00; /* verde limão */
     }
     label {
       display: block;
       margin-top: 15px;
+      color: #a8ff60;
     }
     input, select {
       width: 100%;
       padding: 10px;
       margin-top: 5px;
       border-radius: 5px;
-      border: none;
-      background-color: #21262d;
-      color: #c9d1d9;
+      border: 1px solid #4caf50;
+      background-color: #002200;
+      color: #a8ff60;
+      font-weight: bold;
+      transition: border-color 0.3s ease;
+    }
+    input:focus, select:focus {
+      border-color: #7fff00;
+      outline: none;
+      background-color: #003300;
     }
     button {
       margin-top: 20px;
       width: 100%;
       padding: 10px;
-      background-color: #238636;
+      background-color: #238636; /* verde padrão */
       color: white;
       border: none;
       border-radius: 5px;
       cursor: pointer;
       font-weight: bold;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 0 8px #32cd32;
     }
     button:hover {
-      background-color: #2ea043;
+      background-color: #2ea043; /* verde hover */
+      box-shadow: 0 0 12px #7fff00;
     }
     .wallet-header {
       text-align: center;
@@ -60,21 +71,61 @@
     .balance, .balance-fiat {
       font-size: 1.2em;
       margin-top: 10px;
-      color: #8b949e;
+      color: #90ee90; /* verde claro */
     }
     .history {
       margin-top: 30px;
-      background-color: #0d1117;
+      background-color: #001a00;
       padding: 10px;
-      border: 1px solid #30363d;
+      border: 1px solid #004d00;
       border-radius: 8px;
+      color: #a8ff60;
+      max-height: 150px;
+      overflow-y: auto;
     }
     .btn-logout {
-      background-color: #f44336;
+      background-color: #b22222; /* vermelho escuro */
       margin-top: 30px;
+      box-shadow: 0 0 10px #b22222;
     }
     .btn-logout:hover {
-      background-color: #d32f2f;
+      background-color: #8b1a1a;
+      box-shadow: 0 0 15px #ff0000;
+    }
+
+    /* FOOTER NEON STYLE */
+    footer {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(45deg, #f5f500, #ff4500);
+      color: #000;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: bold;
+      letter-spacing: 0.08rem;
+      text-shadow: 0 0 0.4rem #ff0000;
+      animation: neon 1.5s ease-in-out infinite alternate;
+      border-top: 2px solid #333;
+      margin-top: 2rem;
+      transition: all 0.3s ease-in-out;
+    }
+    @keyframes neon {
+      from {
+        text-shadow:
+          0 0 5px #ff4500,
+          0 0 10px #ff4500,
+          0 0 20px #ff4500,
+          0 0 40px #ff4500,
+          0 0 80px #ff4500;
+      }
+      to {
+        text-shadow:
+          0 0 10px #f5f500,
+          0 0 20px #f5f500,
+          0 0 30px #f5f500,
+          0 0 50px #f5f500,
+          0 0 100px #f5f500;
+      }
     }
   </style>
 </head>
@@ -91,7 +142,7 @@
       <button type="submit">Entrar</button>
     </form>
     <p style="text-align:center; margin-top:15px;">
-      <a href="#" id="show-register" style="color:#58a6ff;">Criar uma conta</a>
+      <a href="#" id="show-register" style="color:#7fff00;">Criar uma conta</a>
     </p>
   </section>
 
@@ -106,7 +157,7 @@
       <button type="submit">Registrar</button>
     </form>
     <p style="text-align:center; margin-top:15px;">
-      <a href="#" id="show-login" style="color:#58a6ff;">Já tem conta? Entrar</a>
+      <a href="#" id="show-login" style="color:#7fff00;">Já tem conta? Entrar</a>
     </p>
   </section>
 
@@ -262,5 +313,10 @@
       historyDisplay.appendChild(p);
     }
   </script>
+
+  <footer>
+    © 2025 Bosco Jones Wallet · Desenvolvido com 💻 por HoloFi · 
+    <a href="https://github.com/lucasnascimento" target="_blank" style="color:#000; text-decoration:none;">GitHub</a>
+  </footer>
 </body>
 </html>
