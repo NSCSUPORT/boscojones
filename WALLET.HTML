@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" href="logo.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bosco Jones Wallet - Login, Registro & Wallet</title>
   <style>
@@ -167,37 +168,40 @@
       font-size: 0.9rem;
       user-select: none;
     }
+footer {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(45deg, #f0f000, #ff4500);
+  color: #000;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-shadow: 0 0 8px #ff0000;
+  margin-top: 20px;
+  animation: neon 1.5s ease-in-out infinite alternate;
+}
 
-    /* Footer simples no estilo GitHub dark */
-    footer {
-      width: 100%;
-      padding: 1rem 0;
-      background-color: #161b22;
-      color: #8b949e;
-      text-align: center;
-      font-size: 0.9rem;
-      border-top: 1px solid #30363d;
-      user-select: none;
-    }
-    footer a {
-      color: #58a6ff;
-      font-weight: 600;
-    }
-    footer a:hover {
-      color: #1f6feb;
-      text-decoration: underline;
-    }
+/* Animação neon */
+@keyframes neon {
+  from {
+    text-shadow:
+      0 0 5px #ff0000,
+      0 0 10px #ff0000,
+      0 0 20px #ff0000,
+      0 0 40px #ff4500,
+      0 0 80px #ff4500;
+  }
+  to {
+    text-shadow:
+      0 0 10px #ff4500,
+      0 0 20px #ff4500,
+      0 0 30px #ff0000,
+      0 0 50px #ff0000,
+      0 0 100px #ff0000;
+  }
+}
 
-    /* Responsividade */
-    @media (max-width: 520px) {
-      .container {
-        margin: 2rem 1rem;
-        padding: 1.5rem 1.5rem;
-      }
-      button {
-        font-size: 1rem;
-      }
-    }
   </style>
 </head>
 <body>
