@@ -1,94 +1,388 @@
- <button type="button" id="generate-code-btn">Criar JBX500</button>
-        <h3>Ativo Gerado:</h3>
-        <pre id="generated-asset">Nenhum</pre>
-    </form>
-    <h3>Total a Pagar (RZX): <span id="total-to-pay">Nenhum</span></h3>
-    <button type="button" id="confirm-btn" disabled>Confirmar Compra</button>
-    <div id="qrcode-container" style="display: none; text-align: center; margin-top: 15px;">
-        <img id="qr-code-img" alt="QR Code para pagamento" />
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>JBX500 Asset - Bosco Jones FX - HoloFi Engine</title>
+<link rel="icon" href="logo.ico" />
+<style>
+  :root {
+    --green: #4caf50;
+    --green-dark: #388e3c;
+    --red: #f44336;
+    --red-dark: #d32f2f;
+    --background: #121212;
+    --card-bg: #1f1f1f;
+    --text-primary: #00ff00;
+    --text-secondary: #a0ffa0;
+    --text-muted: #888;
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--background);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  main {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    font-size: 2.4rem;
+    text-shadow:
+      0 0 5px var(--green),
+      0 0 10px var(--green-dark);
+  }
+
+  h2 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--green);
+    padding-bottom: 0.2rem;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  label {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    display: inline-block;
+  }
+
+  select, input[type=number] {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background-color: #222;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+
+  select:focus, input[type=number]:focus {
+    outline: none;
+    border-color: var(--green);
+    box-shadow: 0 0 5px var(--green);
+  }
+
+  button {
+    cursor: pointer;
+    padding: 0.9rem 1rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.15s ease;
+    user-select: none;
+  }
+
+  button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+    color: #bbb;
+    box-shadow: none;
+  }
+
+  #generate-code-btn {
+    background-color: var(--green);
+    color: #000;
+  }
+
+  #generate-code-btn:hover:not(:disabled) {
+    background-color: var(--green-dark);
+    transform: scale(1.05);
+  }
+
+  #confirm-btn {
+    background-color: var(--red);
+    color: #fff;
+  }
+
+  #confirm-btn:hover:not(:disabled) {
+    background-color: var(--red-dark);
+    transform: scale(1.05);
+  }
+
+  #total-to-pay {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--green);
+  }
+
+  pre {
+    background-color: #000;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    color: var(--text-primary);
+    max-height: 180px;
+    font-size: 0.9rem;
+    user-select: text;
+  }
+
+  #qrcode-container {
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  #qr-code-img {
+    max-width: 180px;
+    border-radius: 12px;
+    box-shadow: 0 0 12px var(--green);
+  }
+
+  footer {
+    margin-top: auto;
+    padding: 1rem 0;
+    width: 100%;
+    max-width: 480px;
+    color: var(--text-muted);
+    text-align: center;
+    font-size: 0.9rem;
+    user-select: none;
+  }
+
+  /* Loading spinner */
+  .spinner {
+    border: 4px solid #222;
+    border-top: 4px solid var(--green);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+  }
+
+  @media (max-width: 520px) {
+    main {
+      padding: 1.5rem 1rem;
+    }
+    h1 {
+      font-size: 1.8rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<main>
+  <h1>JBX500 Asset<br/><small style="color:#888; font-weight:400;">Bosco Jones FX - HoloFi Engine</small></h1>
+
+  <form id="investment-form" novalidate>
+    <div>
+      <label for="investment-value">Valor do Investimento (USD)</label>
+      <select id="investment-value" required aria-required="true" aria-label="Valor do investimento em dólares">
+        <option value="" disabled>Selecione o valor</option>
+        <option value="10">10</option>
+        <option value="50" selected>50</option>
+        <option value="100">100</option>
+        <option value="200">200</option>
+        <option value="500">500</option>
+      </select>
     </div>
-</div>
+
+    <div>
+      <label for="profit">Lucro Esperado (%)</label>
+      <input
+        type="number"
+        id="profit"
+        min="0"
+        max="100"
+        step="0.1"
+        value="18"
+        placeholder="Ex: 18"
+        required
+        aria-required="true"
+        aria-label="Lucro esperado em porcentagem"
+      />
+    </div>
+
+    <div>
+      <label for="giminiosidade">Giminiosidade Base</label>
+      <input
+        type="number"
+        id="giminiosidade"
+        min="0"
+        step="0.01"
+        value="2"
+        placeholder="Ex: 2"
+        required
+        aria-required="true"
+        aria-label="Giminiosidade base"
+      />
+    </div>
+
+    <button type="button" id="generate-code-btn" aria-live="polite">
+      Criar JBX500
+      <span id="loading-spinner" class="spinner" style="display:none;" aria-hidden="true"></span>
+    </button>
+
+    <h2>Ativo Gerado</h2>
+    <pre id="generated-asset" aria-live="polite" aria-atomic="true">Nenhum</pre>
+  </form>
+
+  <h2>Total a Pagar (RZX): <span id="total-to-pay" aria-live="polite" aria-atomic="true">Nenhum</span></h2>
+
+  <button type="button" id="confirm-btn" disabled aria-disabled="true">Confirmar Compra</button>
+
+  <div id="qrcode-container" aria-live="polite" aria-atomic="true" style="display:none;">
+    <img id="qr-code-img" alt="QR Code para pagamento" />
+  </div>
+</main>
 
 <footer>
-    <p>
-        &copy; 2025 JBX700 HoloFi Engine — Criado por Lucas Januário.
-    </p>
+  &copy; 2025 JBX700 HoloFi Engine — Criado por Lucas Januário.
 </footer>
 
 <script>
-    let isConfirmedFirst = false;
-    const conversionRateToARK = 10;
+(() => {
+  const generateBtn = document.getElementById("generate-code-btn");
+  const confirmBtn = document.getElementById("confirm-btn");
+  const investmentValueInput = document.getElementById("investment-value");
+  const profitInput = document.getElementById("profit");
+  const giminiosidadeInput = document.getElementById("giminiosidade");
+  const generatedAssetPre = document.getElementById("generated-asset");
+  const totalToPaySpan = document.getElementById("total-to-pay");
+  const qrCodeContainer = document.getElementById("qrcode-container");
+  const qrCodeImg = document.getElementById("qr-code-img");
+  const loadingSpinner = document.getElementById("loading-spinner");
 
-    function generateHash(data) {
-        const cryptoObj = window.crypto || window.msCrypto;
-        return cryptoObj.subtle.digest("SHA-256", new TextEncoder().encode(data)).then(hash => {
-            return Array.from(new Uint8Array(hash))
-                .map(b => b.toString(16).padStart(2, "0"))
-                .join("");
-        });
+  const conversionRateToARK = 10;
+  let assetGenerated = false;
+
+  function setLoading(isLoading) {
+    if (isLoading) {
+      generateBtn.setAttribute('disabled', 'disabled');
+      loadingSpinner.style.display = 'inline-block';
+    } else {
+      generateBtn.removeAttribute('disabled');
+      loadingSpinner.style.display = 'none';
+    }
+  }
+
+  async function generateHash(data) {
+    const cryptoObj = window.crypto || window.msCrypto;
+    const hashBuffer = await cryptoObj.subtle.digest("SHA-256", new TextEncoder().encode(data));
+    return Array.from(new Uint8Array(hashBuffer))
+      .map(b => b.toString(16).padStart(2, "0"))
+      .join("");
+  }
+
+  function validateInputs() {
+    if (!investmentValueInput.value) return false;
+    if (!profitInput.value || profitInput.value < 0 || profitInput.value > 100) return false;
+    if (!giminiosidadeInput.value || giminiosidadeInput.value < 0) return false;
+    return true;
+  }
+
+  function updateConfirmButton(enabled) {
+    confirmBtn.disabled = !enabled;
+    confirmBtn.setAttribute('aria-disabled', !enabled);
+  }
+
+  generateBtn.addEventListener("click", async () => {
+    if (!validateInputs()) {
+      alert("Por favor, preencha todos os campos corretamente!");
+      return;
     }
 
-    function updateConfirmButtonState() {
-        document.getElementById("confirm-btn").disabled = !isConfirmedFirst;
+    setLoading(true);
+
+    const investmentValue = parseFloat(investmentValueInput.value);
+    const profit = parseFloat(profitInput.value);
+    const giminiosidadeBase = parseFloat(giminiosidadeInput.value);
+
+    // Cálculos
+    const giminiosidadeMaxima = giminiosidadeBase * 2;
+    const totalProfit = investmentValue * (profit / 100);
+    const totalToPayInUSD = (investmentValue + totalProfit) * (1 + giminiosidadeMaxima / 100);
+    const totalToPayInARK = totalToPayInUSD * conversionRateToARK;
+
+    totalToPaySpan.textContent = totalToPayInARK.toFixed(2);
+
+    const hash = await generateHash(`JBX500-${giminiosidadeBase}-${investmentValue}-${profit}`);
+
+    const asset = {
+      name: "JBX500",
+      type: "RZX",
+      hash,
+      network: "DHL4",
+      features: {
+        boost: true,
+        sector: "symbiotic-credit",
+        indexedBy: "holoFiEngine"
+      },
+      investmentValueUSD: investmentValue,
+      profitPercent: profit,
+      giminiosidadeBase
+    };
+
+    generatedAssetPre.textContent = JSON.stringify(asset, null, 2);
+
+    assetGenerated = true;
+    updateConfirmButton(true);
+    qrCodeContainer.style.display = "none";
+
+    setLoading(false);
+  });
+
+  confirmBtn.addEventListener("click", () => {
+    if (!assetGenerated) {
+      alert("Por favor, complete a geração do ativo JBX500!");
+      return;
+    }
+    const totalToPay = parseFloat(totalToPaySpan.textContent);
+    if (isNaN(totalToPay)) {
+      alert("Valor total inválido para pagamento.");
+      return;
     }
 
-    document.getElementById("generate-code-btn").addEventListener("click", async () => {
-        const investmentValue = parseFloat(document.getElementById("investment-value").value);
-        const profit = parseFloat(document.getElementById("profit").value);
-        const giminiosidadeBase = parseFloat(document.getElementById("giminiosidade").value);
+    const amountInARK = (totalToPay * 10 ** 18).toFixed(0);
+    const metamaskUri = `ethereum:?value=${amountInARK}&currency=RZX`;
 
-        if (isNaN(investmentValue) || isNaN(profit) || isNaN(giminiosidadeBase)) {
-            alert("Por favor, preencha todos os campos corretamente!");
-            return;
-        }
+    qrCodeImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(metamaskUri)}`;
+    qrCodeContainer.style.display = "block";
 
-        const giminiosidadeMaxima = giminiosidadeBase * 2;
-        const totalProfit = investmentValue * (profit / 100);
-        const totalToPayInUSD = (investmentValue + totalProfit) * (1 + giminiosidadeMaxima / 100);
-        const totalToPayInARK = totalToPayInUSD * conversionRateToARK;
-
-        document.getElementById("total-to-pay").innerText = totalToPayInARK.toFixed(2);
-
-        const hash = await generateHash("JBX500-" + giminiosidadeBase + "-" + investmentValue + "-" + profit);
-
-        const asset = {
-            name: "JBX500",
-            type: "RZX",
-            hash: hash,
-            network: "DHL4",
-            features: {
-                boost: true,
-                sector: "symbiotic-credit",
-                indexedBy: "holoFiEngine",
-            },
-            investmentValueUSD: investmentValue,
-            profitPercent: profit,
-            giminiosidadeBase: giminiosidadeBase,
-        };
-
-        document.getElementById("generated-asset").innerText = JSON.stringify(asset, null, 2);
-
-        isConfirmedFirst = true;
-        updateConfirmButtonState();
-        document.getElementById("qrcode-container").style.display = "none";
-    });
-
-    document.getElementById("confirm-btn").addEventListener("click", () => {
-        if (!isConfirmedFirst) {
-            alert("Por favor, complete a geração do ativo JBX500!");
-            return;
-        }
-        const totalToPay = parseFloat(document.getElementById("total-to-pay").innerText);
-        if (isNaN(totalToPay)) {
-            alert("Valor total inválido para pagamento.");
-            return;
-        }
-        const amountInARK = (totalToPay * 10 ** 18).toFixed(0);
-        const metamaskUri = `ethereum:?value=${amountInARK}&currency=RZX`;
-
-        const qrCodeImage = document.getElementById("qr-code-img");
-        qrCodeImage.src =
-            "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + encodeURIComponent(metamaskUri);
-        document.getElementById("qrcode-container").style.display = "block";
-    });
+    // Feedback visual no botão após confirmação
+    confirmBtn.textContent = "Pagamento Confirmado ✔";
+    confirmBtn.disabled = true;
+    confirmBtn.setAttribute('aria-disabled', 'true');
+  });
+})();
 </script>
+
+</body>
+</html>
