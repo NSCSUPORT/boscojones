@@ -11,16 +11,15 @@
     @tailwind utilities;
 
     :root {
-      /* GitHub Dark Theme Colors */
-      --bg-default: 15 15% 12%;        /* very dark gray */
-      --fg-default: 210 10% 85%;       /* light gray */
-      --bg-card: 210 10% 18%;          /* dark gray */
-      --fg-card: 210 10% 85%;          /* light gray */
-      --primary: 141 85% 42%;           /* green GitHub success green */
-      --primary-foreground: 210 10% 12%; /* almost black */
-      --secondary: 210 10% 35%;         /* medium gray */
-      --secondary-foreground: 210 10% 70%; /* lighter gray */
-      --destructive: 0 78% 62%;         /* red GitHub danger */
+      --bg-default: 0 0% 5%;        /* quase preto puro */
+      --fg-default: 210 10% 85%;   /* cinza claro */
+      --bg-card: 210 10% 18%;      /* escuro para cards */
+      --fg-card: 210 10% 85%;      /* texto claro */
+      --primary: 141 85% 42%;       /* verde */
+      --primary-foreground: 210 10% 12%;
+      --secondary: 210 10% 35%;
+      --secondary-foreground: 210 10% 70%;
+      --destructive: 0 78% 62%;
       --destructive-foreground: 210 10% 12%;
       --border: 210 10% 28%;
       --input-bg: 210 10% 18%;
@@ -37,9 +36,10 @@
       box-sizing: border-box;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      grid-template-rows: auto auto;
+      grid-template-rows: auto auto 60px;
       gap: 1rem;
       padding: 1rem;
+      min-height: 100vh;
     }
 
     *, *::before, *::after {
@@ -69,118 +69,65 @@
       margin: 0 0 1rem 0;
     }
 
-    .balance {
-      font-size: 2rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.5rem;
-      text-align: center;
-      color: hsl(var(--fg-card));
-    }
-
-    .fiat {
-      text-align: center;
-      font-size: 1rem;
-      color: hsl(var(--secondary-foreground));
-      margin-bottom: 1rem;
-      font-weight: 500;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.3rem;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-weight: 600;
-      color: hsl(var(--primary));
-    }
-
-    input, button {
+    /* footer estilo amarelo neon */
+    footer {
+      grid-column: 1 / -1;
       width: 100%;
-      font-family: monospace, monospace;
+      padding: 12px;
+      background: linear-gradient(45deg, #f0f000, #ff4500);
+      color: #000;
+      text-align: center;
       font-size: 1rem;
-      border-radius: var(--radius);
-      border: 1px solid hsl(var(--border));
-      padding: 0.5rem 0.75rem;
-      outline-offset: 2px;
-      outline-color: transparent;
-      transition: outline-color 0.2s ease;
-      color: hsl(var(--fg-card));
-      background-color: hsl(var(--input-bg));
-      margin-bottom: 0.75rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-shadow: 0 0 8px #ff0000;
+      margin-top: 20px;
+      animation: neon 1.5s ease-in-out infinite alternate;
+      align-self: end;
     }
 
-    input:focus {
-      outline-color: hsl(var(--ring));
-      border-color: hsl(var(--ring));
-      background-color: hsl(var(--bg-card));
+    @keyframes neon {
+      0% {
+        text-shadow:
+          0 0 4px #fff,
+          0 0 11px #f0f000,
+          0 0 19px #f0f000,
+          0 0 40px #f0f000,
+          0 0 80px #ff4500,
+          0 0 90px #ff4500,
+          0 0 100px #ff4500,
+          0 0 150px #ff4500;
+      }
+      50% {
+        text-shadow:
+          0 0 2px #fff,
+          0 0 7px #f0f000,
+          0 0 13px #f0f000,
+          0 0 25px #f0f000,
+          0 0 55px #ff4500,
+          0 0 65px #ff4500,
+          0 0 75px #ff4500,
+          0 0 100px #ff4500;
+      }
+      100% {
+        text-shadow:
+          0 0 4px #fff,
+          0 0 11px #f0f000,
+          0 0 19px #f0f000,
+          0 0 40px #f0f000,
+          0 0 80px #ff4500,
+          0 0 90px #ff4500,
+          0 0 100px #ff4500,
+          0 0 150px #ff4500;
+      }
     }
-
-    button {
-      background-color: hsl(var(--primary));
-      color: hsl(var(--primary-foreground));
-      font-weight: 700;
-      cursor: pointer;
-      border: none;
-      margin-top: 0;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover,
-    button:focus {
-      background-color: hsl(var(--primary) / 0.85);
-      outline-color: hsl(var(--ring));
-    }
-
-    .tx-history {
-      max-height: 180px;
-      overflow-y: auto;
-      font-size: 0.75rem;
-      border-top: 1px solid hsl(var(--border));
-      padding-top: 0.75rem;
-      color: hsl(var(--secondary-foreground));
-      font-family: monospace, monospace;
-    }
-
-    .tx {
-      border-bottom: 1px dotted hsl(var(--border));
-      padding: 0.4rem 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      justify-content: space-between;
-    }
-
-    .tx span {
-      flex: 1 1 100px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      vertical-align: top;
-    }
-
-    .tx-type-send {
-      color: hsl(var(--destructive));
-      font-weight: 600;
-    }
-
-    .tx-type-receive {
-      color: hsl(var(--primary));
-      font-weight: 600;
-    }
-
-    .qr-container {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 0.75rem;
-    }
-
   </style>
 </head>
 <body>
 
   <h1 class="title">Bit Bosco Wallet</h1>
+
+  <!-- cards aqui -->
 
   <section class="card" id="balanceCard" role="region" aria-label="Saldo da carteira">
     <div class="balance" id="balanceDisplay">B$ 1,337.42</div>
@@ -211,6 +158,10 @@
       <!-- Transações aparecerão aqui -->
     </div>
   </section>
+
+  <footer>
+    BOSCO JONES © 2025 - All rights reserved
+  </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <script>
