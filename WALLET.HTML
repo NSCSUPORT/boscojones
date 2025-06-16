@@ -9,29 +9,29 @@
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
   <style>
-    /* Dark HoloFi Engine Style */
+    /* Dark, sóbrio, sem neon */
     body {
       background: linear-gradient(135deg, #0a0f14 0%, #121b27 100%);
-      color: #a0cfff;
+      color: #e0e0e0; /* fonte branca fosca */
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       padding: 20px;
     }
     .container {
       max-width: 480px;
       margin: auto;
-      background: #162b44;
+      background: #1a2638; /* tom escuro, sem brilho */
       padding: 32px;
       border-radius: 16px;
-      box-shadow: 0 0 20px #104d8f88;
-      border: 1px solid #1e406a;
+      box-shadow: 0 0 10px #00000088; /* sombra suave e escura */
+      border: 1px solid #2a3a55;
     }
     h1 {
-      color: #3399ff;
+      color: #ffffff;
       text-align: center;
       margin-bottom: 32px;
-      text-shadow: 0 0 10px #66b2ffaa;
       font-weight: 700;
       letter-spacing: 1.5px;
+      /* removido text-shadow */
     }
     label, input, select {
       display: block;
@@ -39,24 +39,24 @@
       margin-top: 14px;
       font-size: 1.1rem;
       font-weight: 600;
-      color: #d0e7ff;
-      text-shadow: 0 0 4px #235b9e88;
+      color: #e0e0e0;
+      /* removido text-shadow */
     }
     input, select {
       padding: 12px;
-      background: #0d1a2a;
-      border: 1px solid #2f5876;
+      background: #122034; /* fundo escuro */
+      border: 1px solid #2a3a55;
       border-radius: 8px;
-      color: #a0cfff;
+      color: #e0e0e0;
       font-weight: 500;
-      transition: border-color 0.3s ease;
+      transition: border-color 0.3s ease, background-color 0.3s ease;
     }
     input:focus, select:focus {
       outline: none;
-      border-color: #66aaff;
-      box-shadow: 0 0 8px #66aaffaa;
-      background: #133a6c;
-      color: #e0f0ff;
+      border-color: #5599dd;
+      background: #1c3a6b; /* tom escuro azul */
+      color: #ffffff;
+      box-shadow: none; /* sem brilho */
     }
     .btn {
       margin-top: 28px;
@@ -67,73 +67,62 @@
       border: none;
       cursor: pointer;
       font-weight: 700;
-      box-shadow: 0 0 15px #3399ff77;
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
-      user-select: none;
+      box-shadow: none; /* sem brilho */
+      transition: background-color 0.3s ease;
+      color: #f0f0f0;
     }
     #btn-deposit {
-      background: linear-gradient(135deg, #00c851, #007e33);
-      color: #e0ffe0;
+      background: #007e33; /* verde escuro */
       float: left;
-      text-shadow: 0 0 6px #00ff77aa;
     }
     #btn-deposit:hover {
-      background: linear-gradient(135deg, #00e676, #009933);
-      box-shadow: 0 0 25px #00ff99cc;
+      background: #005522;
     }
     #btn-withdraw {
-      background: linear-gradient(135deg, #ff4444, #cc0000);
-      color: #ffe0e0;
+      background: #cc0000; /* vermelho escuro */
       float: right;
-      text-shadow: 0 0 6px #ff6666aa;
     }
     #btn-withdraw:hover {
-      background: linear-gradient(135deg, #ff5555, #dd1111);
-      box-shadow: 0 0 25px #ff6666cc;
+      background: #880000;
     }
     #btn-generate-pix {
       margin-top: 32px;
-      background: linear-gradient(135deg, #1a73e8, #155ab6);
-      color: white;
+      background: #155ab6; /* azul escuro */
+      color: #f0f0f0;
       width: 100%;
       border-radius: 12px;
       font-weight: 700;
-      box-shadow: 0 0 20px #3399ffbb;
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: none;
+      transition: background-color 0.3s ease;
       clear: both;
     }
     #btn-generate-pix:hover {
-      background: linear-gradient(135deg, #3c86ff, #1972ff);
-      box-shadow: 0 0 30px #66aaffee;
+      background: #0f3f7a;
     }
     #saldo-container {
       text-align: center;
       margin-top: 40px;
-      color: #66ffbb;
+      color: #a0d6b4; /* verde fosco */
       font-size: 1.4rem;
       font-weight: 700;
       letter-spacing: 1px;
       clear: both;
-      text-shadow: 0 0 8px #00ffaaee;
+      /* removido text-shadow */
     }
     #qrcode-container {
       margin-top: 32px;
       text-align: center;
-      background: #0a1a2b;
+      background: #122034;
       padding: 20px;
       border-radius: 16px;
-      box-shadow: inset 0 0 10px #3399ff44;
+      box-shadow: inset 0 0 6px #00000066; /* sombra interna sutil */
       user-select: none;
     }
     #asset-select {
       cursor: not-allowed;
-      background: #0d1a2a;
+      background: #122034;
       border-color: #336699;
-      color: #66aaffaa;
-    }
-    /* Clear floats for buttons */
-    .btn-group {
-      overflow: hidden;
+      color: #778fbb;
     }
   </style>
 </head>
@@ -153,10 +142,8 @@
     <label>Geminiosidade (%): <span id="gem-value">0</span>%</label>
     <input type="range" id="gem" min="0" max="10" value="0" />
 
-    <div class="btn-group">
-      <button id="btn-deposit" class="btn">Depositar</button>
-      <button id="btn-withdraw" class="btn">Sacar</button>
-    </div>
+    <button id="btn-deposit" class="btn">Depositar</button>
+    <button id="btn-withdraw" class="btn">Sacar</button>
 
     <button id="btn-generate-pix">Gerar QR Code Pix (5% taxa)</button>
 
@@ -164,23 +151,19 @@
     <div id="qrcode-container"></div>
   </div>
 
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <script>
-  // Salva e lê saldo do localStorage para persistência simples
   const STORAGE_KEY = 'jbx1000_wallet_saldo';
-
   let saldoAtual = parseFloat(localStorage.getItem(STORAGE_KEY)) || 0;
 
-  // Atualiza display saldo
   function atualizarSaldoNaTela() {
     document.getElementById('saldo').innerText = saldoAtual.toFixed(2);
   }
 
-  // Atualiza o texto da Geminiosidade
   document.getElementById('gem').addEventListener('input', e => {
     document.getElementById('gem-value').innerText = e.target.value;
   });
 
-  // Fibonacci para Geminiosidade
   function fibonacci(n) {
     if (n <= 1) return 1;
     let a = 1, b = 1;
@@ -188,7 +171,6 @@
     return b;
   }
 
-  // Validação simples valor positivo
   function validarValor() {
     const val = parseFloat(document.getElementById('valor').value);
     if (isNaN(val) || val <= 0) {
@@ -198,17 +180,14 @@
     return val;
   }
 
-  // Limpa o input valor
   function limparValorInput() {
     document.getElementById('valor').value = '';
   }
 
-  // Limpa QR Code
   function limparQRCode() {
     document.getElementById('qrcode-container').innerHTML = '';
   }
 
-  // Depositar com multiplicador Fibonacci da Geminiosidade
   document.getElementById('btn-deposit').onclick = () => {
     const valor = validarValor();
     if (valor === null) return;
@@ -226,7 +205,6 @@
     limparQRCode();
   };
 
-  // Sacar valor
   document.getElementById('btn-withdraw').onclick = () => {
     const valor = validarValor();
     if (valor === null) return;
@@ -245,67 +223,22 @@
     limparQRCode();
   };
 
-  // Função para gerar payload Pix básico conforme padrão BR Code simplificado para Pix
-  function gerarPayloadPix(chave, nome, cidade, valor, id) {
-    // Função auxiliar para montar campos: <tag><tamanho><valor>
-    function montarCampo(tag, valor) {
-      const valorStr = String(valor);
-      const lengthStr = valorStr.length.toString().padStart(2, '0');
-      return `${tag}${lengthStr}${valorStr}`;
-    }
-
-    // Campos principais
-    const gui = 'BR.GOV.BCB.PIX'; // Payload GUI obrigatório
-    const valorStr = valor.toFixed(2);
-
-    let payload = '';
-    payload += montarCampo('00', '01'); // Payload format indicator
-    payload += montarCampo('26', 
-      montarCampo('00', gui) +
-      montarCampo('01', chave)
-    ); // Merchant Account Information
-    payload += montarCampo('52', '0000'); // Merchant Category Code (0000 = unspecified)
-    payload += montarCampo('53', '986');  // Currency BRL
-    payload += montarCampo('54', valorStr); // Transaction amount
-    payload += montarCampo('58', 'BR');    // Country Code
-    payload += montarCampo('59', nome);   // Merchant Name
-    payload += montarCampo('60', cidade); // Merchant City
-    payload += montarCampo('62', montarCampo('05', id)); // Additional Data Field Template
-    // CRC16 precisa ser calculado para o padrão correto, mas omitiremos para simplificação
-    payload += '6304'; // CRC placeholder (should calculate CRC16 here in production)
-    return payload;
-  }
-
-  // Gerar QR Code Pix com taxa 5%
   document.getElementById('btn-generate-pix').onclick = () => {
     const valor = validarValor();
     if (valor === null) return;
 
-    const valorComTaxa = valor * 1.05;
+    const valorComTaxa = (valor * 1.05).toFixed(2);
 
     const chavePix = "48761013889"; // seu Pix
     const nomeRecebedor = "JBX Wallet";
     const cidade = "SAO PAULO";
     const identificador = "PIXJBX1000";
 
-    // Gerar payload Pix (não utilizado diretamente para QRCode, só para exibir debug)
-    const payloadPix = gerarPayloadPix(chavePix, nomeRecebedor, cidade, valorComTaxa, identificador);
-
-    // Gerar QR Code com valor para Pix usando URI padrão
-    // URI Pix padrão: pix:<chave>?amount=<valor>&... (mais parâmetros podem ser adicionados)
-    const pixUri = `pix:${chavePix}?amount=${valorComTaxa.toFixed(2)}`;
-
-    limparQRCode();
-    QRCode.toCanvas(document.getElementById('qrcode-container'), pixUri, { width: 220 }, function (error) {
-      if (error) {
-        alert('Erro ao gerar QR Code: ' + error);
-      } else {
-        alert(`QR Code Pix gerado para pagamento de R$ ${valorComTaxa.toFixed(2)} (incluindo 5% taxa).`);
-      }
+    QRCode.toCanvas(document.getElementById('qrcode-container'), `pix:${chavePix}?amount=${valorComTaxa}`, { width: 220 }, function (error) {
+      if (error) alert('Erro ao gerar QR Code: ' + error);
     });
   };
 
-  // Inicializar saldo na tela
   atualizarSaldoNaTela();
 </script>
 
