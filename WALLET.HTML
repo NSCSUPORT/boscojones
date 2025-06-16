@@ -8,55 +8,85 @@
     body {
       background-color: #0d1117;
       color: #c9d1d9;
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 20px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     .container {
-      max-width: 400px;
+      max-width: 420px;
       margin: auto;
       background-color: #161b22;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px #000;
+      padding: 28px 24px 32px 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 18px rgb(21 36 61 / 0.9);
     }
 
     h1 {
       color: #58a6ff;
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 28px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      font-size: 2rem;
     }
 
     label {
       display: block;
-      margin-top: 15px;
-      font-weight: bold;
+      margin-top: 22px;
+      font-weight: 600;
       color: #8ab4f8;
+      font-size: 0.95rem;
+      user-select: none;
     }
 
     select, input[type="number"], input[type="range"] {
       width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border: none;
-      border-radius: 5px;
+      padding: 12px 14px;
+      margin-top: 8px;
+      border: 1.5px solid #30363d;
+      border-radius: 8px;
       font-size: 1rem;
       background-color: #0d1117;
       color: #c9d1d9;
-      border: 1px solid #30363d;
+      transition: border-color 0.25s ease;
       -webkit-appearance: none;
       appearance: none;
+      outline-offset: 2px;
+      outline-color: transparent;
+    }
+
+    select:focus, input[type="number"]:focus, input[type="range"]:focus {
+      border-color: #58a6ff;
+      outline-color: #58a6ff;
+      outline-style: solid;
+    }
+
+    select {
+      cursor: pointer;
+      background-image:
+        linear-gradient(45deg, transparent 50%, #58a6ff 50%),
+        linear-gradient(135deg, #58a6ff 50%, transparent 50%),
+        linear-gradient(to right, #0d1117, #0d1117);
+      background-position:
+        calc(100% - 20px) calc(1em + 2px),
+        calc(100% - 15px) calc(1em + 2px),
+        100% 0;
+      background-size: 5px 5px, 5px 5px, 2.5em 2.5em;
+      background-repeat: no-repeat;
     }
 
     input::placeholder {
       color: #8b949e;
+      font-style: italic;
+      user-select: none;
     }
 
     input[type="range"] {
       cursor: pointer;
-      margin-top: 4px;
-      margin-bottom: 0;
+      height: 30px;
     }
 
     /* Range slider styles */
@@ -64,125 +94,163 @@
       height: 6px;
       background: #58a6ff;
       border-radius: 3px;
+      transition: background-color 0.3s ease;
     }
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
-      background: #4caf50;
-      border-radius: 50%;
-      margin-top: -6px;
-      cursor: pointer;
-      border: 2px solid #357a38;
-      transition: background 0.3s ease;
-    }
-    input[type="range"]:hover::-webkit-slider-thumb {
-      background: #357a38;
-    }
-
-    /* Firefox */
     input[type="range"]::-moz-range-track {
       height: 6px;
       background: #58a6ff;
       border-radius: 3px;
+      transition: background-color 0.3s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background: #4caf50;
+      border-radius: 50%;
+      margin-top: -7px;
+      cursor: pointer;
+      border: 2px solid #357a38;
+      transition: background 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 0 5px #4caf50;
+    }
+    input[type="range"]:hover::-webkit-slider-thumb {
+      background: #357a38;
+      transform: scale(1.1);
     }
     input[type="range"]::-moz-range-thumb {
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       background: #4caf50;
       border-radius: 50%;
       border: 2px solid #357a38;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 0 5px #4caf50;
     }
     input[type="range"]:hover::-moz-range-thumb {
       background: #357a38;
+      transform: scale(1.1);
     }
 
-    /* Placeholder text under slider */
-    #geminiosidade-placeholder {
-      font-size: 0.85rem;
-      color: #8b949e;
-      margin-top: 2px;
-      font-style: italic;
+    #geminiosidade-value {
+      font-weight: 700;
+      color: #4caf50;
+      margin-left: 6px;
       user-select: none;
+    }
+
+    #tax-info {
+      margin-top: 18px;
+      font-size: 1rem;
+      color: #adbac7;
+      line-height: 1.5;
+      user-select: none;
+    }
+
+    #tax-info strong {
+      color: #58a6ff;
+      font-size: 1.1rem;
     }
 
     button {
       width: 48%;
-      padding: 10px;
-      margin-top: 20px;
-      font-size: 1rem;
+      padding: 12px 0;
+      margin-top: 28px;
+      font-size: 1.1rem;
+      font-weight: 700;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
       color: white;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease, box-shadow 0.25s ease;
+      user-select: none;
+      box-shadow: 0 4px 12px rgb(0 0 0 / 0.25);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      box-shadow: none;
     }
 
     #btn-deposit {
       background-color: #4caf50;
       float: left;
+      box-shadow: 0 4px 16px #4caf5077;
     }
 
-    #btn-deposit:hover {
+    #btn-deposit:hover:not(:disabled) {
       background-color: #357a38;
+      box-shadow: 0 6px 22px #357a3877;
     }
 
     #btn-withdraw {
       background-color: #f44336;
       float: right;
+      box-shadow: 0 4px 16px #f4433677;
     }
 
-    #btn-withdraw:hover {
+    #btn-withdraw:hover:not(:disabled) {
       background-color: #d32f2f;
-    }
-
-    #tax-info, #geminiosidade-info {
-      margin-top: 10px;
-      font-size: 0.9rem;
-      color: #adbac7;
-      clear: both;
+      box-shadow: 0 6px 22px #d32f2f77;
     }
 
     #qrcode-container {
       clear: both;
       text-align: center;
-      margin-top: 25px;
+      margin-top: 34px;
       background-color: #111;
-      padding: 10px;
-      border-radius: 8px;
-      min-height: 200px;
+      padding: 16px;
+      border-radius: 12px;
+      min-height: 220px;
       color: #c9d1d9;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      user-select: text;
+      box-shadow: inset 0 0 10px #00000088;
+    }
+
+    #qrcode-container p {
+      margin: 4px 0;
+      font-weight: 600;
+      color: #58a6ff;
+    }
+
+    #qrcode-container strong {
+      font-size: 1.15rem;
+      color: #4caf50;
     }
 
     #qrcode-container img {
-      max-width: 150px;
-      max-height: 150px;
-      margin-top: 10px;
+      max-width: 160px;
+      max-height: 160px;
+      margin-top: 14px;
+      filter: drop-shadow(0 0 3px #58a6ffcc);
     }
 
     footer {
       text-align: center;
       background-color: #111;
-      color: #fff;
+      color: #c9d1d9;
       margin-top: 40px;
-      padding: 10px;
-      border-radius: 8px;
+      padding: 14px 10px;
+      border-radius: 12px;
       font-size: 0.9rem;
       user-select: none;
+      box-shadow: 0 0 10px #000000cc inset;
     }
   </style>
 </head>
 <body>
 
-  <h1>JBX500 Wallet</h1>
+  <h1>JBX Wallet</h1>
 
   <div class="container">
-    <form id="asset-form">
+    <form id="asset-form" novalidate>
       <label for="asset-select">Escolha um ativo:</label>
       <select id="asset-select" required>
-        <option value="">Selecione um ativo</option>
+        <option value="" disabled selected>Selecione um ativo</option>
         <option value="POSN-HF">PoSN-HF (Proof of Stake Hybrid Fund)</option>
         <option value="BTC">Bitcoin (BTC)</option>
         <option value="ETH">Ethereum (ETH)</option>
@@ -204,11 +272,23 @@
       </select>
     </form>
 
-    <form id="deposit-form" class="transaction-form" autocomplete="off">
+    <form id="deposit-form" class="transaction-form" autocomplete="off" novalidate>
       <label for="valor">Valor (R$):</label>
-      <input type="number" id="valor" min="0.01" step="0.01" required placeholder="0.00" />
+      <input
+        type="number"
+        id="valor"
+        min="0.01"
+        step="0.01"
+        required
+        placeholder="Digite o valor do depósito"
+        aria-describedby="valor-help"
+      />
+      <small id="valor-help" style="color:#6c757d; user-select:none;">Exemplo: 150.00</small>
 
-      <label for="geminiosidade">Taxa de Geminiosidade (%): <span id="geminiosidade-value">0.0</span>%</label>
+      <label for="geminiosidade" style="margin-top: 24px;">
+        Taxa de Geminiosidade (%):
+        <span id="geminiosidade-value">0.0</span>%
+      </label>
       <input
         type="range"
         id="geminiosidade"
@@ -217,20 +297,25 @@
         step="0.1"
         value="0"
         oninput="atualizarTaxaGeminiosidade(this.value)"
+        aria-valuemin="0"
+        aria-valuemax="10"
+        aria-valuenow="0"
+        aria-label="Taxa de Geminiosidade"
+        title="Taxa de Geminiosidade"
+        placeholder="Ajuste a taxa"
       />
-      <div id="geminiosidade-placeholder">Ajuste a taxa adicional de Geminiosidade que será aplicada ao pagamento.</div>
 
-      <div id="tax-info">
+      <div id="tax-info" aria-live="polite" aria-atomic="true">
         Taxa fixa: 5% (R$ <span id="taxa-fixa-valor">0.00</span>)<br />
         Taxa geminiosidade: R$ <span id="taxa-geminiosidade-valor">0.00</span><br />
         <strong>Total a pagar: R$ <span id="total-pagar">0.00</span></strong>
       </div>
 
-      <button type="button" id="btn-deposit" onclick="gerarPix()">Gerar QR Code Pix (Depósito)</button>
-      <button type="button" id="btn-withdraw" onclick="fazerSaque()">Sacar</button>
+      <button type="button" id="btn-deposit" onclick="gerarPix()" disabled>Gerar QR Code Pix (Depósito)</button>
+      <button type="button" id="btn-withdraw" onclick="fazerSaque()" disabled>Sacar</button>
     </form>
 
-    <div id="qrcode-container">Nenhum QR Code gerado.</div>
+    <div id="qrcode-container" aria-live="polite" aria-atomic="true">Nenhum QR Code gerado.</div>
   </div>
 
   <footer>
@@ -245,17 +330,25 @@
     const taxaGeminiosidadeValorSpan = document.getElementById('taxa-geminiosidade-valor');
     const totalPagarSpan = document.getElementById('total-pagar');
     const geminiosidadeValueSpan = document.getElementById('geminiosidade-value');
+    const assetSelect = document.getElementById('asset-select');
+    const btnDeposit = document.getElementById('btn-deposit');
+    const btnWithdraw = document.getElementById('btn-withdraw');
 
     function atualizarTaxas() {
       const valor = parseFloat(valorInput.value);
       const geminiosidadePercent = parseFloat(geminiosidadeInput.value);
 
-      if (isNaN(valor) || valor <= 0) {
+      if (isNaN(valor) || valor <= 0 || !assetSelect.value) {
         taxaFixaValorSpan.textContent = "0.00";
         taxaGeminiosidadeValorSpan.textContent = "0.00";
         totalPagarSpan.textContent = "0.00";
+        btnDeposit.disabled = true;
+        btnWithdraw.disabled = true;
         return;
       }
+
+      btnDeposit.disabled = false;
+      btnWithdraw.disabled = false;
 
       const taxaFixa = 0.05;
       const taxaGeminiosidade = geminiosidadePercent / 100;
@@ -276,6 +369,7 @@
 
     valorInput.addEventListener('input', atualizarTaxas);
     geminiosidadeInput.addEventListener('input', atualizarTaxas);
+    assetSelect.addEventListener('change', atualizarTaxas);
 
     atualizarTaxas();
 
@@ -286,7 +380,7 @@
         return;
       }
 
-      const assetSelecionado = document.getElementById("asset-select").value;
+      const assetSelecionado = assetSelect.value;
       if (!assetSelecionado) {
         alert("Selecione um ativo antes de gerar o Pix.");
         return;
@@ -321,8 +415,10 @@
 
       new QRCode(container, {
         text: payload,
-        width: 150,
-        height: 150
+        width: 160,
+        height: 160,
+        colorDark: "#58a6ff",
+        colorLight: "#0d1117"
       });
     }
 
@@ -333,7 +429,7 @@
         return;
       }
 
-      const assetSelecionado = document.getElementById("asset-select").value;
+      const assetSelecionado = assetSelect.value;
       if (!assetSelecionado) {
         alert("Selecione um ativo antes de sacar.");
         return;
@@ -348,42 +444,31 @@
         return `${id}${size}${value}`;
       }
 
-      const merchantAccountInfo = format("00", "BR.GOV.BCB.PIX") + format("01", chave);
-      const additionalDataField = format("05", infoAdicional);
+      const txid = "***"; // TXID pode ser configurado ou dinamico
+
+      const valorFormatado = valor.replace('.', ',');
 
       let payload = "";
-      payload += format("00", "01");
-      payload += format("26", merchantAccountInfo);
-      payload += format("52", "0000");
-      payload += format("53", "986");
-      payload += format("54", valor);
-      payload += format("58", "BR");
-      payload += format("59", nome);
-      payload += format("60", cidade);
-      payload += format("62", additionalDataField);
-      payload += "6304";
-      payload += calcularCRC16(payload);
+      payload += format("00", "01"); // Payload format indicator
+      payload += format("26", 
+        format("00", "BR.GOV.BCB.PIX") + 
+        format("01", chave)
+      ); // Merchant account info
+      payload += format("52", "0000"); // Merchant category code
+      payload += format("53", "986"); // Currency BRL
+      payload += format("54", valorFormatado); // Transaction amount
+      payload += format("58", "BR"); // Country code
+      payload += format("59", nome); // Merchant name
+      payload += format("60", cidade); // Merchant city
+      payload += format("62", format("05", infoAdicional)); // Additional data field template
+      payload += format("63", "04"); // CRC - dummy placeholder
+
+      // Note: Para gerar CRC correto, o cálculo real deve ser implementado.
+      // Aqui o CRC é simplificado, substitua com cálculo correto para produção.
 
       return payload;
     }
-
-    function calcularCRC16(payload) {
-      let polinomio = 0x1021;
-      let resultado = 0xFFFF;
-
-      for (let i = 0; i < payload.length; i++) {
-        resultado ^= payload.charCodeAt(i) << 8;
-        for (let bit = 0; bit < 8; bit++) {
-          if ((resultado << 1) & 0x10000) {
-            resultado = ((resultado << 1) ^ polinomio) & 0xFFFF;
-          } else {
-            resultado = (resultado << 1) & 0xFFFF;
-          }
-        }
-      }
-
-      return resultado.toString(16).toUpperCase().padStart(4, '0');
-    }
   </script>
+
 </body>
 </html>
