@@ -1,673 +1,251 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <link rel="icon" href="logo.ico" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bosco Jones Wallet - Login, Registro & Wallet</title>
-  <style>
-    /* Reset básico */
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      background-color: #0d1117;
-      color: #c9d1d9;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji';
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .container {
-      max-width: 480px;
-      margin: 3rem auto;
-      padding: 2rem 2.5rem;
-      background-color: #161b22;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(1, 4, 9, 0.6);
-      transition: box-shadow 0.3s ease;
-    }
-    .container:hover {
-      box-shadow: 0 12px 30px rgba(1, 4, 9, 0.9);
-    }
-
-    h2 {
-      margin-bottom: 1.5rem;
-      color: #c9d1d9;
-      font-weight: 600;
-      font-size: 1.8rem;
-      text-align: center;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      color: #8b949e;
-    }
-
-    input,
-    select {
-      width: 100%;
-      padding: 0.6rem 1rem;
-      margin-bottom: 1.3rem;
-      background-color: #0d1117;
-      border: 1.5px solid #30363d;
-      border-radius: 6px;
-      color: #c9d1d9;
-      font-size: 1rem;
-      transition: border-color 0.3s ease;
-    }
-
-    input::placeholder {
-      color: #484f58;
-    }
-
-    input:focus,
-    select:focus {
-      border-color: #58a6ff;
-      outline: none;
-      box-shadow: 0 0 8px #58a6ff44;
-      background-color: #161b22;
-    }
-
-    button {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      background-color: #238636;
-      border: none;
-      border-radius: 8px;
-      color: white;
-      font-weight: 600;
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: background-color 0.25s ease;
-      box-shadow: 0 4px 10px rgba(35, 134, 54, 0.6);
-    }
-    button:hover {
-      background-color: #2ea043;
-      box-shadow: 0 6px 14px rgba(46, 160, 67, 0.75);
-    }
-
-    .wallet-header {
-      text-align: center;
-      margin-bottom: 1.8rem;
-    }
-
-    .wallet-header h2 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: #58a6ff;
-      margin-bottom: 0.2rem;
-    }
-
-    .balance,
-    .balance-fiat {
-      font-size: 1.2rem;
-      color: #8b949e;
-      font-weight: 500;
-    }
-
-    .history {
-      margin-top: 2rem;
-      background-color: #0d1117;
-      padding: 1rem 1.2rem;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      color: #8b949e;
-      max-height: 180px;
-      overflow-y: auto;
-      font-size: 0.95rem;
-      line-height: 1.4;
-    }
-
-    .history strong {
-      display: block;
-      margin-bottom: 0.8rem;
-      color: #58a6ff;
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
-
-    .history p {
-      margin: 0.4rem 0;
-      padding-left: 0.5rem;
-      border-left: 3px solid #30363d;
-      color: #c9d1d9;
-    }
-
-    .btn-logout {
-      background-color: #bf4b4b;
-      margin-top: 2.5rem;
-      box-shadow: 0 4px 12px rgba(191, 75, 75, 0.7);
-      font-weight: 600;
-    }
-    .btn-logout:hover {
-      background-color: #d15757;
-      box-shadow: 0 6px 14px rgba(209, 87, 87, 0.85);
-    }
-
-    a {
-      color: #58a6ff;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s ease;
-    }
-    a:hover {
-      color: #1f6feb;
-      text-decoration: underline;
-    }
-
-    /* Links "Criar conta" e "Já tem conta?" centralizados */
-    p.link-switch {
-      text-align: center;
-      margin-top: 1.3rem;
-      font-size: 0.9rem;
-      user-select: none;
-    }
-    footer {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(45deg, #f0f000, #ff4500);
-      color: #000;
-      text-align: center;
-      font-size: 1rem;
-      font-weight: bold;
-      letter-spacing: 2px;
-      text-shadow: 0 0 8px #ff0000;
-      margin-top: 20px;
-      animation: neon 1.5s ease-in-out infinite alternate;
-    }
-
-    /* Animação neon */
-    @keyframes neon {
-      from {
-        text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 40px #ff4500,
-          0 0 80px #ff4500;
-      }
-      to {
-        text-shadow: 0 0 10px #ff4500, 0 0 20px #ff4500, 0 0 30px #ff0000, 0 0 50px #ff0000,
-          0 0 100px #ff0000;
-      }
-    }
-
-    /* PIX Payment Section */
-    #pix-payment-section {
-      max-width: 480px;
-      margin: 2rem auto 4rem;
-      padding: 2rem 2.5rem;
-      background-color: #161b22;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(1, 4, 9, 0.6);
-    }
-
-    #pix-payment-section h2 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-      color: #c9d1d9;
-      font-weight: 600;
-      font-size: 1.6rem;
-    }
-
-    #pix-payment-section label {
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      color: #8b949e;
-      display: block;
-    }
-
-    #pix-payment-section input {
-      width: 100%;
-      padding: 0.6rem 1rem;
-      margin-bottom: 1.3rem;
-      background-color: #0d1117;
-      border: 1.5px solid #30363d;
-      border-radius: 6px;
-      color: #c9d1d9;
-      font-size: 1rem;
-      transition: border-color 0.3s ease;
-    }
-
-    #pix-payment-section input:focus {
-      border-color: #58a6ff;
-      outline: none;
-      box-shadow: 0 0 8px #58a6ff44;
-      background-color: #161b22;
-    }
-
-    #pix-payment-section button {
-      background-color: #238636;
-      box-shadow: 0 4px 10px rgba(35, 134, 54, 0.6);
-      cursor: pointer;
-    }
-
-    #pix-qrcodes {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 1rem;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .qrcode-box {
-      background-color: #0d1117;
-      border: 1.5px solid #30363d;
-      border-radius: 8px;
-      padding: 1rem;
-      width: 45%;
-      min-width: 180px;
-      text-align: center;
-      color: #c9d1d9;
-      user-select: none;
-    }
-
-    .qrcode-box h3 {
-      margin-bottom: 0.8rem;
-      color: #58a6ff;
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
-
-    .qrcode-box canvas {
-      margin: 0 auto;
-    }
-
-    @media (max-width: 600px) {
-      #pix-qrcodes {
-        flex-direction: column;
-      }
-      .qrcode-box {
-        width: 100%;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Login + Pix Split 5% via Firebase</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #121212;
+    color: #eee;
+    padding: 20px;
+  }
+  label, input, button {
+    display: block;
+    margin: 10px 0;
+  }
+  input {
+    font-size: 1.2rem;
+    padding: 5px;
+    width: 250px;
+  }
+  button {
+    font-size: 1.1rem;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  button:hover {
+    background-color: #388E3C;
+  }
+  #qrcodes > div {
+    margin-top: 20px;
+  }
+  #qrcodes h4 {
+    margin-bottom: 5px;
+  }
+  #splitInfo {
+    margin-top: 15px;
+    font-size: 1.1rem;
+  }
+  #authSection, #appSection {
+    max-width: 400px;
+    margin: auto;
+  }
+  #logoutBtn {
+    background-color: #f44336;
+  }
+  #logoutBtn:hover {
+    background-color: #d32f2f;
+  }
+  .error, .success {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  .error { color: #f44336; }
+  .success { color: #4CAF50; }
+</style>
 </head>
 <body>
-  <!-- LOGIN FORM -->
-  <section id="login-section" class="container">
-    <h2>Login Bosco Wallet</h2>
-    <form id="login-form" autocomplete="off">
-      <label for="login-email">Email:</label>
-      <input type="email" id="login-email" required placeholder="seuemail@exemplo.com" />
-      <label for="login-password">Senha:</label>
-      <input type="password" id="login-password" required placeholder="••••••••" />
-      <button type="submit">Entrar</button>
-    </form>
-    <p class="link-switch">
-      <a href="#" id="show-register">Criar uma conta</a>
-    </p>
-  </section>
 
-  <!-- REGISTRO FORM -->
-  <section id="register-section" class="container" style="display:none;">
-    <h2>Registrar</h2>
-    <form id="register-form" autocomplete="off">
-      <label for="register-email">Email:</label>
-      <input type="email" id="register-email" required placeholder="seuemail@exemplo.com" />
-      <label for="register-password">Senha:</label>
-      <input type="password" id="register-password" required placeholder="••••••••" />
-      <button type="submit">Registrar</button>
-    </form>
-    <p class="link-switch">
-      <a href="#" id="show-login">Já tem conta? Entrar</a>
-    </p>
-  </section>
+<h2 style="text-align:center;">App Login + Pix Split 5%</h2>
 
-  <!-- WALLET -->
-  <section id="wallet-section" class="container" style="display:none;">
-    <div class="wallet-header">
-      <h2>Bem-vindo, <span id="user-display"></span>!</h2>
-      <div class="balance" id="balance">USD 0.00</div>
-      <div class="balance-fiat" id="balance-fiat">USD 0.00</div>
-    </div>
+<div id="authSection">
+  <h3>Login / Registro</h3>
+  <input type="email" id="email" placeholder="Email" required />
+  <input type="password" id="password" placeholder="Senha" required />
+  <button id="loginBtn">Entrar</button>
+  <button id="registerBtn">Registrar</button>
+  <div id="authMessage"></div>
+</div>
 
-    <!-- Seletor de ativo -->
-    <form class="transaction-form" id="asset-select-form">
-      <label for="currency">Selecionar Ativo:</label>
-      <select id="currency" required>
-        <!-- GIX2 Assets -->
-        <option value="DC-COIN">DC Coin (Trix Z)</option>
-        <option value="DARK1">DARK1 (Shadow Token)</option>
-        <option value="DARK2">DARK2 (Oblivion Coin)</option>
-        <option value="DARK3">DARK3 (Phantom Credit)</option>
-        <option value="DARK4">DARK4 (Eclipse Asset)</option>
-        <option value="POSN-HF">PoSN-HF (Proof of Stake Hybrid Fund)</option>
-        <option value="BTC">Bitcoin (BTC)</option>
-        <option value="ETH">Ethereum (ETH)</option>
-        <option value="LTC">Litecoin (LTC)</option>
-        <option value="XRP">Ripple (XRP)</option>
-        <option value="DOGE">Dogecoin (DOGE)</option>
-        <option value="ADA">Cardano (ADA)</option>
+<div id="appSection" style="display:none;">
+  <button id="logoutBtn">Sair</button>
 
-        <!-- RZX (Dark HoloFi Lashs) -->
-        <option value="DHL1">DHL1 (Dark Lash - Shadow)</option>
-        <option value="DHL2">DHL2 (Dark Lash - Oblivion)</option>
-        <option value="DHL3">DHL3 (Dark Lash - Phantom)</option>
-        <option value="DHL4">DHL4 (Dark Lash - Eclipse)</option>
+  <h3>Pagamento Pix com Split 5%</h3>
 
-        <!-- HoloFi e Simbióticos -->
-        <option value="SPPX">SPPX (Simbiótico Premium)</option>
-        <option value="QVAFLES">QVAFLES (SSQAFLE)</option>
-        <option value="XETH">XETH (Cross Ethereum)</option>
-        <option value="D-EURO">D-EURO (Euro Digital)</option>
-        <option value="SSQSEA">SSQSEA (Base de Simbiose)</option>
-        <option value="RZX-STARTUP">START UP RZX</option>
-        <option value="JBX500">JBX500 Asset (HoloFi Symbiotic Dark)</option>
-      </select>
-    </form>
+  <label for="amount">Informe o valor total (R$):</label>
+  <input type="number" id="amount" min="0.01" step="0.01" placeholder="Ex: 100.00" />
 
-    <!-- Formulários -->
-    <form id="deposit-form" class="transaction-form" autocomplete="off">
-      <label for="deposit-amount">Depositar valor (USD):</label>
-      <input type="number" id="deposit-amount" min="0.01" step="0.01" required placeholder="0.00" />
-      <button type="submit">Depositar</button>
-    </form>
+  <button id="generateBtn">Gerar QR Codes Pix</button>
 
-    <form id="withdraw-form" class="transaction-form" autocomplete="off">
-      <label for="withdraw-amount">Sacar valor (USD):</label>
-      <input type="number" id="withdraw-amount" min="0.01" step="0.01" required placeholder="0.00" />
-      <button type="submit">Sacar</button>
-    </form>
+  <div id="splitInfo"></div>
+  <div id="qrcodes"></div>
+</div>
 
-    <!-- Histórico -->
-    <div class="history" id="transaction-history">
-      <strong>Histórico de transações:</strong>
-      <p>Nenhuma transação ainda.</p>
-    </div>
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 
-    <button id="logout-btn" class="btn-logout">Sair</button>
-  </section>
+<!-- Pix Payload lib -->
+<script src="https://cdn.jsdelivr.net/npm/pix-payload@1.2.1/dist/index.min.js"></script>
 
-  <!-- PIX PAYMENT SECTION -->
-  <section id="pix-payment-section" class="container" style="display:none;">
-    <h2>Pagamento via PIX</h2>
-    <form id="pix-form" autocomplete="off">
-      <label for="pix-amount">Informe o valor para pagamento (R$):</label>
-      <input type="number" id="pix-amount" min="0.01" step="0.01" required placeholder="0.00" />
-      <button type="submit">Gerar QR Codes PIX</button>
-    </form>
-    <div id="pix-qrcodes" style="display:none;">
-      <div class="qrcode-box">
-        <h3>Pagamento Principal</h3>
-        <div id="qrcode-main"></div>
-        <p id="pix-main-amount"></p>
-      </div>
-      <div class="qrcode-box">
-        <h3>Pagamento 5% taxa para 48761013889</h3>
-        <div id="qrcode-tax"></div>
-        <p id="pix-tax-amount"></p>
-      </div>
-    </div>
-  </section>
+<!-- QRCode lib -->
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
 
-  <footer>
-    © 2025 Bosco Jones Wallet · Desenvolvido por lucas januario ·
-  </footer>
+<script>
+  // Config Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDzfZvQi-oaOUWPgSOu8BtTINa_LO2ZoLc",
+    authDomain: "bosco-jones-wallet.firebaseapp.com",
+    projectId: "bosco-jones-wallet",
+    storageBucket: "bosco-jones-wallet.appspot.com",
+    messagingSenderId: "1829673164",
+    appId: "1:1829673164:web:37c947c8aafe1af72a8a69",
+    measurementId: "G-6SZH0MHRGE"
+  };
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
 
-  <!-- Biblioteca QRCode.js -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+  // UI Elements
+  const authSection = document.getElementById('authSection');
+  const appSection = document.getElementById('appSection');
+  const authMessage = document.getElementById('authMessage');
+  const emailInput = document.getElementById('email');
+  const passInput = document.getElementById('password');
+  const loginBtn = document.getElementById('loginBtn');
+  const registerBtn = document.getElementById('registerBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
 
-  <script>
-    // Seu firebaseConfig fornecido
-    const firebaseConfig = {
-      apiKey: "AIzaSyDzfZvQi-oaOUWPgSOu8BtTINa_LO2ZoLc",
-      authDomain: "bosco-jones-wallet.firebaseapp.com",
-      projectId: "bosco-jones-wallet",
-      storageBucket: "bosco-jones-wallet.firebasestorage.app",
-      messagingSenderId: "1829673164",
-      appId: "1:1829673164:web:37c947c8aafe1af72a8a69",
-      measurementId: "G-6SZH0MHRGE"
-    };
+  // Chaves Pix
+  const CHAVE_PRINCIPAL = "luakaskn22@gmail.com"; // Sua chave Pix principal
+  const CHAVE_TAXA = "11958849894"; // Sua chave Pix para taxa 5%
 
-    // Inicializa Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+  // Pix pagamento UI
+  const amountInput = document.getElementById('amount');
+  const generateBtn = document.getElementById('generateBtn');
+  const splitInfo = document.getElementById('splitInfo');
+  const qrcodesDiv = document.getElementById('qrcodes');
 
-    // Elementos UI
-    const loginSection = document.getElementById('login-section');
-    const registerSection = document.getElementById('register-section');
-    const walletSection = document.getElementById('wallet-section');
-    const pixPaymentSection = document.getElementById('pix-payment-section');
-
-    const loginForm = document.getElementById('login-form');
-    const registerForm = document.getElementById('register-form');
-    const depositForm = document.getElementById('deposit-form');
-    const withdrawForm = document.getElementById('withdraw-form');
-    const assetSelectForm = document.getElementById('asset-select-form');
-
-    const userDisplay = document.getElementById('user-display');
-    const balanceDisplay = document.getElementById('balance');
-    const balanceFiatDisplay = document.getElementById('balance-fiat');
-    const transactionHistoryEl = document.getElementById('transaction-history');
-
-    const logoutBtn = document.getElementById('logout-btn');
-
-    const showRegisterLink = document.getElementById('show-register');
-    const showLoginLink = document.getElementById('show-login');
-
-    // PIX Elements
-    const pixForm = document.getElementById('pix-form');
-    const pixAmountInput = document.getElementById('pix-amount');
-    const pixQRCodes = document.getElementById('pix-qrcodes');
-    const qrcodeMainDiv = document.getElementById('qrcode-main');
-    const qrcodeTaxDiv = document.getElementById('qrcode-tax');
-    const pixMainAmount = document.getElementById('pix-main-amount');
-    const pixTaxAmount = document.getElementById('pix-tax-amount');
-
-    // Estado da aplicação
-    let currentUser = null;
-    let balance = 0;
-    let currentAsset = 'DC-COIN';
-    let transactionHistory = [];
-
-    // Troca visual entre login e registro
-    showRegisterLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      loginSection.style.display = 'none';
-      registerSection.style.display = 'block';
-      walletSection.style.display = 'none';
-      pixPaymentSection.style.display = 'none';
-    });
-
-    showLoginLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      loginSection.style.display = 'block';
-      registerSection.style.display = 'none';
-      walletSection.style.display = 'none';
-      pixPaymentSection.style.display = 'none';
-    });
-
-    // Registro
-    registerForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('register-email').value.trim();
-      const password = document.getElementById('register-password').value;
-
-      try {
-        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-        alert('Conta criada com sucesso! Você será redirecionado para a carteira.');
-        registerForm.reset();
-      } catch (error) {
-        alert('Erro ao criar conta: ' + error.message);
-      }
-    });
-
-    // Login
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('login-email').value.trim();
-      const password = document.getElementById('login-password').value;
-
-      try {
-        const userCredential = await auth.signInWithEmailAndPassword(email, password);
-        loginForm.reset();
-      } catch (error) {
-        alert('Erro ao fazer login: ' + error.message);
-      }
-    });
-
-    // Logout
-    logoutBtn.addEventListener('click', async () => {
-      await auth.signOut();
-    });
-
-    // Atualizar UI após login/logout
-    auth.onAuthStateChanged((user) => {
-      currentUser = user;
-      if (user) {
-        // Mostrar Wallet
-        loginSection.style.display = 'none';
-        registerSection.style.display = 'none';
-        walletSection.style.display = 'block';
-        pixPaymentSection.style.display = 'block';
-
-        userDisplay.textContent = user.email;
-
-        // Resetar saldo e histórico (simulação)
-        balance = 0;
-        transactionHistory = [];
-        updateBalanceUI();
-        updateTransactionHistoryUI();
-      } else {
-        // Mostrar Login
-        loginSection.style.display = 'block';
-        registerSection.style.display = 'none';
-        walletSection.style.display = 'none';
-        pixPaymentSection.style.display = 'none';
-
-        userDisplay.textContent = '';
-        balance = 0;
-        transactionHistory = [];
-      }
-    });
-
-    // Atualizar saldo e exibir no UI
-    function updateBalanceUI() {
-      balanceDisplay.textContent = `${currentAsset} ${balance.toFixed(2)}`;
-      // Exemplo: converter para BRL fixo (simulado)
-      const brlRate = 5.20;
-      balanceFiatDisplay.textContent = `R$ ${(balance * brlRate).toFixed(2)}`;
+  // Gerenciar estado login
+  auth.onAuthStateChanged(user => {
+    if(user) {
+      authSection.style.display = 'none';
+      appSection.style.display = 'block';
+      authMessage.innerHTML = '';
+    } else {
+      authSection.style.display = 'block';
+      appSection.style.display = 'none';
+      authMessage.innerHTML = '';
+      emailInput.value = '';
+      passInput.value = '';
     }
+  });
 
-    // Atualizar histórico
-    function updateTransactionHistoryUI() {
-      if (transactionHistory.length === 0) {
-        transactionHistoryEl.innerHTML = '<strong>Histórico de transações:</strong><p>Nenhuma transação ainda.</p>';
-        return;
-      }
-
-      let html = '<strong>Histórico de transações:</strong>';
-      for (const tx of transactionHistory.slice().reverse()) {
-        const color = tx.type === 'deposit' ? '#238636' : '#bf4b4b';
-        html += `<p style="color:${color}"><strong>${tx.type.toUpperCase()}</strong> - ${tx.amount.toFixed(2)} ${currentAsset} <br/><small>${new Date(tx.date).toLocaleString()}</small></p>`;
-      }
-      transactionHistoryEl.innerHTML = html;
+  // Login
+  loginBtn.addEventListener('click', () => {
+    const email = emailInput.value.trim();
+    const password = passInput.value;
+    if(!email || !password) {
+      authMessage.innerHTML = '<p class="error">Preencha email e senha.</p>';
+      return;
     }
-
-    // Deposit Form
-    depositForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const amount = parseFloat(document.getElementById('deposit-amount').value);
-      if (isNaN(amount) || amount <= 0) {
-        alert('Informe um valor válido para depositar.');
-        return;
-      }
-      balance += amount;
-      transactionHistory.push({ type: 'deposit', amount, date: Date.now() });
-      updateBalanceUI();
-      updateTransactionHistoryUI();
-      depositForm.reset();
-      alert(`Depósito de ${amount.toFixed(2)} ${currentAsset} realizado com sucesso.`);
-    });
-
-    // Withdraw Form
-    withdrawForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const amount = parseFloat(document.getElementById('withdraw-amount').value);
-      if (isNaN(amount) || amount <= 0) {
-        alert('Informe um valor válido para sacar.');
-        return;
-      }
-      if (amount > balance) {
-        alert('Saldo insuficiente.');
-        return;
-      }
-      balance -= amount;
-      transactionHistory.push({ type: 'withdraw', amount, date: Date.now() });
-      updateBalanceUI();
-      updateTransactionHistoryUI();
-      withdrawForm.reset();
-      alert(`Saque de ${amount.toFixed(2)} ${currentAsset} realizado com sucesso.`);
-    });
-
-    // Alterar ativo selecionado
-    document.getElementById('currency').addEventListener('change', (e) => {
-      currentAsset = e.target.value;
-      updateBalanceUI();
-    });
-
-    // PIX Payment
-    // Função para gerar payload PIX simples (exemplo estático)
-    function generatePixPayload(amount, pixKey, description = '') {
-      // Para exemplo simples, formato: 
-      // https://pix.example.com/pag?chave=pixKey&valor=amount&desc=description
-      // Na prática, usar gerador oficial do Banco Central ou bibliotecas dedicadas
-
-      const valorFixed = amount.toFixed(2).replace('.', ',');
-      return `00020126580014BR.GOV.BCB.PIX0136${pixKey}0208${valorFixed}53039865404${description}6304XXXX`;
-    }
-
-    pixForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const amount = parseFloat(pixAmountInput.value);
-      if (isNaN(amount) || amount <= 0) {
-        alert('Informe um valor válido para o pagamento PIX.');
-        return;
-      }
-
-      // PIX Keys (fixas)
-      const pixKeyMain = 'bosco.jones@example.com'; // Pode ajustar
-      const pixKeyTax = '48761013889';
-
-      const taxAmount = +(amount * 0.05).toFixed(2);
-      const mainAmount = +(amount - taxAmount).toFixed(2);
-
-      // Simples payload, aqui só texto com chave e valor, só pra gerar QR Code
-      // Para uso real, recomenda-se biblioteca oficial do Banco Central PIX Payload Generator
-      const payloadMain = `00020126580014BR.GOV.BCB.PIX0126${pixKeyMain}520400005303986540${mainAmount.toFixed(
-        2
-      )}5802BR5925Bosco Jones Wallet6009Sao Paulo61080540900062070503***6304B60C`;
-      const payloadTax = `00020126580014BR.GOV.BCB.PIX0125${pixKeyTax}520400005303986540${taxAmount.toFixed(
-        2
-      )}5802BR5925Bosco Jones Wallet6009Sao Paulo61080540900062070503***6304B60D`;
-
-      // Limpar QR
-      qrcodeMainDiv.innerHTML = '';
-      qrcodeTaxDiv.innerHTML = '';
-
-      QRCode.toCanvas(qrcodeMainDiv, payloadMain, { width: 180 }, function (error) {
-        if (error) console.error(error);
+    auth.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        authMessage.innerHTML = '<p class="success">Login realizado com sucesso!</p>';
+      })
+      .catch(e => {
+        authMessage.innerHTML = `<p class="error">Erro no login: ${e.message}</p>`;
       });
-      QRCode.toCanvas(qrcodeTaxDiv, payloadTax, { width: 180 }, function (error) {
-        if (error) console.error(error);
+  });
+
+  // Registro
+  registerBtn.addEventListener('click', () => {
+    const email = emailInput.value.trim();
+    const password = passInput.value;
+    if(!email || !password) {
+      authMessage.innerHTML = '<p class="error">Preencha email e senha.</p>';
+      return;
+    }
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        authMessage.innerHTML = '<p class="success">Usuário registrado com sucesso! Faça login.</p>';
+      })
+      .catch(e => {
+        authMessage.innerHTML = `<p class="error">Erro no registro: ${e.message}</p>`;
       });
+  });
 
-      pixMainAmount.textContent = `R$ ${mainAmount.toFixed(2)}`;
-      pixTaxAmount.textContent = `R$ ${taxAmount.toFixed(2)}`;
+  // Logout
+  logoutBtn.addEventListener('click', () => {
+    auth.signOut();
+  });
 
-      pixQRCodes.style.display = 'flex';
+  // Gerar QR Codes Pix com split 5%
+  generateBtn.addEventListener('click', () => {
+    const totalValue = parseFloat(amountInput.value);
+    if (!totalValue || totalValue <= 0) {
+      alert("Informe um valor válido maior que zero.");
+      return;
+    }
+
+    const taxa = totalValue * 0.05;
+    const valorLiquido = totalValue - taxa;
+
+    splitInfo.innerHTML = `
+      <strong>Valor total:</strong> R$ ${totalValue.toFixed(2)}<br/>
+      <strong>Taxa (5%):</strong> R$ ${taxa.toFixed(2)}<br/>
+      <strong>Valor líquido para você:</strong> R$ ${valorLiquido.toFixed(2)}
+    `;
+
+    // Usando PixPayload para payload Pix oficial
+    const payloadPrincipal = new PixPayload.PixPayload(CHAVE_PRINCIPAL, {
+      description: 'Pagamento valor líquido',
+      amount: valorLiquido.toFixed(2),
+      txid: `txid-${Date.now()}`
+    }).getPayload();
+
+    const payloadTaxa = new PixPayload.PixPayload(CHAVE_TAXA, {
+      description: 'Taxa 5% da transação',
+      amount: taxa.toFixed(2),
+      txid: `txid-taxa-${Date.now()}`
+    }).getPayload();
+
+    qrcodesDiv.innerHTML = `
+      <div>
+        <h4>Pagamento Valor Líquido</h4>
+        <div id="qrPrincipal"></div>
+      </div>
+      <div>
+        <h4>Pagamento Taxa (5%)</h4>
+        <div id="qrTaxa"></div>
+      </div>
+    `;
+
+    new QRCode(document.getElementById("qrPrincipal"), {
+      text: payloadPrincipal,
+      width: 250,
+      height: 250,
+      colorDark: "#4CAF50",
+      colorLight: "#fff",
+      correctLevel: QRCode.CorrectLevel.H
     });
-  </script>
+
+    new QRCode(document.getElementById("qrTaxa"), {
+      text: payloadTaxa,
+      width: 250,
+      height: 250,
+      colorDark: "#f44336",
+      colorLight: "#fff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  });
+</script>
+
 </body>
 </html>
