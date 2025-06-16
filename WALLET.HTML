@@ -6,18 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bosco Jones Wallet - Login, Registro & Wallet</title>
   <style>
-    /* Reset básico */
     * {
       box-sizing: border-box;
     }
 
     body {
       margin: 0;
-      background-color: #0d1117; /* GitHub Dark background */
-      color: #c9d1d9; /* texto claro padrão GitHub */
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      background-color: #0d1117;
+      color: #c9d1d9;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -28,11 +25,11 @@
       max-width: 480px;
       margin: 3rem auto;
       padding: 2rem 2.5rem;
-      background-color: #161b22; /* painel escuro GitHub */
+      background-color: #161b22;
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(1, 4, 9, 0.6);
-      transition: box-shadow 0.3s ease;
     }
+
     .container:hover {
       box-shadow: 0 12px 30px rgba(1, 4, 9, 0.9);
     }
@@ -61,7 +58,6 @@
       border-radius: 6px;
       color: #c9d1d9;
       font-size: 1rem;
-      transition: border-color 0.3s ease;
     }
 
     input::placeholder {
@@ -78,16 +74,16 @@
     button {
       width: 100%;
       padding: 0.75rem 1rem;
-      background-color: #238636; /* verde GitHub padrão */
+      background-color: #238636;
       border: none;
       border-radius: 8px;
       color: white;
       font-weight: 600;
       font-size: 1.1rem;
       cursor: pointer;
-      transition: background-color 0.25s ease;
       box-shadow: 0 4px 10px rgba(35, 134, 54, 0.6);
     }
+
     button:hover {
       background-color: #2ea043;
       box-shadow: 0 6px 14px rgba(46, 160, 67, 0.75);
@@ -102,7 +98,6 @@
       font-size: 1.6rem;
       font-weight: 700;
       color: #58a6ff;
-      margin-bottom: 0.2rem;
     }
 
     .balance, .balance-fiat {
@@ -121,7 +116,6 @@
       max-height: 180px;
       overflow-y: auto;
       font-size: 0.95rem;
-      line-height: 1.4;
     }
 
     .history strong {
@@ -143,70 +137,65 @@
       background-color: #bf4b4b;
       margin-top: 2.5rem;
       box-shadow: 0 4px 12px rgba(191, 75, 75, 0.7);
-      font-weight: 600;
     }
+
     .btn-logout:hover {
       background-color: #d15757;
       box-shadow: 0 6px 14px rgba(209, 87, 87, 0.85);
+    }
+
+    p.link-switch {
+      text-align: center;
+      margin-top: 1.3rem;
+      font-size: 0.9rem;
     }
 
     a {
       color: #58a6ff;
       text-decoration: none;
       font-weight: 600;
-      transition: color 0.3s ease;
     }
+
     a:hover {
       color: #1f6feb;
       text-decoration: underline;
     }
 
-    /* Links "Criar conta" e "Já tem conta?" centralizados */
-    p.link-switch {
+    footer {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(45deg, #f0f000, #ff4500);
+      color: #000;
       text-align: center;
-      margin-top: 1.3rem;
-      font-size: 0.9rem;
-      user-select: none;
+      font-size: 1rem;
+      font-weight: bold;
+      text-shadow: 0 0 8px #ff0000;
+      animation: neon 1.5s ease-in-out infinite alternate;
     }
-footer {
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(45deg, #f0f000, #ff4500);
-  color: #000;
-  text-align: center;
-  font-size: 1rem;
-  font-weight: bold;
-  letter-spacing: 2px;
-  text-shadow: 0 0 8px #ff0000;
-  margin-top: 20px;
-  animation: neon 1.5s ease-in-out infinite alternate;
-}
 
-/* Animação neon */
-@keyframes neon {
-  from {
-    text-shadow:
-      0 0 5px #ff0000,
-      0 0 10px #ff0000,
-      0 0 20px #ff0000,
-      0 0 40px #ff4500,
-      0 0 80px #ff4500;
-  }
-  to {
-    text-shadow:
-      0 0 10px #ff4500,
-      0 0 20px #ff4500,
-      0 0 30px #ff0000,
-      0 0 50px #ff0000,
-      0 0 100px #ff0000;
-  }
-}
-
+    @keyframes neon {
+      from {
+        text-shadow:
+          0 0 5px #ff0000,
+          0 0 10px #ff0000,
+          0 0 20px #ff0000,
+          0 0 40px #ff4500,
+          0 0 80px #ff4500;
+      }
+      to {
+        text-shadow:
+          0 0 10px #ff4500,
+          0 0 20px #ff4500,
+          0 0 30px #ff0000,
+          0 0 50px #ff0000,
+          0 0 100px #ff0000;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <!-- LOGIN FORM -->
+  <!-- LOGIN -->
   <section id="login-section" class="container">
     <h2>Login Bosco Wallet</h2>
     <form id="login-form" autocomplete="off">
@@ -216,12 +205,10 @@ footer {
       <input type="password" id="login-password" required placeholder="••••••••" />
       <button type="submit">Entrar</button>
     </form>
-    <p class="link-switch">
-      <a href="#" id="show-register">Criar uma conta</a>
-    </p>
+    <p class="link-switch"><a href="#" id="show-register">Criar uma conta</a></p>
   </section>
 
-  <!-- REGISTRO FORM -->
+  <!-- REGISTRO -->
   <section id="register-section" class="container" style="display:none;">
     <h2>Registrar</h2>
     <form id="register-form" autocomplete="off">
@@ -231,9 +218,7 @@ footer {
       <input type="password" id="register-password" required placeholder="••••••••" />
       <button type="submit">Registrar</button>
     </form>
-    <p class="link-switch">
-      <a href="#" id="show-login">Já tem conta? Entrar</a>
-    </p>
+    <p class="link-switch"><a href="#" id="show-login">Já tem conta? Entrar</a></p>
   </section>
 
   <!-- WALLET -->
@@ -244,42 +229,17 @@ footer {
       <div class="balance-fiat" id="balance-fiat">USD 0.00</div>
     </div>
 
-    <!-- Seletor de ativo -->
     <form class="transaction-form">
       <label for="currency">Selecionar Ativo:</label>
       <select id="currency" required>
-        <!-- GIX2 Assets -->
-        <option value="DC-COIN">DC Coin (Trix Z)</option>
-        <option value="DARK1">DARK1 (Shadow Token)</option>
-        <option value="DARK2">DARK2 (Oblivion Coin)</option>
-        <option value="DARK3">DARK3 (Phantom Credit)</option>
-        <option value="DARK4">DARK4 (Eclipse Asset)</option>
-        <option value="POSN-HF">PoSN-HF (Proof of Stake Hybrid Fund)</option>
         <option value="BTC">Bitcoin (BTC)</option>
         <option value="ETH">Ethereum (ETH)</option>
-        <option value="LTC">Litecoin (LTC)</option>
-        <option value="XRP">Ripple (XRP)</option>
-        <option value="DOGE">Dogecoin (DOGE)</option>
-        <option value="ADA">Cardano (ADA)</option>
-
-        <!-- RZX (Dark HoloFi Lashs) -->
-        <option value="DHL1">DHL1 (Dark Lash - Shadow)</option>
-        <option value="DHL2">DHL2 (Dark Lash - Oblivion)</option>
-        <option value="DHL3">DHL3 (Dark Lash - Phantom)</option>
-        <option value="DHL4">DHL4 (Dark Lash - Eclipse)</option>
-
-        <!-- HoloFi e Simbióticos -->
-        <option value="SPPX">SPPX (Simbiótico Premium)</option>
-        <option value="QVAFLES">QVAFLES (SSQAFLE)</option>
-        <option value="XETH">XETH (Cross Ethereum)</option>
-        <option value="D-EURO">D-EURO (Euro Digital)</option>
-        <option value="SSQSEA">SSQSEA (Base de Simbiose)</option>
-        <option value="RZX-STARTUP">START UP RZX</option>
-        <option value="JBX500">JBX500 Asset (HoloFi Symbiotic Dark)</option>
+        <option value="DC-COIN">DC Coin (Trix Z)</option>
+        <option value="DARK1">DARK1 (Shadow Token)</option>
+        <option value="JBX500">JBX500 Asset</option>
       </select>
     </form>
 
-    <!-- Formulários -->
     <form id="deposit-form" class="transaction-form" autocomplete="off">
       <label for="deposit-amount">Depositar valor (USD):</label>
       <input type="number" id="deposit-amount" min="0.01" step="0.01" required placeholder="0.00" />
@@ -292,7 +252,23 @@ footer {
       <button type="submit">Sacar</button>
     </form>
 
-    <!-- Histórico -->
+    <!-- NOVO FORMULÁRIO DE PAGAMENTO -->
+    <form id="payment-form" class="transaction-form" autocomplete="off">
+      <label for="card-name">Nome do Titular:</label>
+      <input type="text" id="card-name" required placeholder="Nome impresso no cartão" />
+
+      <label for="card-number">Número do Cartão:</label>
+      <input type="text" id="card-number" required placeholder="•••• •••• •••• ••••" maxlength="19" />
+
+      <label for="card-expiry">Validade:</label>
+      <input type="text" id="card-expiry" required placeholder="MM/AA" maxlength="5" />
+
+      <label for="card-cvv">CVV:</label>
+      <input type="text" id="card-cvv" required placeholder="123" maxlength="4" />
+
+      <button type="submit">Salvar Dados de Pagamento</button>
+    </form>
+
     <div class="history" id="transaction-history">
       <strong>Histórico de transações:</strong>
       <p>Nenhuma transação ainda.</p>
@@ -301,7 +277,10 @@ footer {
     <button id="logout-btn" class="btn-logout">Sair</button>
   </section>
 
-  <!-- Script funcional -->
+  <footer>
+    © 2025 Bosco Jones Wallet · Desenvolvido por lucas januario ·
+  </footer>
+
   <script>
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
@@ -314,19 +293,18 @@ footer {
 
     let balance = 0;
 
-    // Navegação entre login e registro
     document.getElementById('show-register').onclick = (e) => {
       e.preventDefault();
       loginSection.style.display = 'none';
       registerSection.style.display = 'block';
     };
+
     document.getElementById('show-login').onclick = (e) => {
       e.preventDefault();
       registerSection.style.display = 'none';
       loginSection.style.display = 'block';
     };
 
-    // Registro simulado
     registerForm.onsubmit = (e) => {
       e.preventDefault();
       alert('Conta criada com sucesso!');
@@ -334,7 +312,6 @@ footer {
       loginSection.style.display = 'block';
     };
 
-    // Login simulado
     loginForm.onsubmit = (e) => {
       e.preventDefault();
       const email = document.getElementById('login-email').value;
@@ -344,7 +321,6 @@ footer {
       updateBalance();
     };
 
-    // Logout
     document.getElementById('logout-btn').onclick = () => {
       walletSection.style.display = 'none';
       loginSection.style.display = 'block';
@@ -353,12 +329,10 @@ footer {
       historyDisplay.innerHTML = "<strong>Histórico de transações:</strong><p>Nenhuma transação ainda.</p>";
     };
 
-    // Atualiza saldo
     function updateBalance() {
       balanceDisplay.innerText = "USD " + balance.toFixed(2);
     }
 
-    // Depósito
     document.getElementById('deposit-form').onsubmit = (e) => {
       e.preventDefault();
       const amount = parseFloat(document.getElementById('deposit-amount').value);
@@ -371,7 +345,6 @@ footer {
       }
     };
 
-    // Saque
     document.getElementById('withdraw-form').onsubmit = (e) => {
       e.preventDefault();
       const amount = parseFloat(document.getElementById('withdraw-amount').value);
@@ -386,6 +359,12 @@ footer {
       }
     };
 
+    document.getElementById('payment-form').onsubmit = (e) => {
+      e.preventDefault();
+      alert("Dados de pagamento salvos com sucesso!");
+      e.target.reset();
+    };
+
     function appendHistory(text) {
       if (historyDisplay.querySelector('p')) historyDisplay.querySelector('p').remove();
       const p = document.createElement('p');
@@ -395,9 +374,5 @@ footer {
     }
   </script>
 
-  <footer>
-    © 2025 Bosco Jones Wallet · Desenvolvido por lucas januario · 
-    
-  </footer>
 </body>
 </html>
