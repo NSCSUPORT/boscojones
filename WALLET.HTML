@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Minha Wallet - Bosco Jones</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="logo.ico" />
+  <style>
+    body {
+      background-color: #0d1117;
+      color: #c9d1d9;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #58a6ff;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: auto;
+      padding: 20px;
+      background-color: #161b22;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #000;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 1rem;
+      border-radius: 4px;
+      border: none;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #357a38;
+    }
+
+    .saldo {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: #0f0;
+      text-align: center;
+    }
+
+    #qrcode-container {
+      text-align: center;
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #111;
+      border-radius: 8px;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    #qrcode-container img {
+      max-width: 150px;
+      max-height: 150px;
+    }
+
+    footer {
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #fff;
+      background-color: #111;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 30px;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>JBX500 Wallet</h1>
+
+  <div class="container">
+    <div class="saldo">Saldo: R$ <span id="saldo">1000.00</span></div>
+
+    <input type="number" id="valor" placeholder="Valor em R$" />
+    <button onclick="gerarPix()">Pagar com Pix</button>
+
+    <div id="qrcode-container"></div>
+  </div>
+
+  <footer>
+    © 2025 Bosco Jones Wallet<br />
+    Desenvolvido Lucas Januário<br />
+    HoloFi Quantum · Pix com taxa de 5%
+  </footer>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <!-- QR Code Generator -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDzfZvQi-oaOUWPgSOu8BtTINa_LO2ZoLc",
+      authDomain: "bosco-jones-wallet.firebaseapp.com",
+      projectId: "bosco-jones-wallet",
+      storageBucket: "bosco-jones-wallet.appspot.com",
+      messagingSenderId: "1829673164",
+      appId: "1:1829673164:web:37c947c8aafe1af72a8a69"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    const auth = firebase.auth();
+    let saldo = 1000.00;
+
+    function gerarPix() {
+      const valor = parseFloat(document.getElementById('valor').value);
+      if (isNaN(valor) || valor <= 0) {
+        alert("Digite um valor válido.");
+        return;
+      }
+
+      const taxa = valor * 0.05;
+      const total = valor + taxa;
+
+      if (total > saldo) {
+        alert("Saldo insuficiente.");
+        return;
+      }
+
+      const chavePixUsuario = "seu@email.com"; // Você pode usar o email do usuário
+      const chavePixTaxa = "48761013889"; // Seu Pix para receber a taxa
+
+      const payloadUsuario = `pix://pagamento?chave=${chavePixUsuario}&valor=${valor.toFixed(2)}`;
+      const payloadTaxa = `pix://pagamento?chave=${chavePixTaxa}&valor=${taxa.toFixed(2)}`;
+
+      document.getElementById('qrcode-container').innerHTML = "";
+
+      new QRCode(document.getElementById("qrcode-container"), {
+        text: payloadUsuario,
+        width: 128,
+        height: 128
+      });
+
+      setTimeout(() => {
+        new QRCode(document.getElementById("qrcode-container"), {
+          text: payloadTaxa,
+          width: 128,
+          height: 128
+        });
+      }, 500);
+
+      saldo -= total;
+      document.getElementById('saldo').textContent = saldo.toFixed(2);
+    }
+  </script>
+</body>
+</html>
