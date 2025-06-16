@@ -2,9 +2,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" href="logo.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bosco Jones Wallet - Acesso</title>
+  <title>Bosco Jones Wallet - Login, Registro & Wallet</title>
   <style>
     * {
       box-sizing: border-box;
@@ -13,169 +12,255 @@
       margin: 0;
       background-color: #0d1117;
       color: #c9d1d9;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      font-family: 'Segoe UI', sans-serif;
     }
     .container {
-      background: #161b22;
-      padding: 2rem;
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #161b22;
       border-radius: 10px;
-      width: 360px;
-      box-shadow: 0 0 15px #238636cc;
-    }
-    input[type="text"],
-    input[type="password"] {
-      width: 100%;
-      padding: 0.8rem;
-      margin: 0.6rem 0;
-      border-radius: 6px;
-      border: 1px solid #30363d;
-      background: #0d1117;
-      color: #c9d1d9;
-      font-size: 1rem;
-    }
-    input:focus {
-      border-color: #238636;
-      outline: none;
-    }
-    button {
-      width: 100%;
-      padding: 0.8rem;
-      margin-top: 1rem;
-      border: none;
-      border-radius: 6px;
-      background: #238636;
-      color: white;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    button:hover {
-      background: #2ea043;
+      box-shadow: 0 0 10px #000;
     }
     h2 {
-      margin-bottom: 1rem;
-      font-weight: 700;
       text-align: center;
-    }
-    #message, #message-register {
-      margin-top: 1rem;
-      text-align: center;
-      font-weight: 600;
-    }
-    .tab-switch {
-      text-align: center;
-      margin-top: 1rem;
-    }
-    .tab-switch a {
       color: #58a6ff;
-      cursor: pointer;
-      text-decoration: none;
-      font-weight: bold;
     }
-    footer {
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+    input, select {
       width: 100%;
-      padding: 12px;
-      background: linear-gradient(45deg, #f0f000, #ff4500);
-      color: #000;
-      text-align: center;
-      font-size: 1rem;
-      font-weight: bold;
-      letter-spacing: 2px;
-      text-shadow: 0 0 8px #ff0000;
-      margin-top: auto;
-      animation: neon 1.5s ease-in-out infinite alternate;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: none;
+      background-color: #21262d;
+      color: #c9d1d9;
     }
-    @keyframes neon {
-      0% { text-shadow: 0 0 5px #f0f000, 0 0 10px #ff4500; }
-      50% { text-shadow: 0 0 20px #ff4500, 0 0 30px #f0f000; }
-      100% { text-shadow: 0 0 5px #f0f000, 0 0 10px #ff4500; }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 10px;
+      background-color: #238636;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #2ea043;
+    }
+    .wallet-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .balance, .balance-fiat {
+      font-size: 1.2em;
+      margin-top: 10px;
+      color: #8b949e;
+    }
+    .history {
+      margin-top: 30px;
+      background-color: #0d1117;
+      padding: 10px;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+    }
+    .btn-logout {
+      background-color: #f44336;
+      margin-top: 30px;
+    }
+    .btn-logout:hover {
+      background-color: #d32f2f;
     }
   </style>
 </head>
 <body>
-<main>
-  <section class="container">
-    <!-- Login -->
-    <div id="login-section">
-      <h2>Login Bosco Jones Wallet</h2>
-      <form id="login-form">
-        <input type="text" id="username" placeholder="Usuário" required autocomplete="username" />
-        <input type="password" id="password" placeholder="Senha" required autocomplete="current-password" />
-        <button type="submit">Entrar</button>
-      </form>
-      <div class="tab-switch">Não tem conta? <a id="show-register">Registrar</a></div>
-      <div id="message"></div>
-    </div>
 
-    <!-- Registro -->
-    <div id="register-section" style="display: none;">
-      <h2>Registrar Conta</h2>
-      <form id="register-form">
-        <input type="text" id="reg-username" placeholder="Novo usuário" required />
-        <input type="password" id="reg-password" placeholder="Nova senha" required />
-        <button type="submit">Registrar</button>
-      </form>
-      <div class="tab-switch">Já tem conta? <a id="show-login">Entrar</a></div>
-      <div id="message-register"></div>
-    </div>
+  <!-- LOGIN FORM -->
+  <section id="login-section" class="container">
+    <h2>Login Bosco Wallet</h2>
+    <form id="login-form">
+      <label for="login-email">Email:</label>
+      <input type="email" id="login-email" required />
+      <label for="login-password">Senha:</label>
+      <input type="password" id="login-password" required />
+      <button type="submit">Entrar</button>
+    </form>
+    <p style="text-align:center; margin-top:15px;">
+      <a href="#" id="show-register" style="color:#58a6ff;">Criar uma conta</a>
+    </p>
   </section>
-</main>
 
-<footer>
-  BOSCO JONES WALLET - LOGIN & REGISTRO
-</footer>
+  <!-- REGISTRO FORM -->
+  <section id="register-section" class="container" style="display:none;">
+    <h2>Registrar</h2>
+    <form id="register-form">
+      <label for="register-email">Email:</label>
+      <input type="email" id="register-email" required />
+      <label for="register-password">Senha:</label>
+      <input type="password" id="register-password" required />
+      <button type="submit">Registrar</button>
+    </form>
+    <p style="text-align:center; margin-top:15px;">
+      <a href="#" id="show-login" style="color:#58a6ff;">Já tem conta? Entrar</a>
+    </p>
+  </section>
 
-<script>
-  const loginSection = document.getElementById('login-section');
-  const registerSection = document.getElementById('register-section');
-  const showRegister = document.getElementById('show-register');
-  const showLogin = document.getElementById('show-login');
+  <!-- WALLET -->
+  <section id="wallet-section" class="container" style="display:none;">
+    <div class="wallet-header">
+      <h2>Bem-vindo, <span id="user-display"></span>!</h2>
+      <div class="balance" id="balance">USD 0.00</div>
+      <div class="balance-fiat" id="balance-fiat">USD 0.00</div>
+    </div>
 
-  showRegister.addEventListener('click', () => {
-    loginSection.style.display = 'none';
-    registerSection.style.display = 'block';
-  });
+    <!-- Seletor de ativo -->
+    <form class="transaction-form">
+      <label for="currency">Selecionar Ativo:</label>
+      <select id="currency" required>
+        <!-- GIX2 Assets -->
+        <option value="DC-COIN">DC Coin (Trix Z)</option>
+        <option value="DARK1">DARK1 (Shadow Token)</option>
+        <option value="DARK2">DARK2 (Oblivion Coin)</option>
+        <option value="DARK3">DARK3 (Phantom Credit)</option>
+        <option value="DARK4">DARK4 (Eclipse Asset)</option>
+        <option value="POSN-HF">PoSN-HF (Proof of Stake Hybrid Fund)</option>
+        <option value="BTC">Bitcoin (BTC)</option>
+        <option value="ETH">Ethereum (ETH)</option>
+        <option value="LTC">Litecoin (LTC)</option>
+        <option value="XRP">Ripple (XRP)</option>
+        <option value="DOGE">Dogecoin (DOGE)</option>
+        <option value="ADA">Cardano (ADA)</option>
 
-  showLogin.addEventListener('click', () => {
-    registerSection.style.display = 'none';
-    loginSection.style.display = 'block';
-  });
+        <!-- RZX (Dark HoloFi Lashs) -->
+        <option value="DHL1">DHL1 (Dark Lash - Shadow)</option>
+        <option value="DHL2">DHL2 (Dark Lash - Oblivion)</option>
+        <option value="DHL3">DHL3 (Dark Lash - Phantom)</option>
+        <option value="DHL4">DHL4 (Dark Lash - Eclipse)</option>
 
-  document.getElementById('login-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const user = document.getElementById('username').value;
-    const pass = document.getElementById('password').value;
-    if (user === 'admin' && pass === '1234') {
-      document.getElementById('message').style.color = '#4caf50';
-      document.getElementById('message').textContent = 'Login bem-sucedido! Redirecionando...';
-      setTimeout(() => window.location.href = 'wallet.html', 1500);
-    } else {
-      document.getElementById('message').style.color = '#ff5555';
-      document.getElementById('message').textContent = 'Credenciais inválidas!';
-    }
-  });
+        <!-- HoloFi e Simbióticos -->
+        <option value="SPPX">SPPX (Simbiótico Premium)</option>
+        <option value="QVAFLES">QVAFLES (SSQAFLE)</option>
+        <option value="XETH">XETH (Cross Ethereum)</option>
+        <option value="D-EURO">D-EURO (Euro Digital)</option>
+        <option value="SSQSEA">SSQSEA (Base de Simbiose)</option>
+        <option value="RZX-STARTUP">START UP RZX</option>
+        <option value="JBX500">JBX500 Asset (HoloFi Symbiotic Dark)</option>
+      </select>
+    </form>
 
-  document.getElementById('register-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const newUser = document.getElementById('reg-username').value;
-    const newPass = document.getElementById('reg-password').value;
-    document.getElementById('message-register').style.color = '#4caf50';
-    document.getElementById('message-register').textContent = `Conta "${newUser}" registrada com sucesso!`;
-    setTimeout(() => {
+    <!-- Formulários -->
+    <form id="deposit-form" class="transaction-form">
+      <label for="deposit-amount">Depositar valor (USD):</label>
+      <input type="number" id="deposit-amount" min="0.01" step="0.01" required />
+      <button type="submit">Depositar</button>
+    </form>
+
+    <form id="withdraw-form" class="transaction-form">
+      <label for="withdraw-amount">Sacar valor (USD):</label>
+      <input type="number" id="withdraw-amount" min="0.01" step="0.01" required />
+      <button type="submit">Sacar</button>
+    </form>
+
+    <!-- Histórico -->
+    <div class="history" id="transaction-history">
+      <strong>Histórico de transações:</strong>
+      <p>Nenhuma transação ainda.</p>
+    </div>
+
+    <button id="logout-btn" class="btn-logout">Sair</button>
+  </section>
+
+  <!-- Script funcional -->
+  <script>
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const loginSection = document.getElementById('login-section');
+    const registerSection = document.getElementById('register-section');
+    const walletSection = document.getElementById('wallet-section');
+    const userDisplay = document.getElementById('user-display');
+    const balanceDisplay = document.getElementById('balance');
+    const historyDisplay = document.getElementById('transaction-history');
+
+    let balance = 0;
+
+    // Navegação entre login e registro
+    document.getElementById('show-register').onclick = () => {
+      loginSection.style.display = 'none';
+      registerSection.style.display = 'block';
+    };
+    document.getElementById('show-login').onclick = () => {
       registerSection.style.display = 'none';
       loginSection.style.display = 'block';
-    }, 1500);
-  });
-</script>
+    };
+
+    // Registro simulado
+    registerForm.onsubmit = (e) => {
+      e.preventDefault();
+      alert('Conta criada com sucesso!');
+      registerSection.style.display = 'none';
+      loginSection.style.display = 'block';
+    };
+
+    // Login simulado
+    loginForm.onsubmit = (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      userDisplay.innerText = email;
+      loginSection.style.display = 'none';
+      walletSection.style.display = 'block';
+    };
+
+    // Logout
+    document.getElementById('logout-btn').onclick = () => {
+      walletSection.style.display = 'none';
+      loginSection.style.display = 'block';
+      balance = 0;
+      updateBalance();
+      historyDisplay.innerHTML = "<strong>Histórico de transações:</strong><p>Nenhuma transação ainda.</p>";
+    };
+
+    // Atualiza saldo
+    function updateBalance() {
+      balanceDisplay.innerText = "USD " + balance.toFixed(2);
+    }
+
+    // Depósito
+    document.getElementById('deposit-form').onsubmit = (e) => {
+      e.preventDefault();
+      const amount = parseFloat(document.getElementById('deposit-amount').value);
+      const currency = document.getElementById('currency').value;
+      if (!isNaN(amount) && amount > 0) {
+        balance += amount;
+        updateBalance();
+        appendHistory(`+ USD ${amount.toFixed(2)} depositado em ${currency}`);
+      }
+    };
+
+    // Saque
+    document.getElementById('withdraw-form').onsubmit = (e) => {
+      e.preventDefault();
+      const amount = parseFloat(document.getElementById('withdraw-amount').value);
+      const currency = document.getElementById('currency').value;
+      if (!isNaN(amount) && amount > 0 && amount <= balance) {
+        balance -= amount;
+        updateBalance();
+        appendHistory(`- USD ${amount.toFixed(2)} sacado de ${currency}`);
+      } else {
+        alert("Saldo insuficiente.");
+      }
+    };
+
+    function appendHistory(text) {
+      if (historyDisplay.querySelector('p')) historyDisplay.querySelector('p').remove();
+      const p = document.createElement('p');
+      p.innerText = text;
+      historyDisplay.appendChild(p);
+    }
+  </script>
 </body>
 </html>
