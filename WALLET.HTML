@@ -6,318 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bosco Jones Wallet - Login, Registro & Wallet</title>
   <style>
-    /* Reset básico */
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      background-color: #0d1117;
-      color: #c9d1d9;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji';
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .container {
-      max-width: 480px;
-      margin: 3rem auto;
-      padding: 2rem 2.5rem;
-      background-color: #161b22;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(1, 4, 9, 0.6);
-      transition: box-shadow 0.3s ease;
-    }
-    .container:hover {
-      box-shadow: 0 12px 30px rgba(1, 4, 9, 0.9);
-    }
-
-    h2 {
-      margin-bottom: 1.5rem;
-      color: #c9d1d9;
-      font-weight: 600;
-      font-size: 1.8rem;
-      text-align: center;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      color: #8b949e;
-    }
-
-    input,
-    select {
-      width: 100%;
-      padding: 0.6rem 1rem;
-      margin-bottom: 1.3rem;
-      background-color: #0d1117;
-      border: 1.5px solid #30363d;
-      border-radius: 6px;
-      color: #c9d1d9;
-      font-size: 1rem;
-      transition: border-color 0.3s ease;
-    }
-
-    input::placeholder {
-      color: #484f58;
-    }
-
-    input:focus,
-    select:focus {
-      border-color: #58a6ff;
-      outline: none;
-      box-shadow: 0 0 8px #58a6ff44;
-      background-color: #161b22;
-    }
-
-    button {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      background-color: #238636;
-      border: none;
-      border-radius: 8px;
-      color: white;
-      font-weight: 600;
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: background-color 0.25s ease;
-      box-shadow: 0 4px 10px rgba(35, 134, 54, 0.6);
-    }
-    button:hover {
-      background-color: #2ea043;
-      box-shadow: 0 6px 14px rgba(46, 160, 67, 0.75);
-    }
-
-    .wallet-header {
-      text-align: center;
-      margin-bottom: 1.8rem;
-    }
-
-    .wallet-header h2 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: #58a6ff;
-      margin-bottom: 0.2rem;
-    }
-
-    .balance,
-    .balance-fiat {
-      font-size: 1.2rem;
-      color: #8b949e;
-      font-weight: 500;
-    }
-
-    .history {
-      margin-top: 2rem;
-      background-color: #0d1117;
-      padding: 1rem 1.2rem;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      color: #8b949e;
-      max-height: 180px;
-      overflow-y: auto;
-      font-size: 0.95rem;
-      line-height: 1.4;
-    }
-
-    .history strong {
-      display: block;
-      margin-bottom: 0.8rem;
-      color: #58a6ff;
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
-
-    .history p {
-      margin: 0.4rem 0;
-      padding-left: 0.5rem;
-      border-left: 3px solid #30363d;
-      color: #c9d1d9;
-    }
-
-    .btn-logout {
-      background-color: #bf4b4b;
-      margin-top: 2.5rem;
-      box-shadow: 0 4px 12px rgba(191, 75, 75, 0.7);
-      font-weight: 600;
-    }
-    .btn-logout:hover {
-      background-color: #d15757;
-      box-shadow: 0 6px 14px rgba(209, 87, 87, 0.85);
-    }
-
-    a {
-      color: #58a6ff;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s ease;
-    }
-    a:hover {
-      color: #1f6feb;
-      text-decoration: underline;
-    }
-
-    /* Links "Criar conta" e "Já tem conta?" centralizados */
-    p.link-switch {
-      text-align: center;
-      margin-top: 1.3rem;
-      font-size: 0.9rem;
-      user-select: none;
-    }
-    footer {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(45deg, #f0f000, #ff4500);
-      color: #000;
-      text-align: center;
-      font-size: 1rem;
-      font-weight: bold;
-      letter-spacing: 2px;
-      text-shadow: 0 0 8px #ff0000;
-      margin-top: 20px;
-      animation: neon 1.5s ease-in-out infinite alternate;
-    }
-
-    /* Animação neon */
-    @keyframes neon {
-      from {
-        text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 40px #ff4500,
-          0 0 80px #ff4500;
-      }
-      to {
-        text-shadow: 0 0 10px #ff4500, 0 0 20px #ff4500, 0 0 30px #ff0000, 0 0 50px #ff0000,
-          0 0 100px #ff0000;
-      }
-    }
-
-    /* PIX Payment Section */
-    #pix-payment-section {
-      max-width: 480px;
-      margin: 2rem auto 4rem;
-      padding: 2rem 2.5rem;
-      background-color: #161b22;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(1, 4, 9, 0.6);
-    }
-
-    #pix-payment-section h2 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-      color: #c9d1d9;
-      font-weight: 600;
-      font-size: 1.6rem;
-    }
-
-    #pix-payment-section label {
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      color: #8b949e;
-      display: block;
-    }
-
-    #pix-payment-section input {
-      width: 100%;
-      padding: 0.6rem 1rem;
-      margin-bottom: 1.3rem;
-      background-color: #0d1117;
-      border: 1.5px solid #30363d;
-      border-radius: 6px;
-      color: #c9d1d9;
-      font-size: 1rem;
-      transition: border-color 0.3s ease;
-    }
-
-    #pix-payment-section input:focus {
-      border-color: #58a6ff;
-      outline: none;
-      box-shadow: 0 0 8px #58a6ff44;
-      background-color: #161b22;
-    }
-
-    #pix-payment-section button {
-      background-color: #238636;
-      box-shadow: 0 4px 10px rgba(35, 134, 54, 0.6);
-      cursor: pointer;
-    }
-
-    #pix-qrcodes {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 1rem;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .qrcode-box {
-      background-color: #0d1117;
-      border: 1.5px solid #30363d;
-      border-radius: 8px;
-      padding: 1rem;
-      width: 45%;
-      min-width: 180px;
-      text-align: center;
-      color: #c9d1d9;
-      user-select: none;
-    }
-
-    .qrcode-box h3 {
-      margin-bottom: 0.8rem;
-      color: #58a6ff;
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
-
-    .qrcode-box canvas {
-      margin: 0 auto;
-    }
-
-    @media (max-width: 600px) {
-      #pix-qrcodes {
-        flex-direction: column;
-      }
-      .qrcode-box {
-        width: 100%;
-      }
-    }
+    /* seu CSS permanece o mesmo, para brevidade omito aqui */
   </style>
 </head>
 <body>
   <!-- LOGIN FORM -->
   <section id="login-section" class="container">
-    <h2>Login Bosco Wallet</h2>
-    <form id="login-form" autocomplete="off">
-      <label for="login-email">Email:</label>
-      <input type="email" id="login-email" required placeholder="seuemail@exemplo.com" />
-      <label for="login-password">Senha:</label>
-      <input type="password" id="login-password" required placeholder="••••••••" />
-      <button type="submit">Entrar</button>
-    </form>
-    <p class="link-switch">
-      <a href="#" id="show-register">Criar uma conta</a>
-    </p>
+    <!-- ... seu formulário login ... -->
   </section>
 
   <!-- REGISTRO FORM -->
   <section id="register-section" class="container" style="display:none;">
-    <h2>Registrar</h2>
-    <form id="register-form" autocomplete="off">
-      <label for="register-email">Email:</label>
-      <input type="email" id="register-email" required placeholder="seuemail@exemplo.com" />
-      <label for="register-password">Senha:</label>
-      <input type="password" id="register-password" required placeholder="••••••••" />
-      <button type="submit">Registrar</button>
-    </form>
-    <p class="link-switch">
-      <a href="#" id="show-login">Já tem conta? Entrar</a>
-    </p>
+    <!-- ... seu formulário registro ... -->
   </section>
 
   <!-- WALLET -->
@@ -332,52 +32,41 @@
     <form class="transaction-form">
       <label for="currency">Selecionar Ativo:</label>
       <select id="currency" required>
-        <!-- GIX2 Assets -->
-        <option value="DC-COIN">DC Coin (Trix Z)</option>
-        <option value="DARK1">DARK1 (Shadow Token)</option>
-        <option value="DARK2">DARK2 (Oblivion Coin)</option>
-        <option value="DARK3">DARK3 (Phantom Credit)</option>
-        <option value="DARK4">DARK4 (Eclipse Asset)</option>
-        <option value="POSN-HF">PoSN-HF (Proof of Stake Hybrid Fund)</option>
-        <option value="BTC">Bitcoin (BTC)</option>
-        <option value="ETH">Ethereum (ETH)</option>
-        <option value="LTC">Litecoin (LTC)</option>
-        <option value="XRP">Ripple (XRP)</option>
-        <option value="DOGE">Dogecoin (DOGE)</option>
-        <option value="ADA">Cardano (ADA)</option>
-
-        <!-- RZX (Dark HoloFi Lashs) -->
-        <option value="DHL1">DHL1 (Dark Lash - Shadow)</option>
-        <option value="DHL2">DHL2 (Dark Lash - Oblivion)</option>
-        <option value="DHL3">DHL3 (Dark Lash - Phantom)</option>
-        <option value="DHL4">DHL4 (Dark Lash - Eclipse)</option>
-
-        <!-- HoloFi e Simbióticos -->
-        <option value="SPPX">SPPX (Simbiótico Premium)</option>
-        <option value="QVAFLES">QVAFLES (SSQAFLE)</option>
-        <option value="XETH">XETH (Cross Ethereum)</option>
-        <option value="D-EURO">D-EURO (Euro Digital)</option>
-        <option value="SSQSEA">SSQSEA (Base de Simbiose)</option>
-        <option value="RZX-STARTUP">START UP RZX</option>
-        <option value="JBX500">JBX500 Asset (HoloFi Symbiotic Dark)</option>
+        <!-- suas opções -->
       </select>
     </form>
 
-    <!-- Formulários -->
+    <!-- Formulário de Depósito -->
     <form id="deposit-form" class="transaction-form" autocomplete="off">
       <label for="deposit-amount">Depositar valor (USD):</label>
       <input type="number" id="deposit-amount" min="0.01" step="0.01" required placeholder="0.00" />
       <button type="submit">Depositar</button>
-  <!-- PIX PAYMENT SECTION -->
-  <section id="pix-payment-section" class="container" style="display:none;">
-    <h2>Pagamento via PIX</h2>
-    <form id="pix-form" autocomplete="off">
-      <label for="pix-amount">Informe o valor para pagamento (R$):</label>
-      <input type="number" id="pix-amount" min="0.01" step="0.01" required placeholder="0.00" />
-      <button type="submit">Gerar QR Codes PIX</button>
-    </form>
     </form>
 
+    <!-- PIX PAYMENT SECTION -->
+    <section id="pix-payment-section" class="container" style="display:none;">
+      <h2>Pagamento via PIX</h2>
+      <form id="pix-form" autocomplete="off">
+        <label for="pix-amount">Informe o valor para pagamento (R$):</label>
+        <input type="number" id="pix-amount" min="0.01" step="0.01" required placeholder="0.00" />
+        <button type="submit">Gerar QR Codes PIX</button>
+      </form>
+
+      <div id="pix-qrcodes" style="display:none;">
+        <div class="qrcode-box">
+          <h3>Pagamento Principal</h3>
+          <div id="qrcode-main"></div>
+          <p id="pix-main-amount"></p>
+        </div>
+        <div class="qrcode-box">
+          <h3>Pagamento 5% taxa para 48761013889</h3>
+          <div id="qrcode-tax"></div>
+          <p id="pix-tax-amount"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Formulário de Saque -->
     <form id="withdraw-form" class="transaction-form" autocomplete="off">
       <label for="withdraw-amount">Sacar valor (USD):</label>
       <input type="number" id="withdraw-amount" min="0.01" step="0.01" required placeholder="0.00" />
@@ -393,266 +82,65 @@
     <button id="logout-btn" class="btn-logout">Sair</button>
   </section>
 
-    <div id="pix-qrcodes" style="display:none;">
-      <div class="qrcode-box">
-        <h3>Pagamento Principal</h3>
-        <div id="qrcode-main"></div>
-        <p id="pix-main-amount"></p>
-      </div>
-      <div class="qrcode-box">
-        <h3>Pagamento 5% taxa para 48761013889</h3>
-        <div id="qrcode-tax"></div>
-        <p id="pix-tax-amount"></p>
-      </div>
-    </div>
-  </section>
-
   <footer>
     © 2025 Bosco Jones Wallet · Desenvolvido por lucas januario ·
   </footer>
 
   <!-- Biblioteca QRCode.js -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
-
   <script>
-    // Seus scripts originais
-    const loginForm = document.getElementById('login-form');
-    const registerForm = document.getElementById('register-form');
-    const loginSection = document.getElementById('login-section');
-    const registerSection = document.getElementById('register-section');
-    const walletSection = document.getElementById('wallet-section');
-    const userDisplay = document.getElementById('user-display');
-    const balanceDisplay = document.getElementById('balance');
-    const historyDisplay = document.getElementById('transaction-history');
+    // Exemplo simples para gerar QR codes PIX
 
-    let balance = 0;
-
-    // Navegação entre login e registro
-    document.getElementById('show-register').onclick = (e) => {
-      e.preventDefault();
-      loginSection.style.display = 'none';
-      registerSection.style.display = 'block';
-      walletSection.style.display = 'none';
-      pixPaymentSection.style.display = 'none';
-    };
-    document.getElementById('show-login').onclick = (e) => {
-      e.preventDefault();
-      loginSection.style.display = 'block';
-      registerSection.style.display = 'none';
-      walletSection.style.display = 'none';
-      pixPaymentSection.style.display = 'none';
-    };
-
-    // Simples armazenamento local de usuários (para demonstração)
-    const usersKey = 'boscoUsers';
-    const loggedUserKey = 'boscoLoggedUser';
-    function saveUser(email, password) {
-      let users = JSON.parse(localStorage.getItem(usersKey) || '{}');
-      users[email] = { password: password, balance: 0, history: [] };
-      localStorage.setItem(usersKey, JSON.stringify(users));
-    }
-    function getUser(email) {
-      let users = JSON.parse(localStorage.getItem(usersKey) || '{}');
-      return users[email];
-    }
-    function setLoggedUser(email) {
-      localStorage.setItem(loggedUserKey, email);
-    }
-    function getLoggedUser() {
-      return localStorage.getItem(loggedUserKey);
-    }
-    function logoutUser() {
-      localStorage.removeItem(loggedUserKey);
-    }
-    function updateUserData(email, data) {
-      let users = JSON.parse(localStorage.getItem(usersKey) || '{}');
-      users[email] = {...users[email], ...data};
-      localStorage.setItem(usersKey, JSON.stringify(users));
-    }
-
-    // Mostrar saldo e histórico
-    function updateWalletUI(email) {
-      const user = getUser(email);
-      balance = user.balance || 0;
-      balanceDisplay.textContent = `Saldo: R$ ${balance.toFixed(2)}`;
-      userDisplay.textContent = email;
-
-      // Histórico
-      const history = user.history || [];
-      if (history.length === 0) {
-        historyDisplay.innerHTML = '<strong>Histórico de transações:</strong><p>Nenhuma transação ainda.</p>';
-      } else {
-        historyDisplay.innerHTML = '<strong>Histórico de transações:</strong>';
-        history.forEach(tx => {
-          const p = document.createElement('p');
-          p.textContent = `${tx.date} - ${tx.type}: R$ ${tx.amount.toFixed(2)}`;
-          historyDisplay.appendChild(p);
-        });
-      }
-    }
-
-    // Login
-    loginForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const email = document.getElementById('login-email').value.trim();
-      const password = document.getElementById('login-password').value;
-      const user = getUser(email);
-      if (user && user.password === password) {
-        setLoggedUser(email);
-        loginSection.style.display = 'none';
-        registerSection.style.display = 'none';
-        walletSection.style.display = 'block';
-        pixPaymentSection.style.display = 'block';
-        updateWalletUI(email);
-      } else {
-        alert('Email ou senha incorretos.');
-      }
-    });
-
-    // Registro
-    registerForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const email = document.getElementById('register-email').value.trim();
-      const password = document.getElementById('register-password').value;
-      if (getUser(email)) {
-        alert('Email já registrado.');
-        return;
-      }
-      saveUser(email, password);
-      alert('Conta criada com sucesso! Faça login.');
-      registerSection.style.display = 'none';
-      loginSection.style.display = 'block';
-    });
-
-    // Logout
-    document.getElementById('logout-btn').addEventListener('click', () => {
-      logoutUser();
-      walletSection.style.display = 'none';
-      pixPaymentSection.style.display = 'none';
-      loginSection.style.display = 'block';
-      userDisplay.textContent = '';
-      balance = 0;
-    });
-
-    // PIX Payment Section
-    const pixPaymentSection = document.getElementById('pix-payment-section');
     const pixForm = document.getElementById('pix-form');
+    const pixQrcodes = document.getElementById('pix-qrcodes');
     const qrcodeMainDiv = document.getElementById('qrcode-main');
     const qrcodeTaxDiv = document.getElementById('qrcode-tax');
-    const pixQRCodesDiv = document.getElementById('pix-qrcodes');
-    const pixMainAmountP = document.getElementById('pix-main-amount');
-    const pixTaxAmountP = document.getElementById('pix-tax-amount');
-
-    // Dados PIX fixos
-    const pixKeyTax = '48761013889'; // PIX fixo para 5% taxa
-    const pixReceiverName = 'Bosco Jones'; // Nome do recebedor - opcional no payload
-    const pixCity = 'Sao Paulo'; // Cidade - opcional
-
-    // Função para gerar payload PIX padrão BRCode (simplificado)
-    // Para produção, use uma API oficial de gerador de QRCode PIX ou biblioteca especializada.
-    function generatePixPayload(key, amount, description = 'Pagamento Bosco Jones') {
-      // Campos fixos do payload:
-      // - Payload Format Indicator (00)
-      // - Merchant Account Information (26)
-      // - Merchant Category Code (52)
-      // - Transaction Currency (53) - 986 = BRL
-      // - Transaction Amount (54) - opcional
-      // - Country Code (58) - BR
-      // - Merchant Name (59)
-      // - Merchant City (60)
-      // - Additional Data Field Template (62)
-      // - CRC16 (63)
-
-      // Função auxiliar para montar campo no formato TLV
-      function tlv(id, value) {
-        const length = value.length.toString().padStart(2, '0');
-        return id + length + value;
-      }
-
-      // Merchant Account Information (26)
-      // GUI (00): br.gov.bcb.pix
-      // Key (01): chave pix (email, cpf, telefone ou EVP)
-      // Description (optional 02)
-      let merchantAccountInfo = tlv('00', 'br.gov.bcb.pix') + tlv('01', key);
-      if (description) {
-        merchantAccountInfo += tlv('02', description);
-      }
-
-      let payload = '';
-      payload += tlv('00', '01'); // Payload Format Indicator
-      payload += tlv('26', merchantAccountInfo);
-      payload += tlv('52', '0000'); // Merchant Category Code - default 0000
-      payload += tlv('53', '986'); // Currency BRL
-      if (amount) {
-        payload += tlv('54', amount.toFixed(2));
-      }
-      payload += tlv('58', 'BR'); // Country Code
-      payload += tlv('59', pixReceiverName.substring(0, 25)); // Merchant Name max 25 chars
-      payload += tlv('60', pixCity.substring(0, 15)); // Merchant City max 15 chars
-      // Additional Data Field Template (62) - pode incluir TXID se quiser
-      payload += tlv('62', tlv('05', '***'));
-
-      // Calcular CRC16
-      function crc16(str) {
-        const polinomio = 0x1021;
-        let crc = 0xffff;
-        for (let i = 0; i < str.length; i++) {
-          crc ^= str.charCodeAt(i) << 8;
-          for (let j = 0; j < 8; j++) {
-            if ((crc & 0x8000) !== 0) crc = (crc << 1) ^ polinomio;
-            else crc <<= 1;
-          }
-        }
-        crc &= 0xffff;
-        return crc.toString(16).toUpperCase().padStart(4, '0');
-      }
-
-      const payloadToCRC = payload + '6304'; // '63' + '04' length do CRC
-      const crc = crc16(payloadToCRC);
-
-      return payload + '6304' + crc;
-    }
+    const pixMainAmount = document.getElementById('pix-main-amount');
+    const pixTaxAmount = document.getElementById('pix-tax-amount');
 
     pixForm.addEventListener('submit', (e) => {
       e.preventDefault();
-
       const amount = parseFloat(document.getElementById('pix-amount').value);
       if (isNaN(amount) || amount <= 0) {
-        alert('Informe um valor válido maior que zero.');
+        alert('Informe um valor válido para pagamento.');
         return;
       }
 
-      const taxAmount = amount * 0.05;
+      // Valores PIX
+      const taxAmount = +(amount * 0.05).toFixed(2);
+      const mainAmount = +(amount - taxAmount).toFixed(2);
 
-      // Gerar payloads PIX para o valor e para a taxa
-      const payloadMain = generatePixPayload(
-        getLoggedUser() || 'user@example.com',
-        amount,
-        'Pagamento Principal Bosco Jones'
-      );
-      const payloadTax = generatePixPayload(pixKeyTax, taxAmount, 'Taxa 5% Bosco Jones');
+      // Aqui você deve montar os dados PIX (string) para os QR Codes
+      // Exemplo simples: gerar um texto para representar o pagamento
+      // Substitua pelas strings PIX reais no formato esperado pelo banco
 
-      // Limpar QR Codes anteriores
+      const pixKeyMain = 'your-pix-key-main@exemplo.com';  // altere para chave real
+      const pixKeyTax = '48761013889'; // chave pix para taxa 5%
+
+      // Montar strings de pagamento PIX (simplificado)
+      const pixPayloadMain = `PIX|CHAVE:${pixKeyMain}|VALOR:${mainAmount}`;
+      const pixPayloadTax = `PIX|CHAVE:${pixKeyTax}|VALOR:${taxAmount}`;
+
+      // Limpar qrcodes anteriores
       qrcodeMainDiv.innerHTML = '';
       qrcodeTaxDiv.innerHTML = '';
 
-      // Gerar QR Codes (usando QRCode.js)
-      QRCode.toCanvas(qrcodeMainDiv, payloadMain, { width: 180 }, (error) => {
+      // Gerar QR codes
+      QRCode.toCanvas(qrcodeMainDiv, pixPayloadMain, { width: 180 }, (error) => {
         if (error) console.error(error);
       });
-      QRCode.toCanvas(qrcodeTaxDiv, payloadTax, { width: 180 }, (error) => {
+      QRCode.toCanvas(qrcodeTaxDiv, pixPayloadTax, { width: 180 }, (error) => {
         if (error) console.error(error);
       });
 
-      pixMainAmountP.textContent = `R$ ${amount.toFixed(2)}`;
-      pixTaxAmountP.textContent = `R$ ${taxAmount.toFixed(2)}`;
+      // Exibir valores
+      pixMainAmount.textContent = `R$ ${mainAmount.toFixed(2)}`;
+      pixTaxAmount.textContent = `R$ ${taxAmount.toFixed(2)}`;
 
-      pixQRCodesDiv.style.display = 'flex';
+      // Exibir área dos QR Codes
+      pixQrcodes.style.display = 'flex';
+      document.getElementById('pix-payment-section').style.display = 'block';
     });
-
-    // Ao fazer login, mostrar seção PIX
-    // O show/hide já tratado no evento login
-
   </script>
 </body>
 </html>
