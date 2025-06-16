@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Bosco Jones Wallet - Login & Wallet</title>
+<title>Bosco Jones Wallet - Login & Registro</title>
 <style>
   * {
     box-sizing: border-box;
@@ -157,19 +157,51 @@
       text-shadow: 0 0 5px #f0f000, 0 0 10px #ff4500;
     }
   }
+
+  /* toggle buttons */
+  .toggle-btns {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .toggle-btns button {
+    width: auto;
+    padding: 0.5rem 1rem;
+    background: #238636cc;
+    border-radius: 6px;
+    font-weight: 700;
+  }
+  .toggle-btns button.active {
+    background: #2ea043;
+  }
 </style>
 </head>
 <body>
 
 <main>
-  <!-- Login form -->
-  <section id="login-section" class="container">
-    <h2>Login Bosco Jones Wallet</h2>
+  <section id="auth-section" class="container">
+    <div class="toggle-btns">
+      <button id="btn-login" class="active">Login</button>
+      <button id="btn-register">Registrar</button>
+    </div>
+
+    <!-- Login form -->
     <form id="login-form">
-      <input type="text" id="username" placeholder="Usuário" required autocomplete="username" />
-      <input type="password" id="password" placeholder="Senha" required autocomplete="current-password" />
+      <h2>Login Bosco Jones Wallet</h2>
+      <input type="text" id="login-username" placeholder="Usuário" required autocomplete="username" />
+      <input type="password" id="login-password" placeholder="Senha" required autocomplete="current-password" />
       <button type="submit">Entrar</button>
     </form>
+
+    <!-- Register form -->
+    <form id="register-form" style="display:none;">
+      <h2>Registrar novo usuário</h2>
+      <input type="text" id="register-username" placeholder="Usuário" required autocomplete="username" />
+      <input type="password" id="register-password" placeholder="Senha" required autocomplete="new-password" />
+      <button type="submit">Registrar</button>
+    </form>
+
     <div id="message"></div>
   </section>
 
@@ -207,10 +239,17 @@
 </footer>
 
 <script>
-  const loginSection = document.getElementById('login-section');
+  // Elementos principais
+  const authSection = document.getElementById('auth-section');
   const walletSection = document.getElementById('wallet-section');
-  const loginForm = document.getElementById('login-form');
   const message = document.getElementById('message');
+
+  // Toggle login/register buttons e forms
+  const btnLogin = document.getElementById('btn-login');
+  const btnRegister = document.getElementById('btn-register');
+  const loginForm = document.getElementById('login-form');
+  const registerForm = document.getElementById('register-form');
+
   const userDisplay = document.getElementById('user-display');
   const balance = document.getElementById('balance');
   const balanceFiat = document.getElementById('balance-fiat');
@@ -226,7 +265,7 @@
 
   function updateBalance() {
     balance.textContent = `B$ ${currentBalance.toFixed(2)}`;
-    const usd = currentBalance * 0.5; // taxa fixa
+    const usd = currentBalance * 0.5;
     balanceFiat.textContent = `USD ${usd.toFixed(2)}`;
   }
 
@@ -244,11 +283,30 @@
     transactionHistory.innerHTML = html;
   }
 
+  // Alternar forms
+  btnLogin.addEventListener('click', () => {
+    btnLogin.classList.add('active');
+    btnRegister.classList.remove('active');
+    loginForm.style.display = 'block';
+    registerForm.style.display = 'none';
+    message.textContent = '';
+  });
+
+  btnRegister.addEventListener('click', () => {
+    btnRegister.classList.add('active');
+    btnLogin.classList.remove('active');
+    registerForm.style.display = 'block';
+    loginForm.style.display = 'none';
+    message.textContent = '';
+  });
+
+  // Login
   loginForm.addEventListener('submit', async e => {
     e.preventDefault();
+    message.style.color = '';
     message.textContent = '';
-    const username = loginForm.username.value.trim();
-    const password = loginForm.password.value.trim();
+    const username = document.getElementById('login-username').value.trim();
+    const password = document.getElementById('login-password').value.trim();
 
     try {
       const res = await fetch('http://localhost:3000/login', {
@@ -272,7 +330,7 @@
       updateBalance();
       updateHistory();
 
-      loginSection.style.display = 'none';
+      authSection.style.display = 'none';
       walletSection.style.display = 'block';
 
       loginForm.reset();
@@ -282,6 +340,49 @@
     }
   });
 
+  // Registro
+  registerForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    message.style.color = '';
+    message.textContent = '';
+    const username = document.getElementById('register-username').value.trim();
+    const password = document.getElementById('register-password').value.trim();
+
+    try {
+      const res = await fetch('http://localhost:3000/register', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error);
+      }
+
+      const data = await res.json();
+
+      currentUser = data.username;
+      currentBalance = data.balance;
+      transactionLog = data.history;
+
+      userDisplay.textContent = currentUser;
+      updateBalance();
+      updateHistory();
+
+      authSection.style.display = 'none';
+      walletSection.style.display = 'block';
+
+      registerForm.reset();
+      message.style.color = 'green';
+      message.textContent = 'Registrado com sucesso!';
+    } catch (error) {
+      message.style.color = 'red';
+      message.textContent = error.message;
+    }
+  });
+
+  // Depositar
   depositForm.addEventListener('submit', async e => {
     e.preventDefault();
     const amount = parseFloat(document.getElementById('deposit-amount').value);
@@ -310,6 +411,7 @@
     }
   });
 
+  // Sacar
   withdrawForm.addEventListener('submit', async e => {
     e.preventDefault();
     const amount = parseFloat(document.getElementById('withdraw-amount').value);
@@ -338,13 +440,15 @@
     }
   });
 
+  // Logout
   logoutBtn.addEventListener('click', () => {
-    loginSection.style.display = 'block';
+    authSection.style.display = 'block';
     walletSection.style.display = 'none';
     currentUser = null;
     currentBalance = 0;
     transactionLog = [];
     loginForm.reset();
+    registerForm.reset();
     message.textContent = '';
   });
 </script>
