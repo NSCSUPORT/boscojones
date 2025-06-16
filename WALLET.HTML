@@ -1,252 +1,119 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<link rel="icon" href="logo.ico">
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Login + Pix Split 5% via Firebase</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #121212;
-    color: #eee;
-    padding: 20px;
-  }
-  label, input, button {
-    display: block;
-    margin: 10px 0;
-  }
-  input {
-    font-size: 1.2rem;
-    padding: 5px;
-    width: 250px;
-  }
-  button {
-    font-size: 1.1rem;
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  button:hover {
-    background-color: #388E3C;
-  }
-  #qrcodes > div {
-    margin-top: 20px;
-  }
-  #qrcodes h4 {
-    margin-bottom: 5px;
-  }
-  #splitInfo {
-    margin-top: 15px;
-    font-size: 1.1rem;
-  }
-  #authSection, #appSection {
-    max-width: 400px;
-    margin: auto;
-  }
-  #logoutBtn {
-    background-color: #f44336;
-  }
-  #logoutBtn:hover {
-    background-color: #d32f2f;
-  }
-  .error, .success {
-    margin-top: 10px;
-    font-weight: bold;
-  }
-  .error { color: #f44336; }
-  .success { color: #4CAF50; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bosco Jones Wallet</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <style>
+    /* (ESTILO DARK MODE GITHUB + FORMULÁRIO DE TRANSAÇÃO) */
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background-color: #0d1117;
+      color: #c9d1d9;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      max-width: 400px;
+      background: #161b22;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    h2 { text-align: center; color: #58a6ff; }
+    label { color: #8b949e; font-weight: bold; margin-top: 1rem; display: block; }
+    input {
+      width: 100%; padding: 10px; margin: 8px 0;
+      background: #0d1117; border: 1px solid #30363d; border-radius: 6px;
+      color: #fff;
+    }
+    button {
+      width: 100%; padding: 10px; margin-top: 1rem;
+      background-color: #238636; border: none;
+      border-radius: 6px; color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover { background-color: #2ea043; }
+    #qrcode { text-align: center; margin-top: 1rem; }
+    footer {
+      margin-top: 2rem;
+      text-align: center;
+      color: #ff4500;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <h2>Wallet Bosco Jones</h2>
 
-<h2 style="text-align:center;">App Login + Pix Split 5%</h2>
+    <label>Email</label>
+    <input type="email" id="email" placeholder="usuario@email.com">
 
-<div id="authSection">
-  <h3>Login / Registro</h3>
-  <input type="email" id="email" placeholder="Email" required />
-  <input type="password" id="password" placeholder="Senha" required />
-  <button id="loginBtn">Entrar</button>
-  <button id="registerBtn">Registrar</button>
-  <div id="authMessage"></div>
-</div>
+    <label>Senha</label>
+    <input type="password" id="senha" placeholder="Senha">
 
-<div id="appSection" style="display:none;">
-  <button id="logoutBtn">Sair</button>
+    <button onclick="registrar()">Registrar</button>
+    <button onclick="entrar()">Entrar</button>
 
-  <h3>Pagamento Pix com Split 5%</h3>
+    <label>Valor (R$)</label>
+    <input type="number" id="valor" placeholder="100">
+    <button onclick="gerarQRCode()">Gerar QR Code Pix +5%</button>
 
-  <label for="amount">Informe o valor total (R$):</label>
-  <input type="number" id="amount" min="0.01" step="0.01" placeholder="Ex: 100.00" />
+    <div id="qrcode"></div>
+    <p id="mensagem"></p>
+  </div>
 
-  <button id="generateBtn">Gerar QR Codes Pix</button>
+  <footer>&copy; 2025 Bosco Jones | PIX automático 5% incluso</footer>
 
-  <div id="splitInfo"></div>
-  <div id="qrcodes"></div>
-</div>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDzfZvQi-oaOUWPgSOu8BtTINa_LO2ZoLc",
+      authDomain: "bosco-jones-wallet.firebaseapp.com",
+      projectId: "bosco-jones-wallet",
+      storageBucket: "bosco-jones-wallet.appspot.com",
+      messagingSenderId: "1829673164",
+      appId: "1:1829673164:web:37c947c8aafe1af72a8a69",
+      measurementId: "G-6SZH0MHRGE"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-
-<!-- Pix Payload lib -->
-<script src="https://cdn.jsdelivr.net/npm/pix-payload@1.2.1/dist/index.min.js"></script>
-
-<!-- QRCode lib -->
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
-
-<script>
-  // Config Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyDzfZvQi-oaOUWPgSOu8BtTINa_LO2ZoLc",
-    authDomain: "bosco-jones-wallet.firebaseapp.com",
-    projectId: "bosco-jones-wallet",
-    storageBucket: "bosco-jones-wallet.appspot.com",
-    messagingSenderId: "1829673164",
-    appId: "1:1829673164:web:37c947c8aafe1af72a8a69",
-    measurementId: "G-6SZH0MHRGE"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-
-  // UI Elements
-  const authSection = document.getElementById('authSection');
-  const appSection = document.getElementById('appSection');
-  const authMessage = document.getElementById('authMessage');
-  const emailInput = document.getElementById('email');
-  const passInput = document.getElementById('password');
-  const loginBtn = document.getElementById('loginBtn');
-  const registerBtn = document.getElementById('registerBtn');
-  const logoutBtn = document.getElementById('logoutBtn');
-
-  // Chaves Pix
-  const CHAVE_PRINCIPAL = "luakaskn22@gmail.com"; // Sua chave Pix principal
-  const CHAVE_TAXA = "11958849894"; // Sua chave Pix para taxa 5%
-
-  // Pix pagamento UI
-  const amountInput = document.getElementById('amount');
-  const generateBtn = document.getElementById('generateBtn');
-  const splitInfo = document.getElementById('splitInfo');
-  const qrcodesDiv = document.getElementById('qrcodes');
-
-  // Gerenciar estado login
-  auth.onAuthStateChanged(user => {
-    if(user) {
-      authSection.style.display = 'none';
-      appSection.style.display = 'block';
-      authMessage.innerHTML = '';
-    } else {
-      authSection.style.display = 'block';
-      appSection.style.display = 'none';
-      authMessage.innerHTML = '';
-      emailInput.value = '';
-      passInput.value = '';
+    function registrar() {
+      const email = document.getElementById("email").value;
+      const senha = document.getElementById("senha").value;
+      auth.createUserWithEmailAndPassword(email, senha)
+        .then(() => alert("Usuário registrado com sucesso!"))
+        .catch(e => alert("Erro: " + e.message));
     }
-  });
 
-  // Login
-  loginBtn.addEventListener('click', () => {
-    const email = emailInput.value.trim();
-    const password = passInput.value;
-    if(!email || !password) {
-      authMessage.innerHTML = '<p class="error">Preencha email e senha.</p>';
-      return;
+    function entrar() {
+      const email = document.getElementById("email").value;
+      const senha = document.getElementById("senha").value;
+      auth.signInWithEmailAndPassword(email, senha)
+        .then(() => alert("Login realizado!"))
+        .catch(e => alert("Erro: " + e.message));
     }
-    auth.signInWithEmailAndPassword(email, password)
-      .then(() => {
-        authMessage.innerHTML = '<p class="success">Login realizado com sucesso!</p>';
-      })
-      .catch(e => {
-        authMessage.innerHTML = `<p class="error">Erro no login: ${e.message}</p>`;
+
+    function gerarQRCode() {
+      const valor = parseFloat(document.getElementById("valor").value);
+      const chavePix = "48761013889"; // Chave Pix destino
+      const valorFinal = valor * 1.05;
+      const payload = `00020126410014BR.GOV.BCB.PIX0111${chavePix}5204000053039865802BR5925BOSCO JONES TEC LTDA6009SAO PAULO62290525VALOR+5%R$${valorFinal.toFixed(2)}6304`;
+      document.getElementById("mensagem").innerText = `Total com 5% incluso: R$ ${valorFinal.toFixed(2)}`;
+      QRCode.toCanvas(document.getElementById('qrcode'), payload, function (error) {
+        if (error) console.error(error);
       });
-  });
-
-  // Registro
-  registerBtn.addEventListener('click', () => {
-    const email = emailInput.value.trim();
-    const password = passInput.value;
-    if(!email || !password) {
-      authMessage.innerHTML = '<p class="error">Preencha email e senha.</p>';
-      return;
     }
-    auth.createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        authMessage.innerHTML = '<p class="success">Usuário registrado com sucesso! Faça login.</p>';
-      })
-      .catch(e => {
-        authMessage.innerHTML = `<p class="error">Erro no registro: ${e.message}</p>`;
-      });
-  });
-
-  // Logout
-  logoutBtn.addEventListener('click', () => {
-    auth.signOut();
-  });
-
-  // Gerar QR Codes Pix com split 5%
-  generateBtn.addEventListener('click', () => {
-    const totalValue = parseFloat(amountInput.value);
-    if (!totalValue || totalValue <= 0) {
-      alert("Informe um valor válido maior que zero.");
-      return;
-    }
-
-    const taxa = totalValue * 0.05;
-    const valorLiquido = totalValue - taxa;
-
-    splitInfo.innerHTML = `
-      <strong>Valor total:</strong> R$ ${totalValue.toFixed(2)}<br/>
-      <strong>Taxa (5%):</strong> R$ ${taxa.toFixed(2)}<br/>
-      <strong>Valor líquido para você:</strong> R$ ${valorLiquido.toFixed(2)}
-    `;
-
-    // Usando PixPayload para payload Pix oficial
-    const payloadPrincipal = new PixPayload.PixPayload(CHAVE_PRINCIPAL, {
-      description: 'Pagamento valor líquido',
-      amount: valorLiquido.toFixed(2),
-      txid: `txid-${Date.now()}`
-    }).getPayload();
-
-    const payloadTaxa = new PixPayload.PixPayload(CHAVE_TAXA, {
-      description: 'Taxa 5% da transação',
-      amount: taxa.toFixed(2),
-      txid: `txid-taxa-${Date.now()}`
-    }).getPayload();
-
-    qrcodesDiv.innerHTML = `
-      <div>
-        <h4>Pagamento Valor Líquido</h4>
-        <div id="qrPrincipal"></div>
-      </div>
-      <div>
-        <h4>Pagamento Taxa (5%)</h4>
-        <div id="qrTaxa"></div>
-      </div>
-    `;
-
-    new QRCode(document.getElementById("qrPrincipal"), {
-      text: payloadPrincipal,
-      width: 250,
-      height: 250,
-      colorDark: "#4CAF50",
-      colorLight: "#fff",
-      correctLevel: QRCode.CorrectLevel.H
-    });
-
-    new QRCode(document.getElementById("qrTaxa"), {
-      text: payloadTaxa,
-      width: 250,
-      height: 250,
-      colorDark: "#f44336",
-      colorLight: "#fff",
-      correctLevel: QRCode.CorrectLevel.H
-    });
-  });
-</script>
-
+  </script>
 </body>
 </html>
