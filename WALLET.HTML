@@ -5,13 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Bosco Jones Wallet - Login & Wallet</title>
 <style>
-  /* Reset básico e fontes */
   * {
     box-sizing: border-box;
   }
   body {
     margin: 0;
-    background-color: #0d1117; /* preto estilo GitHub */
+    background-color: #0d1117;
     color: #c9d1d9;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
     height: 100vh;
@@ -25,7 +24,6 @@
     align-items: center;
   }
 
-  /* Container dos formulários e wallet */
   .container {
     background: #161b22;
     padding: 2rem;
@@ -34,7 +32,6 @@
     box-shadow: 0 0 15px #238636cc;
   }
 
-  /* Inputs e botão */
   input[type="text"],
   input[type="password"],
   input[type="number"] {
@@ -84,7 +81,6 @@
     font-weight: 600;
   }
 
-  /* Wallet styles */
   .wallet-header {
     text-align: center;
     margin-bottom: 1rem;
@@ -110,7 +106,6 @@
     background: #f85149;
   }
 
-  /* Formulário de transações */
   form.transaction-form {
     margin-top: 1rem;
   }
@@ -123,7 +118,6 @@
     margin-top: 0.3rem;
   }
 
-  /* Histórico */
   .history {
     margin-top: 1.5rem;
     max-height: 150px;
@@ -179,7 +173,7 @@
     <div id="message"></div>
   </section>
 
-  <!-- Wallet dashboard, hidden initially -->
+  <!-- Wallet dashboard -->
   <section id="wallet-section" class="container" style="display:none;">
     <div class="wallet-header">
       <h2>Bem-vindo, <span id="user-display"></span>!</h2>
@@ -213,12 +207,6 @@
 </footer>
 
 <script>
-  // Usuário/senha fixos simulando DB
-  const validUsers = [
-    { username: 'lucas', password: '123456' },
-    { username: 'admin', password: 'admin' }
-  ];
-
   const loginSection = document.getElementById('login-section');
   const walletSection = document.getElementById('wallet-section');
   const loginForm = document.getElementById('login-form');
@@ -233,18 +221,15 @@
   const transactionHistory = document.getElementById('transaction-history');
 
   let currentUser = null;
-  let currentBalance = 0.0;
+  let currentBalance = 0;
   let transactionLog = [];
 
-  // Função para atualizar o saldo na tela
   function updateBalance() {
     balance.textContent = `B$ ${currentBalance.toFixed(2)}`;
-    // Simulando taxa de câmbio fixa: 1 B$ = 0.5 USD
-    const usd = currentBalance * 0.5;
+    const usd = currentBalance * 0.5; // taxa fixa
     balanceFiat.textContent = `USD ${usd.toFixed(2)}`;
   }
 
-  // Atualiza histórico na tela
   function updateHistory() {
     if(transactionLog.length === 0){
       transactionHistory.innerHTML = '<strong>Histórico de transações:</strong><p>Nenhuma transação ainda.</p>';
@@ -253,91 +238,114 @@
     let html = '<strong>Histórico de transações:</strong>';
     for(let i = transactionLog.length - 1; i >= 0; i--){
       const t = transactionLog[i];
-      html += `<p>[${t.date}] - <strong>${t.type}</strong>: B$ ${t.amount.toFixed(2)}</p>`;
+      const date = new Date(t.date).toLocaleString();
+      html += `<p>[${date}] - <strong>${t.type}</strong>: B$ ${t.amount.toFixed(2)}</p>`;
     }
     transactionHistory.innerHTML = html;
   }
 
-  loginForm.addEventListener('submit', e => {
+  loginForm.addEventListener('submit', async e => {
     e.preventDefault();
     message.textContent = '';
     const username = loginForm.username.value.trim();
     const password = loginForm.password.value.trim();
 
-    const user = validUsers.find(u => u.username === username && u.password === password);
-    if (!user) {
+    try {
+      const res = await fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error);
+      }
+
+      const data = await res.json();
+
+      currentUser = data.username;
+      currentBalance = data.balance;
+      transactionLog = data.history;
+
+      userDisplay.textContent = currentUser;
+      updateBalance();
+      updateHistory();
+
+      loginSection.style.display = 'none';
+      walletSection.style.display = 'block';
+
+      loginForm.reset();
+    } catch (error) {
       message.style.color = 'red';
-      message.textContent = 'Usuário ou senha inválidos.';
-      return;
+      message.textContent = error.message;
     }
-
-    currentUser = user.username;
-    currentBalance = 0.0;
-    transactionLog = [];
-
-    userDisplay.textContent = currentUser;
-    updateBalance();
-    updateHistory();
-
-    loginSection.style.display = 'none';
-    walletSection.style.display = 'block';
-
-    // limpa formulários e mensagens
-    loginForm.reset();
-    message.textContent = '';
-    depositForm.reset();
-    withdrawForm.reset();
   });
 
-  logoutBtn.addEventListener('click', () => {
-    // Voltar para tela de login
-    loginSection.style.display = 'block';
-    walletSection.style.display = 'none';
-    currentUser = null;
-    currentBalance = 0.0;
-    transactionLog = [];
-    loginForm.reset();
-    message.textContent = '';
-  });
-
-  depositForm.addEventListener('submit', e => {
+  depositForm.addEventListener('submit', async e => {
     e.preventDefault();
     const amount = parseFloat(document.getElementById('deposit-amount').value);
-    if(isNaN(amount) || amount <= 0){
+    if (isNaN(amount) || amount <= 0) {
       alert('Insira um valor válido para depósito.');
       return;
     }
-    currentBalance += amount;
-    transactionLog.push({
-      type: 'Depósito',
-      amount: amount,
-      date: new Date().toLocaleString()
-    });
-    updateBalance();
-    updateHistory();
-    depositForm.reset();
+    try {
+      const res = await fetch('http://localhost:3000/deposit', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ username: currentUser, amount }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error);
+      }
+      const data = await res.json();
+      currentBalance = data.balance;
+      transactionLog.push(data.transaction);
+      updateBalance();
+      updateHistory();
+      depositForm.reset();
+    } catch (error) {
+      alert(error.message);
+    }
   });
 
-  withdrawForm.addEventListener('submit', e => {
+  withdrawForm.addEventListener('submit', async e => {
     e.preventDefault();
     const amount = parseFloat(document.getElementById('withdraw-amount').value);
-    if(isNaN(amount) || amount <= 0){
+    if (isNaN(amount) || amount <= 0) {
       alert('Insira um valor válido para saque.');
       return;
     }
-    if(amount > currentBalance){
-      alert('Saldo insuficiente para saque.');
-      return;
+    try {
+      const res = await fetch('http://localhost:3000/withdraw', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ username: currentUser, amount }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error);
+      }
+      const data = await res.json();
+      currentBalance = data.balance;
+      transactionLog.push(data.transaction);
+      updateBalance();
+      updateHistory();
+      withdrawForm.reset();
+    } catch (error) {
+      alert(error.message);
     }
-    currentBalance -= amount;
-    transactionLog.push({
-      type: 'Saque',
-      amount: amount,
-      date: new Date().toLocaleString()
-    });
-    updateBalance();
-    updateHistory();
-    withdrawForm.reset();
+  });
+
+  logoutBtn.addEventListener('click', () => {
+    loginSection.style.display = 'block';
+    walletSection.style.display = 'none';
+    currentUser = null;
+    currentBalance = 0;
+    transactionLog = [];
+    loginForm.reset();
+    message.textContent = '';
   });
 </script>
 
