@@ -2,9 +2,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Minha Wallet - Bosco Jones</title>
+  <title>Wallet Pix JBX500</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" href="logo.ico" />
   <style>
     body {
       background-color: #0d1117;
@@ -14,28 +13,27 @@
       padding: 20px;
     }
 
-    h1 {
-      color: #58a6ff;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
     .container {
       max-width: 400px;
       margin: auto;
-      padding: 20px;
       background-color: #161b22;
+      padding: 20px;
       border-radius: 8px;
       box-shadow: 0 0 10px #000;
+    }
+
+    h1 {
+      color: #58a6ff;
+      text-align: center;
     }
 
     input, button {
       width: 100%;
       padding: 10px;
       margin-top: 10px;
-      font-size: 1rem;
-      border-radius: 4px;
       border: none;
+      border-radius: 5px;
+      font-size: 1rem;
     }
 
     button {
@@ -48,21 +46,12 @@
       background-color: #357a38;
     }
 
-    .saldo {
-      font-size: 1.2rem;
-      margin-bottom: 10px;
-      color: #0f0;
-      text-align: center;
-    }
-
     #qrcode-container {
       text-align: center;
       margin-top: 15px;
-      padding: 10px;
       background-color: #111;
+      padding: 10px;
       border-radius: 8px;
-      max-height: 150px;
-      overflow-y: auto;
     }
 
     #qrcode-container img {
@@ -71,15 +60,13 @@
     }
 
     footer {
-      white-space: pre-wrap;
-      word-break: break-word;
-      color: #fff;
+      text-align: center;
       background-color: #111;
+      color: #fff;
+      margin-top: 30px;
       padding: 10px;
       border-radius: 8px;
-      margin-top: 30px;
       font-size: 0.9rem;
-      text-align: center;
     }
   </style>
 </head>
@@ -88,80 +75,99 @@
   <h1>JBX500 Wallet</h1>
 
   <div class="container">
-    <div class="saldo">Saldo: R$ <span id="saldo">1000.00</span></div>
-
-    <input type="number" id="valor" placeholder="Valor em R$" />
-    <button onclick="gerarPix()">Pagar com Pix</button>
+    <input type="number" id="valor" placeholder="Digite o valor em R$" />
+    <button onclick="gerarPix()">Gerar QR Code Pix</button>
 
     <div id="qrcode-container"></div>
   </div>
 
   <footer>
     © 2025 Bosco Jones Wallet<br />
-    Desenvolvido Lucas Januário<br />
-    HoloFi Quantum · Pix com taxa de 5%
+    Pix com taxa de 5% embutida<br />
+    HoloFi Symbiotic Dark 💚
   </footer>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
-  <!-- QR Code Generator -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDzfZvQi-oaOUWPgSOu8BtTINa_LO2ZoLc",
-      authDomain: "bosco-jones-wallet.firebaseapp.com",
-      projectId: "bosco-jones-wallet",
-      storageBucket: "bosco-jones-wallet.appspot.com",
-      messagingSenderId: "1829673164",
-      appId: "1:1829673164:web:37c947c8aafe1af72a8a69"
-    };
-    firebase.initializeApp(firebaseConfig);
-
-    const auth = firebase.auth();
-    let saldo = 1000.00;
-
     function gerarPix() {
-      const valor = parseFloat(document.getElementById('valor').value);
-      if (isNaN(valor) || valor <= 0) {
+      const valorDigitado = parseFloat(document.getElementById("valor").value);
+      if (isNaN(valorDigitado) || valorDigitado <= 0) {
         alert("Digite um valor válido.");
         return;
       }
 
-      const taxa = valor * 0.05;
-      const total = valor + taxa;
+      // Calcula valor com 5% de taxa
+      const valorComTaxa = valorDigitado * 1.05;
 
-      if (total > saldo) {
-        alert("Saldo insuficiente.");
-        return;
-      }
+      // Substitua esta chave pela sua chave Pix real
+      const chavePix = "48761013889";
+      const nome = "Lucas Januário";
+      const cidade = "BRASILIA";
 
-      const chavePixUsuario = "seu@email.com"; // Você pode usar o email do usuário
-      const chavePixTaxa = "48761013889"; // Seu Pix para receber a taxa
-
-      const payloadUsuario = `pix://pagamento?chave=${chavePixUsuario}&valor=${valor.toFixed(2)}`;
-      const payloadTaxa = `pix://pagamento?chave=${chavePixTaxa}&valor=${taxa.toFixed(2)}`;
-
-      document.getElementById('qrcode-container').innerHTML = "";
-
-      new QRCode(document.getElementById("qrcode-container"), {
-        text: payloadUsuario,
-        width: 128,
-        height: 128
+      // Monta o Pix Copia e Cola padrão BR Code
+      const payload = gerarPayloadPix({
+        chave: chavePix,
+        nome: nome,
+        cidade: cidade,
+        valor: valorComTaxa.toFixed(2),
+        infoAdicional: "Pagamento JBX500"
       });
 
-      setTimeout(() => {
-        new QRCode(document.getElementById("qrcode-container"), {
-          text: payloadTaxa,
-          width: 128,
-          height: 128
-        });
-      }, 500);
+      const container = document.getElementById("qrcode-container");
+      container.innerHTML = "";
 
-      saldo -= total;
-      document.getElementById('saldo').textContent = saldo.toFixed(2);
+      new QRCode(container, {
+        text: payload,
+        width: 150,
+        height: 150
+      });
+    }
+
+    function gerarPayloadPix({chave, nome, cidade, valor, infoAdicional}) {
+      function format(id, value) {
+        const size = value.length.toString().padStart(2, '0');
+        return `${id}${size}${value}`;
+      }
+
+      const merchantAccountInfo = format("00", "BR.GOV.BCB.PIX") +
+                                  format("01", chave);
+
+      const additionalDataField = format("05", infoAdicional);
+
+      let payload = "";
+      payload += format("00", "01"); // Payload Format Indicator
+      payload += format("26", merchantAccountInfo); // Merchant Account Info
+      payload += format("52", "0000"); // Merchant Category Code
+      payload += format("53", "986"); // Moeda BRL
+      payload += format("54", valor); // Valor
+      payload += format("58", "BR"); // País
+      payload += format("59", nome); // Nome do recebedor
+      payload += format("60", cidade); // Cidade
+      payload += format("62", additionalDataField); // Info adicional
+
+      // CRC16
+      payload += "6304";
+      payload += calcularCRC16(payload);
+
+      return payload;
+    }
+
+    function calcularCRC16(payload) {
+      let polinomio = 0x1021;
+      let resultado = 0xFFFF;
+
+      for (let i = 0; i < payload.length; i++) {
+        resultado ^= payload.charCodeAt(i) << 8;
+        for (let bit = 0; bit < 8; bit++) {
+          if ((resultado << 1) & 0x10000) {
+            resultado = ((resultado << 1) ^ polinomio) & 0xFFFF;
+          } else {
+            resultado = (resultado << 1) & 0xFFFF;
+          }
+        }
+      }
+
+      return resultado.toString(16).toUpperCase().padStart(4, '0');
     }
   </script>
 </body>
