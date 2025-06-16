@@ -1,165 +1,213 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Wallet Bosco Jones - Bit Bosco</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+
     body {
-      margin: 0; padding: 20px;
-      background-color: #000;
-      color: #00ff00;
-      font-family: 'Press Start 2P', cursive, monospace;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
     }
-    h1 {
-      font-size: 1.8rem;
-      margin-bottom: 10px;
+
+    @layer base {
+      :root {
+        --background: 0 0% 13%; /* Dark Charcoal */
+        --foreground: 0 0% 95%; /* Off-white */
+
+        --card: 0 0% 10%;
+        --card-foreground: 0 0% 95%;
+
+        --primary: 160 100% 75%; /* Aqua Green */
+        --primary-foreground: 0 0% 10%;
+
+        --destructive: 0 60% 50%;
+        --destructive-foreground: 0 0% 95%;
+
+        --border: 0 0% 20%;
+        --input: 0 0% 18%;
+        --ring: 160 100% 75%;
+        --radius: 0.5rem;
+      }
     }
+
+    @layer base {
+      * {
+        border-color: hsl(var(--border));
+      }
+      body {
+        background-color: hsl(var(--background));
+        color: hsl(var(--foreground));
+      }
+    }
+
     .card {
-      background: #111;
-      border: 2px solid #00ff00;
-      border-radius: 10px;
-      padding: 20px;
+      background-color: hsl(var(--card));
+      color: hsl(var(--card-foreground));
+      border: 2px solid hsl(var(--border));
+      border-radius: var(--radius);
+      box-shadow: 0 0 15px hsl(var(--primary) / 0.4);
+      padding: 1.25rem;
+      margin: 0.5rem auto;
       width: 320px;
-      margin: 10px 0;
-      box-shadow: 0 0 15px #00ff00aa;
+      max-width: 95vw;
     }
+
     .balance {
-      font-size: 2.4rem;
-      font-weight: bold;
-      margin-bottom: 5px;
-      letter-spacing: 2px;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
       text-align: center;
+      margin-bottom: 0.5rem;
     }
+
     .fiat {
       text-align: center;
       font-size: 1rem;
-      color: #66ff66;
-      margin-bottom: 20px;
+      color: hsl(var(--primary));
+      margin-bottom: 1rem;
+      font-weight: 600;
     }
+
     label {
-      font-size: 0.75rem;
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 0.25rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 0.15em;
+      font-weight: 600;
+      color: hsl(var(--primary));
     }
+
     input, button {
       width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      font-family: monospace;
+      font-family: monospace, monospace;
       font-size: 1rem;
-      border-radius: 5px;
-      border: none;
-      outline: none;
+      border-radius: var(--radius);
+      border: 1.5px solid hsl(var(--border));
+      padding: 0.5rem 0.75rem;
+      outline-offset: 2px;
+      outline-color: transparent;
+      transition: outline-color 0.2s ease;
+      color: hsl(var(--card-foreground));
+      background-color: hsl(var(--input));
     }
-    input {
-      background: #222;
-      color: #00ff00;
-      border: 1px solid #00ff00;
+
+    input:focus {
+      outline-color: hsl(var(--ring));
+      border-color: hsl(var(--ring));
+      background-color: hsl(var(--card));
     }
+
     button {
-      background: #00ff00;
-      color: #000;
+      background-color: hsl(var(--primary));
+      color: hsl(var(--primary-foreground));
+      font-weight: 700;
       cursor: pointer;
-      font-weight: bold;
-      transition: background 0.3s ease;
+      border: none;
+      margin-top: 0.25rem;
+      transition: background-color 0.3s ease;
     }
-    button:hover {
-      background: #33ff33;
+
+    button:hover,
+    button:focus {
+      background-color: hsl(var(--primary) / 0.8);
+      outline-color: hsl(var(--ring));
     }
+
     .tx-history {
       max-height: 150px;
       overflow-y: auto;
       font-size: 0.75rem;
-      border-top: 1px solid #00ff00;
-      padding-top: 10px;
+      border-top: 1px solid hsl(var(--border));
+      padding-top: 0.75rem;
+      color: hsl(var(--primary));
+      font-family: monospace, monospace;
     }
+
     .tx {
-      border-bottom: 1px dotted #00ff00;
-      padding: 6px 0;
+      border-bottom: 1px dotted hsl(var(--border));
+      padding: 0.4rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: space-between;
     }
+
     .tx span {
-      display: inline-block;
-      width: 100px;
+      flex: 1 1 100px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       vertical-align: top;
     }
+
     .tx-type-send {
-      color: #ff4444;
+      color: hsl(var(--destructive));
+      font-weight: 700;
     }
+
     .tx-type-receive {
-      color: #44ff44;
+      color: hsl(var(--accent, 120 61% 50%));
+      font-weight: 700;
     }
+
     .qr-container {
       display: flex;
       justify-content: center;
-      margin-bottom: 10px;
-    }
-    /* Responsive */
-    @media (max-width: 400px) {
-      .card {
-        width: 95vw;
-      }
+      margin-bottom: 0.75rem;
     }
   </style>
 </head>
 <body>
 
-  <h1>Bit Bosco Wallet</h1>
+  <h1 class="text-center font-bold text-xl mb-4">Bit Bosco Wallet</h1>
 
-  <div class="card" id="balanceCard">
+  <section class="card" id="balanceCard" role="region" aria-label="Saldo da carteira">
     <div class="balance" id="balanceDisplay">B$ 1,337.42</div>
     <div class="fiat" id="fiatDisplay">≈ USD 420.69</div>
-  </div>
+  </section>
 
-  <div class="card">
+  <section class="card" role="region" aria-label="Enviar BoscoCoin">
     <form id="sendForm">
       <label for="sendAddress">Enviar para endereço</label>
-      <input type="text" id="sendAddress" placeholder="Endereço Bosco Jones" required />
+      <input type="text" id="sendAddress" placeholder="Endereço Bosco Jones" autocomplete="off" required />
       
       <label for="sendAmount">Quantidade (B$)</label>
       <input type="number" id="sendAmount" placeholder="Ex: 50" min="0.01" step="0.01" required />
       
-      <button type="submit">Enviar BoscoCoin</button>
+      <button type="submit" aria-label="Enviar BoscoCoin">Enviar BoscoCoin</button>
     </form>
-  </div>
+  </section>
 
-  <div class="card" id="receiveCard">
-    <label>Seu endereço para receber</label>
-    <div class="qr-container" id="qrCode"></div>
-    <input type="text" id="receiveAddress" readonly />
-  </div>
+  <section class="card" id="receiveCard" role="region" aria-label="Receber BoscoCoin">
+    <label for="receiveAddress">Seu endereço para receber</label>
+    <div class="qr-container" id="qrCode" aria-hidden="true"></div>
+    <input type="text" id="receiveAddress" readonly aria-readonly="true" />
+  </section>
 
-  <div class="card">
-    <h2>Histórico de Transações</h2>
-    <div class="tx-history" id="txHistory">
-      <!-- Transações aparecem aqui -->
+  <section class="card" role="region" aria-label="Histórico de Transações">
+    <h2 class="font-semibold text-lg mb-2">Histórico de Transações</h2>
+    <div class="tx-history" id="txHistory" tabindex="0" aria-live="polite" aria-atomic="true">
+      <!-- Transações aparecerão aqui -->
     </div>
-  </div>
+  </section>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <script>
-  // Estado inicial
   let balance = 1337.42;
   const exchangeRate = 0.314; // 1 BoscoCoin = 0.314 USD (exemplo)
   const address = "BOSCOJONES1234567890ABCDEF";
 
-  // Histórico simulado
   let transactions = [
     { type: 'receive', amount: 500, from: 'AMIGO12345', date: new Date(Date.now() - 86400000) }, // ontem
     { type: 'send', amount: 100, to: 'LOJA98765', date: new Date(Date.now() - 43200000) } // 12h atrás
   ];
 
-  // Elementos DOM
   const balanceDisplay = document.getElementById('balanceDisplay');
   const fiatDisplay = document.getElementById('fiatDisplay');
   const receiveAddressInput = document.getElementById('receiveAddress');
@@ -167,7 +215,6 @@
   const sendForm = document.getElementById('sendForm');
   const qrCodeContainer = document.getElementById('qrCode');
 
-  // Funções
   function updateBalance() {
     balanceDisplay.textContent = `B$ ${balance.toFixed(2)}`;
     fiatDisplay.textContent = `≈ USD ${(balance * exchangeRate).toFixed(2)}`;
@@ -194,19 +241,17 @@
 
   function generateQRCode() {
     qrCodeContainer.innerHTML = '';
-    QRCode.toCanvas(address, { width: 150, color: { dark: '#00ff00', light: '#0000' } }, function (error, canvas) {
+    QRCode.toCanvas(address, { width: 150, color: { dark: 'hsl(var(--primary))', light: '#0000' } }, function (error, canvas) {
       if (error) console.error(error);
       else qrCodeContainer.appendChild(canvas);
     });
   }
 
-  // Setup inicial
   receiveAddressInput.value = address;
   updateBalance();
   renderTransactions();
   generateQRCode();
 
-  // Envio (simulado)
   sendForm.addEventListener('submit', e => {
     e.preventDefault();
     const toAddress = document.getElementById('sendAddress').value.trim();
@@ -221,13 +266,11 @@
       return;
     }
 
-    // Atualizar saldo e histórico
     balance -= amount;
     transactions.push({ type: 'send', amount, to: toAddress, date: new Date() });
     updateBalance();
     renderTransactions();
 
-    // Limpar formulário
     sendForm.reset();
     alert(`Enviado ${amount.toFixed(2)} B$ para ${toAddress} com sucesso!`);
   });
