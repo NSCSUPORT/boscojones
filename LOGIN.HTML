@@ -4,334 +4,228 @@
   <meta charset="UTF-8" />
   <link rel="icon" href="logo.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>JBX1000 CRC-16</title>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <title>JBX1000 - Login e Registro</title>
   <style>
-    * { box-sizing: border-box; }
     body {
-      background: #0d1117; color: #e0e0e0;
+      background: #0d1117;
+      color: #e0e0e0;
       font-family: 'Segoe UI', sans-serif;
-      margin: 0; padding: 0 8px;
-      display: flex; justify-content: center; min-height: 100vh; align-items: flex-start; padding-top: 20px;
-      font-size: 14px;
+      margin: 0;
+      padding: 20px 10px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
     }
     .container {
-      width: 100%; max-width: 400px;
-      background: #1c1f26; border-radius: 12px; padding: 18px; box-shadow: 0 0 10px #000a;
+      max-width: 400px;
+      width: 100%;
+      background: #1c1f26;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 15px #000a;
     }
     h1 {
-      text-align: center; margin-bottom: 16px; color: #00ffb2;
-      font-weight: 700; font-size: 1.3rem;
+      text-align: center;
+      color: #00ffb2;
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+    .btn-toggle-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+      gap: 10px;
+    }
+    .btn-toggle {
+      background: #222b35;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      color: #ccc;
+      font-weight: 700;
+      cursor: pointer;
+      flex: 1;
+      transition: background-color 0.3s;
+      font-size: 1rem;
+    }
+    .btn-toggle.active,
+    .btn-toggle:hover {
+      background-color: #00ffb2;
+      color: #0d1117;
+    }
+    form {
+      display: none;
+      flex-direction: column;
+    }
+    form.active {
+      display: flex;
     }
     label {
-      display: block; margin: 10px 0 5px; font-weight: 700; font-size: 0.9rem;
+      margin-top: 10px;
+      font-weight: 600;
+      font-size: 0.9rem;
     }
-    input[type="number"],
-    input[type="text"],
     input[type="email"],
     input[type="password"] {
-      width: 100%; padding: 8px; border: 1px solid #444;
-      border-radius: 6px; background-color: #0f141a; color: #fff;
+      margin-top: 5px;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background-color: #0f141a;
+      color: #fff;
       font-size: 0.9rem;
     }
-    .btn {
-      width: 48%; padding: 10px; margin-top: 12px;
-      border: none; border-radius: 8px; font-weight: 700;
-      cursor: pointer; transition: background 0.3s; font-size: 0.9rem;
-    }
-    #btn-register {
-      width: 100%; margin-bottom: 20px;
-      background-color: #17a2b8; color: white;
-    }
-    #btn-register:hover {
-      background-color: #117a8b;
-    }
-    #btn-deposit { background-color: #28a745; color: white; }
-    #btn-deposit:hover { background-color: #218838; }
-    #btn-withdraw { background-color: #dc3545; color: white; float: right; }
-    #btn-withdraw:hover { background-color: #c82333; }
-    #btn-generate-pix {
-      width: 100%; margin-top: 18px; padding: 12px;
-      background-color: #007bff; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;
+    .btn-submit {
+      margin-top: 20px;
+      background-color: #00ffb2;
+      border: none;
+      color: #0d1117;
+      font-weight: 700;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
       font-size: 1rem;
+      transition: background-color 0.3s;
     }
-    #btn-generate-pix:hover { background-color: #0056b3; }
-    #btn-clear-history {
-      width: 100%; margin-top: 14px; padding: 8px;
-      background-color: #666; border: none; border-radius: 8px;
-      color: white; cursor: pointer; font-weight: 700;
+    .btn-submit:hover {
+      background-color: #00cc8f;
+    }
+    .message {
+      margin-top: 12px;
       font-size: 0.9rem;
-    }
-    #btn-clear-history:hover { background-color: #444; }
-    #saldo-container {
-      text-align: center; margin-top: 18px;
-      font-size: 1rem; color: #1efcb8; font-weight: 700;
-    }
-    #qrcode-container {
-      margin-top: 18px; padding: 14px; background-color: #11161c;
-      border-radius: 10px; text-align: center; min-height: 220px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      color: #666;
-      word-break: break-word;
-    }
-    pre {
-      background: #000000cc; padding: 8px; margin-top: 8px; border-radius: 6px;
-      color: #00ffb2; font-size: 0.85rem; user-select: all; white-space: pre-wrap; word-break: break-word;
-      max-height: 100px; overflow-y: auto;
-      width: 100%;
-    }
-    #history-container {
-      margin-top: 28px; max-height: 220px; overflow-y: auto;
-      background: #10131a; border-radius: 10px; padding: 12px; font-size: 0.85rem;
-    }
-    #history-container h2 {
-      margin-top: 0; font-weight: 700; color: #0ff; text-align: center; margin-bottom: 8px;
-      font-size: 1rem;
-    }
-    .transaction {
-      padding: 4px 6px; border-bottom: 1px solid #222;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .transaction:last-child { border-bottom: none; }
-    .transaction .type { font-weight: 700; text-transform: capitalize; font-size: 0.85rem; flex: 1; }
-    .transaction.deposit { color: #28a745; }
-    .transaction.withdraw { color: #dc3545; }
-    .transaction.pix { color: #007bff; }
-    .transaction .date { font-size: 0.7rem; color: #aaa; font-style: italic; flex: 1.5; text-align: right; }
-    @media (max-width: 420px) {
-      .btn { width: 100%; margin-top: 8px; float: none; }
-      #btn-withdraw { float: none; }
-      #btn-generate-pix { font-size: 0.95rem; }
-      h1 { font-size: 1.1rem; }
+      color: #ff6666;
+      font-weight: 600;
+      min-height: 24px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Registro de Usuário</h1>
-    <label for="email">Email:</label>
-    <input type="email" id="email" placeholder="seuemail@exemplo.com" />
-    <label for="senha">Senha:</label>
-    <input type="password" id="senha" placeholder="Digite sua senha" />
-    <button id="btn-register" class="btn">Registrar</button>
 
-    <hr style="margin: 20px 0; border-color: #333;" />
-
-    <h1>Carteira JBX1000 CRC</h1>
-    <label for="valor">Valor (R$):</label>
-    <input type="number" id="valor" placeholder="0,00" min="0.01" step="0.01" />
-    
-    <label for="chavePix">Chave Pix (para saque):</label>
-    <input type="text" id="chavePix" placeholder="Insira sua chave Pix" />
-
-    <button id="btn-deposit" class="btn">Depositar</button>
-    <button id="btn-withdraw" class="btn">Sacar</button>
-    <button id="btn-generate-pix">Gerar Pix Copia e Cola (5% taxa)</button>
-
-    <div id="saldo-container">Saldo: <span id="saldo">R$ 0,00</span></div>
-    <div id="qrcode-container"><span>QR Code e Copia e Cola aparecerão aqui</span></div>
-    <button id="btn-clear-history">Limpar Histórico</button>
-    <div id="history-container">
-      <h2>Histórico de Transações</h2>
-      <div id="history-list">Nenhuma transação registrada.</div>
-    </div>
+<div class="container">
+  <div class="btn-toggle-container">
+    <button id="btn-login" class="btn-toggle active">Entrar</button>
+    <button id="btn-register" class="btn-toggle">Registrar</button>
   </div>
 
+  <!-- Formulário Login -->
+  <form id="form-login" class="active">
+    <h1>Login</h1>
+    <label for="login-email">Email</label>
+    <input type="email" id="login-email" placeholder="seuemail@exemplo.com" required />
+    <label for="login-senha">Senha</label>
+    <input type="password" id="login-senha" placeholder="Sua senha" required />
+    <button type="submit" class="btn-submit">Entrar</button>
+    <div id="login-msg" class="message"></div>
+  </form>
+
+  <!-- Formulário Registro -->
+  <form id="form-register">
+    <h1>Registro</h1>
+    <label for="reg-email">Email</label>
+    <input type="email" id="reg-email" placeholder="seuemail@exemplo.com" required />
+    <label for="reg-senha">Senha</label>
+    <input type="password" id="reg-senha" placeholder="Sua senha (mín 6 caracteres)" required minlength="6" />
+    <button type="submit" class="btn-submit">Registrar</button>
+    <div id="register-msg" class="message"></div>
+  </form>
+</div>
+
 <script>
-(() => {
-  const emailInput = document.getElementById("email");
-  const senhaInput = document.getElementById("senha");
-  const btnRegister = document.getElementById("btn-register");
+  const btnLogin = document.getElementById('btn-login');
+  const btnRegister = document.getElementById('btn-register');
+  const formLogin = document.getElementById('form-login');
+  const formRegister = document.getElementById('form-register');
 
-  const valorInput = document.getElementById("valor");
-  const chavePixInput = document.getElementById("chavePix");
-  const btnDeposit = document.getElementById("btn-deposit");
-  const btnWithdraw = document.getElementById("btn-withdraw");
-  const btnGeneratePix = document.getElementById("btn-generate-pix");
-  const btnClearHistory = document.getElementById("btn-clear-history");
-  const saldoSpan = document.getElementById("saldo");
-  const qrcodeContainer = document.getElementById("qrcode-container");
-  const historyList = document.getElementById("history-list");
-
-  let saldo = 0;
-  let history = [];
-
-  btnRegister.addEventListener("click", async () => {
-    const email = emailInput.value.trim();
-    const senha = senhaInput.value;
-
-    if (!email) return alert("Informe o email.");
-    if (!senha || senha.length < 6) return alert("Senha deve ter no mínimo 6 caracteres.");
-
-    // Simulação de envio para backend
-    try {
-      // Exemplo de POST para backend de registro (troque URL)
-      const response = await fetch("http://localhost:3000/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, senha })
-      });
-      const data = await response.json();
-      if (data.error) return alert("Erro no registro: " + data.error);
-
-      alert("Registro realizado com sucesso! Agora faça login.");
-      // Pode limpar o form registro após sucesso
-      emailInput.value = "";
-      senhaInput.value = "";
-    } catch (err) {
-      console.error("Erro no registro:", err);
-      alert("Erro ao registrar usuário.");
-    }
+  // Alterna entre os formulários
+  btnLogin.addEventListener('click', () => {
+    btnLogin.classList.add('active');
+    btnRegister.classList.remove('active');
+    formLogin.classList.add('active');
+    formRegister.classList.remove('active');
+    clearMessages();
   });
 
-  async function carregarSaldo() {
+  btnRegister.addEventListener('click', () => {
+    btnRegister.classList.add('active');
+    btnLogin.classList.remove('active');
+    formRegister.classList.add('active');
+    formLogin.classList.remove('active');
+    clearMessages();
+  });
+
+  function clearMessages() {
+    document.getElementById('login-msg').textContent = '';
+    document.getElementById('register-msg').textContent = '';
+  }
+
+  // Função para registrar usuário (exemplo, conectar backend)
+  formRegister.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('reg-email').value.trim();
+    const senha = document.getElementById('reg-senha').value;
+
+    if (!email || senha.length < 6) {
+      document.getElementById('register-msg').textContent = 'Preencha todos os campos corretamente.';
+      return;
+    }
+
     try {
-      const res = await fetch("http://localhost:3000/saldo");
+      const res = await fetch('http://localhost:3000/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, senha }),
+      });
       const data = await res.json();
-      saldo = parseFloat(data.saldo || 0);
-      atualizarSaldo();
-    } catch (err) {
-      console.error("Erro ao carregar saldo:", err);
-    }
-  }
-
-  function atualizarSaldo() {
-    saldoSpan.textContent = `R$ ${saldo.toFixed(2).replace('.', ',')}`;
-  }
-
-  function atualizarHistorico() {
-    if (history.length === 0) {
-      historyList.textContent = "Nenhuma transação registrada.";
-      return;
-    }
-    historyList.innerHTML = "";
-    history.forEach(tx => {
-      const div = document.createElement("div");
-      div.className = `transaction ${tx.type}`;
-      div.innerHTML = `
-        <div class="type">${tx.type}</div>
-        <div>R$ ${tx.amount.toFixed(2).replace('.', ',')}</div>
-        <div class="date">${new Date(tx.date).toLocaleString('pt-BR')}</div>
-      `;
-      historyList.appendChild(div);
-    });
-  }
-
-  function addTransacao(type, amount) {
-    history.unshift({ type, amount, date: new Date().toISOString() });
-    if (history.length > 50) history.pop();
-    atualizarHistorico();
-  }
-
-  function limparPix() {
-    qrcodeContainer.innerHTML = "<span>QR Code e Copia e Cola aparecerão aqui</span>";
-  }
-
-  async function gerarPix() {
-    limparPix();
-    if (saldo <= 0) {
-      alert("Saldo insuficiente para gerar Pix.");
-      return;
-    }
-
-    try {
-      const response = await fetch("http://localhost:3000/criar-cobranca", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ valor: saldo.toFixed(2) })
-      });
-
-      const data = await response.json();
-
-      if (!data.qrcode || !data.imagemQrcode) {
-        alert("Erro ao gerar cobrança Pix.");
-        return;
+      if (res.ok) {
+        document.getElementById('register-msg').style.color = 'lightgreen';
+        document.getElementById('register-msg').textContent = 'Registro realizado com sucesso!';
+        formRegister.reset();
+      } else {
+        document.getElementById('register-msg').style.color = '#ff6666';
+        document.getElementById('register-msg').textContent = data.error || 'Erro ao registrar.';
       }
-
-      const pre = document.createElement("pre");
-      pre.textContent = data.qrcode;
-      qrcodeContainer.appendChild(pre);
-
-      const img = document.createElement("img");
-      img.src = data.imagemQrcode;
-      img.alt = "QR Code Pix";
-      img.style.marginTop = "10px";
-      img.style.maxWidth = "200px";
-      qrcodeContainer.appendChild(img);
-
-      addTransacao("pix", saldo);
-      saldo = 0;
-      atualizarSaldo();
     } catch (err) {
-      console.error("Erro ao gerar Pix:", err);
-      alert("Erro ao gerar cobrança Pix.");
+      document.getElementById('register-msg').style.color = '#ff6666';
+      document.getElementById('register-msg').textContent = 'Erro ao conectar ao servidor.';
+      console.error(err);
     }
-  }
+  });
 
-  btnDeposit.addEventListener("click", async () => {
-    const valor = parseFloat(valorInput.value.replace(',', '.'));
-    if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
+  // Função para login (exemplo)
+  formLogin.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('login-email').value.trim();
+    const senha = document.getElementById('login-senha').value;
+
+    if (!email || senha.length < 6) {
+      document.getElementById('login-msg').textContent = 'Preencha todos os campos corretamente.';
+      return;
+    }
 
     try {
-      const response = await fetch("http://localhost:3000/depositar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ valor })
+      const res = await fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, senha }),
       });
-      const data = await response.json();
-      if (data.error) return alert(data.error);
-
-      addTransacao("deposit", valor);
-      await carregarSaldo();
-      limparPix();
-      valorInput.value = "";
+      const data = await res.json();
+      if (res.ok) {
+        document.getElementById('login-msg').style.color = 'lightgreen';
+        document.getElementById('login-msg').textContent = 'Login realizado com sucesso!';
+        formLogin.reset();
+        // Aqui você pode redirecionar para a página da carteira, por exemplo:
+        // window.location.href = 'carteira.html';
+      } else {
+        document.getElementById('login-msg').style.color = '#ff6666';
+        document.getElementById('login-msg').textContent = data.error || 'Erro no login.';
+      }
     } catch (err) {
-      console.error("Erro no depósito:", err);
-      alert("Erro ao depositar.");
+      document.getElementById('login-msg').style.color = '#ff6666';
+      document.getElementById('login-msg').textContent = 'Erro ao conectar ao servidor.';
+      console.error(err);
     }
   });
-
-  btnWithdraw.addEventListener("click", async () => {
-    const valor = parseFloat(valorInput.value.replace(',', '.'));
-    const chave = chavePixInput.value.trim();
-    if (!chave) return alert("Informe a chave Pix para saque.");
-    if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
-    if (valor > saldo) return alert("Saldo insuficiente.");
-
-    try {
-      const response = await fetch("http://localhost:3000/sacar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ valor })
-      });
-      const data = await response.json();
-      if (data.error) return alert(data.error);
-
-      addTransacao("withdraw", valor);
-      await carregarSaldo();
-      limparPix();
-      valorInput.value = "";
-      chavePixInput.value = "";
-    } catch (err) {
-      console.error("Erro no saque:", err);
-      alert("Erro ao sacar.");
-    }
-  });
-
-  btnGeneratePix.addEventListener("click", gerarPix);
-
-  btnClearHistory.addEventListener("click", () => {
-    if (confirm("Limpar histórico de transações?")) {
-      history = [];
-      atualizarHistorico();
-      limparPix();
-    }
-  });
-
-  // Inicialização
-  carregarSaldo();
-  atualizarHistorico();
-})();
 </script>
 
 </body>
