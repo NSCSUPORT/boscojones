@@ -81,6 +81,16 @@
       background: linear-gradient(90deg, #388e3c, #1b5e20);
     }
 
+    #btnRegister {
+      background: linear-gradient(90deg, #1a73e8, #1251a3);
+      margin-top: 8px;
+      box-shadow: 0 4px 10px rgba(26, 115, 232, 0.4);
+    }
+
+    #btnRegister:hover {
+      background: linear-gradient(90deg, #1251a3, #0d3472);
+    }
+
     .message {
       margin-top: 1rem;
       padding: 10px;
@@ -134,7 +144,7 @@
     </div>
 
     <button id="btnLogin">Entrar</button>
-    <button id="btnRegister" style="background: linear-gradient(90deg, #1a73e8, #1251a3);">Registrar</button>
+    <button id="btnRegister">Registrar</button>
 
     <div id="authMessage" class="message"></div>
   </div>
@@ -175,34 +185,59 @@
     btnLogin.onclick = async () => {
       const email = emailInput.value.trim();
       const password = passwordInput.value.trim();
+
       if (!email || !password) {
         showMessage("Preencha todos os campos.", true);
         return;
       }
+
+      btnLogin.disabled = true;
+      btnRegister.disabled = true;
+      showMessage("Entrando...");
+
       try {
         await auth.signInWithEmailAndPassword(email, password);
         showMessage("Login realizado com sucesso!");
         setTimeout(() => window.location.href = "wallet.html", 1000);
       } catch (e) {
         showMessage("Erro ao entrar: " + e.message, true);
+      } finally {
+        btnLogin.disabled = false;
+        btnRegister.disabled = false;
       }
     };
 
     btnRegister.onclick = async () => {
       const email = emailInput.value.trim();
       const password = passwordInput.value.trim();
+
       if (!email || !password) {
         showMessage("Preencha todos os campos.", true);
         return;
       }
+
+      btnLogin.disabled = true;
+      btnRegister.disabled = true;
+      showMessage("Registrando...");
+
       try {
         await auth.createUserWithEmailAndPassword(email, password);
         showMessage("Registro realizado com sucesso!");
         setTimeout(() => window.location.href = "wallet.html", 1000);
       } catch (e) {
         showMessage("Erro ao registrar: " + e.message, true);
+      } finally {
+        btnLogin.disabled = false;
+        btnRegister.disabled = false;
       }
     };
+
+    // Optional: redirect if already logged in
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        window.location.href = "wallet.html";
+      }
+    });
   </script>
 </body>
 </html>
