@@ -31,29 +31,6 @@
       margin-bottom: 15px;
       font-weight: 700;
     }
-    .btn-toggle-container {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-      gap: 10px;
-    }
-    .btn-toggle {
-      background: #222b35;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      color: #ccc;
-      font-weight: 700;
-      cursor: pointer;
-      flex: 1;
-      transition: background-color 0.3s;
-      font-size: 1rem;
-    }
-    .btn-toggle.active,
-    .btn-toggle:hover {
-      background-color: #00ffb2;
-      color: #0d1117;
-    }
     form {
       display: none;
       flex-direction: column;
@@ -78,7 +55,7 @@
     }
     .btn-submit {
       margin-top: 20px;
-      background-color: #00ffb2;
+      background-color: #00ffb2; /* verde */
       border: none;
       color: #0d1117;
       font-weight: 700;
@@ -90,6 +67,22 @@
     }
     .btn-submit:hover {
       background-color: #00cc8f;
+    }
+    .btn-switch {
+      margin-top: 12px;
+      background-color: #ff8800; /* laranja */
+      border: none;
+      color: #0d1117;
+      font-weight: 700;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: background-color 0.3s;
+      width: 100%;
+    }
+    .btn-switch:hover {
+      background-color: #cc6f00;
     }
     .message {
       margin-top: 12px;
@@ -103,10 +96,6 @@
 <body>
 
 <div class="container">
-  <div class="btn-toggle-container">
-    <button id="btn-login" class="btn-toggle active">Entrar</button>
-    <button id="btn-register" class="btn-toggle">Registrar</button>
-  </div>
 
   <!-- Formulário Login -->
   <form id="form-login" class="active">
@@ -116,6 +105,7 @@
     <label for="login-senha">Senha</label>
     <input type="password" id="login-senha" placeholder="Sua senha" required />
     <button type="submit" class="btn-submit">Entrar</button>
+    <button type="button" id="btn-to-register" class="btn-switch">Registrar</button>
     <div id="login-msg" class="message"></div>
   </form>
 
@@ -127,30 +117,29 @@
     <label for="reg-senha">Senha</label>
     <input type="password" id="reg-senha" placeholder="Sua senha (mín 6 caracteres)" required minlength="6" />
     <button type="submit" class="btn-submit">Registrar</button>
+    <button type="button" id="btn-to-login" class="btn-switch">Entrar</button>
     <div id="register-msg" class="message"></div>
   </form>
 </div>
 
 <script>
-  const btnLogin = document.getElementById('btn-login');
-  const btnRegister = document.getElementById('btn-register');
   const formLogin = document.getElementById('form-login');
   const formRegister = document.getElementById('form-register');
 
-  // Alterna entre os formulários
-  btnLogin.addEventListener('click', () => {
-    btnLogin.classList.add('active');
-    btnRegister.classList.remove('active');
-    formLogin.classList.add('active');
-    formRegister.classList.remove('active');
+  const btnToRegister = document.getElementById('btn-to-register');
+  const btnToLogin = document.getElementById('btn-to-login');
+
+  // Alternar para Registro
+  btnToRegister.addEventListener('click', () => {
+    formLogin.classList.remove('active');
+    formRegister.classList.add('active');
     clearMessages();
   });
 
-  btnRegister.addEventListener('click', () => {
-    btnRegister.classList.add('active');
-    btnLogin.classList.remove('active');
-    formRegister.classList.add('active');
-    formLogin.classList.remove('active');
+  // Alternar para Login
+  btnToLogin.addEventListener('click', () => {
+    formRegister.classList.remove('active');
+    formLogin.classList.add('active');
     clearMessages();
   });
 
@@ -214,7 +203,7 @@
         document.getElementById('login-msg').style.color = 'lightgreen';
         document.getElementById('login-msg').textContent = 'Login realizado com sucesso!';
         formLogin.reset();
-        // Aqui você pode redirecionar para a página da carteira, por exemplo:
+        // Exemplo: redirecionar
         // window.location.href = 'carteira.html';
       } else {
         document.getElementById('login-msg').style.color = '#ff6666';
