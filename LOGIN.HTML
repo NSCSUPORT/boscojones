@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" href="logo.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>JBX1000 CRC-16 - Login & Wallet</title>
+  <title>JBX1000 CRC-16</title>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <style>
     * { box-sizing: border-box; }
@@ -39,15 +39,13 @@
       border: none; border-radius: 8px; font-weight: 700;
       cursor: pointer; transition: background 0.3s; font-size: 0.9rem;
     }
-    #btn-login { background-color: #007bff; color: white; }
-    #btn-login:hover { background-color: #0056b3; }
-    #btn-logout {
-      background-color: #dc3545; color: white; width: 100%; margin-top: 18px;
-      padding: 10px; border: none; border-radius: 8px; font-weight: 700;
-      cursor: pointer; transition: background 0.3s; font-size: 1rem;
+    #btn-register {
+      width: 100%; margin-bottom: 20px;
+      background-color: #17a2b8; color: white;
     }
-    #btn-logout:hover { background-color: #c82333; }
-
+    #btn-register:hover {
+      background-color: #117a8b;
+    }
     #btn-deposit { background-color: #28a745; color: white; }
     #btn-deposit:hover { background-color: #218838; }
     #btn-withdraw { background-color: #dc3545; color: white; float: right; }
@@ -100,14 +98,6 @@
     .transaction.withdraw { color: #dc3545; }
     .transaction.pix { color: #007bff; }
     .transaction .date { font-size: 0.7rem; color: #aaa; font-style: italic; flex: 1.5; text-align: right; }
-
-    #login-section, #wallet-section {
-      width: 100%; max-width: 400px;
-      background: #1c1f26; border-radius: 12px; padding: 18px; box-shadow: 0 0 10px #000a;
-    }
-
-    #wallet-section { display: none; }
-
     @media (max-width: 420px) {
       .btn { width: 100%; margin-top: 8px; float: none; }
       #btn-withdraw { float: none; }
@@ -117,21 +107,16 @@
   </style>
 </head>
 <body>
-
-  <!-- LOGIN -->
-  <div id="login-section" class="container">
-    <h1>Login JBX1000</h1>
+  <div class="container">
+    <h1>Registro de Usuário</h1>
     <label for="email">Email:</label>
-    <input type="email" id="email" placeholder="seu@email.com" autocomplete="username" />
-    
+    <input type="email" id="email" placeholder="seuemail@exemplo.com" />
     <label for="senha">Senha:</label>
-    <input type="password" id="senha" placeholder="Senha" autocomplete="current-password" />
-    
-    <button id="btn-login" class="btn">Entrar</button>
-  </div>
+    <input type="password" id="senha" placeholder="Digite sua senha" />
+    <button id="btn-register" class="btn">Registrar</button>
 
-  <!-- WALLET -->
-  <div id="wallet-section" class="container" style="display:none;">
+    <hr style="margin: 20px 0; border-color: #333;" />
+
     <h1>Carteira JBX1000 CRC</h1>
     <label for="valor">Valor (R$):</label>
     <input type="number" id="valor" placeholder="0,00" min="0.01" step="0.01" />
@@ -146,7 +131,6 @@
     <div id="saldo-container">Saldo: <span id="saldo">R$ 0,00</span></div>
     <div id="qrcode-container"><span>QR Code e Copia e Cola aparecerão aqui</span></div>
     <button id="btn-clear-history">Limpar Histórico</button>
-    <button id="btn-logout">Sair</button>
     <div id="history-container">
       <h2>Histórico de Transações</h2>
       <div id="history-list">Nenhuma transação registrada.</div>
@@ -155,14 +139,10 @@
 
 <script>
 (() => {
-  const loginSection = document.getElementById("login-section");
-  const walletSection = document.getElementById("wallet-section");
   const emailInput = document.getElementById("email");
   const senhaInput = document.getElementById("senha");
-  const btnLogin = document.getElementById("btn-login");
-  const btnLogout = document.getElementById("btn-logout");
+  const btnRegister = document.getElementById("btn-register");
 
-  // Wallet elements
   const valorInput = document.getElementById("valor");
   const chavePixInput = document.getElementById("chavePix");
   const btnDeposit = document.getElementById("btn-deposit");
@@ -173,34 +153,45 @@
   const qrcodeContainer = document.getElementById("qrcode-container");
   const historyList = document.getElementById("history-list");
 
-  // Estado
   let saldo = 0;
   let history = [];
-  let userEmail = null;
 
-  // --- Funções Utilitárias ---
+  btnRegister.addEventListener("click", async () => {
+    const email = emailInput.value.trim();
+    const senha = senhaInput.value;
 
-  function salvarDadosUsuario() {
-    if (!userEmail) return;
-    const data = { saldo, history };
-    localStorage.setItem(`walletData_${userEmail}`, JSON.stringify(data));
-  }
+    if (!email) return alert("Informe o email.");
+    if (!senha || senha.length < 6) return alert("Senha deve ter no mínimo 6 caracteres.");
 
-  function carregarDadosUsuario() {
-    if (!userEmail) return;
-    const dataRaw = localStorage.getItem(`walletData_${userEmail}`);
-    if (dataRaw) {
-      try {
-        const data = JSON.parse(dataRaw);
-        saldo = parseFloat(data.saldo) || 0;
-        history = Array.isArray(data.history) ? data.history : [];
-      } catch {
-        saldo = 0;
-        history = [];
-      }
-    } else {
-      saldo = 0;
-      history = [];
+    // Simulação de envio para backend
+    try {
+      // Exemplo de POST para backend de registro (troque URL)
+      const response = await fetch("http://localhost:3000/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, senha })
+      });
+      const data = await response.json();
+      if (data.error) return alert("Erro no registro: " + data.error);
+
+      alert("Registro realizado com sucesso! Agora faça login.");
+      // Pode limpar o form registro após sucesso
+      emailInput.value = "";
+      senhaInput.value = "";
+    } catch (err) {
+      console.error("Erro no registro:", err);
+      alert("Erro ao registrar usuário.");
+    }
+  });
+
+  async function carregarSaldo() {
+    try {
+      const res = await fetch("http://localhost:3000/saldo");
+      const data = await res.json();
+      saldo = parseFloat(data.saldo || 0);
+      atualizarSaldo();
+    } catch (err) {
+      console.error("Erro ao carregar saldo:", err);
     }
   }
 
@@ -230,7 +221,6 @@
     history.unshift({ type, amount, date: new Date().toISOString() });
     if (history.length > 50) history.pop();
     atualizarHistorico();
-    salvarDadosUsuario();
   }
 
   function limparPix() {
@@ -244,106 +234,88 @@
       return;
     }
 
-    // Aqui você pode implementar integração real com backend para gerar cobrança Pix
-    // Para demo, vamos simular a geração do código e QRCode com um texto dummy
-
-    const pixCode = `00020126440014BR.GOV.BCB.PIX0136${userEmail}520400005303986540${saldo.toFixed(2).replace('.', '')}5802BR5913JBX1000 CRC6009Sao Paulo62070503***6304B60F`; // mock Pix Copia e Cola
-    limparPix();
-
-    // QRCode via lib
     try {
-      qrcodeContainer.innerHTML = "";
-      await QRCode.toCanvas(qrcodeContainer, pixCode, { width: 180 });
+      const response = await fetch("http://localhost:3000/criar-cobranca", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ valor: saldo.toFixed(2) })
+      });
+
+      const data = await response.json();
+
+      if (!data.qrcode || !data.imagemQrcode) {
+        alert("Erro ao gerar cobrança Pix.");
+        return;
+      }
+
       const pre = document.createElement("pre");
-      pre.textContent = pixCode;
+      pre.textContent = data.qrcode;
       qrcodeContainer.appendChild(pre);
-    } catch {
-      qrcodeContainer.textContent = pixCode;
-    }
 
-    addTransacao("pix", saldo);
-    saldo = 0;
-    atualizarSaldo();
-    salvarDadosUsuario();
+      const img = document.createElement("img");
+      img.src = data.imagemQrcode;
+      img.alt = "QR Code Pix";
+      img.style.marginTop = "10px";
+      img.style.maxWidth = "200px";
+      qrcodeContainer.appendChild(img);
+
+      addTransacao("pix", saldo);
+      saldo = 0;
+      atualizarSaldo();
+    } catch (err) {
+      console.error("Erro ao gerar Pix:", err);
+      alert("Erro ao gerar cobrança Pix.");
+    }
   }
 
-  // --- Login / Logout ---
-
-  function exibirWallet() {
-    loginSection.style.display = "none";
-    walletSection.style.display = "block";
-    carregarDadosUsuario();
-    atualizarSaldo();
-    atualizarHistorico();
-    limparPix();
-    valorInput.value = "";
-    chavePixInput.value = "";
-  }
-
-  function exibirLogin() {
-    loginSection.style.display = "block";
-    walletSection.style.display = "none";
-    emailInput.value = "";
-    senhaInput.value = "";
-    userEmail = null;
-    saldo = 0;
-    history = [];
-    salvarDadosUsuario();
-  }
-
-  btnLogin.addEventListener("click", () => {
-    const email = emailInput.value.trim().toLowerCase();
-    const senha = senhaInput.value;
-
-    if (!email) return alert("Informe o email.");
-    if (!senha) return alert("Informe a senha.");
-
-    // Simulação simples: senha "1234" para todos os emails
-    // Troque pela lógica real de autenticação via backend
-    if (senha === "1234") {
-      userEmail = email;
-      localStorage.setItem("loggedUser", userEmail);
-      exibirWallet();
-    } else {
-      alert("Email ou senha inválidos.");
-    }
-  });
-
-  btnLogout.addEventListener("click", () => {
-    if (confirm("Deseja realmente sair?")) {
-      localStorage.removeItem("loggedUser");
-      exibirLogin();
-    }
-  });
-
-  // --- Wallet ações ---
-
-  btnDeposit.addEventListener("click", () => {
+  btnDeposit.addEventListener("click", async () => {
     const valor = parseFloat(valorInput.value.replace(',', '.'));
     if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
 
-    saldo += valor;
-    addTransacao("deposit", valor);
-    atualizarSaldo();
-    valorInput.value = "";
-    limparPix();
-    salvarDadosUsuario();
+    try {
+      const response = await fetch("http://localhost:3000/depositar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ valor })
+      });
+      const data = await response.json();
+      if (data.error) return alert(data.error);
+
+      addTransacao("deposit", valor);
+      await carregarSaldo();
+      limparPix();
+      valorInput.value = "";
+    } catch (err) {
+      console.error("Erro no depósito:", err);
+      alert("Erro ao depositar.");
+    }
   });
 
-  btnWithdraw.addEventListener("click", () => {
+  btnWithdraw.addEventListener("click", async () => {
     const valor = parseFloat(valorInput.value.replace(',', '.'));
     const chave = chavePixInput.value.trim();
     if (!chave) return alert("Informe a chave Pix para saque.");
     if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
     if (valor > saldo) return alert("Saldo insuficiente.");
 
-    saldo -= valor;
-    addTransacao("withdraw", valor);
-    atualizarSaldo();
-    valorInput.value = "";
-    chavePixInput.value = "";
-    limparPix();
-    salvarDadosUsuario();
+    try {
+      const response = await fetch("http://localhost:3000/sacar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ valor })
+      });
+      const data = await response.json();
+      if (data.error) return alert(data.error);
+
+      addTransacao("withdraw", valor);
+      await carregarSaldo();
+      limparPix();
+      valorInput.value = "";
+      chavePixInput.value = "";
+    } catch (err) {
+      console.error("Erro no saque:", err);
+      alert("Erro ao sacar.");
+    }
   });
 
   btnGeneratePix.addEventListener("click", gerarPix);
@@ -353,18 +325,12 @@
       history = [];
       atualizarHistorico();
       limparPix();
-      salvarDadosUsuario();
     }
   });
 
-  // --- Inicialização ---
-  const loggedUser = localStorage.getItem("loggedUser");
-  if (loggedUser) {
-    userEmail = loggedUser;
-    exibirWallet();
-  } else {
-    exibirLogin();
-  }
+  // Inicialização
+  carregarSaldo();
+  atualizarHistorico();
 })();
 </script>
 
