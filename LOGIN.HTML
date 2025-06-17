@@ -2,316 +2,371 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Login - Bosco Jones Wallet</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" href="logo.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JBX1000 CRC-16 - Login & Wallet</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
-      margin: 0;
-      padding: 0;
-      background-color: #0d1117;
-      color: #c9d1d9;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      background: #0d1117; color: #e0e0e0;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0; padding: 0 8px;
+      display: flex; justify-content: center; min-height: 100vh; align-items: flex-start; padding-top: 20px;
+      font-size: 14px;
     }
-
     .container {
-      background-color: #161b22;
-      padding: 2rem 2.5rem;
-      border-radius: 12px;
-      box-shadow: 0 0 25px rgba(0,255,100,0.15);
-      width: 100%;
-      max-width: 380px;
-      text-align: center;
-      transition: box-shadow 0.3s ease;
+      width: 100%; max-width: 400px;
+      background: #1c1f26; border-radius: 12px; padding: 18px; box-shadow: 0 0 10px #000a;
     }
-
-    .container:focus-within {
-      box-shadow: 0 0 35px rgba(0,255,100,0.4);
-      outline: none;
-    }
-
     h1 {
-      color: #58a6ff;
-      margin-bottom: 2rem;
-      font-size: 1.75rem;
-      font-weight: 700;
-      text-shadow: 0 0 6px #58a6ff88;
-      user-select: none;
+      text-align: center; margin-bottom: 16px; color: #00ffb2;
+      font-weight: 700; font-size: 1.3rem;
     }
-
-    .input-group {
-      position: relative;
-      margin-bottom: 1.2rem;
+    label {
+      display: block; margin: 10px 0 5px; font-weight: 700; font-size: 0.9rem;
     }
-
-    .input-group input {
-      width: 100%;
-      padding: 14px 14px 14px 42px;
-      border: 1.8px solid #30363d;
-      border-radius: 8px;
-      background-color: #0d1117;
-      color: #c9d1d9;
-      font-size: 1.05rem;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-      outline-offset: 2px;
+    input[type="number"],
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%; padding: 8px; border: 1px solid #444;
+      border-radius: 6px; background-color: #0f141a; color: #fff;
+      font-size: 0.9rem;
     }
-
-    .input-group input:focus {
-      border-color: #58a6ff;
-      box-shadow: 0 0 8px #58a6ff99;
-      outline: none;
-      background-color: #121820;
+    .btn {
+      width: 48%; padding: 10px; margin-top: 12px;
+      border: none; border-radius: 8px; font-weight: 700;
+      cursor: pointer; transition: background 0.3s; font-size: 0.9rem;
     }
-
-    .input-group i {
-      position: absolute;
-      top: 50%;
-      left: 12px;
-      transform: translateY(-50%);
-      color: #8b949e;
-      font-size: 1.2rem;
-      pointer-events: none;
-      user-select: none;
+    #btn-login { background-color: #007bff; color: white; }
+    #btn-login:hover { background-color: #0056b3; }
+    #btn-logout {
+      background-color: #dc3545; color: white; width: 100%; margin-top: 18px;
+      padding: 10px; border: none; border-radius: 8px; font-weight: 700;
+      cursor: pointer; transition: background 0.3s; font-size: 1rem;
     }
+    #btn-logout:hover { background-color: #c82333; }
 
-    button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 12px;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 8px;
-      background: linear-gradient(90deg, #4caf50, #2e7d32);
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 6px 14px rgba(76, 175, 80, 0.3);
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      user-select: none;
-    }
-
-    button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-
-    button:hover:not(:disabled) {
-      background: linear-gradient(90deg, #388e3c, #1b5e20);
-      box-shadow: 0 8px 20px rgba(56, 142, 60, 0.5);
-    }
-
-    #btnRegister {
-      background: linear-gradient(90deg, #1a73e8, #1251a3);
-      margin-top: 10px;
-      box-shadow: 0 6px 14px rgba(26, 115, 232, 0.5);
-    }
-
-    #btnRegister:hover:not(:disabled) {
-      background: linear-gradient(90deg, #1251a3, #0d3472);
-      box-shadow: 0 8px 20px rgba(18, 81, 163, 0.6);
-    }
-
-    .message {
-      margin-top: 1.25rem;
-      padding: 12px;
-      border-radius: 6px;
-      background-color: #1c1f26;
-      color: #00ff99;
-      font-size: 0.95rem;
-      min-height: 40px;
-      line-height: 1.3;
-      user-select: none;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    .error {
-      background-color: #8b0000;
-      color: #ffcccc;
-    }
-
-    footer {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(45deg, #f0f000, #ff4500);
-      color: #000;
-      text-align: center;
+    #btn-deposit { background-color: #28a745; color: white; }
+    #btn-deposit:hover { background-color: #218838; }
+    #btn-withdraw { background-color: #dc3545; color: white; float: right; }
+    #btn-withdraw:hover { background-color: #c82333; }
+    #btn-generate-pix {
+      width: 100%; margin-top: 18px; padding: 12px;
+      background-color: #007bff; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;
       font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-shadow: 0 0 8px #ff0000;
-      animation: neon 1.5s ease-in-out infinite alternate;
-      user-select: none;
+    }
+    #btn-generate-pix:hover { background-color: #0056b3; }
+    #btn-clear-history {
+      width: 100%; margin-top: 14px; padding: 8px;
+      background-color: #666; border: none; border-radius: 8px;
+      color: white; cursor: pointer; font-weight: 700;
+      font-size: 0.9rem;
+    }
+    #btn-clear-history:hover { background-color: #444; }
+    #saldo-container {
+      text-align: center; margin-top: 18px;
+      font-size: 1rem; color: #1efcb8; font-weight: 700;
+    }
+    #qrcode-container {
+      margin-top: 18px; padding: 14px; background-color: #11161c;
+      border-radius: 10px; text-align: center; min-height: 220px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: #666;
+      word-break: break-word;
+    }
+    pre {
+      background: #000000cc; padding: 8px; margin-top: 8px; border-radius: 6px;
+      color: #00ffb2; font-size: 0.85rem; user-select: all; white-space: pre-wrap; word-break: break-word;
+      max-height: 100px; overflow-y: auto;
+      width: 100%;
+    }
+    #history-container {
+      margin-top: 28px; max-height: 220px; overflow-y: auto;
+      background: #10131a; border-radius: 10px; padding: 12px; font-size: 0.85rem;
+    }
+    #history-container h2 {
+      margin-top: 0; font-weight: 700; color: #0ff; text-align: center; margin-bottom: 8px;
+      font-size: 1rem;
+    }
+    .transaction {
+      padding: 4px 6px; border-bottom: 1px solid #222;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .transaction:last-child { border-bottom: none; }
+    .transaction .type { font-weight: 700; text-transform: capitalize; font-size: 0.85rem; flex: 1; }
+    .transaction.deposit { color: #28a745; }
+    .transaction.withdraw { color: #dc3545; }
+    .transaction.pix { color: #007bff; }
+    .transaction .date { font-size: 0.7rem; color: #aaa; font-style: italic; flex: 1.5; text-align: right; }
+
+    #login-section, #wallet-section {
+      width: 100%; max-width: 400px;
+      background: #1c1f26; border-radius: 12px; padding: 18px; box-shadow: 0 0 10px #000a;
     }
 
-    @keyframes neon {
-      0% { text-shadow: 0 0 5px #ff0000; }
-      50% { text-shadow: 0 0 20px #ff4500; }
-      100% { text-shadow: 0 0 5px #ff0000; }
-    }
+    #wallet-section { display: none; }
 
-    /* Responsividade */
-    @media (max-width: 400px) {
-      .container {
-        padding: 1.5rem 1.8rem;
-        max-width: 320px;
-      }
-
-      h1 {
-        font-size: 1.4rem;
-      }
-
-      button {
-        font-size: 1rem;
-        padding: 12px;
-      }
+    @media (max-width: 420px) {
+      .btn { width: 100%; margin-top: 8px; float: none; }
+      #btn-withdraw { float: none; }
+      #btn-generate-pix { font-size: 0.95rem; }
+      h1 { font-size: 1.1rem; }
     }
   </style>
-
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-  <main class="container" role="main" aria-label="Formulário de login Bosco Jones Wallet">
-    <h1 tabindex="0">BOSCO JONES WALLET</h1>
+  <!-- LOGIN -->
+  <div id="login-section" class="container">
+    <h1>Login JBX1000</h1>
+    <label for="email">Email:</label>
+    <input type="email" id="email" placeholder="seu@email.com" autocomplete="username" />
+    
+    <label for="senha">Senha:</label>
+    <input type="password" id="senha" placeholder="Senha" autocomplete="current-password" />
+    
+    <button id="btn-login" class="btn">Entrar</button>
+  </div>
 
-    <div class="input-group">
-      <label for="email" class="sr-only">Email</label>
-      <i class="fas fa-envelope" aria-hidden="true"></i>
-      <input type="email" id="email" placeholder="Email" autocomplete="email" required aria-required="true" />
+  <!-- WALLET -->
+  <div id="wallet-section" class="container" style="display:none;">
+    <h1>Carteira JBX1000 CRC</h1>
+    <label for="valor">Valor (R$):</label>
+    <input type="number" id="valor" placeholder="0,00" min="0.01" step="0.01" />
+    
+    <label for="chavePix">Chave Pix (para saque):</label>
+    <input type="text" id="chavePix" placeholder="Insira sua chave Pix" />
+
+    <button id="btn-deposit" class="btn">Depositar</button>
+    <button id="btn-withdraw" class="btn">Sacar</button>
+    <button id="btn-generate-pix">Gerar Pix Copia e Cola (5% taxa)</button>
+
+    <div id="saldo-container">Saldo: <span id="saldo">R$ 0,00</span></div>
+    <div id="qrcode-container"><span>QR Code e Copia e Cola aparecerão aqui</span></div>
+    <button id="btn-clear-history">Limpar Histórico</button>
+    <button id="btn-logout">Sair</button>
+    <div id="history-container">
+      <h2>Histórico de Transações</h2>
+      <div id="history-list">Nenhuma transação registrada.</div>
     </div>
+  </div>
 
-    <div class="input-group">
-      <label for="password" class="sr-only">Senha</label>
-      <i class="fas fa-lock" aria-hidden="true"></i>
-      <input type="password" id="password" placeholder="Senha" autocomplete="current-password" required aria-required="true" />
-    </div>
+<script>
+(() => {
+  const loginSection = document.getElementById("login-section");
+  const walletSection = document.getElementById("wallet-section");
+  const emailInput = document.getElementById("email");
+  const senhaInput = document.getElementById("senha");
+  const btnLogin = document.getElementById("btn-login");
+  const btnLogout = document.getElementById("btn-logout");
 
-    <button id="btnLogin" type="button" aria-live="polite">Entrar</button>
-    <button id="btnRegister" type="button" aria-live="polite">Registrar</button>
+  // Wallet elements
+  const valorInput = document.getElementById("valor");
+  const chavePixInput = document.getElementById("chavePix");
+  const btnDeposit = document.getElementById("btn-deposit");
+  const btnWithdraw = document.getElementById("btn-withdraw");
+  const btnGeneratePix = document.getElementById("btn-generate-pix");
+  const btnClearHistory = document.getElementById("btn-clear-history");
+  const saldoSpan = document.getElementById("saldo");
+  const qrcodeContainer = document.getElementById("qrcode-container");
+  const historyList = document.getElementById("history-list");
 
-    <div id="authMessage" role="alert" aria-live="assertive" class="message" aria-atomic="true"></div>
-  </main>
+  // Estado
+  let saldo = 0;
+  let history = [];
+  let userEmail = null;
 
-  <footer>
-    © 2025 Bosco Jones Wallet — Desenvolvido por Lucas Januário — HoloFi Quantum
-  </footer>
+  // --- Funções Utilitárias ---
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  function salvarDadosUsuario() {
+    if (!userEmail) return;
+    const data = { saldo, history };
+    localStorage.setItem(`walletData_${userEmail}`, JSON.stringify(data));
+  }
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDzfZvQi-oaOUWPgSOu8BtTINa_LO2ZoLc",
-      authDomain: "bosco-jones-wallet.firebaseapp.com",
-      projectId: "bosco-jones-wallet",
-      storageBucket: "bosco-jones-wallet.firebasestorage.app",
-      messagingSenderId: "1829673164",
-      appId: "1:1829673164:web:37c947c8aafe1af72a8a69",
-      measurementId: "G-6SZH0MHRGE"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const authMessage = document.getElementById('authMessage');
-    const btnLogin = document.getElementById('btnLogin');
-    const btnRegister = document.getElementById('btnRegister');
-
-    function showMessage(msg, isError = false) {
-      authMessage.textContent = msg;
-      authMessage.className = isError ? "message error" : "message";
+  function carregarDadosUsuario() {
+    if (!userEmail) return;
+    const dataRaw = localStorage.getItem(`walletData_${userEmail}`);
+    if (dataRaw) {
+      try {
+        const data = JSON.parse(dataRaw);
+        saldo = parseFloat(data.saldo) || 0;
+        history = Array.isArray(data.history) ? data.history : [];
+      } catch {
+        saldo = 0;
+        history = [];
+      }
+    } else {
+      saldo = 0;
+      history = [];
     }
+  }
 
-    btnLogin.onclick = async () => {
-      const email = emailInput.value.trim();
-      const password = passwordInput.value.trim();
+  function atualizarSaldo() {
+    saldoSpan.textContent = `R$ ${saldo.toFixed(2).replace('.', ',')}`;
+  }
 
-      if (!email || !password) {
-        showMessage("Preencha todos os campos.", true);
-        return;
-      }
-
-      btnLogin.disabled = true;
-      btnRegister.disabled = true;
-      showMessage("Entrando...");
-
-      try {
-        await auth.signInWithEmailAndPassword(email, password);
-        showMessage("Login realizado com sucesso!");
-        setTimeout(() => window.location.href = "wallet.html", 1000);
-      } catch (e) {
-        showMessage("Erro ao entrar: " + e.message, true);
-      } finally {
-        btnLogin.disabled = false;
-        btnRegister.disabled = false;
-      }
-    };
-
-    btnRegister.onclick = async () => {
-      const email = emailInput.value.trim();
-      const password = passwordInput.value.trim();
-
-      if (!email || !password) {
-        showMessage("Preencha todos os campos.", true);
-        return;
-      }
-
-      btnLogin.disabled = true;
-      btnRegister.disabled = true;
-      showMessage("Registrando...");
-
-      try {
-        await auth.createUserWithEmailAndPassword(email, password);
-        showMessage("Registro realizado com sucesso!");
-        setTimeout(() => window.location.href = "wallet.html", 1000);
-      } catch (e) {
-        showMessage("Erro ao registrar: " + e.message, true);
-      } finally {
-        btnLogin.disabled = false;
-        btnRegister.disabled = false;
-      }
-    };
-
-    // Redirecionar se já logado
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        window.location.href = "wallet.html";
-      }
+  function atualizarHistorico() {
+    if (history.length === 0) {
+      historyList.textContent = "Nenhuma transação registrada.";
+      return;
+    }
+    historyList.innerHTML = "";
+    history.forEach(tx => {
+      const div = document.createElement("div");
+      div.className = `transaction ${tx.type}`;
+      div.innerHTML = `
+        <div class="type">${tx.type}</div>
+        <div>R$ ${tx.amount.toFixed(2).replace('.', ',')}</div>
+        <div class="date">${new Date(tx.date).toLocaleString('pt-BR')}</div>
+      `;
+      historyList.appendChild(div);
     });
-  </script>
+  }
 
-  <style>
-    /* Classe para esconder label visualmente mas acessível para leitores de tela */
-    .sr-only {
-      position: absolute !important;
-      width: 1px !important;
-      height: 1px !important;
-      padding: 0 !important;
-      margin: -1px !important;
-      overflow: hidden !important;
-      clip: rect(0,0,0,0) !important;
-      border: 0 !important;
+  function addTransacao(type, amount) {
+    history.unshift({ type, amount, date: new Date().toISOString() });
+    if (history.length > 50) history.pop();
+    atualizarHistorico();
+    salvarDadosUsuario();
+  }
+
+  function limparPix() {
+    qrcodeContainer.innerHTML = "<span>QR Code e Copia e Cola aparecerão aqui</span>";
+  }
+
+  async function gerarPix() {
+    limparPix();
+    if (saldo <= 0) {
+      alert("Saldo insuficiente para gerar Pix.");
+      return;
     }
-  </style>
+
+    // Aqui você pode implementar integração real com backend para gerar cobrança Pix
+    // Para demo, vamos simular a geração do código e QRCode com um texto dummy
+
+    const pixCode = `00020126440014BR.GOV.BCB.PIX0136${userEmail}520400005303986540${saldo.toFixed(2).replace('.', '')}5802BR5913JBX1000 CRC6009Sao Paulo62070503***6304B60F`; // mock Pix Copia e Cola
+    limparPix();
+
+    // QRCode via lib
+    try {
+      qrcodeContainer.innerHTML = "";
+      await QRCode.toCanvas(qrcodeContainer, pixCode, { width: 180 });
+      const pre = document.createElement("pre");
+      pre.textContent = pixCode;
+      qrcodeContainer.appendChild(pre);
+    } catch {
+      qrcodeContainer.textContent = pixCode;
+    }
+
+    addTransacao("pix", saldo);
+    saldo = 0;
+    atualizarSaldo();
+    salvarDadosUsuario();
+  }
+
+  // --- Login / Logout ---
+
+  function exibirWallet() {
+    loginSection.style.display = "none";
+    walletSection.style.display = "block";
+    carregarDadosUsuario();
+    atualizarSaldo();
+    atualizarHistorico();
+    limparPix();
+    valorInput.value = "";
+    chavePixInput.value = "";
+  }
+
+  function exibirLogin() {
+    loginSection.style.display = "block";
+    walletSection.style.display = "none";
+    emailInput.value = "";
+    senhaInput.value = "";
+    userEmail = null;
+    saldo = 0;
+    history = [];
+    salvarDadosUsuario();
+  }
+
+  btnLogin.addEventListener("click", () => {
+    const email = emailInput.value.trim().toLowerCase();
+    const senha = senhaInput.value;
+
+    if (!email) return alert("Informe o email.");
+    if (!senha) return alert("Informe a senha.");
+
+    // Simulação simples: senha "1234" para todos os emails
+    // Troque pela lógica real de autenticação via backend
+    if (senha === "1234") {
+      userEmail = email;
+      localStorage.setItem("loggedUser", userEmail);
+      exibirWallet();
+    } else {
+      alert("Email ou senha inválidos.");
+    }
+  });
+
+  btnLogout.addEventListener("click", () => {
+    if (confirm("Deseja realmente sair?")) {
+      localStorage.removeItem("loggedUser");
+      exibirLogin();
+    }
+  });
+
+  // --- Wallet ações ---
+
+  btnDeposit.addEventListener("click", () => {
+    const valor = parseFloat(valorInput.value.replace(',', '.'));
+    if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
+
+    saldo += valor;
+    addTransacao("deposit", valor);
+    atualizarSaldo();
+    valorInput.value = "";
+    limparPix();
+    salvarDadosUsuario();
+  });
+
+  btnWithdraw.addEventListener("click", () => {
+    const valor = parseFloat(valorInput.value.replace(',', '.'));
+    const chave = chavePixInput.value.trim();
+    if (!chave) return alert("Informe a chave Pix para saque.");
+    if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
+    if (valor > saldo) return alert("Saldo insuficiente.");
+
+    saldo -= valor;
+    addTransacao("withdraw", valor);
+    atualizarSaldo();
+    valorInput.value = "";
+    chavePixInput.value = "";
+    limparPix();
+    salvarDadosUsuario();
+  });
+
+  btnGeneratePix.addEventListener("click", gerarPix);
+
+  btnClearHistory.addEventListener("click", () => {
+    if (confirm("Limpar histórico de transações?")) {
+      history = [];
+      atualizarHistorico();
+      limparPix();
+      salvarDadosUsuario();
+    }
+  });
+
+  // --- Inicialização ---
+  const loggedUser = localStorage.getItem("loggedUser");
+  if (loggedUser) {
+    userEmail = loggedUser;
+    exibirWallet();
+  } else {
+    exibirLogin();
+  }
+})();
+</script>
 
 </body>
 </html>
