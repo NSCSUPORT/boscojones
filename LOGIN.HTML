@@ -6,90 +6,144 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>JBX1000 - Login e Registro</title>
   <style>
+    /* Reset simples para body */
     body {
       background: #0d1117;
       color: #e0e0e0;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
       display: flex;
       justify-content: center; /* horizontal */
-      align-items: center; /* vertical */
+      align-items: center;     /* vertical */
       height: 100vh;
+      overflow: hidden;
     }
+
     .container {
       max-width: 400px;
       width: 100%;
       background: #1c1f26;
       border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 0 15px #000a;
-    }
-    h1 {
+      padding: 30px 25px 40px;
+      box-shadow: 0 0 25px #000a;
+      box-sizing: border-box;
       text-align: center;
-      color: #00ffb2;
-      margin-bottom: 15px;
-      font-weight: 700;
     }
+
+    h1 {
+      color: #00ffb2;
+      margin-bottom: 25px;
+      font-weight: 700;
+      font-size: 2rem;
+      user-select: none;
+    }
+
     form {
       display: none;
       flex-direction: column;
+      align-items: stretch;
     }
+
     form.active {
       display: flex;
     }
+
     label {
-      margin-top: 10px;
+      margin-top: 15px;
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 1rem;
+      text-align: left;
+      user-select: none;
     }
+
     input[type="email"],
     input[type="password"] {
-      margin-top: 5px;
-      padding: 8px;
-      border-radius: 6px;
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 8px;
       border: 1px solid #444;
       background-color: #0f141a;
       color: #fff;
-      font-size: 0.9rem;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+      outline-offset: 2px;
     }
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      border-color: #00ffb2;
+      outline: none;
+    }
+
     .btn-submit {
-      margin-top: 20px;
+      margin-top: 25px;
       background-color: #00ffb2;
       border: none;
       color: #0d1117;
       font-weight: 700;
-      padding: 12px;
-      border-radius: 8px;
+      padding: 14px 0;
+      border-radius: 10px;
       cursor: pointer;
-      font-size: 1rem;
-      transition: background-color 0.3s;
+      font-size: 1.1rem;
+      transition: background-color 0.3s, transform 0.1s;
+      user-select: none;
     }
     .btn-submit:hover {
       background-color: #00cc8f;
+      transform: scale(1.05);
     }
+    .btn-submit:active {
+      transform: scale(0.95);
+    }
+
     .btn-switch {
-      margin-top: 12px;
+      margin-top: 18px;
       background-color: #ff8800;
       border: none;
       color: #0d1117;
       font-weight: 700;
-      padding: 10px;
-      border-radius: 8px;
+      padding: 12px 0;
+      border-radius: 10px;
       cursor: pointer;
-      font-size: 0.95rem;
-      transition: background-color 0.3s;
+      font-size: 1rem;
+      transition: background-color 0.3s, transform 0.1s;
+      user-select: none;
       width: 100%;
     }
     .btn-switch:hover {
       background-color: #cc6f00;
+      transform: scale(1.05);
     }
+    .btn-switch:active {
+      transform: scale(0.95);
+    }
+
     .message {
-      margin-top: 12px;
-      font-size: 0.9rem;
-      color: #ff6666;
+      margin-top: 15px;
+      font-size: 1rem;
+      min-height: 28px;
       font-weight: 600;
-      min-height: 24px;
+      color: #ff6666;
+      user-select: none;
+    }
+
+    /* Para telas pequenas */
+    @media (max-width: 420px) {
+      .container {
+        padding: 25px 20px 35px;
+        margin: 15px;
+      }
+      h1 {
+        font-size: 1.75rem;
+      }
+      input[type="email"],
+      input[type="password"] {
+        font-size: 0.95rem;
+      }
+      .btn-submit, .btn-switch {
+        font-size: 1rem;
+        padding: 12px 0;
+      }
     }
   </style>
 </head>
@@ -98,27 +152,27 @@
 <div class="container">
 
   <!-- Formulário Login -->
-  <form id="form-login" class="active">
-    <h1>Login</h1>
+  <form id="form-login" class="active" autocomplete="off" spellcheck="false">
+    <h1>BOSCO JONES WALLET </h1>
     <label for="login-email">Email</label>
-    <input type="email" id="login-email" placeholder="seuemail@exemplo.com" required />
+    <input type="email" id="login-email" placeholder="seuemail@exemplo.com" required autocomplete="username" />
     <label for="login-senha">Senha</label>
-    <input type="password" id="login-senha" placeholder="Sua senha" required minlength="6" />
+    <input type="password" id="login-senha" placeholder="Sua senha" required minlength="6" autocomplete="current-password" />
     <button type="submit" class="btn-submit">Entrar</button>
     <button type="button" id="btn-to-register" class="btn-switch">Registrar</button>
-    <div id="login-msg" class="message"></div>
+    <div id="login-msg" class="message" role="alert" aria-live="polite"></div>
   </form>
 
   <!-- Formulário Registro -->
-  <form id="form-register">
+  <form id="form-register" autocomplete="off" spellcheck="false">
     <h1>Registro</h1>
     <label for="reg-email">Email</label>
-    <input type="email" id="reg-email" placeholder="seuemail@exemplo.com" required />
+    <input type="email" id="reg-email" placeholder="seuemail@exemplo.com" required autocomplete="username" />
     <label for="reg-senha">Senha</label>
-    <input type="password" id="reg-senha" placeholder="Sua senha (mín 6 caracteres)" required minlength="6" />
+    <input type="password" id="reg-senha" placeholder="Sua senha (mín 6 caracteres)" required minlength="6" autocomplete="new-password" />
     <button type="submit" class="btn-submit">Registrar</button>
     <button type="button" id="btn-to-login" class="btn-switch">Entrar</button>
-    <div id="register-msg" class="message"></div>
+    <div id="register-msg" class="message" role="alert" aria-live="polite"></div>
   </form>
 </div>
 
@@ -135,23 +189,31 @@
     formLogin.classList.remove('active');
     formRegister.classList.add('active');
     clearMessages();
+    // Foco no primeiro campo do registro
+    document.getElementById('reg-email').focus();
   });
 
   btnToLogin.addEventListener('click', () => {
     formRegister.classList.remove('active');
     formLogin.classList.add('active');
     clearMessages();
+    // Foco no primeiro campo do login
+    document.getElementById('login-email').focus();
   });
 
   function clearMessages() {
-    document.getElementById('login-msg').textContent = '';
-    document.getElementById('register-msg').textContent = '';
-    document.getElementById('login-msg').style.color = '#ff6666';
-    document.getElementById('register-msg').style.color = '#ff6666';
+    const loginMsg = document.getElementById('login-msg');
+    const registerMsg = document.getElementById('register-msg');
+    loginMsg.textContent = '';
+    registerMsg.textContent = '';
+    loginMsg.style.color = '#ff6666';
+    registerMsg.style.color = '#ff6666';
   }
 
   formRegister.addEventListener('submit', async (e) => {
     e.preventDefault();
+    clearMessages();
+
     const email = document.getElementById('reg-email').value.trim();
     const senha = document.getElementById('reg-senha').value;
 
@@ -184,6 +246,8 @@
 
   formLogin.addEventListener('submit', async (e) => {
     e.preventDefault();
+    clearMessages();
+
     const email = document.getElementById('login-email').value.trim();
     const senha = document.getElementById('login-senha').value;
 
@@ -203,8 +267,8 @@
         document.getElementById('login-msg').style.color = 'lightgreen';
         document.getElementById('login-msg').textContent = 'Login realizado com sucesso!';
         formLogin.reset();
-        // Redirecione para a página da carteira, por exemplo:
-        // window.location.href = 'carteira.html';
+        // Se quiser, redirecione aqui:
+        // window.location.href = 'wallet.html';
       } else {
         document.getElementById('login-msg').style.color = '#ff6666';
         document.getElementById('login-msg').textContent = data.error || 'Erro no login.';
