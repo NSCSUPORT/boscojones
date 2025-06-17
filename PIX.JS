@@ -26,6 +26,25 @@ db.run(`
     data TEXT
   )
 `);
+const db = require('./database');
+
+// Exemplo: depositar R$50
+db.depositar(50, (err) => {
+  if (err) console.error(err.message);
+  else console.log('Depósito realizado!');
+});
+
+// Exemplo: sacar R$20
+db.sacar(20, (err) => {
+  if (err) console.error(err.message);
+  else console.log('Saque realizado!');
+});
+
+// Exemplo: pegar saldo
+db.pegarSaldo((err, saldo) => {
+  if (err) console.error(err.message);
+  else console.log('Saldo atual:', saldo);
+});
 
 // Inicializa saldo se não houver
 db.get("SELECT * FROM wallet WHERE id = 1", (err, row) => {
