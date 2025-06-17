@@ -1,35 +1,39 @@
 require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
-const db = require('./database'); // Importa o arquivo SQLite criado
-const app = express();
+const db = require('./database'); // Banco SQLite
+const cors = require('cors');
 
+const app = express();
+app.use(cors());
 app.use(express.json());
 
-// Função para autenticar na API Pix
+// Autenticação com a API Pix (Gerencianet)
 const auth = async () => {
-  const authData = Buffer.from(`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`).toString('base64');
-  const response = await axios.post(
-    `${process.env.PIX_API_URL}/oauth/token`,
-    'grant_type=client_credentials',
-    {
-      headers: {
-        Authorization: `Basic ${authData}`,
-        'Content-Type': 'application/x-www-form-urlencoded'
+  try {
+    const authData = Buffer.from(`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`).toString('base64');
+    const response = await axios.post(
+      `${process.env.PIX_API_URL}/oauth/token`,
+      'grant_type=client_credentials',
+      {
+        headers: {
+          Authorization: `Basic ${authData}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
       }
-    }
-  );
-  return response.data.access_token;
+    );
+    return response.data.access_token;
+  } catch (error) {
+    console.error("Erro ao autenticar:", error.response?.data || error.message);
+    throw new Error("Falha na autenticação Pix");
+  }
 };
 
-// Endpoint para criar cobrança Pix e zerar saldo após gerar a cobrança
+// Criar cobrança Pix e zerar saldo
 app.post('/criar-cobranca', async (req, res) => {
   try {
     const saldoAtual = await new Promise((resolve, reject) => {
-      db.pegarSaldo((err, saldo) => {
-        if (err) reject(err);
-        else resolve(saldo);
-      });
+      db.pegarSaldo((err, saldo) => (err ? reject(err) : resolve(saldo)));
     });
 
     if (saldoAtual <= 0) {
@@ -38,16 +42,17 @@ app.post('/criar-cobranca', async (req, res) => {
 
     const accessToken = await auth();
 
+    const valorOriginal = saldoAtual.toFixed(2);
+
     const body = {
       calendario: { expiracao: 3600 },
       devedor: {
         nome: "Lucas Januário",
-        cpf: "12345678909"
-      },
+        cpf: "48761013889" // ⚠️ 
       valor: {
-        original: saldoAtual.toFixed(2)
+        original: valorOriginal
       },
-      chave: process.env.PIX_CHAVE, // Chave Pix no .env
+      chave: process.env.PIX_CHAVE,
       solicitacaoPagador: "Pagamento via JBX Wallet"
     };
 
@@ -71,16 +76,10 @@ app.post('/criar-cobranca', async (req, res) => {
       }
     );
 
-    // Zera saldo e adiciona transação 'pix'
     await new Promise((resolve, reject) => {
       db.atualizarSaldo(0, (err) => {
-        if (err) reject(err);
-        else {
-          db.adicionarTransacao('pix', saldoAtual, (err2) => {
-            if (err2) reject(err2);
-            else resolve();
-          });
-        }
+        if (err) return reject(err);
+        db.adicionarTransacao('pix', saldoAtual, (err2) => (err2 ? reject(err2) : resolve()));
       });
     });
 
@@ -90,13 +89,14 @@ app.post('/criar-cobranca', async (req, res) => {
       qrcode: qrResponse.data.qrcode,
       imagemQrcode: qrResponse.data.imagemQrcode
     });
+
   } catch (error) {
-    console.error("Erro ao gerar cobrança Pix:", error?.response?.data || error.message);
+    console.error("Erro ao gerar cobrança Pix:", error.response?.data || error.message);
     res.status(500).json({ error: "Erro ao gerar cobrança Pix" });
   }
 });
 
-// Endpoint para depositar valor no saldo
+// Depositar saldo
 app.post('/depositar', (req, res) => {
   const valor = parseFloat(req.body.valor);
   if (isNaN(valor) || valor <= 0) {
@@ -109,7 +109,7 @@ app.post('/depositar', (req, res) => {
   });
 });
 
-// Endpoint para sacar valor do saldo
+// Sacar saldo
 app.post('/sacar', (req, res) => {
   const valor = parseFloat(req.body.valor);
   if (isNaN(valor) || valor <= 0) {
@@ -122,7 +122,7 @@ app.post('/sacar', (req, res) => {
   });
 });
 
-// Endpoint para consultar saldo atual
+// Consultar saldo
 app.get('/saldo', (req, res) => {
   db.pegarSaldo((err, saldo) => {
     if (err) return res.status(500).json({ error: "Erro ao consultar saldo" });
@@ -130,6 +130,8 @@ app.get('/saldo', (req, res) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log("API Pix rodando em http://localhost:3000");
+// Inicia servidor na porta correta (Vercel/Heroku/Local)
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`API Pix rodando em http://localhost:${PORT}`);
 });
