@@ -124,14 +124,14 @@
   const qrcodeContainer = document.getElementById("qrcode-container");
   const historyList = document.getElementById("history-list");
 
+  const chavePix = "48761013889"; // 🔑 Chave Pix editável
+  const txid = "JBX1000"; // 🔁 TXID único para cada transação
+
   const STORAGE_SALDO = "jbx1000_saldo";
   const STORAGE_HISTORY = "jbx1000_history";
 
-  // Zera tudo ao iniciar (modo produção)
-  localStorage.removeItem(STORAGE_SALDO);
-  localStorage.removeItem(STORAGE_HISTORY);
-  let saldo = 0;
-  let history = [];
+  let saldo = parseFloat(localStorage.getItem(STORAGE_SALDO)) || 0;
+  let history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
 
   function atualizarSaldo() {
     saldoSpan.textContent = `R$ ${saldo.toFixed(2).replace('.', ',')}`;
@@ -161,11 +161,7 @@
   }
 
   function addTransacao(type, amount) {
-    history.unshift({
-      type,
-      amount,
-      date: new Date().toISOString()
-    });
+    history.unshift({ type, amount, date: new Date().toISOString() });
     if (history.length > 50) history.pop();
     salvarEstado();
     atualizarHistorico();
@@ -183,37 +179,27 @@
     return crc.toString(16).toUpperCase().padStart(4, '0');
   }
 
-  function formatPixValue(val) {
-    return Math.round(val * 100).toString();
-  }
-
   function campo(id, valor) {
     const len = valor.length.toString().padStart(2, '0');
     return id + len + valor;
   }
 
-  function gerarPayloadPix(valorEmCentavos) {
-    const chavePix = "48761013889";
+  function gerarPayloadPix(valorCents) {
     const nome = "Lucas Januário".toUpperCase();
     const cidade = "SAO PAULO".toUpperCase();
-    const txid = "JBX1000";
 
     let payload = "";
     payload += campo("00", "01");
-    let merchantInfo = campo("00", "br.gov.bcb.pix") + campo("01", chavePix);
-    payload += campo("26", merchantInfo);
+    let merchant = campo("00", "br.gov.bcb.pix") + campo("01", chavePix);
+    payload += campo("26", merchant);
     payload += campo("52", "0000");
     payload += campo("53", "986");
-    payload += campo("54", (parseFloat(valorEmCentavos)/100).toFixed(2));
+    payload += campo("54", (valorCents / 100).toFixed(2));
     payload += campo("58", "BR");
-    payload += campo("59", nome.substring(0,25));
-    payload += campo("60", cidade.substring(0,15));
-    let addData = campo("05", txid);
-    payload += campo("62", addData);
-    let payloadCrc = payload + "6304";
-    let crc = crc16ccitt(payloadCrc);
-    payload += campo("63", crc);
-
+    payload += campo("59", nome.substring(0, 25));
+    payload += campo("60", cidade.substring(0, 15));
+    payload += campo("62", campo("05", txid));
+    payload += campo("63", crc16ccitt(payload + "6304"));
     return payload;
   }
 
@@ -228,12 +214,13 @@
       return;
     }
     const valorComTaxa = saldo * 1.05;
-    const valorPixCents = formatPixValue(valorComTaxa);
-    const payload = gerarPayloadPix(valorPixCents);
+    const payload = gerarPayloadPix(Math.round(valorComTaxa * 100));
+
     const pre = document.createElement("pre");
     pre.textContent = payload;
     qrcodeContainer.appendChild(pre);
-    QRCode.toCanvas(payload, { width: 200, color: {dark: '#00ffb2', light: '#11161c'} }, (error, canvas) => {
+
+    QRCode.toCanvas(payload, { width: 240, color: {dark: '#00ffb2', light: '#11161c'} }, (error, canvas) => {
       if (error) {
         console.error(error);
         alert("Erro ao gerar QR Code.");
@@ -244,11 +231,8 @@
   }
 
   btnDeposit.addEventListener("click", () => {
-    let valor = parseFloat(valorInput.value.replace(',', '.'));
-    if (isNaN(valor) || valor <= 0) {
-      alert("Informe um valor válido para depósito.");
-      return;
-    }
+    const valor = parseFloat(valorInput.value.replace(',', '.'));
+    if (isNaN(valor) || valor <= 0) return alert("Informe um valor válido.");
     saldo += valor;
     addTransacao("deposit", valor);
     atualizarSaldo();
@@ -257,15 +241,9 @@
   });
 
   btnWithdraw.addEventListener("click", () => {
-    let valor = parseFloat(valorInput.value.replace(',', '.'));
-    if (isNaN(valor) || valor <= 0) {
-      alert("Informe um valor válido para saque.");
-      return;
-    }
-    if (valor > saldo) {
-      alert("Saldo insuficiente para saque.");
-      return;
-    }
+    const valor = parseFloat(valorInput.value.replace(',', '.'));
+    if (isNaN(valor) || valor <= 0) return alert("Informe um valor válido.");
+    if (valor > saldo) return alert("Saldo insuficiente.");
     saldo -= valor;
     addTransacao("withdraw", valor);
     atualizarSaldo();
@@ -273,12 +251,10 @@
     limparPix();
   });
 
-  btnGeneratePix.addEventListener("click", () => {
-    gerarPix();
-  });
+  btnGeneratePix.addEventListener("click", gerarPix);
 
   btnClearHistory.addEventListener("click", () => {
-    if (confirm("Tem certeza que deseja limpar o histórico de transações?")) {
+    if (confirm("Deseja limpar todo o histórico?")) {
       history = [];
       salvarEstado();
       atualizarHistorico();
@@ -291,5 +267,6 @@
   limparPix();
 })();
 </script>
+
 </body>
 </html>
