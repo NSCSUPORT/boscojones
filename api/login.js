@@ -1,12 +1,8 @@
-// api/login.js
 import { Client } from 'pg';
-
-const connectionString = 'postgresql://postgres:[LUCASJ4NJ4N1891@@_@12]@db.twiuahfzftwlnfbeanav.supabase.co:5432/postgres';
+import bcrypt from 'bcrypt';
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Método não permitido' });
-  }
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Método não permitido' });
 
   const { email, senha } = req.body;
 
@@ -14,12 +10,11 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Email e senha são obrigatórios' });
   }
 
-  const client = new Client({ connectionString });
+  const client = new Client({ connectionString: process.env.DATABASE_URL });
   await client.connect();
 
   try {
-    // Verifica usuário e senha
-    const result = await client.query('SELECT * FROM usuarios WHERE email = $1 AND senha = $2', [email, senha]);
+    const result = await client.query('SELECT * FROM usuarios WHERE email = $1', [email]);
 
     await client.end();
 
@@ -27,10 +22,17 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: 'Email ou senha inválidos' });
     }
 
+    const user = result.rows[0];
+
+    const validPassword = await bcrypt.compare(senha, user.senha);
+    if (!validPassword) {
+      return res.status(401).json({ error: 'Email ou senha inválidos' });
+    }
+
     return res.status(200).json({ message: 'Login realizado com sucesso' });
-  } catch (err) {
+  } catch (error) {
     await client.end();
-    console.error(err);
+    console.error(error);
     return res.status(500).json({ error: 'Erro interno do servidor' });
   }
 }
