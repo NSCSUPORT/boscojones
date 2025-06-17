@@ -1,61 +1,76 @@
-// pix-backend.js
 require('dotenv').config();
 const express = require('express');
-const https = require('https');
-const fs = require('fs');
 const axios = require('axios');
-
 const app = express();
 app.use(express.json());
 
-// Carrega certificados do Pix
-const httpsAgent = new https.Agent({
-  cert: fs.readFileSync(process.env.PIX_CERT),
-  key: fs.readFileSync(process.env.PIX_KEY),
-  rejectUnauthorized: false
-});
+const auth = async () => {
+  const authData = Buffer.from(`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`).toString('base64');
 
-// Função para obter token OAuth2
-async function getAccessToken() {
-  const auth = Buffer.from(`${process.env.PIX_CLIENT_ID}:${process.env.PIX_CLIENT_SECRET}`).toString('base64');
   const response = await axios.post(
-    'https://api-pix.gerencianet.com.br/oauth/token',
+    `${process.env.PIX_SANDBOX_URL}/oauth/token`,
     'grant_type=client_credentials',
     {
       headers: {
-        Authorization: `Basic ${auth}`,
+        Authorization: `Basic ${authData}`,
         'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      httpsAgent
+      }
     }
   );
   return response.data.access_token;
-}
+};
 
-// Rota para criar cobrança Pix
-app.post('/criar-pix', async (req, res) => {
-  const { valor, chave, txid } = req.body;
+app.post('/criar-cobranca', async (req, res) => {
   try {
-    const token = await getAccessToken();
+    const accessToken = await auth();
+
     const body = {
       calendario: { expiracao: 3600 },
-      valor: { original: valor },
-      chave,
-      solicitacaoPagador: 'Pagamento via JBX1000'
+      devedor: {
+        nome: "Lucas Januário",
+        cpf: "12345678909"
+      },
+      valor: {
+        original: "10.00"
+      },
+      chave: "SEUEMAIL@seudominio.com.br", // Chave Pix
+      solicitacaoPagador: "Pagamento do serviço Bosco Jones"
     };
 
-    const response = await axios.put(
-      `https://api-pix.gerencianet.com.br/v2/cob/${txid}`,
+    const { data } = await axios.post(
+      `${process.env.PIX_SANDBOX_URL}/v2/cob`,
       body,
       {
-        headers: { Authorization: `Bearer ${token}` },
-        httpsAgent
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
       }
     );
-    res.json(response.data);
-  } catch (err) {
-    res.status(500).json({ erro: 'Falha na criação do Pix', detalhe: err.message });
+
+    const txid = data.txid;
+
+    const qrResponse = await axios.get(
+      `${process.env.PIX_SANDBOX_URL}/v2/loc/${data.loc.id}/qrcode`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
+    );
+
+    res.json({
+      txid,
+      location: data.loc.id,
+      qrcode: qrResponse.data.qrcode,
+      imagemQrcode: qrResponse.data.imagemQrcode
+    });
+  } catch (error) {
+    console.error(error?.response?.data || error.message);
+    res.status(500).json({ error: "Erro ao gerar cobrança Pix" });
   }
 });
 
-app.listen(3000, () => console.log('Servidor Pix iniciado na porta 3000'));
+app.listen(3000, () => {
+  console.log('API Pix rodando em http://localhost:3000');
+});
