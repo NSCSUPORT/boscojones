@@ -1,36 +1,34 @@
-import { Client } from 'pg';
-import bcrypt from 'bcrypt';
+const express = require('express');
+const bcrypt = require('bcrypt');
+const db = require('./database');
 
-const saltRounds = 10;
+const router = express.Router();
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Método não permitido' });
-
+router.post('/register', async (req, res) => {
   const { email, senha } = req.body;
 
-  if (!email || !senha || senha.length < 6) {
-    return res.status(400).json({ error: 'Email e senha (mín 6 caracteres) são obrigatórios' });
+  if (!email || !senha) {
+    return res.status(400).json({ error: 'Preencha email e senha.' });
   }
-
-  const client = new Client({ connectionString: process.env.DATABASE_URL });
-  await client.connect();
 
   try {
-    const exists = await client.query('SELECT * FROM usuarios WHERE email = $1', [email]);
-    if (exists.rows.length > 0) {
-      await client.end();
-      return res.status(409).json({ error: 'Usuário já registrado' });
-    }
-
-    const hashedPassword = await bcrypt.hash(senha, saltRounds);
-
-    await client.query('INSERT INTO usuarios(email, senha) VALUES ($1, $2)', [email, hashedPassword]);
-
-    await client.end();
-    return res.status(201).json({ message: 'Usuário registrado com sucesso' });
-  } catch (error) {
-    await client.end();
-    console.error(error);
-    return res.status(500).json({ error: 'Erro interno do servidor' });
+    const hash = await bcrypt.hash(senha, 10);
+    db.run(
+      `INSERT INTO users (email, senha) VALUES (?, ?)`,
+      [email, hash],
+      function (err) {
+        if (err) {
+          if (err.code === 'SQLITE_CONSTRAINT') {
+            return res.status(400).json({ error: 'Email já registrado.' });
+          }
+          return res.status(500).json({ error: 'Erro ao registrar.' });
+        }
+        res.status(200).json({ message: 'Registro OK' });
+      }
+    );
+  } catch (err) {
+    res.status(500).json({ error: 'Erro no servidor.' });
   }
-}
+});
+
+module.exports = router;
