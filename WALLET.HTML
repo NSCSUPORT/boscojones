@@ -390,20 +390,46 @@
     qrcodeContainer.innerHTML = "<span>QR Code e Copia e Cola aparecerão aqui</span>";
   }
 
-  function gerarPix() {
+  async function gerarPix() {
     limparPix();
     if (saldo <= 0) {
       alert("Saldo insuficiente para gerar Pix.");
       return;
     }
-    const valorComTaxa = saldo * 1.05;
-    const payload = `pix:lucas@jbx.com.br\nvalor:R$${valorComTaxa.toFixed(2)}`;
-    const pre = document.createElement("pre");
-    pre.textContent = payload;
-    qrcodeContainer.appendChild(pre);
-    QRCode.toCanvas(payload, { width: 200, color: { dark: '#00ffb2', light: '#11161c' } }, (err, canvas) => {
-      if (!err) qrcodeContainer.appendChild(canvas);
-    });
+
+    try {
+      const response = await fetch("http://localhost:3000/criar-cobranca", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          valor: saldo.toFixed(2)
+        })
+      });
+
+      const data = await response.json();
+
+      if (!data.qrcode || !data.imagemQrcode) {
+        alert("Erro ao gerar Pix.");
+        return;
+      }
+
+      const pre = document.createElement("pre");
+      pre.textContent = data.qrcode;
+      qrcodeContainer.appendChild(pre);
+
+      const img = document.createElement("img");
+      img.src = data.imagemQrcode;
+      img.style.marginTop = "10px";
+      img.alt = "QR Code Pix";
+      qrcodeContainer.appendChild(img);
+
+      addTransacao("pix", saldo);
+      saldo = 0;
+      atualizarSaldo();
+    } catch (err) {
+      console.error("Erro ao gerar Pix:", err);
+      alert("Erro ao gerar Pix.");
+    }
   }
 
   btnDeposit.addEventListener("click", () => {
@@ -444,5 +470,6 @@
   atualizarHistorico();
 })();
 </script>
+
 </body>
 </html>
