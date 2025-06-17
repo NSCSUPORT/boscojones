@@ -134,6 +134,17 @@
   let saldo = 0;
   let history = [];
 
+  async function carregarSaldo() {
+    try {
+      const res = await fetch("http://localhost:3000/saldo");
+      const data = await res.json();
+      saldo = parseFloat(data.saldo || 0);
+      atualizarSaldo();
+    } catch (err) {
+      console.error("Erro ao carregar saldo:", err);
+    }
+  }
+
   function atualizarSaldo() {
     saldoSpan.textContent = `R$ ${saldo.toFixed(2).replace('.', ',')}`;
   }
@@ -187,12 +198,10 @@
         return;
       }
 
-      // Mostra código Pix
       const pre = document.createElement("pre");
       pre.textContent = data.qrcode;
       qrcodeContainer.appendChild(pre);
 
-      // Mostra imagem QR Code
       const img = document.createElement("img");
       img.src = data.imagemQrcode;
       img.alt = "QR Code Pix";
@@ -200,10 +209,7 @@
       img.style.maxWidth = "200px";
       qrcodeContainer.appendChild(img);
 
-      // Registra transação
       addTransacao("pix", saldo);
-
-      // Zera o saldo
       saldo = 0;
       atualizarSaldo();
     } catch (err) {
@@ -212,30 +218,54 @@
     }
   }
 
-  btnDeposit.addEventListener("click", () => {
+  btnDeposit.addEventListener("click", async () => {
     const valor = parseFloat(valorInput.value.replace(',', '.'));
     if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
-    saldo += valor;
-    addTransacao("deposit", valor);
-    atualizarSaldo();
-    limparPix();
-    valorInput.value = "";
+
+    try {
+      const response = await fetch("http://localhost:3000/depositar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ valor })
+      });
+      const data = await response.json();
+      if (data.error) return alert(data.error);
+
+      addTransacao("deposit", valor);
+      await carregarSaldo();
+      limparPix();
+      valorInput.value = "";
+    } catch (err) {
+      console.error("Erro no depósito:", err);
+      alert("Erro ao depositar.");
+    }
   });
 
-  btnWithdraw.addEventListener("click", () => {
+  btnWithdraw.addEventListener("click", async () => {
     const valor = parseFloat(valorInput.value.replace(',', '.'));
     const chave = chavePixInput.value.trim();
     if (!chave) return alert("Informe a chave Pix para saque.");
     if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
     if (valor > saldo) return alert("Saldo insuficiente.");
-    
-    // Simula saque Pix (você pode conectar à API de pagamento aqui)
-    saldo -= valor;
-    addTransacao("withdraw", valor);
-    atualizarSaldo();
-    limparPix();
-    valorInput.value = "";
-    chavePixInput.value = "";
+
+    try {
+      const response = await fetch("http://localhost:3000/sacar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ valor })
+      });
+      const data = await response.json();
+      if (data.error) return alert(data.error);
+
+      addTransacao("withdraw", valor);
+      await carregarSaldo();
+      limparPix();
+      valorInput.value = "";
+      chavePixInput.value = "";
+    } catch (err) {
+      console.error("Erro no saque:", err);
+      alert("Erro ao sacar.");
+    }
   });
 
   btnGeneratePix.addEventListener("click", gerarPix);
@@ -248,10 +278,12 @@
     }
   });
 
-  atualizarSaldo();
+  // Inicialização
+  carregarSaldo();
   atualizarHistorico();
 })();
 </script>
+
 
 
 </body>
