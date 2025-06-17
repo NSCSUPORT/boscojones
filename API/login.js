@@ -1,29 +1,13 @@
-
-const express = require('express');
-const bcrypt = require('bcrypt');
-const db = require('./database');
-
-const router = express.Router();
-
-router.post('/login', (req, res) => {
-  const { email, senha } = req.body;
-
-  if (!email || !senha) {
-    return res.status(400).json({ error: 'Preencha email e senha.' });
+export default function handler(req, res) {
+  if (req.method === 'POST') {
+    const { email, senha } = req.body;
+    // Simular autenticação
+    if (email && senha) {
+      res.status(200).json({ success: true, message: 'Login ok!' });
+    } else {
+      res.status(401).json({ error: 'Credenciais inválidas' });
+    }
+  } else {
+    res.status(405).json({ error: 'Método não permitido' });
   }
-
-  db.get(\`SELECT * FROM users WHERE email = ?\`, [email], async (err, user) => {
-    if (err || !user) {
-      return res.status(401).json({ error: 'Usuário não encontrado.' });
-    }
-
-    const match = await bcrypt.compare(senha, user.senha);
-    if (!match) {
-      return res.status(401).json({ error: 'Senha incorreta.' });
-    }
-
-    res.status(200).json({ message: 'Login OK', user: { email: user.email } });
-  });
-});
-
-module.exports = router;
+}
