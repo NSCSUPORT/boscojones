@@ -1,13 +1,15 @@
 require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
-const app = express();
 
+const app = express();
 app.use(express.json());
 
+// Função de autenticação OAuth2
 const auth = async () => {
   try {
     const authData = Buffer.from(`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`).toString('base64');
+
     const response = await axios.post(
       `${process.env.PIX_API_URL}/oauth/token`,
       'grant_type=client_credentials',
@@ -18,13 +20,15 @@ const auth = async () => {
         }
       }
     );
+
     return response.data.access_token;
   } catch (error) {
-    console.error("Erro na autenticação:", error?.response?.data || error.message);
+    console.error("❌ Erro na autenticação:", error?.response?.data || error.message);
     throw new Error("Falha ao autenticar com a API Pix");
   }
 };
 
+// Rota para criar cobrança Pix
 app.post('/criar-cobranca', async (req, res) => {
   try {
     const valor = req.body.valor || "10.00";
@@ -34,12 +38,12 @@ app.post('/criar-cobranca', async (req, res) => {
       calendario: { expiracao: 3600 },
       devedor: {
         nome: "Lucas Januário",
-        cpf: "12345678909"
+        cpf: "12345678909" // Usar CPF válido em produção
       },
       valor: {
-        original: valor
+        original: parseFloat(valor).toFixed(2)
       },
-      chave: process.env.PIX_CHAVE, // Chave Pix definida no .env
+      chave: process.env.PIX_CHAVE,
       solicitacaoPagador: "Pagamento via JBX Wallet"
     };
 
@@ -71,11 +75,12 @@ app.post('/criar-cobranca', async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Erro ao gerar cobrança:", error?.response?.data || error.message);
+    console.error("❌ Erro ao gerar cobrança:", error?.response?.data || error.message);
     res.status(500).json({ error: "Erro ao gerar cobrança Pix" });
   }
 });
 
+// Inicializa servidor
 app.listen(3000, () => {
   console.log('✅ API Pix rodando em http://localhost:3000');
 });
