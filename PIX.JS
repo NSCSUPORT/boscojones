@@ -1,56 +1,12 @@
 require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
-const sqlite3 = require('sqlite3').verbose();
-const cors = require('cors');
+const db = require('./database'); // Importa o arquivo SQLite criado
 const app = express();
 
-app.use(cors());
 app.use(express.json());
 
-const db = new sqlite3.Database('database.db');
-
-// Cria a tabela se não existir
-db.run(`
-  CREATE TABLE IF NOT EXISTS wallet (
-    id INTEGER PRIMARY KEY,
-    saldo REAL DEFAULT 0
-  )
-`);
-db.run(`
-  CREATE TABLE IF NOT EXISTS transacoes (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    tipo TEXT,
-    valor REAL,
-    chave TEXT,
-    data TEXT
-  )
-`);
-const db = require('./database');
-
-// Exemplo: depositar R$50
-db.depositar(50, (err) => {
-  if (err) console.error(err.message);
-  else console.log('Depósito realizado!');
-});
-
-// Exemplo: sacar R$20
-db.sacar(20, (err) => {
-  if (err) console.error(err.message);
-  else console.log('Saque realizado!');
-});
-
-// Exemplo: pegar saldo
-db.pegarSaldo((err, saldo) => {
-  if (err) console.error(err.message);
-  else console.log('Saldo atual:', saldo);
-});
-
-// Inicializa saldo se não houver
-db.get("SELECT * FROM wallet WHERE id = 1", (err, row) => {
-  if (!row) db.run("INSERT INTO wallet (id, saldo) VALUES (1, 0)");
-});
-
+// Função para autenticar na API Pix
 const auth = async () => {
   const authData = Buffer.from(`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`).toString('base64');
   const response = await axios.post(
@@ -66,28 +22,20 @@ const auth = async () => {
   return response.data.access_token;
 };
 
-// Obter saldo atual
-app.get('/saldo', (req, res) => {
-  db.get("SELECT saldo FROM wallet WHERE id = 1", (err, row) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ saldo: row?.saldo || 0 });
-  });
-});
-
-// Depósito fictício (para teste)
-app.post('/depositar', (req, res) => {
-  const { valor } = req.body;
-  db.run("UPDATE wallet SET saldo = saldo + ? WHERE id = 1", [valor], function(err) {
-    if (err) return res.status(500).json({ error: err.message });
-    db.run("INSERT INTO transacoes (tipo, valor, data) VALUES (?, ?, datetime('now'))", ['deposito', valor]);
-    res.json({ status: 'Depósito adicionado' });
-  });
-});
-
-// Criar cobrança Pix
+// Endpoint para criar cobrança Pix e zerar saldo após gerar a cobrança
 app.post('/criar-cobranca', async (req, res) => {
   try {
-    const { valor } = req.body;
+    const saldoAtual = await new Promise((resolve, reject) => {
+      db.pegarSaldo((err, saldo) => {
+        if (err) reject(err);
+        else resolve(saldo);
+      });
+    });
+
+    if (saldoAtual <= 0) {
+      return res.status(400).json({ error: "Saldo insuficiente para gerar cobrança Pix" });
+    }
+
     const accessToken = await auth();
 
     const body = {
@@ -96,75 +44,92 @@ app.post('/criar-cobranca', async (req, res) => {
         nome: "Lucas Januário",
         cpf: "12345678909"
       },
-      valor: { original: valor },
-      chave: process.env.PIX_CHAVE,
+      valor: {
+        original: saldoAtual.toFixed(2)
+      },
+      chave: process.env.PIX_CHAVE, // Chave Pix no .env
       solicitacaoPagador: "Pagamento via JBX Wallet"
     };
 
-    const { data } = await axios.post(`${process.env.PIX_API_URL}/v2/cob`, body, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      }
-    });
-
-    const qrResponse = await axios.get(`${process.env.PIX_API_URL}/v2/loc/${data.loc.id}/qrcode`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    });
-
-    db.run("UPDATE wallet SET saldo = 0 WHERE id = 1");
-    db.run("INSERT INTO transacoes (tipo, valor, data) VALUES (?, ?, datetime('now'))", ['pix_gerado', valor]);
-
-    res.json({
-      txid: data.txid,
-      qrcode: qrResponse.data.qrcode,
-      imagemQrcode: qrResponse.data.imagemQrcode
-    });
-
-  } catch (error) {
-    console.error(error?.response?.data || error.message);
-    res.status(500).json({ error: "Erro ao gerar cobrança Pix" });
-  }
-});
-
-// Enviar Pix real
-app.post('/sacar', async (req, res) => {
-  try {
-    const { valor, chave } = req.body;
-    const accessToken = await auth();
-
-    db.get("SELECT saldo FROM wallet WHERE id = 1", (err, row) => {
-      if (err || !row || row.saldo < valor) {
-        return res.status(400).json({ error: "Saldo insuficiente" });
-      }
-
-      const body = {
-        valor: valor.toFixed(2),
-        chave: chave,
-        descricao: "Saque via JBX Wallet"
-      };
-
-      axios.post(`${process.env.PIX_API_URL}/v2/pix`, body, {
+    const { data } = await axios.post(
+      `${process.env.PIX_API_URL}/v2/cob`,
+      body,
+      {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json'
         }
-      }).then(() => {
-        db.run("UPDATE wallet SET saldo = saldo - ? WHERE id = 1", [valor]);
-        db.run("INSERT INTO transacoes (tipo, valor, chave, data) VALUES (?, ?, ?, datetime('now'))", ['saque', valor, chave]);
-        res.json({ status: "Pix enviado com sucesso" });
-      }).catch(err => {
-        console.error("Erro ao enviar Pix:", err?.response?.data || err.message);
-        res.status(500).json({ error: "Erro ao enviar Pix" });
+      }
+    );
+
+    const qrResponse = await axios.get(
+      `${process.env.PIX_API_URL}/v2/loc/${data.loc.id}/qrcode`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
+    );
+
+    // Zera saldo e adiciona transação 'pix'
+    await new Promise((resolve, reject) => {
+      db.atualizarSaldo(0, (err) => {
+        if (err) reject(err);
+        else {
+          db.adicionarTransacao('pix', saldoAtual, (err2) => {
+            if (err2) reject(err2);
+            else resolve();
+          });
+        }
       });
     });
-  } catch (e) {
-    res.status(500).json({ error: "Erro ao autenticar ou enviar Pix" });
+
+    res.json({
+      txid: data.txid,
+      location: data.loc.id,
+      qrcode: qrResponse.data.qrcode,
+      imagemQrcode: qrResponse.data.imagemQrcode
+    });
+  } catch (error) {
+    console.error("Erro ao gerar cobrança Pix:", error?.response?.data || error.message);
+    res.status(500).json({ error: "Erro ao gerar cobrança Pix" });
   }
 });
 
+// Endpoint para depositar valor no saldo
+app.post('/depositar', (req, res) => {
+  const valor = parseFloat(req.body.valor);
+  if (isNaN(valor) || valor <= 0) {
+    return res.status(400).json({ error: "Valor inválido" });
+  }
+
+  db.depositar(valor, (err) => {
+    if (err) return res.status(500).json({ error: "Erro ao depositar" });
+    res.json({ message: `Depósito de R$ ${valor.toFixed(2)} realizado com sucesso!` });
+  });
+});
+
+// Endpoint para sacar valor do saldo
+app.post('/sacar', (req, res) => {
+  const valor = parseFloat(req.body.valor);
+  if (isNaN(valor) || valor <= 0) {
+    return res.status(400).json({ error: "Valor inválido" });
+  }
+
+  db.sacar(valor, (err) => {
+    if (err) return res.status(400).json({ error: err.message || "Erro ao sacar" });
+    res.json({ message: `Saque de R$ ${valor.toFixed(2)} realizado com sucesso!` });
+  });
+});
+
+// Endpoint para consultar saldo atual
+app.get('/saldo', (req, res) => {
+  db.pegarSaldo((err, saldo) => {
+    if (err) return res.status(500).json({ error: "Erro ao consultar saldo" });
+    res.json({ saldo });
+  });
+});
+
 app.listen(3000, () => {
-  console.log('🚀 API Pix com SQLite rodando em http://localhost:3000');
+  console.log("API Pix rodando em http://localhost:3000");
 });
