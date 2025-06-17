@@ -2,26 +2,32 @@ require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const app = express();
+
 app.use(express.json());
 
 const auth = async () => {
-  const authData = Buffer.from(`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`).toString('base64');
-
-  const response = await axios.post(
-    `${process.env.PIX_SANDBOX_URL}/oauth/token`,
-    'grant_type=client_credentials',
-    {
-      headers: {
-        Authorization: `Basic ${authData}`,
-        'Content-Type': 'application/x-www-form-urlencoded'
+  try {
+    const authData = Buffer.from(`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`).toString('base64');
+    const response = await axios.post(
+      `${process.env.PIX_API_URL}/oauth/token`,
+      'grant_type=client_credentials',
+      {
+        headers: {
+          Authorization: `Basic ${authData}`,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
       }
-    }
-  );
-  return response.data.access_token;
+    );
+    return response.data.access_token;
+  } catch (error) {
+    console.error("Erro na autenticação:", error?.response?.data || error.message);
+    throw new Error("Falha ao autenticar com a API Pix");
+  }
 };
 
 app.post('/criar-cobranca', async (req, res) => {
   try {
+    const valor = req.body.valor || "10.00";
     const accessToken = await auth();
 
     const body = {
@@ -31,14 +37,14 @@ app.post('/criar-cobranca', async (req, res) => {
         cpf: "12345678909"
       },
       valor: {
-        original: "10.00"
+        original: valor
       },
-      chave: "SEUEMAIL@seudominio.com.br", // Chave Pix
-      solicitacaoPagador: "Pagamento do serviço Bosco Jones"
+      chave: process.env.PIX_CHAVE, // Chave Pix definida no .env
+      solicitacaoPagador: "Pagamento via JBX Wallet"
     };
 
     const { data } = await axios.post(
-      `${process.env.PIX_SANDBOX_URL}/v2/cob`,
+      `${process.env.PIX_API_URL}/v2/cob`,
       body,
       {
         headers: {
@@ -48,10 +54,8 @@ app.post('/criar-cobranca', async (req, res) => {
       }
     );
 
-    const txid = data.txid;
-
     const qrResponse = await axios.get(
-      `${process.env.PIX_SANDBOX_URL}/v2/loc/${data.loc.id}/qrcode`,
+      `${process.env.PIX_API_URL}/v2/loc/${data.loc.id}/qrcode`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`
@@ -60,17 +64,18 @@ app.post('/criar-cobranca', async (req, res) => {
     );
 
     res.json({
-      txid,
+      txid: data.txid,
       location: data.loc.id,
       qrcode: qrResponse.data.qrcode,
       imagemQrcode: qrResponse.data.imagemQrcode
     });
+
   } catch (error) {
-    console.error(error?.response?.data || error.message);
+    console.error("Erro ao gerar cobrança:", error?.response?.data || error.message);
     res.status(500).json({ error: "Erro ao gerar cobrança Pix" });
   }
 });
 
 app.listen(3000, () => {
-  console.log('API Pix rodando em http://localhost:3000');
+  console.log('✅ API Pix rodando em http://localhost:3000');
 });
