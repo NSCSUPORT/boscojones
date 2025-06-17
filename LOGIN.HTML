@@ -20,84 +20,122 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     .container {
       background-color: #161b22;
-      padding: 2rem;
+      padding: 2rem 2.5rem;
       border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,255,100,0.1);
+      box-shadow: 0 0 25px rgba(0,255,100,0.15);
       width: 100%;
-      max-width: 360px;
+      max-width: 380px;
       text-align: center;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .container:focus-within {
+      box-shadow: 0 0 35px rgba(0,255,100,0.4);
+      outline: none;
     }
 
     h1 {
       color: #58a6ff;
-      margin-bottom: 1.5rem;
-      font-size: 1.5rem;
-      text-shadow: 0 0 4px #58a6ff66;
+      margin-bottom: 2rem;
+      font-size: 1.75rem;
+      font-weight: 700;
+      text-shadow: 0 0 6px #58a6ff88;
+      user-select: none;
     }
 
     .input-group {
       position: relative;
-      margin-bottom: 1rem;
+      margin-bottom: 1.2rem;
     }
 
     .input-group input {
       width: 100%;
-      padding: 12px 14px 12px 38px;
-      border: 1px solid #30363d;
-      border-radius: 6px;
+      padding: 14px 14px 14px 42px;
+      border: 1.8px solid #30363d;
+      border-radius: 8px;
       background-color: #0d1117;
       color: #c9d1d9;
-      font-size: 1rem;
+      font-size: 1.05rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      outline-offset: 2px;
+    }
+
+    .input-group input:focus {
+      border-color: #58a6ff;
+      box-shadow: 0 0 8px #58a6ff99;
+      outline: none;
+      background-color: #121820;
     }
 
     .input-group i {
       position: absolute;
       top: 50%;
-      left: 10px;
+      left: 12px;
       transform: translateY(-50%);
       color: #8b949e;
+      font-size: 1.2rem;
+      pointer-events: none;
+      user-select: none;
     }
 
     button {
       width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      font-size: 1rem;
+      padding: 14px;
+      margin-top: 12px;
+      font-size: 1.1rem;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       background: linear-gradient(90deg, #4caf50, #2e7d32);
       color: white;
-      font-weight: bold;
+      font-weight: 700;
       cursor: pointer;
-      transition: 0.3s;
-      box-shadow: 0 4px 10px rgba(76, 175, 80, 0.2);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 6px 14px rgba(76, 175, 80, 0.3);
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
     }
 
-    button:hover {
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    button:hover:not(:disabled) {
       background: linear-gradient(90deg, #388e3c, #1b5e20);
+      box-shadow: 0 8px 20px rgba(56, 142, 60, 0.5);
     }
 
     #btnRegister {
       background: linear-gradient(90deg, #1a73e8, #1251a3);
-      margin-top: 8px;
-      box-shadow: 0 4px 10px rgba(26, 115, 232, 0.4);
+      margin-top: 10px;
+      box-shadow: 0 6px 14px rgba(26, 115, 232, 0.5);
     }
 
-    #btnRegister:hover {
+    #btnRegister:hover:not(:disabled) {
       background: linear-gradient(90deg, #1251a3, #0d3472);
+      box-shadow: 0 8px 20px rgba(18, 81, 163, 0.6);
     }
 
     .message {
-      margin-top: 1rem;
-      padding: 10px;
-      border-radius: 4px;
+      margin-top: 1.25rem;
+      padding: 12px;
+      border-radius: 6px;
       background-color: #1c1f26;
       color: #00ff99;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
+      min-height: 40px;
+      line-height: 1.3;
+      user-select: none;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .error {
@@ -109,15 +147,16 @@
       position: fixed;
       bottom: 0;
       width: 100%;
-      padding: 12px;
+      padding: 14px;
       background: linear-gradient(45deg, #f0f000, #ff4500);
       color: #000;
       text-align: center;
       font-size: 1rem;
-      font-weight: bold;
+      font-weight: 700;
       letter-spacing: 2px;
       text-shadow: 0 0 8px #ff0000;
       animation: neon 1.5s ease-in-out infinite alternate;
+      user-select: none;
     }
 
     @keyframes neon {
@@ -125,29 +164,49 @@
       50% { text-shadow: 0 0 20px #ff4500; }
       100% { text-shadow: 0 0 5px #ff0000; }
     }
+
+    /* Responsividade */
+    @media (max-width: 400px) {
+      .container {
+        padding: 1.5rem 1.8rem;
+        max-width: 320px;
+      }
+
+      h1 {
+        font-size: 1.4rem;
+      }
+
+      button {
+        font-size: 1rem;
+        padding: 12px;
+      }
+    }
   </style>
+
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-  <div class="container">
-    <h1>BOSCO JONES WALLET</h1>
+  <main class="container" role="main" aria-label="Formulário de login Bosco Jones Wallet">
+    <h1 tabindex="0">BOSCO JONES WALLET</h1>
 
     <div class="input-group">
-      <i class="fas fa-envelope"></i>
-      <input type="email" id="email" placeholder="Email" />
+      <label for="email" class="sr-only">Email</label>
+      <i class="fas fa-envelope" aria-hidden="true"></i>
+      <input type="email" id="email" placeholder="Email" autocomplete="email" required aria-required="true" />
     </div>
 
     <div class="input-group">
-      <i class="fas fa-lock"></i>
-      <input type="password" id="password" placeholder="Senha" />
+      <label for="password" class="sr-only">Senha</label>
+      <i class="fas fa-lock" aria-hidden="true"></i>
+      <input type="password" id="password" placeholder="Senha" autocomplete="current-password" required aria-required="true" />
     </div>
 
-    <button id="btnLogin">Entrar</button>
-    <button id="btnRegister">Registrar</button>
+    <button id="btnLogin" type="button" aria-live="polite">Entrar</button>
+    <button id="btnRegister" type="button" aria-live="polite">Registrar</button>
 
-    <div id="authMessage" class="message"></div>
-  </div>
+    <div id="authMessage" role="alert" aria-live="assertive" class="message" aria-atomic="true"></div>
+  </main>
 
   <footer>
     © 2025 Bosco Jones Wallet — Desenvolvido por Lucas Januário — HoloFi Quantum
@@ -232,12 +291,27 @@
       }
     };
 
-    // Optional: redirect if already logged in
+    // Redirecionar se já logado
     auth.onAuthStateChanged(user => {
       if (user) {
         window.location.href = "wallet.html";
       }
     });
   </script>
+
+  <style>
+    /* Classe para esconder label visualmente mas acessível para leitores de tela */
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0,0,0,0) !important;
+      border: 0 !important;
+    }
+  </style>
+
 </body>
 </html>
