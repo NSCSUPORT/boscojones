@@ -2,10 +2,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" href="logo.ico" />
+  <title>Wallet Bosco Jones</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>JBX1000 CRC-16</title>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -99,192 +97,199 @@
 </head>
 <body>
   <div class="container">
-    <h1>Carteira JBX1000 CRC</h1>
-    <label for="valor">Valor (R$):</label>
-    <input type="number" id="valor" placeholder="0,00" min="0.01" step="0.01" />
-    
-    <label for="chavePix">Chave Pix (para saque):</label>
-    <input type="text" id="chavePix" placeholder="Insira sua chave Pix" />
+    <h1>Wallet Bosco Jones</h1>
 
-    <button id="btn-deposit" class="btn">Depositar</button>
-    <button id="btn-withdraw" class="btn">Sacar</button>
-    <button id="btn-generate-pix">Gerar Pix Copia e Cola (5% taxa)</button>
+    <label for="valor">Valor (R$):</label>
+    <input type="number" id="valor" placeholder="Ex: 100,00" step="0.01" min="0" />
+
+    <label for="chavePix">Chave Pix (para saque):</label>
+    <input type="text" id="chavePix" placeholder="Ex: seu-email@dominio.com" />
+
+    <div style="overflow: hidden;">
+      <button id="btn-deposit" class="btn">Depositar</button>
+      <button id="btn-withdraw" class="btn">Sacar</button>
+    </div>
+
+    <button id="btn-generate-pix">Gerar Pix</button>
+    <button id="btn-clear-history">Limpar Histórico</button>
 
     <div id="saldo-container">Saldo: <span id="saldo">R$ 0,00</span></div>
-    <div id="qrcode-container"><span>QR Code e Copia e Cola aparecerão aqui</span></div>
-    <button id="btn-clear-history">Limpar Histórico</button>
+
+    <div id="qrcode-container">
+      <span>QR Code e Copia e Cola aparecerão aqui</span>
+    </div>
+
     <div id="history-container">
       <h2>Histórico de Transações</h2>
       <div id="history-list">Nenhuma transação registrada.</div>
     </div>
   </div>
 
-<script>
-(() => {
-  const valorInput = document.getElementById("valor");
-  const chavePixInput = document.getElementById("chavePix");
-  const btnDeposit = document.getElementById("btn-deposit");
-  const btnWithdraw = document.getElementById("btn-withdraw");
-  const btnGeneratePix = document.getElementById("btn-generate-pix");
-  const btnClearHistory = document.getElementById("btn-clear-history");
-  const saldoSpan = document.getElementById("saldo");
-  const qrcodeContainer = document.getElementById("qrcode-container");
-  const historyList = document.getElementById("history-list");
+  <script>
+    (() => {
+      const valorInput = document.getElementById("valor");
+      const chavePixInput = document.getElementById("chavePix");
+      const btnDeposit = document.getElementById("btn-deposit");
+      const btnWithdraw = document.getElementById("btn-withdraw");
+      const btnGeneratePix = document.getElementById("btn-generate-pix");
+      const btnClearHistory = document.getElementById("btn-clear-history");
+      const saldoSpan = document.getElementById("saldo");
+      const qrcodeContainer = document.getElementById("qrcode-container");
+      const historyList = document.getElementById("history-list");
 
-  let saldo = 0;
-  let history = [];
+      let saldo = 0;
+      let history = [];
 
-  async function carregarSaldo() {
-    try {
-      const res = await fetch("http://localhost:3000/saldo");
-      const data = await res.json();
-      saldo = parseFloat(data.saldo || 0);
-      atualizarSaldo();
-    } catch (err) {
-      console.error("Erro ao carregar saldo:", err);
-    }
-  }
+      const API_BASE = "/api";
 
-  function atualizarSaldo() {
-    saldoSpan.textContent = `R$ ${saldo.toFixed(2).replace('.', ',')}`;
-  }
-
-  function atualizarHistorico() {
-    if (history.length === 0) {
-      historyList.textContent = "Nenhuma transação registrada.";
-      return;
-    }
-    historyList.innerHTML = "";
-    history.forEach(tx => {
-      const div = document.createElement("div");
-      div.className = `transaction ${tx.type}`;
-      div.innerHTML = `
-        <div class="type">${tx.type}</div>
-        <div>R$ ${tx.amount.toFixed(2).replace('.', ',')}</div>
-        <div class="date">${new Date(tx.date).toLocaleString('pt-BR')}</div>
-      `;
-      historyList.appendChild(div);
-    });
-  }
-
-  function addTransacao(type, amount) {
-    history.unshift({ type, amount, date: new Date().toISOString() });
-    if (history.length > 50) history.pop();
-    atualizarHistorico();
-  }
-
-  function limparPix() {
-    qrcodeContainer.innerHTML = "<span>QR Code e Copia e Cola aparecerão aqui</span>";
-  }
-
-  async function gerarPix() {
-    limparPix();
-    if (saldo <= 0) {
-      alert("Saldo insuficiente para gerar Pix.");
-      return;
-    }
-
-    try {
-      const response = await fetch("http://localhost:3000/criar-cobranca", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ valor: saldo.toFixed(2) })
-      });
-
-      const data = await response.json();
-
-      if (!data.qrcode || !data.imagemQrcode) {
-        alert("Erro ao gerar cobrança Pix.");
-        return;
+      async function carregarSaldo() {
+        try {
+          const res = await fetch(`${API_BASE}/saldo`);
+          const data = await res.json();
+          saldo = parseFloat(data.saldo || 0);
+          atualizarSaldo();
+        } catch (err) {
+          console.error("Erro ao carregar saldo:", err);
+        }
       }
 
-      const pre = document.createElement("pre");
-      pre.textContent = data.qrcode;
-      qrcodeContainer.appendChild(pre);
+      function atualizarSaldo() {
+        saldoSpan.textContent = `R$ ${saldo.toFixed(2).replace('.', ',')}`;
+      }
 
-      const img = document.createElement("img");
-      img.src = data.imagemQrcode;
-      img.alt = "QR Code Pix";
-      img.style.marginTop = "10px";
-      img.style.maxWidth = "200px";
-      qrcodeContainer.appendChild(img);
+      function atualizarHistorico() {
+        if (history.length === 0) {
+          historyList.textContent = "Nenhuma transação registrada.";
+          return;
+        }
+        historyList.innerHTML = "";
+        history.forEach(tx => {
+          const div = document.createElement("div");
+          div.className = `transaction ${tx.type}`;
+          div.innerHTML = `
+            <div class="type">${tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}</div>
+            <div>R$ ${tx.amount.toFixed(2).replace('.', ',')}</div>
+            <div class="date">${new Date(tx.date).toLocaleString('pt-BR')}</div>
+          `;
+          historyList.appendChild(div);
+        });
+      }
 
-      addTransacao("pix", saldo);
-      saldo = 0;
-      atualizarSaldo();
-    } catch (err) {
-      console.error("Erro ao gerar Pix:", err);
-      alert("Erro ao gerar cobrança Pix.");
-    }
-  }
+      function addTransacao(type, amount) {
+        history.unshift({ type, amount, date: new Date().toISOString() });
+        if (history.length > 50) history.pop();
+        atualizarHistorico();
+      }
 
-  btnDeposit.addEventListener("click", async () => {
-    const valor = parseFloat(valorInput.value.replace(',', '.'));
-    if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
+      function limparPix() {
+        qrcodeContainer.innerHTML = "<span>QR Code e Copia e Cola aparecerão aqui</span>";
+      }
 
-    try {
-      const response = await fetch("http://localhost:3000/depositar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ valor })
+      async function gerarPix() {
+        limparPix();
+        if (saldo <= 0) {
+          alert("Saldo insuficiente para gerar Pix.");
+          return;
+        }
+
+        try {
+          const response = await fetch(`${API_BASE}/criar-cobranca`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ valor: saldo.toFixed(2) })
+          });
+
+          const data = await response.json();
+
+          if (!data.qrcode || !data.imagemQrcode) {
+            alert("Erro ao gerar cobrança Pix.");
+            return;
+          }
+
+          const pre = document.createElement("pre");
+          pre.textContent = data.qrcode;
+          qrcodeContainer.appendChild(pre);
+
+          const img = document.createElement("img");
+          img.src = data.imagemQrcode;
+          img.alt = "QR Code Pix";
+          img.style.marginTop = "10px";
+          img.style.maxWidth = "200px";
+          qrcodeContainer.appendChild(img);
+
+          addTransacao("pix", saldo);
+          saldo = 0;
+          atualizarSaldo();
+        } catch (err) {
+          console.error("Erro ao gerar Pix:", err);
+          alert("Erro ao gerar cobrança Pix.");
+        }
+      }
+
+      btnDeposit.addEventListener("click", async () => {
+        const valor = parseFloat(valorInput.value.replace(',', '.'));
+        if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
+
+        try {
+          const response = await fetch(`${API_BASE}/depositar`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ valor })
+          });
+          const data = await response.json();
+          if (data.error) return alert(data.error);
+
+          addTransacao("deposit", valor);
+          await carregarSaldo();
+          limparPix();
+          valorInput.value = "";
+        } catch (err) {
+          console.error("Erro no depósito:", err);
+          alert("Erro ao depositar.");
+        }
       });
-      const data = await response.json();
-      if (data.error) return alert(data.error);
 
-      addTransacao("deposit", valor);
-      await carregarSaldo();
-      limparPix();
-      valorInput.value = "";
-    } catch (err) {
-      console.error("Erro no depósito:", err);
-      alert("Erro ao depositar.");
-    }
-  });
+      btnWithdraw.addEventListener("click", async () => {
+        const valor = parseFloat(valorInput.value.replace(',', '.'));
+        const chave = chavePixInput.value.trim();
+        if (!chave) return alert("Informe a chave Pix para saque.");
+        if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
+        if (valor > saldo) return alert("Saldo insuficiente.");
 
-  btnWithdraw.addEventListener("click", async () => {
-    const valor = parseFloat(valorInput.value.replace(',', '.'));
-    const chave = chavePixInput.value.trim();
-    if (!chave) return alert("Informe a chave Pix para saque.");
-    if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
-    if (valor > saldo) return alert("Saldo insuficiente.");
+        try {
+          const response = await fetch(`${API_BASE}/sacar`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ valor, chavePix: chave })
+          });
+          const data = await response.json();
+          if (data.error) return alert(data.error);
 
-    try {
-      const response = await fetch("http://localhost:3000/sacar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ valor })
+          addTransacao("withdraw", valor);
+          await carregarSaldo();
+          limparPix();
+          valorInput.value = "";
+          chavePixInput.value = "";
+        } catch (err) {
+          console.error("Erro no saque:", err);
+          alert("Erro ao sacar.");
+        }
       });
-      const data = await response.json();
-      if (data.error) return alert(data.error);
 
-      addTransacao("withdraw", valor);
-      await carregarSaldo();
-      limparPix();
-      valorInput.value = "";
-      chavePixInput.value = "";
-    } catch (err) {
-      console.error("Erro no saque:", err);
-      alert("Erro ao sacar.");
-    }
-  });
+      btnGeneratePix.addEventListener("click", gerarPix);
 
-  btnGeneratePix.addEventListener("click", gerarPix);
+      btnClearHistory.addEventListener("click", () => {
+        if (confirm("Limpar histórico de transações?")) {
+          history = [];
+          atualizarHistorico();
+          limparPix();
+        }
+      });
 
-  btnClearHistory.addEventListener("click", () => {
-    if (confirm("Limpar histórico de transações?")) {
-      history = [];
+      // Inicialização
+      carregarSaldo();
       atualizarHistorico();
-      limparPix();
-    }
-  });
-
-  // Inicialização
-  carregarSaldo();
-  atualizarHistorico();
-})();
-</script>
-
-
-
+    })();
+  </script>
 </body>
 </html>
