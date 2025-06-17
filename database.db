@@ -1,0 +1,112 @@
+const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
+
+// Cria (ou abre) o arquivo database.db na pasta atual
+const dbPath = path.join(__dirname, 'database.db');
+const db = new sqlite3.Database(dbPath, (err) => {
+  if (err) {
+    console.error("Erro ao abrir banco SQLite:", err.message);
+    process.exit(1);
+  }
+  console.log("Banco SQLite aberto em", dbPath);
+});
+
+// Cria tabela 'transacoes' se não existir
+db.serialize(() => {
+  db.run(`
+    CREATE TABLE IF NOT EXISTS transacoes (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      tipo TEXT NOT NULL,       -- deposit, withdraw, pix
+      valor REAL NOT NULL,
+      data TEXT NOT NULL
+    )
+  `);
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS saldo (
+      id INTEGER PRIMARY KEY CHECK (id = 1),
+      valor REAL NOT NULL
+    )
+  `);
+
+  // Insere saldo inicial 0 se tabela saldo estiver vazia
+  db.get(`SELECT COUNT(*) as count FROM saldo`, (err, row) => {
+    if (err) {
+      console.error("Erro ao verificar saldo:", err.message);
+      return;
+    }
+    if (row.count === 0) {
+      db.run(`INSERT INTO saldo(id, valor) VALUES(1, 0)`);
+      console.log("Saldo inicial criado com valor 0");
+    }
+  });
+});
+
+// Função para pegar saldo atual
+function pegarSaldo(callback) {
+  db.get(`SELECT valor FROM saldo WHERE id=1`, (err, row) => {
+    if (err) {
+      console.error("Erro ao pegar saldo:", err.message);
+      return callback(err);
+    }
+    callback(null, row ? row.valor : 0);
+  });
+}
+
+// Função para atualizar saldo
+function atualizarSaldo(novoValor, callback) {
+  db.run(`UPDATE saldo SET valor = ? WHERE id=1`, [novoValor], function(err) {
+    if (err) {
+      console.error("Erro ao atualizar saldo:", err.message);
+      return callback(err);
+    }
+    callback(null);
+  });
+}
+
+// Função para adicionar transação
+function adicionarTransacao(tipo, valor, callback) {
+  const data = new Date().toISOString();
+  db.run(`INSERT INTO transacoes(tipo, valor, data) VALUES (?, ?, ?)`, [tipo, valor, data], function(err) {
+    if (err) {
+      console.error("Erro ao adicionar transação:", err.message);
+      return callback(err);
+    }
+    callback(null);
+  });
+}
+
+// Exemplo: depositar valor
+function depositar(valor, callback) {
+  pegarSaldo((err, saldoAtual) => {
+    if (err) return callback(err);
+    const novoSaldo = saldoAtual + valor;
+    atualizarSaldo(novoSaldo, (err) => {
+      if (err) return callback(err);
+      adicionarTransacao('deposit', valor, callback);
+    });
+  });
+}
+
+// Exemplo: sacar valor
+function sacar(valor, callback) {
+  pegarSaldo((err, saldoAtual) => {
+    if (err) return callback(err);
+    if (valor > saldoAtual) return callback(new Error('Saldo insuficiente'));
+    const novoSaldo = saldoAtual - valor;
+    atualizarSaldo(novoSaldo, (err) => {
+      if (err) return callback(err);
+      adicionarTransacao('withdraw', valor, callback);
+    });
+  });
+}
+
+// Exporta funções para usar no app
+module.exports = {
+  db,
+  pegarSaldo,
+  atualizarSaldo,
+  adicionarTransacao,
+  depositar,
+  sacar,
+};
