@@ -127,16 +127,16 @@
   const STORAGE_SALDO = "jbx1000_saldo";
   const STORAGE_HISTORY = "jbx1000_history";
 
-  // Inicializa saldo e histórico do localStorage
-  let saldo = parseFloat(localStorage.getItem(STORAGE_SALDO)) || 0;
-  let history = JSON.parse(localStorage.getItem(STORAGE_HISTORY)) || [];
+  // Zera tudo ao iniciar (modo produção)
+  localStorage.removeItem(STORAGE_SALDO);
+  localStorage.removeItem(STORAGE_HISTORY);
+  let saldo = 0;
+  let history = [];
 
-  // Atualiza saldo no HTML
   function atualizarSaldo() {
     saldoSpan.textContent = `R$ ${saldo.toFixed(2).replace('.', ',')}`;
   }
 
-  // Atualiza histórico no HTML
   function atualizarHistorico() {
     if (history.length === 0) {
       historyList.textContent = "Nenhuma transação registrada.";
@@ -155,13 +155,11 @@
     });
   }
 
-  // Salva saldo e histórico no localStorage
   function salvarEstado() {
     localStorage.setItem(STORAGE_SALDO, saldo.toFixed(2));
     localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
   }
 
-  // Adiciona transação no histórico
   function addTransacao(type, amount) {
     history.unshift({
       type,
@@ -173,32 +171,27 @@
     atualizarHistorico();
   }
 
-  // CRC-16 CCITT-FALSE para Pix
   function crc16ccitt(str) {
     let crc = 0xFFFF;
     for (let i = 0; i < str.length; i++) {
       crc ^= str.charCodeAt(i) << 8;
       for (let j = 0; j < 8; j++) {
-        if ((crc & 0x8000) !== 0) crc = (crc << 1) ^ 0x1021;
-        else crc <<= 1;
+        crc = (crc & 0x8000) ? (crc << 1) ^ 0x1021 : crc << 1;
         crc &= 0xFFFF;
       }
     }
     return crc.toString(16).toUpperCase().padStart(4, '0');
   }
 
-  // Formata valor para Pix (em centavos, sem vírgula)
   function formatPixValue(val) {
     return Math.round(val * 100).toString();
   }
 
-  // Cria campo do payload Pix
   function campo(id, valor) {
     const len = valor.length.toString().padStart(2, '0');
     return id + len + valor;
   }
 
-  // Gera payload Pix para QR Code e copia e cola
   function gerarPayloadPix(valorEmCentavos) {
     const chavePix = "48761013889";
     const nome = "Lucas Januário".toUpperCase();
@@ -206,29 +199,17 @@
     const txid = "JBX1000";
 
     let payload = "";
-    // Payload Format Indicator
     payload += campo("00", "01");
-    // Merchant Account Information
-    let merchantInfo = "";
-    merchantInfo += campo("00", "br.gov.bcb.pix");
-    merchantInfo += campo("01", chavePix);
+    let merchantInfo = campo("00", "br.gov.bcb.pix") + campo("01", chavePix);
     payload += campo("26", merchantInfo);
-    // Merchant Category Code
     payload += campo("52", "0000");
-    // Transaction Currency (BRL)
     payload += campo("53", "986");
-    // Transaction Amount
-    payload += campo("54", valorEmCentavos ? (parseFloat(valorEmCentavos)/100).toFixed(2) : "");
-    // Country Code
+    payload += campo("54", (parseFloat(valorEmCentavos)/100).toFixed(2));
     payload += campo("58", "BR");
-    // Merchant Name
     payload += campo("59", nome.substring(0,25));
-    // Merchant City
     payload += campo("60", cidade.substring(0,15));
-    // Additional Data Field Template
     let addData = campo("05", txid);
     payload += campo("62", addData);
-    // CRC16 Checksum
     let payloadCrc = payload + "6304";
     let crc = crc16ccitt(payloadCrc);
     payload += campo("63", crc);
@@ -236,35 +217,22 @@
     return payload;
   }
 
-  // Limpa container do Pix
   function limparPix() {
     qrcodeContainer.innerHTML = "<span>QR Code e Copia e Cola aparecerão aqui</span>";
   }
 
-  // Gera QR Code e copia e cola Pix
   function gerarPix() {
     limparPix();
-
     if (saldo <= 0) {
       alert("Saldo insuficiente para gerar Pix.");
       return;
     }
-
-    // Valor + 5% taxa
     const valorComTaxa = saldo * 1.05;
-
-    // valor em centavos (string)
     const valorPixCents = formatPixValue(valorComTaxa);
-
-    // Gera payload
     const payload = gerarPayloadPix(valorPixCents);
-
-    // Mostra payload texto
     const pre = document.createElement("pre");
     pre.textContent = payload;
     qrcodeContainer.appendChild(pre);
-
-    // Gera QR Code no canvas
     QRCode.toCanvas(payload, { width: 200, color: {dark: '#00ffb2', light: '#11161c'} }, (error, canvas) => {
       if (error) {
         console.error(error);
@@ -275,7 +243,6 @@
     });
   }
 
-  // Evento Deposit
   btnDeposit.addEventListener("click", () => {
     let valor = parseFloat(valorInput.value.replace(',', '.'));
     if (isNaN(valor) || valor <= 0) {
@@ -289,7 +256,6 @@
     limparPix();
   });
 
-  // Evento Withdraw
   btnWithdraw.addEventListener("click", () => {
     let valor = parseFloat(valorInput.value.replace(',', '.'));
     if (isNaN(valor) || valor <= 0) {
@@ -307,12 +273,10 @@
     limparPix();
   });
 
-  // Evento gerar Pix
   btnGeneratePix.addEventListener("click", () => {
     gerarPix();
   });
 
-  // Evento limpar histórico
   btnClearHistory.addEventListener("click", () => {
     if (confirm("Tem certeza que deseja limpar o histórico de transações?")) {
       history = [];
@@ -322,7 +286,6 @@
     }
   });
 
-  // Inicializa UI
   atualizarSaldo();
   atualizarHistorico();
   limparPix();
