@@ -2,294 +2,135 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Wallet Bosco Jones</title>
+  <title>Wallet - Bosco Jones</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="logo.ico" />
   <style>
-    * { box-sizing: border-box; }
     body {
-      background: #0d1117; color: #e0e0e0;
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0; padding: 0 8px;
-      display: flex; justify-content: center; min-height: 100vh; align-items: flex-start; padding-top: 20px;
-      font-size: 14px;
+      background-color: #0d1117;
+      color: #c9d1d9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
     }
-    .container {
-      width: 100%; max-width: 400px;
-      background: #1c1f26; border-radius: 12px; padding: 18px; box-shadow: 0 0 10px #000a;
-    }
-    h1 {
-      text-align: center; margin-bottom: 16px; color: #00ffb2;
-      font-weight: 700; font-size: 1.3rem;
-    }
-    label {
-      display: block; margin: 10px 0 5px; font-weight: 700; font-size: 0.9rem;
-    }
-    input[type="number"],
-    input[type="text"] {
-      width: 100%; padding: 8px; border: 1px solid #444;
-      border-radius: 6px; background-color: #0f141a; color: #fff;
-      font-size: 0.9rem;
-    }
-    .btn {
-      width: 48%; padding: 10px; margin-top: 12px;
-      border: none; border-radius: 8px; font-weight: 700;
-      cursor: pointer; transition: background 0.3s; font-size: 0.9rem;
-    }
-    #btn-deposit { background-color: #28a745; color: white; }
-    #btn-deposit:hover { background-color: #218838; }
-    #btn-withdraw { background-color: #dc3545; color: white; float: right; }
-    #btn-withdraw:hover { background-color: #c82333; }
-    #btn-generate-pix {
-      width: 100%; margin-top: 18px; padding: 12px;
-      background-color: #007bff; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;
-      font-size: 1rem;
-    }
-    #btn-generate-pix:hover { background-color: #0056b3; }
-    #btn-clear-history {
-      width: 100%; margin-top: 14px; padding: 8px;
-      background-color: #666; border: none; border-radius: 8px;
-      color: white; cursor: pointer; font-weight: 700;
-      font-size: 0.9rem;
-    }
-    #btn-clear-history:hover { background-color: #444; }
-    #saldo-container {
-      text-align: center; margin-top: 18px;
-      font-size: 1rem; color: #1efcb8; font-weight: 700;
-    }
-    #qrcode-container {
-      margin-top: 18px; padding: 14px; background-color: #11161c;
-      border-radius: 10px; text-align: center; min-height: 220px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      color: #666;
-      word-break: break-word;
-    }
-    pre {
-      background: #000000cc; padding: 8px; margin-top: 8px; border-radius: 6px;
-      color: #00ffb2; font-size: 0.85rem; user-select: all; white-space: pre-wrap; word-break: break-word;
-      max-height: 100px; overflow-y: auto;
+
+    .wallet-container {
+      background-color: #161b22;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,255,100,0.1);
       width: 100%;
+      max-width: 400px;
+      text-align: center;
     }
-    #history-container {
-      margin-top: 28px; max-height: 220px; overflow-y: auto;
-      background: #10131a; border-radius: 10px; padding: 12px; font-size: 0.85rem;
+
+    h1 {
+      color: #58a6ff;
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+      text-shadow: 0 0 4px #58a6ff66;
     }
-    #history-container h2 {
-      margin-top: 0; font-weight: 700; color: #0ff; text-align: center; margin-bottom: 8px;
+
+    #userEmail {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: #00ff99;
+      word-break: break-all;
+    }
+
+    button {
+      padding: 12px 20px;
       font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #f44336, #d32f2f);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 4px 10px rgba(244, 67, 54, 0.2);
     }
-    .transaction {
-      padding: 4px 6px; border-bottom: 1px solid #222;
-      display: flex; justify-content: space-between; align-items: center;
+
+    button:hover {
+      background: linear-gradient(90deg, #d32f2f, #a12727);
     }
-    .transaction:last-child { border-bottom: none; }
-    .transaction .type { font-weight: 700; text-transform: capitalize; font-size: 0.85rem; flex: 1; }
-    .transaction.deposit { color: #28a745; }
-    .transaction.withdraw { color: #dc3545; }
-    .transaction.pix { color: #007bff; }
-    .transaction .date { font-size: 0.7rem; color: #aaa; font-style: italic; flex: 1.5; text-align: right; }
-    @media (max-width: 420px) {
-      .btn { width: 100%; margin-top: 8px; float: none; }
-      #btn-withdraw { float: none; }
-      #btn-generate-pix { font-size: 0.95rem; }
-      h1 { font-size: 1.1rem; }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(45deg, #f0f000, #ff4500);
+      color: #000;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-shadow: 0 0 8px #ff0000;
+      animation: neon 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes neon {
+      0% { text-shadow: 0 0 5px #ff0000; }
+      50% { text-shadow: 0 0 20px #ff4500; }
+      100% { text-shadow: 0 0 5px #ff0000; }
     }
   </style>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 </head>
 <body>
-  <div class="container">
-    <h1>Wallet Bosco Jones</h1>
-
-    <label for="valor">Valor (R$):</label>
-    <input type="number" id="valor" placeholder="Ex: 100,00" step="0.01" min="0" />
-
-    <label for="chavePix">Chave Pix (para saque):</label>
-    <input type="text" id="chavePix" placeholder="Ex: seu-email@dominio.com" />
-
-    <div style="overflow: hidden;">
-      <button id="btn-deposit" class="btn">Depositar</button>
-      <button id="btn-withdraw" class="btn">Sacar</button>
-    </div>
-
-    <button id="btn-generate-pix">Gerar Pix</button>
-    <button id="btn-clear-history">Limpar Histórico</button>
-
-    <div id="saldo-container">Saldo: <span id="saldo">R$ 0,00</span></div>
-
-    <div id="qrcode-container">
-      <span>QR Code e Copia e Cola aparecerão aqui</span>
-    </div>
-
-    <div id="history-container">
-      <h2>Histórico de Transações</h2>
-      <div id="history-list">Nenhuma transação registrada.</div>
-    </div>
+  <div class="wallet-container">
+    <h1>Bem-vindo à Bosco Jones Wallet</h1>
+    <div id="userEmail">Carregando email...</div>
+    <button id="btnLogout">Sair</button>
   </div>
 
+  <footer>
+    © 2025 Bosco Jones Wallet — Desenvolvido por Lucas Januário — HoloFi Quantum
+  </footer>
+
   <script>
-    (() => {
-      const valorInput = document.getElementById("valor");
-      const chavePixInput = document.getElementById("chavePix");
-      const btnDeposit = document.getElementById("btn-deposit");
-      const btnWithdraw = document.getElementById("btn-withdraw");
-      const btnGeneratePix = document.getElementById("btn-generate-pix");
-      const btnClearHistory = document.getElementById("btn-clear-history");
-      const saldoSpan = document.getElementById("saldo");
-      const qrcodeContainer = document.getElementById("qrcode-container");
-      const historyList = document.getElementById("history-list");
+    const firebaseConfig = {
+      apiKey: "AIzaSyDzfZvQi-oaOUWPgSOu8BtTINa_LO2ZoLc",
+      authDomain: "bosco-jones-wallet.firebaseapp.com",
+      projectId: "bosco-jones-wallet",
+      storageBucket: "bosco-jones-wallet.firebasestorage.app",
+      messagingSenderId: "1829673164",
+      appId: "1:1829673164:web:37c947c8aafe1af72a8a69",
+      measurementId: "G-6SZH0MHRGE"
+    };
 
-      let saldo = 0;
-      let history = [];
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-      const API_BASE = "/api";
+    const userEmailDiv = document.getElementById('userEmail');
+    const btnLogout = document.getElementById('btnLogout');
 
-      async function carregarSaldo() {
-        try {
-          const res = await fetch(`${API_BASE}/saldo`);
-          const data = await res.json();
-          saldo = parseFloat(data.saldo || 0);
-          atualizarSaldo();
-        } catch (err) {
-          console.error("Erro ao carregar saldo:", err);
-        }
+    // Verifica se usuário está logado e mostra email
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        userEmailDiv.textContent = `Você está logado como: ${user.email}`;
+      } else {
+        // Se não estiver logado, redireciona para login
+        window.location.href = 'login.html';
       }
+    });
 
-      function atualizarSaldo() {
-        saldoSpan.textContent = `R$ ${saldo.toFixed(2).replace('.', ',')}`;
-      }
-
-      function atualizarHistorico() {
-        if (history.length === 0) {
-          historyList.textContent = "Nenhuma transação registrada.";
-          return;
-        }
-        historyList.innerHTML = "";
-        history.forEach(tx => {
-          const div = document.createElement("div");
-          div.className = `transaction ${tx.type}`;
-          div.innerHTML = `
-            <div class="type">${tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}</div>
-            <div>R$ ${tx.amount.toFixed(2).replace('.', ',')}</div>
-            <div class="date">${new Date(tx.date).toLocaleString('pt-BR')}</div>
-          `;
-          historyList.appendChild(div);
-        });
-      }
-
-      function addTransacao(type, amount) {
-        history.unshift({ type, amount, date: new Date().toISOString() });
-        if (history.length > 50) history.pop();
-        atualizarHistorico();
-      }
-
-      function limparPix() {
-        qrcodeContainer.innerHTML = "<span>QR Code e Copia e Cola aparecerão aqui</span>";
-      }
-
-      async function gerarPix() {
-        limparPix();
-        if (saldo <= 0) {
-          alert("Saldo insuficiente para gerar Pix.");
-          return;
-        }
-
-        try {
-          const response = await fetch(`${API_BASE}/criar-cobranca`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ valor: saldo.toFixed(2) })
-          });
-
-          const data = await response.json();
-
-          if (!data.qrcode || !data.imagemQrcode) {
-            alert("Erro ao gerar cobrança Pix.");
-            return;
-          }
-
-          const pre = document.createElement("pre");
-          pre.textContent = data.qrcode;
-          qrcodeContainer.appendChild(pre);
-
-          const img = document.createElement("img");
-          img.src = data.imagemQrcode;
-          img.alt = "QR Code Pix";
-          img.style.marginTop = "10px";
-          img.style.maxWidth = "200px";
-          qrcodeContainer.appendChild(img);
-
-          addTransacao("pix", saldo);
-          saldo = 0;
-          atualizarSaldo();
-        } catch (err) {
-          console.error("Erro ao gerar Pix:", err);
-          alert("Erro ao gerar cobrança Pix.");
-        }
-      }
-
-      btnDeposit.addEventListener("click", async () => {
-        const valor = parseFloat(valorInput.value.replace(',', '.'));
-        if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
-
-        try {
-          const response = await fetch(`${API_BASE}/depositar`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ valor })
-          });
-          const data = await response.json();
-          if (data.error) return alert(data.error);
-
-          addTransacao("deposit", valor);
-          await carregarSaldo();
-          limparPix();
-          valorInput.value = "";
-        } catch (err) {
-          console.error("Erro no depósito:", err);
-          alert("Erro ao depositar.");
-        }
+    // Logout ao clicar no botão
+    btnLogout.onclick = () => {
+      auth.signOut().then(() => {
+        window.location.href = 'login.html';
+      }).catch((error) => {
+        alert("Erro ao sair: " + error.message);
       });
-
-      btnWithdraw.addEventListener("click", async () => {
-        const valor = parseFloat(valorInput.value.replace(',', '.'));
-        const chave = chavePixInput.value.trim();
-        if (!chave) return alert("Informe a chave Pix para saque.");
-        if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
-        if (valor > saldo) return alert("Saldo insuficiente.");
-
-        try {
-          const response = await fetch(`${API_BASE}/sacar`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ valor, chavePix: chave })
-          });
-          const data = await response.json();
-          if (data.error) return alert(data.error);
-
-          addTransacao("withdraw", valor);
-          await carregarSaldo();
-          limparPix();
-          valorInput.value = "";
-          chavePixInput.value = "";
-        } catch (err) {
-          console.error("Erro no saque:", err);
-          alert("Erro ao sacar.");
-        }
-      });
-
-      btnGeneratePix.addEventListener("click", gerarPix);
-
-      btnClearHistory.addEventListener("click", () => {
-        if (confirm("Limpar histórico de transações?")) {
-          history = [];
-          atualizarHistorico();
-          limparPix();
-        }
-      });
-
-      // Inicialização
-      carregarSaldo();
-      atualizarHistorico();
-    })();
+    };
   </script>
 </body>
 </html>
