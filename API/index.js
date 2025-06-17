@@ -1,4 +1,5 @@
-
+app.use('/api', registerRoute);
+app.use('/api', loginRoute);
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
