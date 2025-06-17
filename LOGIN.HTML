@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>JBX1000 - Login e Registro</title>
   <style>
-    /* Reset simples para body */
     body {
       background: #0d1117;
       color: #e0e0e0;
@@ -14,8 +13,8 @@
       margin: 0;
       padding: 0;
       display: flex;
-      justify-content: center; /* horizontal */
-      align-items: center;     /* vertical */
+      justify-content: center;
+      align-items: center;
       height: 100vh;
       overflow: hidden;
     }
@@ -67,7 +66,7 @@
       color: #fff;
       font-size: 1rem;
       transition: border-color 0.3s;
-      outline-offset: 2px;
+      outline-offset: 3px;
     }
     input[type="email"]:focus,
     input[type="password"]:focus {
@@ -127,7 +126,6 @@
       user-select: none;
     }
 
-    /* Para telas pequenas */
     @media (max-width: 420px) {
       .container {
         padding: 25px 20px 35px;
@@ -153,7 +151,7 @@
 
   <!-- Formulário Login -->
   <form id="form-login" class="active" autocomplete="off" spellcheck="false">
-    <h1>BOSCO JONES WALLET </h1>
+    <h1>BOSCO JONES WALLET</h1>
     <label for="login-email">Email</label>
     <input type="email" id="login-email" placeholder="seuemail@exemplo.com" required autocomplete="username" />
     <label for="login-senha">Senha</label>
@@ -189,7 +187,6 @@
     formLogin.classList.remove('active');
     formRegister.classList.add('active');
     clearMessages();
-    // Foco no primeiro campo do registro
     document.getElementById('reg-email').focus();
   });
 
@@ -197,7 +194,6 @@
     formRegister.classList.remove('active');
     formLogin.classList.add('active');
     clearMessages();
-    // Foco no primeiro campo do login
     document.getElementById('login-email').focus();
   });
 
@@ -205,9 +201,9 @@
     const loginMsg = document.getElementById('login-msg');
     const registerMsg = document.getElementById('register-msg');
     loginMsg.textContent = '';
+    loginMsg.style.color = '';
     registerMsg.textContent = '';
-    loginMsg.style.color = '#ff6666';
-    registerMsg.style.color = '#ff6666';
+    registerMsg.style.color = '';
   }
 
   formRegister.addEventListener('submit', async (e) => {
@@ -218,7 +214,9 @@
     const senha = document.getElementById('reg-senha').value;
 
     if (!email || senha.length < 6) {
-      document.getElementById('register-msg').textContent = 'Preencha todos os campos corretamente.';
+      const msg = document.getElementById('register-msg');
+      msg.textContent = 'Preencha todos os campos corretamente.';
+      msg.style.color = '#ff6666';
       return;
     }
 
@@ -229,17 +227,19 @@
         body: JSON.stringify({ email, senha }),
       });
       const data = await res.json();
+      const msg = document.getElementById('register-msg');
       if (res.ok) {
-        document.getElementById('register-msg').style.color = 'lightgreen';
-        document.getElementById('register-msg').textContent = 'Registro realizado com sucesso!';
+        msg.style.color = 'lightgreen';
+        msg.textContent = 'Registro realizado com sucesso!';
         formRegister.reset();
       } else {
-        document.getElementById('register-msg').style.color = '#ff6666';
-        document.getElementById('register-msg').textContent = data.error || 'Erro ao registrar.';
+        msg.style.color = '#ff6666';
+        msg.textContent = data.error || 'Erro ao registrar.';
       }
     } catch (err) {
-      document.getElementById('register-msg').style.color = '#ff6666';
-      document.getElementById('register-msg').textContent = 'Erro ao conectar ao servidor.';
+      const msg = document.getElementById('register-msg');
+      msg.style.color = '#ff6666';
+      msg.textContent = 'Erro ao conectar ao servidor.';
       console.error(err);
     }
   });
@@ -252,7 +252,9 @@
     const senha = document.getElementById('login-senha').value;
 
     if (!email || senha.length < 6) {
-      document.getElementById('login-msg').textContent = 'Preencha todos os campos corretamente.';
+      const msg = document.getElementById('login-msg');
+      msg.textContent = 'Preencha todos os campos corretamente.';
+      msg.style.color = '#ff6666';
       return;
     }
 
@@ -263,19 +265,21 @@
         body: JSON.stringify({ email, senha }),
       });
       const data = await res.json();
+      const msg = document.getElementById('login-msg');
       if (res.ok) {
-        document.getElementById('login-msg').style.color = 'lightgreen';
-        document.getElementById('login-msg').textContent = 'Login realizado com sucesso!';
+        msg.style.color = 'lightgreen';
+        msg.textContent = 'Login realizado com sucesso!';
         formLogin.reset();
-        // Se quiser, redirecione aqui:
+        // Exemplo de redirecionamento após login
         // window.location.href = 'wallet.html';
       } else {
-        document.getElementById('login-msg').style.color = '#ff6666';
-        document.getElementById('login-msg').textContent = data.error || 'Erro no login.';
+        msg.style.color = '#ff6666';
+        msg.textContent = data.error || 'Erro no login.';
       }
     } catch (err) {
-      document.getElementById('login-msg').style.color = '#ff6666';
-      document.getElementById('login-msg').textContent = 'Erro ao conectar ao servidor.';
+      const msg = document.getElementById('login-msg');
+      msg.style.color = '#ff6666';
+      msg.textContent = 'Erro ao conectar ao servidor.';
       console.error(err);
     }
   });
