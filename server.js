@@ -1,91 +1,78 @@
 // server.js
-const express = require("express");
-const sqlite3 = require("sqlite3").verbose();
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const cors = require("cors");
+const express = require('express');
+const sqlite3 = require('sqlite3').verbose();
+const bcrypt = require('bcrypt');
+const cors = require('cors');
 
 const app = express();
-const port = 3000;
-const SECRET = "sua_chave_secreta_super_forte"; // troca para algo seguro
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
 
-// Cria ou abre o banco SQLite
-const db = new sqlite3.Database("./usuarios.db");
+// Cria banco SQLite na memória ou arquivo
+const db = new sqlite3.Database('./users.db', (err) => {
+  if (err) console.error(err.message);
+  else console.log('Conectado ao SQLite.');
+});
 
-// Cria tabela usuarios se não existir
+// Cria tabela de usuários se não existir
 db.run(`
-  CREATE TABLE IF NOT EXISTS usuarios (
+  CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     email TEXT UNIQUE,
-    senha TEXT
+    password TEXT
   )
 `);
 
-// Registro de usuário
-app.post("/api/register", (req, res) => {
+// Registro
+app.post('/api/register', (req, res) => {
   const { email, senha } = req.body;
-  if (!email || !senha) return res.status(400).json({ error: "Email e senha obrigatórios." });
+  if (!email || !senha || senha.length < 6) {
+    return res.status(400).json({ error: 'Email e senha (mínimo 6 caracteres) são obrigatórios.' });
+  }
 
+  // Hash da senha
   bcrypt.hash(senha, 10, (err, hash) => {
-    if (err) return res.status(500).json({ error: "Erro no servidor." });
+    if (err) return res.status(500).json({ error: 'Erro ao criptografar senha.' });
 
-    const query = `INSERT INTO usuarios (email, senha) VALUES (?, ?)`;
+    // Insere no banco
+    const query = `INSERT INTO users (email, password) VALUES (?, ?)`;
     db.run(query, [email, hash], function(err) {
       if (err) {
-        if (err.message.includes("UNIQUE")) {
-          return res.status(400).json({ error: "Email já cadastrado." });
+        if (err.message.includes('UNIQUE')) {
+          return res.status(409).json({ error: 'Email já cadastrado.' });
         }
-        return res.status(500).json({ error: "Erro ao registrar usuário." });
+        return res.status(500).json({ error: 'Erro ao registrar usuário.' });
       }
-      res.json({ message: "Usuário registrado com sucesso." });
+      res.status(201).json({ message: 'Usuário registrado com sucesso!' });
     });
   });
 });
 
 // Login
-app.post("/api/login", (req, res) => {
+app.post('/api/login', (req, res) => {
   const { email, senha } = req.body;
-  if (!email || !senha) return res.status(400).json({ error: "Email e senha obrigatórios." });
+  if (!email || !senha) {
+    return res.status(400).json({ error: 'Email e senha são obrigatórios.' });
+  }
 
-  db.get("SELECT * FROM usuarios WHERE email = ?", [email], (err, user) => {
-    if (err) return res.status(500).json({ error: "Erro no servidor." });
-    if (!user) return res.status(400).json({ error: "Usuário não encontrado." });
+  const query = `SELECT * FROM users WHERE email = ?`;
+  db.get(query, [email], (err, row) => {
+    if (err) return res.status(500).json({ error: 'Erro ao consultar usuário.' });
+    if (!row) return res.status(401).json({ error: 'Usuário não encontrado.' });
 
-    bcrypt.compare(senha, user.senha, (err, valid) => {
-      if (err) return res.status(500).json({ error: "Erro no servidor." });
-      if (!valid) return res.status(400).json({ error: "Senha incorreta." });
+    // Compara senha
+    bcrypt.compare(senha, row.password, (err, result) => {
+      if (err) return res.status(500).json({ error: 'Erro ao verificar senha.' });
+      if (!result) return res.status(401).json({ error: 'Senha incorreta.' });
 
-      // Gera token JWT simples (expira em 1h)
-      const token = jwt.sign({ id: user.id, email: user.email }, SECRET, { expiresIn: "1h" });
-
-      res.json({ message: "Login efetuado com sucesso.", token });
+      // Login OK
+      res.json({ message: 'Login efetuado com sucesso!' });
     });
   });
 });
 
-// Middleware para proteger rotas
-function verificarToken(req, res, next) {
-  const authHeader = req.headers["authorization"];
-  if (!authHeader) return res.status(401).json({ error: "Token não fornecido." });
-
-  const token = authHeader.split(" ")[1];
-  if (!token) return res.status(401).json({ error: "Token inválido." });
-
-  jwt.verify(token, SECRET, (err, decoded) => {
-    if (err) return res.status(401).json({ error: "Token inválido ou expirado." });
-    req.user = decoded;
-    next();
-  });
-}
-
-// Exemplo de rota protegida
-app.get("/api/profile", verificarToken, (req, res) => {
-  res.json({ message: "Acesso liberado!", user: req.user });
-});
-
-app.listen(port, () => {
-  console.log(`Servidor rodando em http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
