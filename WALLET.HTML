@@ -1,121 +1,96 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />    
+  <meta charset="UTF-8" />
   <link rel="icon" href="logo.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>JBX1000 CRC-16</title>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <style>
-    * { box-sizing: border-box; }
     body {
-      background: #0d1117; color: #e0e0e0;
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0; padding: 0 8px;
-      display: flex; justify-content: center; min-height: 100vh; align-items: flex-start; padding-top: 20px;
-      font-size: 14px;
-    }
-    .container {
-      width: 100%; max-width: 400px;
-      background: #1c1f26; border-radius: 12px; padding: 18px; box-shadow: 0 0 10px #000a;
+      background-color: #0d1117;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
     }
     h1 {
-      text-align: center; margin-bottom: 16px; color: #00ffb2;
-      font-weight: 700; font-size: 1.3rem;
+      text-align: center;
+      color: #00ffb2;
     }
-    label {
-      display: block; margin: 10px 0 5px; font-weight: 700; font-size: 0.9rem;
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background-color: #11161c;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 255, 178, 0.2);
     }
-    input[type="number"] {
-      width: 100%; padding: 8px; border: 1px solid #444;
-      border-radius: 6px; background-color: #0f141a; color: #fff;
-      font-size: 0.9rem;
+    label, input, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
     }
-    .btn {
-      width: 48%; padding: 10px; margin-top: 12px;
-      border: none; border-radius: 8px; font-weight: 700;
-      cursor: pointer; transition: background 0.3s; font-size: 0.9rem;
+    input {
+      padding: 10px;
+      background: #1a1f26;
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: #00ffb2;
     }
-    #btn-deposit { background-color: #28a745; color: white; }
-    #btn-deposit:hover { background-color: #218838; }
-    #btn-withdraw { background-color: #dc3545; color: white; float: right; }
-    #btn-withdraw:hover { background-color: #c82333; }
-    #btn-generate-pix {
-      width: 100%; margin-top: 18px; padding: 12px;
-      background-color: #007bff; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;
-      font-size: 1rem;
+    button {
+      padding: 10px;
+      background-color: #00ffb2;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
     }
-    #btn-generate-pix:hover { background-color: #0056b3; }
-    #btn-clear-history {
-      width: 100%; margin-top: 14px; padding: 8px;
-      background-color: #666; border: none; border-radius: 8px;
-      color: white; cursor: pointer; font-weight: 700;
-      font-size: 0.9rem;
-    }
-    #btn-clear-history:hover { background-color: #444; }
-    #saldo-container {
-      text-align: center; margin-top: 18px;
-      font-size: 1rem; color: #1efcb8; font-weight: 700;
+    button:hover {
+      background-color: #00c49f;
     }
     #qrcode-container {
-      margin-top: 18px; padding: 14px; background-color: #11161c;
-      border-radius: 10px; text-align: center; min-height: 220px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      color: #666;
-      word-break: break-word;
-    }
-    pre {
-      background: #000000cc; padding: 8px; margin-top: 8px; border-radius: 6px;
-      color: #00ffb2; font-size: 0.85rem; user-select: all; white-space: pre-wrap; word-break: break-word;
-      max-height: 100px; overflow-y: auto;
-      width: 100%;
-    }
-    #history-container {
-      margin-top: 28px; max-height: 220px; overflow-y: auto;
-      background: #10131a; border-radius: 10px; padding: 12px; font-size: 0.85rem;
-    }
-    #history-container h2 {
-      margin-top: 0; font-weight: 700; color: #0ff; text-align: center; margin-bottom: 8px;
-      font-size: 1rem;
+      text-align: center;
+      margin-top: 20px;
     }
     .transaction {
-      padding: 4px 6px; border-bottom: 1px solid #222;
-      display: flex; justify-content: space-between; align-items: center;
+      margin: 5px 0;
+      padding: 5px;
+      background: #1e1e2e;
+      border-left: 4px solid #00ffb2;
     }
-    .transaction:last-child { border-bottom: none; }
-    .transaction .type { font-weight: 700; text-transform: capitalize; font-size: 0.85rem; flex: 1; }
-    .transaction.deposit { color: #28a745; }
-    .transaction.withdraw { color: #dc3545; }
-    .transaction.pix { color: #007bff; }
-    .transaction .date { font-size: 0.7rem; color: #aaa; font-style: italic; flex: 1.5; text-align: right; }
-    @media (max-width: 420px) {
-      .btn { width: 100%; margin-top: 8px; float: none; }
-      #btn-withdraw { float: none; }
-      #btn-generate-pix { font-size: 0.95rem; }
-      h1 { font-size: 1.1rem; }
-    }
+    .transaction.deposit { border-color: #00c853; }
+    .transaction.withdraw { border-color: #d50000; }
   </style>
 </head>
 <body>
+  <h1>Carteira Digital JBX1000</h1>
   <div class="container">
-    <h1>Carteira JBX1000 CRC</h1>
-    <label for="valor">Valor (R$):</label>
-    <input type="number" id="valor" placeholder="0,00" min="0.01" step="0.01" />
-    <button id="btn-deposit" class="btn">Depositar</button>
-    <button id="btn-withdraw" class="btn">Sacar</button>
-    <button id="btn-generate-pix">Gerar Pix Copia e Cola (5% taxa)</button>
-    <div id="saldo-container">Saldo: <span id="saldo">R$ 0,00</span></div>
-    <div id="qrcode-container"><span>QR Code e Copia e Cola aparecerão aqui</span></div>
+    <label for="valor">Valor (R$)</label>
+    <input type="number" id="valor" placeholder="Ex: 150.00" />
+
+    <label for="chavePix">Chave Pix para Saque:</label>
+    <input type="text" id="chavePix" placeholder="ex: email@exemplo.com, CPF, telefone..." />
+
+    <button id="btn-deposit">Depositar</button>
+    <button id="btn-withdraw">Sacar</button>
+    <button id="btn-generate-pix">Gerar Pix (5% Taxa)</button>
     <button id="btn-clear-history">Limpar Histórico</button>
-    <div id="history-container">
-      <h2>Histórico de Transações</h2>
-      <div id="history-list">Nenhuma transação registrada.</div>
-    </div>
+
+    <h2>Saldo Atual:</h2>
+    <div id="saldo">R$ 0,00</div>
+
+    <div id="qrcode-container"><span>QR Code e Copia e Cola aparecerão aqui</span></div>
+
+    <h2>Histórico de Transações</h2>
+    <div id="history-list">Nenhuma transação registrada.</div>
   </div>
 
-<script>
+  <script>
 (() => {
   const valorInput = document.getElementById("valor");
+  const chavePixInput = document.getElementById("chavePix");
   const btnDeposit = document.getElementById("btn-deposit");
   const btnWithdraw = document.getElementById("btn-withdraw");
   const btnGeneratePix = document.getElementById("btn-generate-pix");
@@ -124,17 +99,18 @@
   const qrcodeContainer = document.getElementById("qrcode-container");
   const historyList = document.getElementById("history-list");
 
-  const chavePix = "48761013889"; // 🔑 Chave Pix editável
-  const txid = "JBX1000"; // 🔁 TXID único para cada transação
+  const chavePix = "48761013889"; // Chave Pix para destino do QR Code
+  const txid = "JBX1000";
 
   const STORAGE_SALDO = "jbx1000_saldo";
   const STORAGE_HISTORY = "jbx1000_history";
 
-  let saldo = parseFloat(localStorage.getItem(STORAGE_SALDO)) || 0;
+  let saldo = 0;
   let history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
 
   function atualizarSaldo() {
     saldoSpan.textContent = `R$ ${saldo.toFixed(2).replace('.', ',')}`;
+    localStorage.setItem(STORAGE_SALDO, saldo.toFixed(2));
   }
 
   function atualizarHistorico() {
@@ -167,6 +143,15 @@
     atualizarHistorico();
   }
 
+  function limparPix() {
+    qrcodeContainer.innerHTML = "<span>QR Code e Copia e Cola aparecerão aqui</span>";
+  }
+
+  function campo(id, valor) {
+    const len = valor.length.toString().padStart(2, '0');
+    return id + len + valor;
+  }
+
   function crc16ccitt(str) {
     let crc = 0xFFFF;
     for (let i = 0; i < str.length; i++) {
@@ -179,15 +164,9 @@
     return crc.toString(16).toUpperCase().padStart(4, '0');
   }
 
-  function campo(id, valor) {
-    const len = valor.length.toString().padStart(2, '0');
-    return id + len + valor;
-  }
-
   function gerarPayloadPix(valorCents) {
-    const nome = "Lucas Januário".toUpperCase();
-    const cidade = "SAO PAULO".toUpperCase();
-
+    const nome = "Lucas Januário";
+    const cidade = "SAO PAULO";
     let payload = "";
     payload += campo("00", "01");
     let merchant = campo("00", "br.gov.bcb.pix") + campo("01", chavePix);
@@ -201,10 +180,6 @@
     payload += campo("62", campo("05", txid));
     payload += campo("63", crc16ccitt(payload + "6304"));
     return payload;
-  }
-
-  function limparPix() {
-    qrcodeContainer.innerHTML = "<span>QR Code e Copia e Cola aparecerão aqui</span>";
   }
 
   function gerarPix() {
@@ -244,10 +219,12 @@
     const valor = parseFloat(valorInput.value.replace(',', '.'));
     if (isNaN(valor) || valor <= 0) return alert("Informe um valor válido.");
     if (valor > saldo) return alert("Saldo insuficiente.");
+    if (!chavePixInput.value.trim()) return alert("Insira a chave Pix para o saque.");
     saldo -= valor;
     addTransacao("withdraw", valor);
     atualizarSaldo();
     valorInput.value = "";
+    chavePixInput.value = "";
     limparPix();
   });
 
@@ -256,7 +233,9 @@
   btnClearHistory.addEventListener("click", () => {
     if (confirm("Deseja limpar todo o histórico?")) {
       history = [];
+      saldo = 0;
       salvarEstado();
+      atualizarSaldo();
       atualizarHistorico();
       limparPix();
     }
@@ -266,7 +245,6 @@
   atualizarHistorico();
   limparPix();
 })();
-</script>
-
+  </script>
 </body>
 </html>
