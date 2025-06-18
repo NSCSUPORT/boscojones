@@ -178,11 +178,8 @@ footer {
   <footer>
     © 2025 bosco jones fx  - Todos os direitos reservados 
   </footer>
-
 <script>
 (() => {
-  // Elementos existentes
-  const valorInput = document.getElementById("valor");
   const chavePixInput = document.getElementById("chavePix");
   const cupomInput = document.getElementById("cupom");
   const btnDeposit = document.getElementById("btn-deposit");
@@ -192,8 +189,6 @@ footer {
   const saldoSpan = document.getElementById("saldo");
   const qrcodeContainer = document.getElementById("qrcode-container");
   const historyList = document.getElementById("history-list");
-
-  // Novo: seleção do ativo
   const ativoSelect = document.getElementById("ativoSelect");
 
   let saldo = 0;
@@ -246,7 +241,6 @@ footer {
         saldo += valor;
         addTransacao("deposit", valor);
         atualizarSaldo();
-        valorInput.value = "";
         chavePixInput.value = "";
         alert("Depósito confirmado com sucesso!");
       } else {
@@ -258,39 +252,32 @@ footer {
     }
   }
 
-  // Novo: ao mudar seleção do ativo, atualiza o campo valor com o valor padrão do ativo
-  if (ativoSelect) {
-    ativoSelect.addEventListener("change", () => {
-      const selectedOption = ativoSelect.options[ativoSelect.selectedIndex];
-      const valorPadrao = selectedOption.getAttribute("data-valor");
-      if (valorPadrao) {
-        valorInput.value = valorPadrao.replace('.', ','); // opcional: já formatar para vírgula
-      } else {
-        valorInput.value = "";
-      }
-    });
+  function obterValorAtivoSelecionado() {
+    const selectedOption = ativoSelect.options[ativoSelect.selectedIndex];
+    const valorPadrao = selectedOption.getAttribute("data-valor");
+    return valorPadrao ? parseFloat(valorPadrao.replace(',', '.')) : 0;
   }
 
   btnDeposit.addEventListener("click", () => {
-    const valor = parseFloat(valorInput.value.replace(',', '.'));
+    const valor = obterValorAtivoSelecionado();
     const chave = chavePixInput.value.trim();
     if (!chave) return alert("Informe sua chave Pix para gerar o depósito.");
-    if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
+    if (isNaN(valor) || valor <= 0) return alert("Selecione um ativo válido.");
     gerarPixDeposito(valor, chave);
   });
 
   btnWithdraw.addEventListener("click", () => {
-    const valor = parseFloat(valorInput.value.replace(',', '.'));
+    const valor = obterValorAtivoSelecionado();
     const chave = chavePixInput.value.trim();
     if (!chave) return alert("Informe a chave Pix para saque.");
-    if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
+    if (isNaN(valor) || valor <= 0) return alert("Selecione um ativo válido.");
     if (valor > saldo) return alert("Saldo insuficiente.");
     saldo -= valor;
     addTransacao("withdraw", valor);
     atualizarSaldo();
     limparPix();
-    valorInput.value = "";
     chavePixInput.value = "";
+    alert("Saque realizado com sucesso.");
   });
 
   btnGeneratePix.addEventListener("click", async () => {
@@ -305,7 +292,6 @@ footer {
     try {
       const pixCode = `00020126360014BR.GOV.BCB.PIX0114+556199999999520400005303986540${valorComTaxa.toFixed(2).replace('.', '')}5802BR5925Lucas Januario do Nascimento6009Brasilia62070503***6304ABCD`;
 
-      qrcodeContainer.innerHTML = "";
       const pre = document.createElement("pre");
       pre.textContent = pixCode;
       qrcodeContainer.appendChild(pre);
@@ -318,10 +304,11 @@ footer {
 
       addTransacao("pix", saldo);
       if (taxaAtiva === 0) {
-        alert(`Pix gerado com isenção de taxa usando o cupom "omelalule0". Valor total: R$ ${valorComTaxa.toFixed(2).replace('.', ',')}`);
+        alert(`Pix gerado com isenção de taxa com cupom "omelalule0". Valor total: R$ ${valorComTaxa.toFixed(2).replace('.', ',')}`);
       } else {
-        alert(`Cobrança Pix gerada com valor líquido R$ ${valorComTaxa.toFixed(2).replace('.', ',')} (5% taxa: R$ ${taxa.toFixed(2).replace('.', ',')})`);
+        alert(`Pix gerado com valor líquido R$ ${valorComTaxa.toFixed(2).replace('.', ',')} (5% taxa: R$ ${taxa.toFixed(2).replace('.', ',')})`);
       }
+
       saldo = 0;
       atualizarSaldo();
     } catch (err) {
@@ -341,7 +328,6 @@ footer {
   atualizarSaldo();
   atualizarHistorico();
 })();
-
 </script>
 
 </body>
