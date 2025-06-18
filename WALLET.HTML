@@ -105,32 +105,7 @@
       #btn-generate-pix { font-size: 0.95rem; }
       h1 { font-size: 1.1rem; }
     }
-footer {
-  width: 100%;
-  padding: 1rem;
-  background: linear-gradient(45deg, #f5f500, #ff4500);
-  color: #000;
-  text-align: center;
-  font-size: 1rem;
-  font-weight: bold;
-  letter-spacing: 0.08rem;
-  text-shadow: 0 0 0.4rem #ff0000;
-  animation: neon 1.5s ease-in-out infinite alternate;
-  border-top: 2px solid #333;
-  margin-top: 2rem;
-  transition: all 0.3s ease-in-out;
-}
-
-/* Animação neon (exemplo simples) */
-@keyframes neon {
-  from {
-    text-shadow: 0 0 0.4rem #ff0000, 0 0 1rem #ff0000, 0 0 2rem #ff0000;
-  }
-  to {
-    text-shadow: 0 0 0.8rem #ff4500, 0 0 2rem #ff4500, 0 0 4rem #ff4500;
-  }
-}
-
+  </style>
 </head>
 <body>
   <div class="container">
@@ -180,156 +155,170 @@ footer {
   <h2>Histórico de Transações</h2>
   <div id="history-list">Nenhuma transação registrada.</div>
 </div>
-<footer>
-  Carteira Bosco Jones - Desenvolvido por Lucas Januário <br />
-  © Todos os direitos reservados
-</footer>
 
 <script>
-  (() => {
-    const valorInput = document.getElementById("valor");
-    const chavePixInput = document.getElementById("chavePix");
-    const cupomInput = document.getElementById("cupom"); // campo de cupom
-    const btnDeposit = document.getElementById("btn-deposit");
-    const btnWithdraw = document.getElementById("btn-withdraw");
-    const btnGeneratePix = document.getElementById("btn-generate-pix");
-    const btnClearHistory = document.getElementById("btn-clear-history");
-    const saldoSpan = document.getElementById("saldo");
-    const qrcodeContainer = document.getElementById("qrcode-container");
-    const historyList = document.getElementById("history-list");
+(() => {
+  // Elementos existentes
+  const valorInput = document.getElementById("valor");
+  const chavePixInput = document.getElementById("chavePix");
+  const cupomInput = document.getElementById("cupom");
+  const btnDeposit = document.getElementById("btn-deposit");
+  const btnWithdraw = document.getElementById("btn-withdraw");
+  const btnGeneratePix = document.getElementById("btn-generate-pix");
+  const btnClearHistory = document.getElementById("btn-clear-history");
+  const saldoSpan = document.getElementById("saldo");
+  const qrcodeContainer = document.getElementById("qrcode-container");
+  const historyList = document.getElementById("history-list");
 
-    let saldo = 0;
-    let history = [];
+  // Novo: seleção do ativo
+  const ativoSelect = document.getElementById("ativoSelect");
 
-    function atualizarSaldo() {
-      saldoSpan.textContent = `R$ ${saldo.toFixed(2).replace('.', ',')}`;
-    }
+  let saldo = 0;
+  let history = [];
 
-    function atualizarHistorico() {
-      historyList.innerHTML = history.length === 0
-        ? "Nenhuma transação registrada."
-        : history.map(tx => `
-          <div class="transaction ${tx.type}">
-            <div class="type">${tx.type}</div>
-            <div>R$ ${tx.amount.toFixed(2).replace('.', ',')}</div>
-            <div class="date">${new Date(tx.date).toLocaleString('pt-BR')}</div>
-          </div>
-        `).join('');
-    }
+  function atualizarSaldo() {
+    saldoSpan.textContent = `R$ ${saldo.toFixed(2).replace('.', ',')}`;
+  }
 
-    function addTransacao(type, amount) {
-      history.unshift({ type, amount, date: new Date().toISOString() });
-      if (history.length > 50) history.pop();
-      atualizarHistorico();
-    }
+  function atualizarHistorico() {
+    historyList.innerHTML = history.length === 0
+      ? "Nenhuma transação registrada."
+      : history.map(tx => `
+        <div class="transaction ${tx.type}">
+          <div class="type">${tx.type}</div>
+          <div>R$ ${tx.amount.toFixed(2).replace('.', ',')}</div>
+          <div class="date">${new Date(tx.date).toLocaleString('pt-BR')}</div>
+        </div>
+      `).join('');
+  }
 
-    function limparPix() {
-      qrcodeContainer.innerHTML = "<span>QR Code e Copia e Cola aparecerão aqui</span>";
-    }
-
-    async function gerarPixDeposito(valor, chave) {
-      limparPix();
-      try {
-        const pixCode = `00020126360014BR.GOV.BCB.PIX0114${chave}520400005303986540${valor.toFixed(2).replace('.', '')}5802BR5925Lucas Nascimento6009Brasilia62070503***6304ABCD`;
-
-        qrcodeContainer.innerHTML = "<h3>Realize o pagamento Pix</h3>";
-        const pre = document.createElement("pre");
-        pre.textContent = pixCode;
-        qrcodeContainer.appendChild(pre);
-
-        const canvas = document.createElement("canvas");
-        qrcodeContainer.appendChild(canvas);
-        QRCode.toCanvas(canvas, pixCode, function (error) {
-          if (error) console.error(error);
-        });
-
-        const confirmado = confirm("Após realizar o pagamento, clique em OK para confirmar o depósito.");
-        if (confirmado) {
-          saldo += valor;
-          addTransacao("deposit", valor);
-          atualizarSaldo();
-          valorInput.value = "";
-          chavePixInput.value = "";
-          alert("Depósito confirmado com sucesso!");
-        } else {
-          alert("Depósito cancelado.");
-        }
-      } catch (err) {
-        console.error("Erro ao gerar Pix:", err);
-        alert("Erro ao gerar cobrança Pix.");
-      }
-    }
-
-    btnDeposit.addEventListener("click", () => {
-      const valor = parseFloat(valorInput.value.replace(',', '.'));
-      const chave = chavePixInput.value.trim();
-      if (!chave) return alert("Informe sua chave Pix para gerar o depósito.");
-      if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
-      gerarPixDeposito(valor, chave);
-    });
-
-    btnWithdraw.addEventListener("click", () => {
-      const valor = parseFloat(valorInput.value.replace(',', '.'));
-      const chave = chavePixInput.value.trim();
-      if (!chave) return alert("Informe a chave Pix para saque.");
-      if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
-      if (valor > saldo) return alert("Saldo insuficiente.");
-      saldo -= valor;
-      addTransacao("withdraw", valor);
-      atualizarSaldo();
-      limparPix();
-      valorInput.value = "";
-      chavePixInput.value = "";
-    });
-
-    btnGeneratePix.addEventListener("click", async () => {
-      limparPix();
-      if (saldo <= 0) return alert("Saldo insuficiente para gerar Pix.");
-
-      const cupom = cupomInput.value.trim().toLowerCase();
-      const taxaAtiva = cupom === "omelalule0" ? 0 : 0.05;
-      const valorComTaxa = +(saldo * (1 - taxaAtiva)).toFixed(2);
-      const taxa = saldo - valorComTaxa;
-
-      try {
-        const pixCode = `00020126360014BR.GOV.BCB.PIX0114+556199999999520400005303986540${valorComTaxa.toFixed(2).replace('.', '')}5802BR5925Lucas Januario do Nascimento6009Brasilia62070503***6304ABCD`;
-
-        qrcodeContainer.innerHTML = "";
-        const pre = document.createElement("pre");
-        pre.textContent = pixCode;
-        qrcodeContainer.appendChild(pre);
-
-        const canvas = document.createElement("canvas");
-        qrcodeContainer.appendChild(canvas);
-        QRCode.toCanvas(canvas, pixCode, function (error) {
-          if (error) console.error(error);
-        });
-
-        addTransacao("pix", saldo);
-        if (taxaAtiva === 0) {
-          alert(`Pix gerado com isenção de taxa usando o cupom "omelalule0". Valor total: R$ ${valorComTaxa.toFixed(2).replace('.', ',')}`);
-        } else {
-          alert(`Cobrança Pix gerada com valor líquido R$ ${valorComTaxa.toFixed(2).replace('.', ',')} (5% taxa: R$ ${taxa.toFixed(2).replace('.', ',')})`);
-        }
-        saldo = 0;
-        atualizarSaldo();
-      } catch (err) {
-        console.error("Erro ao gerar Pix:", err);
-        alert("Erro ao gerar cobrança Pix.");
-      }
-    });
-
-    btnClearHistory.addEventListener("click", () => {
-      if (confirm("Limpar histórico de transações?")) {
-        history = [];
-        atualizarHistorico();
-        limparPix();
-      }
-    });
-
-    atualizarSaldo();
+  function addTransacao(type, amount) {
+    history.unshift({ type, amount, date: new Date().toISOString() });
+    if (history.length > 50) history.pop();
     atualizarHistorico();
-  })();
+  }
+
+  function limparPix() {
+    qrcodeContainer.innerHTML = "<span>QR Code e Copia e Cola aparecerão aqui</span>";
+  }
+
+  async function gerarPixDeposito(valor, chave) {
+    limparPix();
+    try {
+      const pixCode = `00020126360014BR.GOV.BCB.PIX0114${chave}520400005303986540${valor.toFixed(2).replace('.', '')}5802BR5925Lucas Nascimento6009Brasilia62070503***6304ABCD`;
+
+      qrcodeContainer.innerHTML = "<h3>Realize o pagamento Pix</h3>";
+      const pre = document.createElement("pre");
+      pre.textContent = pixCode;
+      qrcodeContainer.appendChild(pre);
+
+      const canvas = document.createElement("canvas");
+      qrcodeContainer.appendChild(canvas);
+      QRCode.toCanvas(canvas, pixCode, function (error) {
+        if (error) console.error(error);
+      });
+
+      const confirmado = confirm("Após realizar o pagamento, clique em OK para confirmar o depósito.");
+      if (confirmado) {
+        saldo += valor;
+        addTransacao("deposit", valor);
+        atualizarSaldo();
+        valorInput.value = "";
+        chavePixInput.value = "";
+        alert("Depósito confirmado com sucesso!");
+      } else {
+        alert("Depósito cancelado.");
+      }
+    } catch (err) {
+      console.error("Erro ao gerar Pix:", err);
+      alert("Erro ao gerar cobrança Pix.");
+    }
+  }
+
+  // Novo: ao mudar seleção do ativo, atualiza o campo valor com o valor padrão do ativo
+  if (ativoSelect) {
+    ativoSelect.addEventListener("change", () => {
+      const selectedOption = ativoSelect.options[ativoSelect.selectedIndex];
+      const valorPadrao = selectedOption.getAttribute("data-valor");
+      if (valorPadrao) {
+        valorInput.value = valorPadrao.replace('.', ','); // opcional: já formatar para vírgula
+      } else {
+        valorInput.value = "";
+      }
+    });
+  }
+
+  btnDeposit.addEventListener("click", () => {
+    const valor = parseFloat(valorInput.value.replace(',', '.'));
+    const chave = chavePixInput.value.trim();
+    if (!chave) return alert("Informe sua chave Pix para gerar o depósito.");
+    if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
+    gerarPixDeposito(valor, chave);
+  });
+
+  btnWithdraw.addEventListener("click", () => {
+    const valor = parseFloat(valorInput.value.replace(',', '.'));
+    const chave = chavePixInput.value.trim();
+    if (!chave) return alert("Informe a chave Pix para saque.");
+    if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
+    if (valor > saldo) return alert("Saldo insuficiente.");
+    saldo -= valor;
+    addTransacao("withdraw", valor);
+    atualizarSaldo();
+    limparPix();
+    valorInput.value = "";
+    chavePixInput.value = "";
+  });
+
+  btnGeneratePix.addEventListener("click", async () => {
+    limparPix();
+    if (saldo <= 0) return alert("Saldo insuficiente para gerar Pix.");
+
+    const cupom = cupomInput.value.trim().toLowerCase();
+    const taxaAtiva = cupom === "omelalule0" ? 0 : 0.05;
+    const valorComTaxa = +(saldo * (1 - taxaAtiva)).toFixed(2);
+    const taxa = saldo - valorComTaxa;
+
+    try {
+      const pixCode = `00020126360014BR.GOV.BCB.PIX0114+556199999999520400005303986540${valorComTaxa.toFixed(2).replace('.', '')}5802BR5925Lucas Januario do Nascimento6009Brasilia62070503***6304ABCD`;
+
+      qrcodeContainer.innerHTML = "";
+      const pre = document.createElement("pre");
+      pre.textContent = pixCode;
+      qrcodeContainer.appendChild(pre);
+
+      const canvas = document.createElement("canvas");
+      qrcodeContainer.appendChild(canvas);
+      QRCode.toCanvas(canvas, pixCode, function (error) {
+        if (error) console.error(error);
+      });
+
+      addTransacao("pix", saldo);
+      if (taxaAtiva === 0) {
+        alert(`Pix gerado com isenção de taxa usando o cupom "omelalule0". Valor total: R$ ${valorComTaxa.toFixed(2).replace('.', ',')}`);
+      } else {
+        alert(`Cobrança Pix gerada com valor líquido R$ ${valorComTaxa.toFixed(2).replace('.', ',')} (5% taxa: R$ ${taxa.toFixed(2).replace('.', ',')})`);
+      }
+      saldo = 0;
+      atualizarSaldo();
+    } catch (err) {
+      console.error("Erro ao gerar Pix:", err);
+      alert("Erro ao gerar cobrança Pix.");
+    }
+  });
+
+  btnClearHistory.addEventListener("click", () => {
+    if (confirm("Limpar histórico de transações?")) {
+      history = [];
+      atualizarHistorico();
+      limparPix();
+    }
+  });
+
+  atualizarSaldo();
+  atualizarHistorico();
+})();
+
 </script>
 
 </body>
