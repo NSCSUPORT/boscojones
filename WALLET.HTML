@@ -132,23 +132,22 @@ footer {
     <h1>WALLET JBX CRC</h1>
 <!-- seu conteúdo anterior -->
 
-<label for="ativo-select">Escolha o Ativo:</label>
-<select id="ativo-select">
+<label for="ativoSelect">Escolha o Ativo:</label>
+<select id="ativoSelect">
   <option disabled selected>-- Selecione um ativo --</option>
-  <option value="Bitcoin Escuro">Bitcoin Escuro - $56.000</option>
-  <option value="Ethereum Escuro">Ethereum Escuro - $3.500</option>
-  <option value="Ondulação Escura">Ondulação Escura - $200</option>
-  <option value="Litecoin Escuro">Litecoin Escuro - $200</option>
-  <option value="Cardano Escuro">Cardano Escuro - $1,50</option>
-  <option value="Solana Escuro">Solana Escuro - $100</option>
-  <option value="Ouro Escuro">Ouro Escuro - $1.800</option>
-  <option value="Diamante Negro">Diamante Negro - $5.000</option>
-  <option value="Prata Escuro">Prata Escuro - $25</option>
-  <option value="Platina Escura">Platina Escura - $950</option>
-  <option value="Titânio Escuro">Titânio Escuro - $600</option>
-  <option value="Cobre Escuro">Cobre Escuro - $9</option>
+  <option data-valor="56000" value="Bitcoin Escuro">Bitcoin Escuro - $56.000</option>
+  <option data-valor="3500" value="Ethereum Escuro">Ethereum Escuro - $3.500</option>
+  <option data-valor="200" value="Ondulação Escura">Ondulação Escura - $200</option>
+  <option data-valor="200" value="Litecoin Escuro">Litecoin Escuro - $200</option>
+  <option data-valor="1.5" value="Cardano Escuro">Cardano Escuro - $1,50</option>
+  <option data-valor="100" value="Solana Escuro">Solana Escuro - $100</option>
+  <option data-valor="1800" value="Ouro Escuro">Ouro Escuro - $1.800</option>
+  <option data-valor="5000" value="Diamante Negro">Diamante Negro - $5.000</option>
+  <option data-valor="25" value="Prata Escuro">Prata Escuro - $25</option>
+  <option data-valor="950" value="Platina Escura">Platina Escura - $950</option>
+  <option data-valor="600" value="Titânio Escuro">Titânio Escuro - $600</option>
+  <option data-valor="9" value="Cobre Escuro">Cobre Escuro - $9</option>
 </select>
-
 
 <label for="chavePix">Chave Pix (para saque):</label>
 <input type="text" id="chavePix" placeholder="Insira sua chave Pix" />
@@ -156,7 +155,6 @@ footer {
 <label for="quantidade">Quantidade:</label>
 <input type="number" id="quantidade" value="1" min="1" step="1" />
 
-<!-- NOVO CAMPO DE CUPOM -->
 <label for="cupom">Cupom (opcional):</label>
 <input type="text" id="cupom" placeholder="Digite o cupom aqui" />
 
@@ -203,7 +201,7 @@ footer {
       ? "Nenhuma transação registrada."
       : history.map(tx => `
         <div class="transaction ${tx.type}">
-          <div class="type">${tx.type}</div>
+          <div class="type">${tx.type.toUpperCase()}</div>
           <div>R$ ${tx.amount.toFixed(2).replace('.', ',')}</div>
           <div class="date">${new Date(tx.date).toLocaleString('pt-BR')}</div>
         </div>
@@ -220,12 +218,19 @@ footer {
     qrcodeContainer.innerHTML = "<span>QR Code e Copia e Cola aparecerão aqui</span>";
   }
 
+  function obterValorAtivoSelecionado() {
+    const selectedOption = ativoSelect.options[ativoSelect.selectedIndex];
+    const valorPadrao = selectedOption?.getAttribute("data-valor");
+    if (!valorPadrao) return 0;
+    return parseFloat(valorPadrao.replace(',', '.'));
+  }
+
   async function gerarPixDeposito(valor, chave) {
     limparPix();
     try {
       const pixCode = `00020126360014BR.GOV.BCB.PIX0114${chave}520400005303986540${valor.toFixed(2).replace('.', '')}5802BR5925Lucas Nascimento6009Brasilia62070503***6304ABCD`;
 
-      qrcodeContainer.innerHTML = "<h3>Realize o pagamento Pix</h3>";
+      qrcodeContainer.innerHTML = "<h3>Realize o pagamento via Pix:</h3>";
       const pre = document.createElement("pre");
       pre.textContent = pixCode;
       qrcodeContainer.appendChild(pre);
@@ -242,47 +247,41 @@ footer {
         addTransacao("deposit", valor);
         atualizarSaldo();
         chavePixInput.value = "";
-        alert("Depósito confirmado com sucesso!");
+        alert("✅ Depósito confirmado com sucesso!");
       } else {
-        alert("Depósito cancelado.");
+        alert("⚠️ Depósito cancelado.");
       }
     } catch (err) {
       console.error("Erro ao gerar Pix:", err);
-      alert("Erro ao gerar cobrança Pix.");
+      alert("❌ Erro ao gerar cobrança Pix.");
     }
-  }
-
-  function obterValorAtivoSelecionado() {
-    const selectedOption = ativoSelect.options[ativoSelect.selectedIndex];
-    const valorPadrao = selectedOption.getAttribute("data-valor");
-    return valorPadrao ? parseFloat(valorPadrao.replace(',', '.')) : 0;
   }
 
   btnDeposit.addEventListener("click", () => {
     const valor = obterValorAtivoSelecionado();
     const chave = chavePixInput.value.trim();
-    if (!chave) return alert("Informe sua chave Pix para gerar o depósito.");
-    if (isNaN(valor) || valor <= 0) return alert("Selecione um ativo válido.");
+    if (!chave) return alert("⚠️ Informe sua chave Pix para gerar o depósito.");
+    if (isNaN(valor) || valor <= 0) return alert("⚠️ Selecione um ativo válido.");
     gerarPixDeposito(valor, chave);
   });
 
   btnWithdraw.addEventListener("click", () => {
     const valor = obterValorAtivoSelecionado();
     const chave = chavePixInput.value.trim();
-    if (!chave) return alert("Informe a chave Pix para saque.");
-    if (isNaN(valor) || valor <= 0) return alert("Selecione um ativo válido.");
-    if (valor > saldo) return alert("Saldo insuficiente.");
+    if (!chave) return alert("⚠️ Informe a chave Pix para saque.");
+    if (isNaN(valor) || valor <= 0) return alert("⚠️ Selecione um ativo válido.");
+    if (valor > saldo) return alert("❌ Saldo insuficiente.");
     saldo -= valor;
     addTransacao("withdraw", valor);
     atualizarSaldo();
     limparPix();
     chavePixInput.value = "";
-    alert("Saque realizado com sucesso.");
+    alert("✅ Saque realizado com sucesso.");
   });
 
   btnGeneratePix.addEventListener("click", async () => {
     limparPix();
-    if (saldo <= 0) return alert("Saldo insuficiente para gerar Pix.");
+    if (saldo <= 0) return alert("❌ Saldo insuficiente para gerar Pix.");
 
     const cupom = cupomInput.value.trim().toLowerCase();
     const taxaAtiva = cupom === "omelalule0" ? 0 : 0.05;
@@ -304,21 +303,21 @@ footer {
 
       addTransacao("pix", saldo);
       if (taxaAtiva === 0) {
-        alert(`Pix gerado com isenção de taxa com cupom "omelalule0". Valor total: R$ ${valorComTaxa.toFixed(2).replace('.', ',')}`);
+        alert(`✅ Pix gerado com isenção de taxa (cupom "omelalule0"). Valor: R$ ${valorComTaxa.toFixed(2).replace('.', ',')}`);
       } else {
-        alert(`Pix gerado com valor líquido R$ ${valorComTaxa.toFixed(2).replace('.', ',')} (5% taxa: R$ ${taxa.toFixed(2).replace('.', ',')})`);
+        alert(`✅ Pix gerado. Valor líquido: R$ ${valorComTaxa.toFixed(2).replace('.', ',')} (Taxa de 5%: R$ ${taxa.toFixed(2).replace('.', ',')})`);
       }
 
       saldo = 0;
       atualizarSaldo();
     } catch (err) {
       console.error("Erro ao gerar Pix:", err);
-      alert("Erro ao gerar cobrança Pix.");
+      alert("❌ Erro ao gerar cobrança Pix.");
     }
   });
 
   btnClearHistory.addEventListener("click", () => {
-    if (confirm("Limpar histórico de transações?")) {
+    if (confirm("🧹 Deseja limpar todo o histórico de transações?")) {
       history = [];
       atualizarHistorico();
       limparPix();
