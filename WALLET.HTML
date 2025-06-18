@@ -1,358 +1,209 @@
 
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>JBX1000 CRC-16</title>
-  <link rel="icon" href="logo.ico" />
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      background: #0d1117; color: #e0e0e0;
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0; padding: 0 8px;
-      display: flex; justify-content: center; min-height: 100vh;
-      align-items: flex-start; padding-top: 20px; font-size: 14px;
+<!DOCTYPE html >
+< html  lang =" pt-BR " >
+< cabeça >
+  < meta  charset =" UTF-8 " />
+  < meta  nome =" viewport " conteúdo =" largura=largura-do-dispositivo, escala-inicial=1 " />
+  < título > JBX1000 CRC-16 </ título >
+  < link  rel =" ícone " href =" logo.ico " />
+  < script  src =" https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js " > </ script >
+  < estilo >
+    * { tamanho da caixa : caixa de borda; }
+    corpo {
+      fundo :  # 0d1117 ; cor :  # e0e0e0 ;
+      família de fontes :  'Segoe UI' , sem serifa;
+      margem :  0 ; preenchimento :  0  8 px ;
+      exibição : flex; justificar-conteúdo : centro; altura mínima :  100 vh ;
+      itens de alinhamento : flex-start; preenchimento superior :  20 px ; tamanho da fonte :  14 px ;
     }
-    .container {
-      width: 100%; max-width: 400px;
-      background: #1c1f26; border-radius: 12px; padding: 18px;
-      box-shadow: 0 0 10px #000a;
+    . contêiner {
+      largura :  100 % ; largura máxima :  400 px ;
+      fundo :  # 1c1f26 ; raio da borda :  12 px ; preenchimento :  18 px ;
+      caixa-sombra :  0  0  10 px  # 000a ;
     }
     h1 {
-      text-align: center; margin-bottom: 16px; color: #00ffb2;
-      font-weight: 700; font-size: 1.3rem;
+      alinhamento de texto : centro; margem inferior :  16 px ; cor :  # 00ffb2 ;
+      peso da fonte :  700 ; tamanho da fonte :  1,3 rem ;
     }
-    label {
-      display: block; margin: 10px 0 5px; font-weight: 700;
-      font-size: 0.9rem;
+    rótulo {
+      exibição : bloco; margem :  10 px  0  5 px ; espessura da fonte :  700 ;
+      tamanho da fonte :  0,9 rem ;
     }
-    select, input[type="number"], input[type="text"] {
-      width: 100%; padding: 8px; border: 1px solid #444;
-      border-radius: 6px; background-color: #0f141a; color: #fff;
-      font-size: 0.9rem;
+    selecione ,  insira [ tipo = "número" ] ,  insira [ tipo = "texto" ] {
+      largura :  100 % ; preenchimento :  8 px ; borda :  1 px sólido # 444 ;
+      raio da borda :  6 px ; cor de fundo :  # 0f141a ; cor :  # fff ;
+      tamanho da fonte :  0,9 rem ;
     }
-    .btn {
-      width: 48%; padding: 10px; margin-top: 12px;
-      border: none; border-radius: 8px; font-weight: 700;
-      cursor: pointer; transition: background 0.3s; font-size: 0.9rem;
+    . btn {
+      largura :  48 % ; preenchimento :  10 px ; margem superior :  12 px ;
+      borda : nenhuma; raio da borda :  8 px ; espessura da fonte :  700 ;
+      cursor : ponteiro; transição : fundo 0,3 s ; tamanho da fonte :  0,9 rem ;
     }
-    #btn-deposit { background-color: #28a745; color: white; }
-    #btn-deposit:hover { background-color: #218838; }
-    #btn-withdraw { background-color: #dc3545; color: white; float: right; }
-    #btn-withdraw:hover { background-color: #c82333; }
-    #btn-generate-pix {
-      width: 100%; margin-top: 18px; padding: 12px;
-      background-color: #007bff; color: white; border: none;
-      border-radius: 8px; font-weight: 700; cursor: pointer;
-      font-size: 1rem;
+    # btn-deposit { cor de fundo :  # 28a745 ; cor : branco; }
+    # btn-deposit : hover { cor de fundo :  # 218838 ; }
+    # btn-withdraw { cor de fundo :  # dc3545 ; cor : branco; float : direita; }
+    # btn-withdraw : hover { cor de fundo :  # c82333 ; }
+    # btn-gerar-pix {
+      largura :  100 % ; margem superior :  18 px ; preenchimento :  12 px ;
+      cor de fundo :  # 007bff ; cor : branco; borda : nenhuma;
+      raio da borda :  8 px ; espessura da fonte :  700 ; cursor : ponteiro;
+      tamanho da fonte :  1 rem ;
     }
-    #btn-generate-pix:hover { background-color: #0056b3; }
-    #btn-clear-history {
-      width: 100%; margin-top: 14px; padding: 8px;
-      background-color: #666; border: none; border-radius: 8px;
-      color: white; cursor: pointer; font-weight: 700;
-      font-size: 0.9rem;
+    # btn-generate-pix : hover { cor de fundo :  # 0056b3 ; }
+    # btn-limpar-histórico {
+      largura :  100 % ; margem superior :  14 px ; preenchimento :  8 px ;
+      cor de fundo :  # 666 ; borda : nenhuma; raio da borda :  8 px ;
+      cor : branco; cursor : ponteiro; espessura da fonte :  700 ;
+      tamanho da fonte :  0,9 rem ;
     }
-    #btn-clear-history:hover { background-color: #444; }
-    #saldo-container {
-      text-align: center; margin-top: 18px;
-      font-size: 1rem; color: #1efcb8; font-weight: 700;
+    # btn-clear-history : hover { cor de fundo :  # 444 ; }
+    # saldo-container {
+      alinhamento de texto : centro; margem superior :  18 px ;
+      tamanho da fonte :  1 rem ; cor :  # 1efcb8 ; espessura da fonte :  700 ;
     }
-    #qrcode-container {
-      margin-top: 18px; padding: 14px; background-color: #11161c;
-      border-radius: 10px; text-align: center; min-height: 220px;
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: center; color: #666;
-      word-break: break-word;
+    # qrcode-container {
+      margem superior :  18 px ; preenchimento :  14 px ; cor de fundo :  # 11161c ;
+      raio da borda :  10 px ; alinhamento do texto : centro; altura mínima :  220 px ;
+      exibição : flex; direção flexível : coluna; itens de alinhamento : centro;
+      justify-content : centro; cor :  # 666 ;
+      quebra-palavra : quebra-palavra;
     }
-    pre {
-      background: #000000cc; padding: 8px; margin-top: 8px;
-      border-radius: 6px; color: #00ffb2; font-size: 0.85rem;
-      user-select: all; white-space: pre-wrap; word-break: break-word;
-      max-height: 100px; overflow-y: auto; width: 100%;
+    pré {
+      fundo :  # 000000cc ; preenchimento :  8 px ; margem superior :  8 px ;
+      raio da borda :  6 px ; cor :  # 00ffb2 ; tamanho da fonte :  0,85 rem ;
+      seleção de usuário : tudo; espaço em branco : pré-quebra; quebra de palavra : quebra de palavra;
+      altura máxima :  100 px ; estouro-y : automático; largura :  100 % ;
+
+    função  atualizarSaldo ( )  {
+      saldoSpan . textContent  =  `R$ ${ saldo . toFixed ( 2 ) . replace ( '.' ,  ',' ) } ` ;
     }
-    #history-container {
-      margin-top: 28px; max-height: 220px; overflow-y: auto;
-      background: #10131a; border-radius: 10px; padding: 12px;
-      font-size: 0.85rem;
+
+    function  atualizarHistórico ( )  {
+      historyList . innerHTML  =  histórico . comprimento  ===  0
+        ? "Nenhuma transação registrada."
+        : história . mapa ( tx  =>  `
+          <div class="transação ${ tx . type } ">
+            <div class="tipo"> ${ tx . tipo } </div>
+            <div>R$ ${ tx . quantidade . toFixed ( 2 ) . replace ( '.' ,  ',' ) } </div>
+            <div class="date"> ${ nova  Data ( tx . data ) . toLocaleString ( 'pt-BR' ) } </div>
+          </div>
+        ` ) . junte-se ( '' ) ;
     }
-    #history-container h2 {
-      margin-top: 0; font-weight: 700; color: #0ff;
-      text-align: center; margin-bottom: 8px; font-size: 1rem;
+
+    função  addTransacao ( tipo ,  valor )  {
+      histórico . unshift ( { tipo , quantidade ,  data : nova  data ( ) . toISOString ( )  } ) ;
+      se  ( histórico . comprimento  >  50 )  histórico . pop ( ) ;
+      AtualizarHistórico ( ) ;
     }
-    .transaction {
-      padding: 4px 6px; border-bottom: 1px solid #222;
-      display: flex; justify-content: space-between; align-items: center;
+
+    função  LimpaPix ( )  {
+      qrcodeContainer . innerHTML  =  "<span>QR Code e Copia e Cola aparecem aqui</span>" ;
     }
-    .transaction:last-child { border-bottom: none; }
-    .transaction .type {
-      font-weight: 700; text-transform: capitalize;
-      font-size: 0.85rem; flex: 1;
-    }
-    .transaction.deposit { color: #28a745; }
-    .transaction.withdraw { color: #dc3545; }
-    .transaction.pix { color: #007bff; }
-    .transaction .date {
-      font-size: 0.7rem; color: #aaa; font-style: italic;
-      flex: 1.5; text-align: right;
-    }
-    @media (max-width: 420px) {
-      .btn { width: 100%; margin-top: 8px; float: none; }
-      #btn-withdraw { float: none; }
-      #btn-generate-pix { font-size: 0.95rem; }
-      h1 { font-size: 1.1rem; }
-    }
-rodapé {
-  largura :  100 % ;
-  preenchimento :  1 rem ;
-  fundo :  gradiente linear ( 45 graus ,  # f5f500 ,  # ff4500 );
-  cor :  # 000 ;
-  alinhamento de texto : centro;
-  tamanho da fonte :  1 rem ;
-  espessura da fonte : negrito;
-  espaçamento entre letras :  0,08 rem ;
-  texto-sombra :  0  0  0,4 rem  # ff0000 ;
-  animação : neon 1,5 s facilidade de entrada e saída infinita alternada;
-  borda superior :  2 px sólido # 333 ;
-  margem superior :  2 rem ;
-  transição : todos os 0,3 s de entrada e saída;
-}
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>WALLET JBX CRC</h1>
-label for="ativo-select">Escolha o Ativo:</label>
-  <select id="ativo-select">
-    <option disabled selected>-- Selecione um ativo --</option>
-    <option value="Bitcoin Escuro">Bitcoin Escuro - $56.000</option>
-    <option value="Ethereum Escuro">Ethereum Escuro - $3.500</option>
-    <option value="Ondulação Escura">Ondulação Escura - $200</option>
-    <option value="Litecoin Escuro">Litecoin Escuro - $200</option>
-    <option value="Cardano Escuro">Cardano Escuro - $1,50</option>
-    <option value="Solana Escuro">Solana Escuro - $100</option>
-    <option value="Ouro Escuro">Ouro Escuro - $1.800</option>
-    <option value="Diamante Negro">Diamante Negro - $5.000</option>
-    <option value="Prata Escuro">Prata Escuro - $25</option>
-    <option value="Platina Escura">Platina Escura - $950</option>
-    <option value="Titânio Escuro">Titânio Escuro - $600</option>
-    <option value="Cobre Escuro">Cobre Escuro - $9</option>
-  </select>
 
-  <label for="quantidade">Quantidade:</label>
-  <input type="number" id="quantidade" value="1" min="1" step="1" />
+     função  assíncrona gerarPixDeposito ( valor ,  chave )  {
+      LimpaPix ( ) ;
+      tentar  {
+        const  pixCode  =  `00020126360014BR.GOV.BCB.PIX0114 ${ chave } 520400005303986540 ${ valor . paraFixado ( 2 ) . substitua ( '.' ,  '' ) } 5802BR5925Lucas Nascimento6009Brasília62070503***6304ABCD` ;
 
-  <label for="valor">Valor (R$):</label>
-  <input type="number" id="valor" placeholder="0,00" min="0.01" step="0.01" />
+        qrcodeContainer . innerHTML  =  "<h3>Realizar o pagamento Pix</h3>" ;
+        const  pre  =  document . createElement ( "pre" ) ​​;
+        pré . textContent  =  pixCode ;
+        qrcodeContainer . appendChild ( pré ) ;
 
-  <label for="chavePix">Chave Pix (para saque):</label>
-  <input type="text" id="chavePix" placeholder="Insira sua chave Pix" />
+        const  canvas  =  documento . createElement ( "tela" ) ;
+        qrcodeContainer . appendChild ( tela ) ;
+        QRCode . toCanvas ( canvas ,  pixCode ,  função  ( erro )  {
+          se  ( erro )  console . erro ( erro ) ;
+        } ) ;
 
-  <!-- NOVO CAMPO DE CUPOM -->
-  <label for="cupom">Cupom (opcional):</label>
-  <input type="text" id="cupom" placeholder="Digite o cupom aqui" />
-
-  <button id="btn-deposit" class="btn">Depositar</button>
-  <button id="btn-withdraw" class="btn">Sacar</button>
-  <button id="btn-generate-pix">Gerar Pix Copia e Cola (5% taxa)</button>
-
-  <div id="saldo-container">Saldo: <span id="saldo">R$ 0,00</span></div>
-
-  <div id="qrcode-container"><span>QR Code e Copia e Cola aparecerão aqui</span></div>
-
-  <button id="btn-clear-history">Limpar Histórico</button>
-
-  <div id="history-container">
-    <h2>Histórico de Transações</h2>
-    <div id="history-list">Nenhuma transação registrada.</div>
-  </div>
-
-  <footer>
-    Bosco Jones Wallet - Desenvolvido por Lucas Januário<br>
-    © Todos os direitos reservados
-  </footer>
-
-<script>
-(() => {
-  const ativoSelect = document.getElementById("ativo-select");
-  const quantidadeInput = document.getElementById("quantidade");
-  const valorInput = document.getElementById("valor");
-  const chavePixInput = document.getElementById("chavePix");
-  const cupomInput = document.getElementById("cupom"); 
-  const btnDeposit = document.getElementById("btn-deposit");
-  const btnWithdraw = document.getElementById("btn-withdraw");
-  const btnGeneratePix = document.getElementById("btn-generate-pix");
-  const btnClearHistory = document.getElementById("btn-clear-history");
-  const saldoSpan = document.getElementById("saldo");
-  const qrcodeContainer = document.getElementById("qrcode-container");
-  const historyList = document.getElementById("history-list");
-
-  let saldo = 0;
-  let history = [];
-
-  // Mapa com os valores dos ativos
-  const precosAtivos = {
-    "Bitcoin Escuro": 56000,
-    "Ethereum Escuro": 3500,
-    "Ondulação Escura": 200,
-    "Litecoin Escuro": 200,
-    "Cardano Escuro": 1.50,
-    "Solana Escuro": 100,
-    "Ouro Escuro": 1800,
-    "Diamante Negro": 5000,
-    "Prata Escuro": 25,
-    "Platina Escura": 950,
-    "Titânio Escuro": 600,
-    "Cobre Escuro": 9
-  };
-
-  function atualizarSaldo() {
-    saldoSpan.textContent = `R$ ${saldo.toFixed(2).replace('.', ',')}`;
-  }
-
-  function atualizarHistorico() {
-    historyList.innerHTML = history.length === 0
-      ? "Nenhuma transação registrada."
-      : history.map(tx => `
-        <div class="transaction ${tx.type}">
-          <div class="type">${tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}</div>
-          <div>R$ ${tx.amount.toFixed(2).replace('.', ',')}</div>
-          <div class="date">${new Date(tx.date).toLocaleString('pt-BR')}</div>
-        </div>
-      `).join('');
-  }
-
-  function addTransacao(type, amount) {
-    history.unshift({ type, amount, date: new Date().toISOString() });
-    if (history.length > 50) history.pop();
-    atualizarHistorico();
-  }
-
-  function limparPix() {
-    qrcodeContainer.innerHTML = "<span>QR Code e Copia e Cola aparecerão aqui</span>";
-  }
-
-  function atualizarValor() {
-    const ativo = ativoSelect.value;
-    const quantidade = parseInt(quantidadeInput.value) || 1;
-    const preco = precosAtivos[ativo] || 0;
-    const total = preco * quantidade;
-    valorInput.value = total.toFixed(2).replace('.', ',');
-  }
-
-  ativoSelect.addEventListener("change", atualizarValor);
-  quantidadeInput.addEventListener("input", atualizarValor);
-
-  async function gerarPixDeposito(valor, chave) {
-    limparPix();
-    try {
-      const valorFormatado = valor.toFixed(2).replace('.', '');
-      const pixCode = `00020126360014BR.GOV.BCB.PIX0114${chave}520400005303986540${valorFormatado}5802BR5925Lucas Nascimento6009Brasilia62070503***6304ABCD`;
-
-      qrcodeContainer.innerHTML = "<h3>Realize o pagamento Pix</h3>";
-      const pre = document.createElement("pre");
-      pre.textContent = pixCode;
-      qrcodeContainer.appendChild(pre);
-
-      const canvas = document.createElement("canvas");
-      qrcodeContainer.appendChild(canvas);
-      QRCode.toCanvas(canvas, pixCode, function (error) {
-        if (error) console.error(error);
-      });
-
-      const confirmado = confirm("Após realizar o pagamento, clique em OK para confirmar o depósito.");
-      if (confirmado) {
-        saldo += valor;
-        addTransacao("deposit", valor);
-        atualizarSaldo();
-        valorInput.value = "";
-        chavePixInput.value = "";
-        alert("Depósito confirmado com sucesso!");
-      } else {
-        alert("Depósito cancelado.");
+        const  confirmado  =  confirm ( "Após realizar o pagamento, clique em OK para confirmar o depósito." ) ;
+        se  ( confirmado )  {
+          saldo  +=  valor ;
+          addTransacao ( "depósito" ,  valor ) ;
+          atualizarSaldo ( ) ;
+          valorInput . valor  =  "" ;
+          chavePixInput . valor  =  "" ;
+          alert ( "Depósito confirmado com sucesso!" ) ;
+        }  outro  {
+          alerta ( "Depósito cancelado." ) ;
+        }
+      }  pegar  ( errar )  {
+        console . error ( "Erro ao gerar Pix:" ,  err ) ;
+        alert ( "Erro ao gerar cobrança Pix." ) ;
       }
-    } catch (err) {
-      console.error("Erro ao gerar Pix:", err);
-      alert("Erro ao gerar cobrança Pix.");
     }
-  }
 
-  btnDeposit.addEventListener("click", () => {
-    const valor = parseFloat(valorInput.value.replace(',', '.'));
-    const chave = chavePixInput.value.trim();
-    if (!chave) return alert("Informe sua chave Pix para gerar o depósito.");
-    if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
-    gerarPixDeposito(valor, chave);
-  });
+    btnDeposit . addEventListener ( "clique" ,  ​​( )  =>  {
+      const  valor  =  parseFloat ( valorInput . valor . substituir ( ',' ,  '.' ) ) ;
+      const  chave  =  chavePixInput . valor . trim ( ) ;
+      if  ( ! chave )  return  alert ( "Informe sua chave Pix para gerar o depósito." ) ;
+      if  ( isNaN ( valor )  ||  valor  <=  0 )  return  alert ( "Valor inválido." ) ;
+      gerarPixDeposito ( valor ,  chave ) ;
+    } ) ;
 
-  btnWithdraw.addEventListener("click", () => {
-    const valor = parseFloat(valorInput.value.replace(',', '.'));
-    const chave = chavePixInput.value.trim();
-    if (!chave) return alert("Informe a chave Pix para saque.");
-    if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
-    if (valor > saldo) return alert("Saldo insuficiente.");
-    saldo -= valor;
-    addTransacao("withdraw", valor);
-    atualizarSaldo();
-    limparPix();
-    valorInput.value = "";
-    chavePixInput.value = "";
-  });
+    btnWithdraw . addEventListener ( "clique" ,  ( )  =>  {
+      const  valor  =  parseFloat ( valorInput . valor . substituir ( ',' ,  '.' ) ) ;
+      const  chave  =  chavePixInput . valor . trim ( ) ;
+      if  ( ! chave )  return  alert ( "Informe a chave Pix para saque." ) ;
+      if  ( isNaN ( valor )  ||  valor  <=  0 )  return  alert ( "Valor inválido." ) ;
+      if  ( valor  >  saldo )  return  alert ( "Saldo insuficiente." ) ;
+      saldo  -=  valor ;
+      addTransacao ( "retirada" ,  valor ) ;
+      atualizarSaldo ( ) ;
+      LimpaPix ( ) ;
+      valorInput . valor  =  "" ;
+      chavePixInput . valor  =  "" ;
+    } ) ;
 
-  btnGeneratePix.addEventListener("click", async () => {
-    limparPix();
-    if (saldo <= 0) return alert("Saldo insuficiente para gerar Pix.");
+    btnGeneratePix . addEventListener ( "clique" ,  async  ( )  =>  {
+      LimpaPix ( ) ;
+      if  ( saldo  <=  0 )  return  alert ( "Saldo insuficiente para gerar Pix." ) ;
 
-    const cupom = cupomInput.value.trim().toLowerCase();
-    const taxaAtiva = cupom === "omelalule0" ? 0 : 0.05;
-    const valorComTaxa = +(saldo * (1 - taxaAtiva)).toFixed(2);
-    const taxa = saldo - valorComTaxa;
+      const  cupom  =  cupomInput . value . trim ( ) . toLowerCase ( ) ;
+      const  taxaAtiva  =  cupom  ===  "omelalule0" ? 0 : 0,05 ;
+      const  valorComTaxa  =  + ( saldo  *  ( 1  -  taxaAtiva ) ) . toFixed ( 2 ) ;
+      const  taxa  =  saldo  -  valorComTaxa ;
 
-    try {
-      const valorFormatado = valorComTaxa.toFixed(2).replace('.', '');
-      const pixCode = `00020126360014BR.GOV.BCB.PIX0114+556199999999520400005303986540${valorFormatado}5802BR5925Lucas Januario do Nascimento6009Brasilia62070503***6304ABCD`;
+      tentar  {
+        const  pixCode  =  `00020126360014BR.GOV.BCB.PIX0114+556199999999520400005303986540 ${ valorComTaxa . paraFixado ( 2 ) . replace ( '.' ,  '' ) } 5802BR5925Lucas Januário do Nascimento6009Brasília62070503***6304ABCD` ;
 
-      qrcodeContainer.innerHTML = "";
-      const pre = document.createElement("pre");
-      pre.textContent = pixCode;
-      qrcodeContainer.appendChild(pre);
+        qrcodeContainer . innerHTML  =  "" ;
+        const  pre  =  document . createElement ( "pre" ) ​​;
+        pré . textContent  =  pixCode ;
+        qrcodeContainer . appendChild ( pré ) ;
 
-      const canvas = document.createElement("canvas");
-      qrcodeContainer.appendChild(canvas);
-      QRCode.toCanvas(canvas, pixCode, function (error) {
-        if (error) console.error(error);
-      });
+        const  canvas  =  documento . createElement ( "tela" ) ;
+        qrcodeContainer . appendChild ( tela ) ;
+        QRCode . toCanvas ( canvas ,  pixCode ,  função  ( erro )  {
+          se  ( erro )  console . erro ( erro ) ;
+        } ) ;
 
-      addTransacao("pix", saldo);
-      if (taxaAtiva === 0) {
-        alert(`Pix gerado com isenção de taxa usando o cupom "omelalule0". Valor total: R$ ${valorComTaxa.toFixed(2).replace('.', ',')}`);
-      } else {
-        alert(`Cobrança Pix gerada com valor líquido R$ ${valorComTaxa.toFixed(2).replace('.', ',')} (5% taxa: R$ ${taxa.toFixed(2).replace('.', ',')})`);
+        addTransação ( "pix" ,  saldo ) ;
+        se  ( taxaAtiva  ===  0 )  {
+          alert ( `Pix gerado com autorização de taxa usando o cupom "omelalule0". Valor total: R$ ${ valorComTaxa . toFixed ( 2 ) . replace ( '.' ,  ',' ) } ` ) ;
+        }  outro  {
+          alert ( `Cbrança Pix gerada com valor líquido R$ ${ valorComTaxa . toFixed ( 2 ) . replace ( '.' ,  ',' ) } (5% taxa: R$ ${ taxa . toFixed ( 2 ) . replace ( '.' ,  ',' ) } )` ) ;
+        }
+        saldo  =  0 ;
+        atualizarSaldo ( ) ;
+      }  pegar  ( errar )  {
+        console . error ( "Erro ao gerar Pix:" ,  err ) ;
+        alert ( "Erro ao gerar cobrança Pix." ) ;
       }
-      saldo = 0;
-      atualizarSaldo();
-    } catch (err) {
-      console.error("Erro ao gerar Pix:", err);
-      alert("Erro ao gerar cobrança Pix.");
-    }
-  });
+    } ) ;
 
-  btnClearHistory.addEventListener("click", () => {
-    if (confirm("Limpar histórico de transações?")) {
-      history = [];
-      atualizarHistorico();
-      limparPix();
-    }
-  });
+    btnClearHistory . addEventListener ( "clique" ,  ​​( )  =>  {
+      if  ( confirm ( "Limpar histórico de transações?" ) )  {
+        história  =  [ ] ;
+        AtualizarHistórico ( ) ;
+        LimpaPix ( ) ;
+      }
+    } ) ;
 
-  atualizarSaldo();
-  atualizarHistorico();
-})();
-</script>
+    atualizarSaldo ( ) ;
+    AtualizarHistórico ( ) ;
+  } ) ( ) ;
+</ script >
 
-
-</body>
-</html>
+</ corpo >
+</ html >
