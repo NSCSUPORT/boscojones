@@ -133,9 +133,40 @@ footer {
 <!-- seu conteúdo anterior -->
 
 <label for="ativoSelect">Escolha o Ativo:</label>
-
 <select id="ativoSelect">
   <option disabled selected>-- Selecione um ativo --</option>
+
+  <!-- Utilities -->
+  <option data-valor="25000" value="EVO">EVO - $25.000</option>
+  <option data-valor="20000" value="AKB">AKB - $20.000</option>
+  <option data-valor="30000" value="ARK">ARK - $30.000</option>
+  <option data-valor="25000" value="RZX2">RZX2 - $25.000</option>
+  <option data-valor="25000" value="XETH">XETH - $25.000</option>
+  <option data-valor="25000" value="DEURO">DEURO - $25.000</option>
+
+  <!-- Investment Funds -->
+  <option data-valor="75000" value="JIUFI">JIUFI - $75.000</option>
+  <option data-valor="75000" value="PUMA">PUMA - $75.000</option>
+  <option data-valor="75000" value="THF">THF - $75.000</option>
+  <option data-valor="75000" value="ETF">ETF - $75.000</option>
+
+  <!-- Real Estate -->
+  <option data-valor="60000" value="NIVE 2">NIVE 2 - $60.000</option>
+  <option data-valor="60000" value="FII">FII - $60.000</option>
+
+  <!-- QSEA Technologies -->
+  <option data-valor="60000" value="QSEA">QSEA - $60.000</option>
+  <option data-valor="60000" value="SSQSEA">SSQSEA - $60.000</option>
+  <option data-valor="60000" value="STSEA">STSEA - $60.000</option>
+
+  <!-- Thematic Tokens -->
+  <option data-valor="25000" value="MARS">MARS - $25.000</option>
+  <option data-valor="25000" value="MOON">MOON - $25.000</option>
+
+  <!-- Start-Up Tokens -->
+  <option data-valor="70000" value="START UP">START UP - $70.000</option>
+
+  <!-- Dark HoloFi Cryptos (8 units listed individually) -->
   <option data-valor="56000" value="Bitcoin Escuro">Bitcoin Escuro - $56.000</option>
   <option data-valor="3500" value="Ethereum Escuro">Ethereum Escuro - $3.500</option>
   <option data-valor="200" value="Ondulação Escura">Ondulação Escura - $200</option>
@@ -148,9 +179,12 @@ footer {
   <option data-valor="950" value="Platina Escura">Platina Escura - $950</option>
   <option data-valor="600" value="Titânio Escuro">Titânio Escuro - $600</option>
   <option data-valor="9" value="Cobre Escuro">Cobre Escuro - $9</option>
+
+  <!-- Outros importantes no ecossistema -->
   <option data-valor="7200" value="SPPX">SPPX - $7.200</option>
   <option data-valor="8700" value="QSEA">QSEA - $8.700</option>
 </select>
+
 
 
 <label for="chavePix">Chave Pix (para saque):</label>
@@ -226,7 +260,7 @@ footer {
   function obterValorTotalSelecionado() {
     const selectedOption = ativoSelect.options[ativoSelect.selectedIndex];
     const valorPadrao = selectedOption?.getAttribute("data-valor");
-    const quantidade = parseInt(quantidadeInput.value, 10) || 1;
+    const quantidade = parseFloat(quantidadeInput.value) || 1;
     if (!valorPadrao) return 0;
     const valorUnitario = parseFloat(valorPadrao.replace(',', '.'));
     return valorUnitario * quantidade;
@@ -335,7 +369,6 @@ footer {
   atualizarHistorico();
 })();
 </script>
-
 
 </body>
 </html>
