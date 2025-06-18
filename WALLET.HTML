@@ -235,7 +235,7 @@ footer {
   async function gerarPixDeposito(valor, chave) {
     limparPix();
     try {
-      // Formata valor sem vírgula e com duas casas decimais, removendo ponto e vírgula, para o Pix
+      // Formata valor para Pix (sem vírgula, com duas casas decimais, ponto removido)
       const valorFormatado = valor.toFixed(2).replace('.', '');
       const pixCode = `00020126360014BR.GOV.BCB.PIX0114${chave}520400005303986540${valorFormatado}5802BR5925Lucas Nascimento6009Brasilia62070503***6304ABCD`;
 
@@ -273,8 +273,8 @@ footer {
       const selectedOption = ativoSelect.options[ativoSelect.selectedIndex];
       const valorPadrao = selectedOption.getAttribute("data-valor");
       if (valorPadrao) {
-        // Converte ponto para vírgula para exibição no input
-        valorInput.value = valorPadrao.replace('.', ',');
+        // Atribui o valor com ponto decimal direto (ex: "56000.00") para input number
+        valorInput.value = valorPadrao;
       } else {
         valorInput.value = "";
       }
