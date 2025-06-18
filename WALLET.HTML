@@ -105,6 +105,21 @@
       #btn-generate-pix { font-size: 0.95rem; }
       h1 { font-size: 1.1rem; }
     }
+rodapé {
+  largura :  100 % ;
+  preenchimento :  1 rem ;
+  fundo :  gradiente linear ( 45 graus ,  # f5f500 ,  # ff4500 );
+  cor :  # 000 ;
+  alinhamento de texto : centro;
+  tamanho da fonte :  1 rem ;
+  espessura da fonte : negrito;
+  espaçamento entre letras :  0,08 rem ;
+  texto-sombra :  0  0  0,4 rem  # ff0000 ;
+  animação : neon 1,5 s facilidade de entrada e saída infinita alternada;
+  borda superior :  2 px sólido # 333 ;
+  margem superior :  2 rem ;
+  transição : todos os 0,3 s de entrada e saída;
+}
   </style>
 </head>
 <body>
@@ -153,6 +168,11 @@
   <div id="history-list">Nenhuma transação registrada.</div>
 </div>
 
+<!-- RODAPÉ -->
+<footer style="margin-top: 40px; padding: 20px; text-align: center; background-color: #111; color: #ccc; font-size: 14px;">
+  Bosco Jones Wallet - Desenvolvido por Lucas Januário<br>
+  © Todos os direitos reservados
+</footer>
 <script>
   (() => {
     const valorInput = document.getElementById("valor");
