@@ -106,7 +106,7 @@
       h1 { font-size: 1.1rem; }
     }
 footer {
-  width: 100%;
+  width: 100%; /* 100% do container, não da tela */
   padding: 1rem;
   background: linear-gradient(45deg, #f5f500, #ff4500);
   color: #000;
@@ -117,18 +117,12 @@ footer {
   text-shadow: 0 0 0.4rem #ff0000;
   animation: neon 1.5s ease-in-out infinite alternate;
   border-top: 2px solid #333;
-  margin-top: 2rem;
+  margin-top: 1.5rem; /* menos margem para ficar melhor no painel */
+  box-sizing: border-box; /* garantir que padding não extrapole */
+  border-radius: 0 0 12px 12px; /* arredondar só a parte inferior */
   transition: all 0.3s ease-in-out;
 }
 
-/* Animação neon (exemplo simples) */
-@keyframes neon {
-  from {
-    text-shadow: 0 0 0.4rem #ff0000, 0 0 1rem #ff0000, 0 0 2rem #ff0000;
-  }
-  to {
-    text-shadow: 0 0 0.8rem #ff4500, 0 0 2rem #ff4500, 0 0 4rem #ff4500;
-  }
 }
 
   </style>
