@@ -183,7 +183,7 @@ footer {
 
 <script>
 (() => {
-  // Elementos existentes
+  // Elementos do DOM
   const valorInput = document.getElementById("valor");
   const chavePixInput = document.getElementById("chavePix");
   const cupomInput = document.getElementById("cupom");
@@ -194,43 +194,50 @@ footer {
   const saldoSpan = document.getElementById("saldo");
   const qrcodeContainer = document.getElementById("qrcode-container");
   const historyList = document.getElementById("history-list");
-
-  // Novo: seleção do ativo
   const ativoSelect = document.getElementById("ativoSelect");
 
   let saldo = 0;
   let history = [];
 
+  // Atualiza o saldo na interface
   function atualizarSaldo() {
     saldoSpan.textContent = `R$ ${saldo.toFixed(2).replace('.', ',')}`;
   }
 
+  // Atualiza o histórico de transações na interface
   function atualizarHistorico() {
-    historyList.innerHTML = history.length === 0
-      ? "Nenhuma transação registrada."
-      : history.map(tx => `
+    if (history.length === 0) {
+      historyList.innerHTML = "Nenhuma transação registrada.";
+    } else {
+      historyList.innerHTML = history.map(tx => `
         <div class="transaction ${tx.type}">
-          <div class="type">${tx.type}</div>
+          <div class="type">${tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}</div>
           <div>R$ ${tx.amount.toFixed(2).replace('.', ',')}</div>
           <div class="date">${new Date(tx.date).toLocaleString('pt-BR')}</div>
         </div>
       `).join('');
+    }
   }
 
+  // Adiciona uma transação ao histórico
   function addTransacao(type, amount) {
     history.unshift({ type, amount, date: new Date().toISOString() });
     if (history.length > 50) history.pop();
     atualizarHistorico();
   }
 
+  // Limpa o container do QR Code
   function limparPix() {
     qrcodeContainer.innerHTML = "<span>QR Code e Copia e Cola aparecerão aqui</span>";
   }
 
+  // Gera o código Pix para depósito e exibe QR code
   async function gerarPixDeposito(valor, chave) {
     limparPix();
     try {
-      const pixCode = `00020126360014BR.GOV.BCB.PIX0114${chave}520400005303986540${valor.toFixed(2).replace('.', '')}5802BR5925Lucas Nascimento6009Brasilia62070503***6304ABCD`;
+      // Formata valor sem vírgula e com duas casas decimais, removendo ponto e vírgula, para o Pix
+      const valorFormatado = valor.toFixed(2).replace('.', '');
+      const pixCode = `00020126360014BR.GOV.BCB.PIX0114${chave}520400005303986540${valorFormatado}5802BR5925Lucas Nascimento6009Brasilia62070503***6304ABCD`;
 
       qrcodeContainer.innerHTML = "<h3>Realize o pagamento Pix</h3>";
       const pre = document.createElement("pre");
@@ -239,7 +246,7 @@ footer {
 
       const canvas = document.createElement("canvas");
       qrcodeContainer.appendChild(canvas);
-      QRCode.toCanvas(canvas, pixCode, function (error) {
+      QRCode.toCanvas(canvas, pixCode, (error) => {
         if (error) console.error(error);
       });
 
@@ -260,33 +267,55 @@ footer {
     }
   }
 
-  // Novo: ao mudar seleção do ativo, atualiza o campo valor com o valor padrão do ativo
+  // Ao mudar a seleção do ativo, atualiza o campo valor com o valor padrão do ativo
   if (ativoSelect) {
     ativoSelect.addEventListener("change", () => {
       const selectedOption = ativoSelect.options[ativoSelect.selectedIndex];
       const valorPadrao = selectedOption.getAttribute("data-valor");
       if (valorPadrao) {
-        valorInput.value = valorPadrao.replace('.', ','); // opcional: já formatar para vírgula
+        // Converte ponto para vírgula para exibição no input
+        valorInput.value = valorPadrao.replace('.', ',');
       } else {
         valorInput.value = "";
       }
     });
   }
 
+  // Evento do botão Depositar
   btnDeposit.addEventListener("click", () => {
     const valor = parseFloat(valorInput.value.replace(',', '.'));
     const chave = chavePixInput.value.trim();
-    if (!chave) return alert("Informe sua chave Pix para gerar o depósito.");
-    if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
+
+    if (!chave) {
+      alert("Informe sua chave Pix para gerar o depósito.");
+      return;
+    }
+    if (isNaN(valor) || valor <= 0) {
+      alert("Valor inválido.");
+      return;
+    }
+
     gerarPixDeposito(valor, chave);
   });
 
+  // Evento do botão Sacar
   btnWithdraw.addEventListener("click", () => {
     const valor = parseFloat(valorInput.value.replace(',', '.'));
     const chave = chavePixInput.value.trim();
-    if (!chave) return alert("Informe a chave Pix para saque.");
-    if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
-    if (valor > saldo) return alert("Saldo insuficiente.");
+
+    if (!chave) {
+      alert("Informe a chave Pix para saque.");
+      return;
+    }
+    if (isNaN(valor) || valor <= 0) {
+      alert("Valor inválido.");
+      return;
+    }
+    if (valor > saldo) {
+      alert("Saldo insuficiente.");
+      return;
+    }
+
     saldo -= valor;
     addTransacao("withdraw", valor);
     atualizarSaldo();
@@ -295,9 +324,13 @@ footer {
     chavePixInput.value = "";
   });
 
-  btnGeneratePix.addEventListener("click", async () => {
+  // Evento do botão Gerar Pix para saque
+  btnGeneratePix.addEventListener("click", () => {
     limparPix();
-    if (saldo <= 0) return alert("Saldo insuficiente para gerar Pix.");
+    if (saldo <= 0) {
+      alert("Saldo insuficiente para gerar Pix.");
+      return;
+    }
 
     const cupom = cupomInput.value.trim().toLowerCase();
     const taxaAtiva = cupom === "omelalule0" ? 0 : 0.05;
@@ -305,7 +338,8 @@ footer {
     const taxa = saldo - valorComTaxa;
 
     try {
-      const pixCode = `00020126360014BR.GOV.BCB.PIX0114+556199999999520400005303986540${valorComTaxa.toFixed(2).replace('.', '')}5802BR5925Lucas Januario do Nascimento6009Brasilia62070503***6304ABCD`;
+      const valorFormatado = valorComTaxa.toFixed(2).replace('.', '');
+      const pixCode = `00020126360014BR.GOV.BCB.PIX0114+556199999999520400005303986540${valorFormatado}5802BR5925Lucas Januario do Nascimento6009Brasilia62070503***6304ABCD`;
 
       qrcodeContainer.innerHTML = "";
       const pre = document.createElement("pre");
@@ -314,16 +348,18 @@ footer {
 
       const canvas = document.createElement("canvas");
       qrcodeContainer.appendChild(canvas);
-      QRCode.toCanvas(canvas, pixCode, function (error) {
+      QRCode.toCanvas(canvas, pixCode, (error) => {
         if (error) console.error(error);
       });
 
       addTransacao("pix", saldo);
+
       if (taxaAtiva === 0) {
         alert(`Pix gerado com isenção de taxa usando o cupom "omelalule0". Valor total: R$ ${valorComTaxa.toFixed(2).replace('.', ',')}`);
       } else {
         alert(`Cobrança Pix gerada com valor líquido R$ ${valorComTaxa.toFixed(2).replace('.', ',')} (5% taxa: R$ ${taxa.toFixed(2).replace('.', ',')})`);
       }
+
       saldo = 0;
       atualizarSaldo();
     } catch (err) {
@@ -332,6 +368,7 @@ footer {
     }
   });
 
+  // Evento do botão Limpar Histórico
   btnClearHistory.addEventListener("click", () => {
     if (confirm("Limpar histórico de transações?")) {
       history = [];
@@ -340,10 +377,12 @@ footer {
     }
   });
 
+  // Inicializa a interface
   atualizarSaldo();
   atualizarHistorico();
-})();
+  limparPix();
 
+})();
 </script>
 
 </body>
