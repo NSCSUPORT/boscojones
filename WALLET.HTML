@@ -133,6 +133,7 @@ footer {
 <!-- seu conteúdo anterior -->
 
 <label for="ativoSelect">Escolha o Ativo:</label>
+
 <select id="ativoSelect">
   <option disabled selected>-- Selecione um ativo --</option>
   <option data-valor="56000" value="Bitcoin Escuro">Bitcoin Escuro - $56.000</option>
@@ -147,7 +148,10 @@ footer {
   <option data-valor="950" value="Platina Escura">Platina Escura - $950</option>
   <option data-valor="600" value="Titânio Escuro">Titânio Escuro - $600</option>
   <option data-valor="9" value="Cobre Escuro">Cobre Escuro - $9</option>
+  <option data-valor="7200" value="SPPX">SPPX - $7.200</option>
+  <option data-valor="8700" value="QSEA">QSEA - $8.700</option>
 </select>
+
 
 <label for="chavePix">Chave Pix (para saque):</label>
 <input type="text" id="chavePix" placeholder="Insira sua chave Pix" />
@@ -188,6 +192,7 @@ footer {
   const qrcodeContainer = document.getElementById("qrcode-container");
   const historyList = document.getElementById("history-list");
   const ativoSelect = document.getElementById("ativoSelect");
+  const quantidadeInput = document.getElementById("quantidade");
 
   let saldo = 0;
   let history = [];
@@ -218,11 +223,13 @@ footer {
     qrcodeContainer.innerHTML = "<span>QR Code e Copia e Cola aparecerão aqui</span>";
   }
 
-  function obterValorAtivoSelecionado() {
+  function obterValorTotalSelecionado() {
     const selectedOption = ativoSelect.options[ativoSelect.selectedIndex];
     const valorPadrao = selectedOption?.getAttribute("data-valor");
+    const quantidade = parseInt(quantidadeInput.value, 10) || 1;
     if (!valorPadrao) return 0;
-    return parseFloat(valorPadrao.replace(',', '.'));
+    const valorUnitario = parseFloat(valorPadrao.replace(',', '.'));
+    return valorUnitario * quantidade;
   }
 
   async function gerarPixDeposito(valor, chave) {
@@ -258,18 +265,18 @@ footer {
   }
 
   btnDeposit.addEventListener("click", () => {
-    const valor = obterValorAtivoSelecionado();
+    const valor = obterValorTotalSelecionado();
     const chave = chavePixInput.value.trim();
     if (!chave) return alert("⚠️ Informe sua chave Pix para gerar o depósito.");
-    if (isNaN(valor) || valor <= 0) return alert("⚠️ Selecione um ativo válido.");
+    if (isNaN(valor) || valor <= 0) return alert("⚠️ Selecione um ativo e quantidade válida.");
     gerarPixDeposito(valor, chave);
   });
 
   btnWithdraw.addEventListener("click", () => {
-    const valor = obterValorAtivoSelecionado();
+    const valor = obterValorTotalSelecionado();
     const chave = chavePixInput.value.trim();
     if (!chave) return alert("⚠️ Informe a chave Pix para saque.");
-    if (isNaN(valor) || valor <= 0) return alert("⚠️ Selecione um ativo válido.");
+    if (isNaN(valor) || valor <= 0) return alert("⚠️ Selecione um ativo e quantidade válida.");
     if (valor > saldo) return alert("❌ Saldo insuficiente.");
     saldo -= valor;
     addTransacao("withdraw", valor);
@@ -328,6 +335,7 @@ footer {
   atualizarHistorico();
 })();
 </script>
+
 
 </body>
 </html>
