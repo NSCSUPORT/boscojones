@@ -262,17 +262,23 @@ footer {
 
   function obterValorTotalSelecionado() {
     const selectedOption = ativoSelect.options[ativoSelect.selectedIndex];
-    const valorPadrao = selectedOption?.getAttribute("data-valor");
+    if (!selectedOption) return 0;
+
+    let valorRaw = selectedOption.getAttribute("data-valor");
+    if (!valorRaw) return 0;
+
+    // Suporta vírgula e ponto como separador decimal
+    const valorUnitario = parseFloat(valorRaw.toString().replace(',', '.'));
     const quantidade = parseFloat(quantidadeInput.value) || 1;
-    if (!valorPadrao) return 0;
-    const valorUnitario = parseFloat(valorPadrao.replace(',', '.'));
+
     return valorUnitario * quantidade;
   }
 
   async function gerarPixDeposito(valor, chave) {
     limparPix();
     try {
-      const pixCode = `00020126360014BR.GOV.BCB.PIX0114${chave}520400005303986540${valor.toFixed(2).replace('.', '')}5802BR5925Lucas Nascimento6009Brasilia62070503***6304ABCD`;
+      const valorFormatado = valor.toFixed(2).replace('.', '');
+      const pixCode = `00020126360014BR.GOV.BCB.PIX0114${chave}520400005303986540${valorFormatado}5802BR5925Lucas Nascimento6009Brasilia62070503***6304ABCD`;
 
       qrcodeContainer.innerHTML = "<h3>Realize o pagamento via Pix:</h3>";
       const pre = document.createElement("pre");
@@ -331,9 +337,10 @@ footer {
     const taxaAtiva = cupom === "omelalule0" ? 0 : 0.05;
     const valorComTaxa = +(saldo * (1 - taxaAtiva)).toFixed(2);
     const taxa = saldo - valorComTaxa;
+    const valorFormatado = valorComTaxa.toFixed(2).replace('.', '');
 
     try {
-      const pixCode = `00020126360014BR.GOV.BCB.PIX0114+556199999999520400005303986540${valorComTaxa.toFixed(2).replace('.', '')}5802BR5925Lucas Januario do Nascimento6009Brasilia62070503***6304ABCD`;
+      const pixCode = `00020126360014BR.GOV.BCB.PIX011448761013889520400005303986540${valorFormatado}5802BR5925Lucas Januario do Nascimento6009Brasilia62070503***6304ABCD`;
 
       const pre = document.createElement("pre");
       pre.textContent = pixCode;
