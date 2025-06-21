@@ -1,0 +1,44 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+/// @title Dark HoloFi Cryptos - Gemini Yield Engine Ownership
+/// @author Lucas Januário
+/// @notice Registers ownership and IP rights of the quantum symbiosis model for Gemini crypto yields
+contract DarkHoloFiGeminiEngine {
+    address public owner;
+    string public constant technologyName = "Dark HoloFi Cryptos - Gemini Yield Engine";
+    string public description;
+    uint256 public deploymentTime;
+
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    event IPRegistered(string description, uint256 timestamp);
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not the owner");
+        _;
+    }
+
+    constructor(string memory _description) {
+        owner = msg.sender;
+        description = _description;
+        deploymentTime = block.timestamp;
+
+        emit OwnershipTransferred(address(0), msg.sender);
+        emit IPRegistered(_description, block.timestamp);
+    }
+
+    function transferOwnership(address newOwner) public onlyOwner {
+        require(newOwner != address(0), "Invalid new owner");
+        emit OwnershipTransferred(owner, newOwner);
+        owner = newOwner;
+    }
+
+    function getTechnologyDetails() public view returns (
+        string memory name,
+        string memory desc,
+        address currentOwner,
+        uint256 deployedAt
+    ) {
+        return (technologyName, description, owner, deploymentTime);
+    }
+}
