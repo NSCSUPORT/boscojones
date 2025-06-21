@@ -239,6 +239,41 @@ footer {
   let saldo = 0;
   let history = [];
 
+  // Definição dos fatores de geminiosidade por ativo
+  const geminilidade = {
+    "EVO": 1.18,
+    "AKB": 1.15,
+    "ARK": 1.20,
+    "RZX2": 1.17,
+    "XETH": 1.19,
+    "DEURO": 1.16,
+    "JIUFI": 1.22,
+    "PUMA": 1.21,
+    "THF": 1.18,
+    "ETF": 1.23,
+    "NIVE 2": 1.15,
+    "FII": 1.14,
+    "QSEA": 1.25,
+    "SSQSEA": 1.20,
+    "STSEA": 1.19,
+    "MARS": 1.21,
+    "MOON": 1.18,
+    "START UP": 1.22,
+    "Bitcoin Escuro": 1.30,
+    "Ethereum Escuro": 1.28,
+    "Ondulação Escura": 1.15,
+    "Litecoin Escuro": 1.14,
+    "Cardano Escuro": 1.12,
+    "Solana Escuro": 1.16,
+    "Ouro Escuro": 1.22,
+    "Diamante Negro": 1.35,
+    "Prata Escuro": 1.13,
+    "Platina Escura": 1.17,
+    "Titânio Escuro": 1.16,
+    "Cobre Escuro": 1.11,
+    "SPPX": 1.15,
+  };
+
   function atualizarSaldo() {
     saldoSpan.textContent = `R$ ${saldo.toFixed(2).replace('.', ',')}`;
   }
@@ -265,6 +300,33 @@ footer {
     qrcodeContainer.innerHTML = "<span>QR Code e Copia e Cola aparecerão aqui</span>";
   }
 
+  function calcularValorComGeminilidade(nomeAtivo, valorUnitario, quantidade) {
+    const r = geminilidade[nomeAtivo] || 1;
+    const ciclos = 10; // Sempre usar a maior escala do bite negro
+
+    const valorInicial = valorUnitario * quantidade;
+    let valorFinal;
+
+    if (r === 1) {
+      valorFinal = valorInicial;
+    } else {
+      // Soma da série geométrica: S = a * (1 - r^(n+1)) / (1 - r)
+      const fatorFractal = (1 - Math.pow(r, ciclos + 1)) / (1 - r);
+      valorFinal = valorInicial * fatorFractal;
+
+      alert(
+        `🧬 GEMINI BITE | Simbiose Escura\n\n` +
+        `Ativo: ${nomeAtivo}\n` +
+        `Valor aplicado: R$ ${valorInicial.toFixed(2).replace('.', ',')}\n` +
+        `Geminilidade: ${r.toFixed(2)}x em ${ciclos} ciclos\n` +
+        `🌌 Multiplicador simbiótico real: ${fatorFractal.toFixed(2)}\n` +
+        `💠 Valor após simbiose máxima: R$ ${valorFinal.toFixed(2).replace('.', ',')}`
+      );
+    }
+
+    return valorFinal;
+  }
+
   function obterValorTotalSelecionado() {
     const selectedOption = ativoSelect.options[ativoSelect.selectedIndex];
     if (!selectedOption) return 0;
@@ -276,43 +338,7 @@ footer {
     const quantidade = parseFloat(quantidadeInput.value) || 1;
     const nomeAtivo = selectedOption.value;
 
-    // 🌌 Tabela de geminiosidade Dark HoloFi Cryptos
-    const geminilidade = {
-      "Bitcoin Escuro": 2.5,
-      "Ethereum Escuro": 2.2,
-      "Ondulação Escura": 1.5,
-      "Litecoin Escuro": 1.6,
-      "Cardano Escuro": 3,
-      "Solana Escuro": 2,
-      "Ouro Escuro": 2.1,
-      "Diamante Negro": 1.8,
-      "Prata Escuro": 2.4,
-      "Platina Escura": 2.2,
-      "Titânio Escuro": 2,
-      "Cobre Escuro": 3
-    };
-
-    const r = geminilidade[nomeAtivo] || 1;
-    const ciclos = r > 1 ? 10 : 1;
-
-    const valorInicial = valorUnitario * quantidade;
-    let valorFinal = valorInicial;
-
-    if (r > 1) {
-      const fatorFractal = (1 - Math.pow(r, ciclos + 1)) / (1 - r);
-      valorFinal = valorInicial * fatorFractal;
-
-      alert(
-        `🧬 GEMINI BITE | Simbiose Escura\n\n` +
-        `Ativo: ${nomeAtivo}\n` +
-        `Valor aplicado: R$ ${valorInicial.toFixed(2).replace('.', ',')}\n` +
-        `Geminilidade: ${r}x em ${ciclos} ciclos\n` +
-        `🌌 Multiplicador simbiótico real: ${fatorFractal.toFixed(2)}\n` +
-        `💠 Valor após simbiose máxima: R$ ${valorFinal.toFixed(2).replace('.', ',')}`
-      );
-    }
-
-    return valorFinal;
+    return calcularValorComGeminilidade(nomeAtivo, valorUnitario, quantidade);
   }
 
   async function gerarPixDeposito(valor, chave) {
@@ -420,6 +446,7 @@ footer {
   atualizarHistorico();
 })();
 </script>
+
 
 </body>
 </html>
